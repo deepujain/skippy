@@ -48,7 +48,28 @@ oss-claw/
 
 ## How to use
 
-- **Cursor:** Copy a `SKILL.md` (or its path) into `.cursor/skills/<name>/SKILL.md` so the agent can load it, or reference this repo in your project.
+### Cursor (recommended)
+
+Clone this repo, then **symlink** skill folders into Cursor’s skills directory so the agent loads them and stays in sync with the repo:
+
+```bash
+# Clone oss-claw (or use your existing clone path)
+git clone https://github.com/deepujain/oss-claw.git /path/to/oss-claw
+cd /path/to/oss-claw
+
+# Symlink each skill into Cursor’s skills directory
+mkdir -p ~/.cursor/skills
+ln -sf "$(pwd)/oss/apache/airflow"   ~/.cursor/skills/airflow-pr-contribution
+ln -sf "$(pwd)/oss/apache/hadoop"    ~/.cursor/skills/hadoop-pr-contribution
+ln -sf "$(pwd)/oss/apache/spark"     ~/.cursor/skills/spark-pr-contribution
+ln -sf "$(pwd)/oss/openclaw"         ~/.cursor/skills/openclaw-pr-contribution
+ln -sf "$(pwd)/oss/slurm"            ~/.cursor/skills/slurm-patch-contribution
+```
+
+After that, Cursor loads the skills from the symlinked paths; any `git pull` in the repo updates the skills. You can also copy a single `SKILL.md` into `.cursor/skills/<name>/SKILL.md` if you prefer not to use symlinks.
+
+### Other agents
+
 - **Claude / ChatGPT:** Paste the relevant section or link the file when starting a task (e.g. "Follow the Hadoop contribution recipe" and attach the Hadoop SKILL.md).
 - **Generic:** Each `SKILL.md` has a **Trigger phrases** section; use those when asking the AI to perform the workflow.
 
