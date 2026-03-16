@@ -52,6 +52,16 @@ oss-claw/
 - **Claude / ChatGPT:** Paste the relevant section or link the file when starting a task (e.g. "Follow the Hadoop contribution recipe" and attach the Hadoop SKILL.md).
 - **Generic:** Each `SKILL.md` has a **Trigger phrases** section; use those when asking the AI to perform the workflow.
 
-## Repo
+## Contributing
 
-- **GitHub:** [deepujain/oss-claw](https://github.com/deepujain/oss-claw)
+Contributions are welcome. To add or improve a skill:
+
+1. **New project skill:** Add a folder under `oss/` (e.g. `oss/<project>/SKILL.md`) with a `SKILL.md` that follows the pattern of existing skills: trigger phrases, sync/branch steps, implement and test, then submit (PR or patch).
+2. **Improve existing skill:** Edit the relevant `SKILL.md` and open a pull request.
+3. **New use case:** Propose a new top-level folder (like `oss/`) for a different use case and add a short note in the README.
+
+Open an [issue](https://github.com/deepujain/oss-claw/issues) to discuss ideas; PRs against `main` for doc or skill updates are preferred.
+
+## License
+
+This repository is licensed under the **MIT License**. See [LICENSE](LICENSE) for the full text.
