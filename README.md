@@ -4,7 +4,7 @@
 
 The world has shifted from writing code to generating code. The art of hand-written code is now transforming to generating tokens from frontier Large Language Models running in the AI factory. Thanks to innovations from Nvidia, Claude, Cursor, GitHub Copilot, and the broader ecosystem, we’re at an inflection point: coding agents and the frontier AI models that power them have changed how software is built forever. 
 
-The difference comes down to **context**: a proper working context acts as a skill and sharply improves the responses and actions of the models that power these agents. In short, **skills** translate **context** into what we give to AI models—and the better the skill, the better the output.
+The difference comes down to context. A proper working context acts as a skill and sharply improves the responses and actions of the models that power these agents. In short, skills translate context into what we give to AI models—and the better the skill, the better the output.
 
 Open source has reshaped the world: from the internet and cloud to mobile and AI, most of the software we rely on is built on open source. Contributing back—fixing bugs, adding features, sharing workflows—strengthens the ecosystem for everyone. The more people who contribute with confidence, the faster innovation moves. Doing that well takes the right skills: workflows, conventions, and checklists that turn an agent into an effective contributor. 
 
