@@ -12,8 +12,9 @@ Coding agents have changed how software is built forever. A proper working conte
 | **Apache Spark** | SPARK (SQL, Core, PySpark, etc.) — JIRA, sbt, GitHub Actions |
 | **Apache Airflow** | Core, providers — GitHub issues, prek, breeze, Helm |
 | **OpenClaw** | openclaw/openclaw — GitHub issues, pnpm, contributor workflow |
+| **Slurm** | SchedMD Slurm — **patch-based** (no GitHub PRs); SchedMD tracker, git format-patch, C - Contributions |
 
-More projects can be added the same way: one skill per project, with issue flow, branch/commit rules, CI, and PR conventions.
+More projects can be added the same way: one skill per project. **Apache-style** projects use GitHub PRs; **patch-based** projects (e.g. Slurm) use the project’s issue tracker and attached patches.
 
 ---
 
@@ -30,6 +31,7 @@ ai-skills/
       spark/                  # Apache Spark PR (JIRA, sbt, GitHub Actions)
       airflow/                # Apache Airflow PR (GitHub issues, prek, breeze)
     openclaw/                 # OpenClaw PR (GitHub issues, pnpm)
+    slurm/                    # Slurm patch contribution (SchedMD tracker, no GitHub PRs)
 ```
 
 ## Skills
@@ -40,6 +42,7 @@ ai-skills/
 | **Spark PR** | [oss-contribution/apache/spark/SKILL.md](oss-contribution/apache/spark/SKILL.md) | New or existing Spark PR; JIRA (SPARK-xxxxx); sbt tests; "here is my Spark PR URL — take actions". |
 | **Airflow PR** | [oss-contribution/apache/airflow/SKILL.md](oss-contribution/apache/airflow/SKILL.md) | New or existing Airflow PR; GitHub issues; prek, breeze, Helm tests. |
 | **OpenClaw PR** | [oss-contribution/openclaw/SKILL.md](oss-contribution/openclaw/SKILL.md) | New OpenClaw PR; GitHub issues; pnpm; "follow the openclaw PR recipe". |
+| **Slurm patch** | [oss-contribution/slurm/SKILL.md](oss-contribution/slurm/SKILL.md) | Slurm contributions; SchedMD tracker; patch workflow; "Slurm contribution" / "Slurm patch". |
 
 ## How to use
 

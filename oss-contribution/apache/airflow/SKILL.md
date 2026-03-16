@@ -11,14 +11,17 @@ When the user asks to contribute a PR to Airflow, pick a GitHub issue, or "follo
 
 | Context | What to do |
 |--------|------------|
-| **New PR** | Pick an issue (§1), sync and create a **new** branch from `main` (§2), implement, run pre-checks and tests (§3), commit and push, open PR. |
-| **Update to existing PR** | Work on the **branch that is already the PR head** (do not create a second branch for the same issue). Rebase that branch on `apache/main` first, then make your changes, run pre-checks and tests (§3), commit and push (force-with-lease if you rebased). |
+| **New PR** | Pick an issue (§1), sync and create a **new** branch from `main` (§2), implement, run pre-checks and tests (§4), commit and push, open PR. |
+| **Update to existing PR** | Work on the **branch that is already the PR head** (do not create a second branch for the same issue). Rebase that branch on `apache/main` first, then make your changes, run pre-checks and tests (§4), commit and push (force-with-lease if you rebased). |
 
 ## 1. Pick an issue (GitHub)
 
-- Find issues on **GitHub**, not JIRA: [apache/airflow Issues](https://github.com/apache/airflow/issues). You can search any open issues (e.g. `is:issue is:open`), not only "good first issue"; that label is a useful hint for smaller scope but not required.
+- **Issue tracker:** [https://github.com/apache/airflow/issues](https://github.com/apache/airflow/issues) — all Airflow issues and PRs live here. Search open issues (e.g. `is:issue is:open`) or filter by labels (e.g. `good first issue`, `kind:bug`) to find one that’s easy to pick.
 - Prefer **well-scoped** issues (clear problem, single fix). Labels like **good first issue** or **kind:bug** often indicate that; other open bugs or improvements are fine too.
-- **Avoid duplicates:** Before implementing, confirm no **open** PR already fixes this issue (yours would be closed as duplicate, e.g. [PR #63201 closed as duplicate of #63104](https://github.com/apache/airflow/pull/63201)). For each candidate issue: (1) Open the issue page and check the **timeline** for “mentioned in PR #…” from another author. (2) Search [apache/airflow pull requests](https://github.com/apache/airflow/pulls) for the issue number (e.g. `62622` or `Fixes #62622`). **Skip the issue** if an open PR from someone else already targets it; pick a different issue so your PR is not closed as duplicate.
+- **Mandatory — no duplicate work:** Do **not** start implementing until you have confirmed that **no open PR** already fixes this issue. Otherwise your PR will be closed as duplicate and the work is wasted (e.g. [PR #63201 was closed as duplicate of #63104](https://github.com/apache/airflow/pull/63201)). For **every** candidate issue before you branch or code:
+  1. Open the issue page and check the **timeline** for “mentioned in PR #…” or “linked pull request” from another author.
+  2. Search [apache/airflow pull requests](https://github.com/apache/airflow/pulls) for the issue number (e.g. `62622` or `Fixes #62622`).
+  **Skip the issue** if any open PR from someone else already targets it; pick a different issue.
 - Note the **issue number** (e.g. `#62622`). The PR title and commit message should reference it (e.g. `Fix … (#62622)`).
 - Fetch issue details if needed to confirm scope and component (core, providers, UI, etc.).
 
@@ -94,7 +97,13 @@ Use the **actual issue number** in the branch name (e.g. `fix-62622-s3-dag-bundl
 - Push to **your fork** (origin), not apache.
 - After rebasing: `git push --no-verify --force-with-lease origin <branch>`. If pre-push hooks fail locally (same env issues as pre-commit), use `git push --force-with-lease --no-verify origin <branch>`.
 
-## 7. Open the PR (GitHub)
+## 7. Before opening the PR (design and scope)
+
+- **Fix direction:** Consider whether the minimal “symptom” fix is what maintainers want. Sometimes the better fix is the opposite: e.g. instead of extending a behavior to more components, remove it from components that don’t need it. Check existing patterns in the codebase for *which components* get a given config or annotation, not only syntax.
+- **Scope:** Make only the changes needed; keep the PR easy to review. If the issue suggests one approach but the codebase pattern suggests another (e.g. “only component X and Y need this”), prefer aligning with the pattern.
+- **No tool attribution:** Do not add “Made with Cursor” or similar to commit messages. If the IDE added it, amend before push (§6).
+
+## 8. Open the PR (GitHub)
 
 - **Where:** GitHub. Create the PR from your fork's branch to **apache/airflow** (base branch **main**).
 - **Title:** Short summary and issue, e.g. `Fix S3DagBundle to delete stale dags recursively (#62622)`.
@@ -106,7 +115,15 @@ Use the **actual issue number** in the branch name (e.g. `fix-62622-s3-dag-bundl
 - Optionally create a local `PR_NNNNN_body.md` for copy-paste only; do not commit it.
 - **Apache projects tracked in JIRA (Spark, Hadoop, HDFS, etc.):** In the PR description, include the contributor’s **JIRA id for credit** (e.g. `**JIRA assignee for credit:** deepujain`). Issues are tracked in JIRA; committers use this to assign the JIRA to the contributor when the PR is merged.
 
-## 8. After push: CI and rebase
+## 9. During review (after the PR is created)
+
+- **Be open to reversing the approach.** Reviewers may suggest the opposite fix (e.g. “don’t add X here; remove X from places that don’t need it”). Treat that as valid design feedback and rework the PR accordingly; don’t defend the original approach unless there’s a strong reason.
+- **Address every comment.** If a reviewer asks for a follow-up (e.g. “Y also doesn’t need this”), apply the same logic to Y and push an update. One round of “same change elsewhere” is common.
+- **Rebase when the branch is out-of-date.** If GitHub shows “This branch is out-of-date with the base branch”, run `git fetch apache && git rebase apache/main`, then `git push --no-verify --force-with-lease origin <branch>` so the PR is mergeable.
+- **Title changes by maintainers are normal.** A maintainer may change the PR title to match the final scope (e.g. from “Add X to A, B, C” to “Remove X from A, B, C”). No need to object.
+- **Update tests when behavior changes.** If your rework changes which code paths or components get a config/annotation, update the relevant test expectations (e.g. helm test assertions) so CI stays green.
+
+## 10. After push: CI and rebase
 
 - **Keep the PR rebased.** Otherwise the build may fail due to unrelated changes. Rebase on latest `main`: `git fetch apache && git rebase apache/main`, then `git push --no-verify --force-with-lease origin <branch>`.
 - If CI fails (ruff, mypy, tests): fix and push; re-run may be automatic or trigger with an empty commit if needed.
@@ -117,7 +134,7 @@ Use the **actual issue number** in the branch name (e.g. `fix-62622-s3-dag-bundl
 
 | What | Why | What to do |
 |------|-----|------------|
-| **Duplicate PR** | Another open PR already fixes the same issue; maintainers close yours as duplicate (e.g. [#63201 closed as duplicate of #63104](https://github.com/apache/airflow/pull/63201)). | Before picking an issue: check the issue’s timeline for “mentioned in PR #…”; search [apache/airflow/pulls](https://github.com/apache/airflow/pulls) for the issue number. **Skip** issues that already have an open PR from another author; choose one with no competing PR. |
+| **Duplicate PR** | Another open PR already fixes the same issue; maintainers close yours as duplicate and the work is wasted (e.g. [#63201 closed as duplicate of #63104](https://github.com/apache/airflow/pull/63201)). | **Before implementing:** For the issue you pick, (1) check the issue’s timeline for “mentioned in PR #…” or a linked PR; (2) search [apache/airflow/pulls](https://github.com/apache/airflow/pulls) for the issue number (e.g. `62622` or `Fixes #62622`). **Do not branch or code** until you confirm no open PR from someone else targets that issue. If one exists, skip and pick a different issue. |
 
 ---
 
@@ -142,9 +159,11 @@ Use the **actual issue number** in the branch name (e.g. `fix-62622-s3-dag-bundl
 
 | Where | What |
 |-------|------|
-| **GitHub Issues** | Find and pick any open, well-scoped issue (#NNNNN); "good first issue" is optional. **Check for existing open PRs** (issue timeline + search PRs) to avoid duplicate. |
+| **GitHub Issues** | [apache/airflow/issues](https://github.com/apache/airflow/issues). Pick any open, well-scoped issue (#NNNNN). **Mandatory:** Confirm no open PR already targets it (issue timeline + search [apache/airflow/pulls](https://github.com/apache/airflow/pulls)); otherwise your PR will be closed as duplicate (e.g. [#63201](https://github.com/apache/airflow/pull/63201)). |
 | **Local** | Clone your fork, add `apache` remote, branch from `main` (or use existing PR branch for updates), implement (include test when possible), **run pre-checks and tests** (§4), commit only your files with issue ref in message, push (use `--no-verify` and `--force-with-lease` after rebase if hooks fail locally). |
-| **GitHub PR** | Push to your fork, open PR into **apache/airflow** (main). Use description format in §6; end with `Fixes #NNNNN`. |
+| **GitHub PR** | Push to your fork, open PR into **apache/airflow** (main). Use description format in §8; end with `Fixes #NNNNN`. |
+| **Before opening PR** (§7) | Check fix direction (minimal vs design change); align with which components need the change; no “Made with Cursor” in commits. |
+| **During review** (§9) | Be open to reversing the approach; address every comment; rebase when out-of-date; accept title changes; update test expectations if behavior changes. |
 | **JIRA-tracked Apache projects** | For Spark, Hadoop, HDFS, etc., issues live in JIRA. In the PR description include **JIRA id for credit** (e.g. `**JIRA assignee for credit:** deepujain`) so committers can assign the JIRA to the contributor. |
 | **CI** | Keep PR rebased on main; fix ruff/mypy/tests if CI fails. If local pre-commit/pre-push hooks are broken (missing deps), use `--no-verify` and rely on CI. |
 
