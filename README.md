@@ -2,11 +2,11 @@
 
 **Accelerate your contributions to Open Source Software with OSS Claw.**
 
-The world has shifted from writing code to generating code. The art of hand-written code is now transforming to generating tokens from frontier Large Language Models running in the AI factory. Thanks to innovations from Nvidia, Claude, Cursor, GitHub Copilot, and the broader ecosystem, we’re at an inflection point: coding agents and the frontier AI models that power them have changed how software is built forever. 
+The world has shifted from writing code to generating code. Generating code is generating tokens, and that is an act of **inference**. The art of hand-written code is now the art of inference: frontier Large Language Models in the AI factory run inference at scale. The larger AI inflection points have been ChatGPT, o1, and now, for code, **Claude Code**, the inference inflection of 2026. Claude Code has extended the context window, so giving better context is more important than ever. Thanks to innovations from Nvidia, Claude, Cursor, GitHub Copilot, and the broader ecosystem, we’re at that inflection point: coding agents and the frontier AI models that power them have changed how software is built forever. 
 
-The difference comes down to context. A proper working context acts as a skill and sharply improves the responses and actions of the models that power these agents. In short, skills translate context into what we give to AI models—and the better the skill, the better the output.
+A proper working context acts as a skill and sharply improves the responses and actions of the models that power these agents. In short, skills translate context into what we give to AI models, and the better the skill, the better the output.
 
-Open source has reshaped the world: from the internet and cloud to mobile and AI, most of the software we rely on is built on open source. Contributing back—fixing bugs, adding features, sharing workflows—strengthens the ecosystem for everyone. The more people who contribute with confidence, the faster innovation moves. Doing that well takes the right skills: workflows, conventions, and checklists that turn an agent into an effective contributor. 
+Open source has reshaped the world: from the internet and cloud to mobile and AI, most of the software we rely on is built on open source. Contributing back (fixing bugs, adding features, sharing workflows) strengthens the ecosystem for everyone. The more people who contribute with confidence, the faster innovation moves. Doing that well takes the right skills: workflows, conventions, and checklists that turn an agent into an effective contributor. 
 
 **OSS Claw** captures and shares those skills. We start with a small set of recipes for contributing to OSS projects; you can add any AI skill that improves how an agent responds. The skills below focus on OSS contribution: open issues, implement fixes, and land PRs. Each skill gives your agent the workflows, conventions, and checklists for a specific project. Use them with Cursor, Claude, Codex, or any agent that can follow structured instructions.
 
@@ -14,11 +14,11 @@ Open source has reshaped the world: from the internet and cloud to mobile and AI
 
 | Project | Scope |
 |--------|--------|
-| **Apache Hadoop** | HADOOP, HDFS, YARN, MAPREDUCE — JIRA, Yetus CI, Maven |
-| **Apache Spark** | SPARK (SQL, Core, PySpark, etc.) — JIRA, sbt, GitHub Actions |
-| **Apache Airflow** | Core, providers — GitHub issues, prek, breeze, Helm |
-| **OpenClaw** | openclaw/openclaw — GitHub issues, pnpm, contributor workflow |
-| **Slurm** | SchedMD Slurm — **patch-based** (no GitHub PRs); SchedMD tracker, git format-patch, C - Contributions |
+| **Apache Hadoop** | HADOOP, HDFS, YARN, MAPREDUCE, JIRA, Yetus CI, Maven |
+| **Apache Spark** | SPARK (SQL, Core, PySpark, etc.), JIRA, sbt, GitHub Actions |
+| **Apache Airflow** | Core, providers, GitHub issues, prek, breeze, Helm |
+| **OpenClaw** | openclaw/openclaw, GitHub issues, pnpm, contributor workflow |
+| **Slurm** | SchedMD Slurm, **patch-based** (no GitHub PRs); SchedMD tracker, git format-patch, C - Contributions |
 
 More projects can be added the same way: one skill per project. **Apache-style** projects use GitHub PRs; **patch-based** projects (e.g. Slurm) use the project’s issue tracker and attached patches.
 
@@ -45,7 +45,7 @@ oss-claw/
 | Skill | Path | Use when |
 |-------|------|----------|
 | **Hadoop PR** | [oss/apache/hadoop/SKILL.md](oss/apache/hadoop/SKILL.md) | New or existing Hadoop/HDFS/YARN PR; JIRA; Yetus CI; "work on this Hadoop PR" with URL. |
-| **Spark PR** | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) | New or existing Spark PR; JIRA (SPARK-xxxxx); sbt tests; "here is my Spark PR URL — take actions". |
+| **Spark PR** | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) | New or existing Spark PR; JIRA (SPARK-xxxxx); sbt tests; "here is my Spark PR URL, take actions". |
 | **Airflow PR** | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) | New or existing Airflow PR; GitHub issues; prek, breeze, Helm tests. |
 | **OpenClaw PR** | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) | New OpenClaw PR; GitHub issues; pnpm; "follow the openclaw PR recipe". |
 | **Slurm patch** | [oss/slurm/SKILL.md](oss/slurm/SKILL.md) | Slurm contributions; SchedMD tracker; patch workflow; "Slurm contribution" / "Slurm patch". |
