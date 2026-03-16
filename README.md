@@ -1,4 +1,6 @@
-# ai-skills
+# 🦀 oss-claw
+
+**Accelerate your contributions to OSS with OSS Claw.**
 
 Coding agents have changed how software is built forever. A proper working context, which is really a skill, can drastically improve the responses and the actions taken by the AI models that power these agents. What matters is the **skills** or **context** given to them; this repository captures those skills. It starts with a small subset (recipes for contributing to OSS projects); contribute any AI skill that improves the responses an agent gives back.
 
@@ -23,9 +25,9 @@ Structured prompts and recipes for AI-assisted workflows. Organized by **use cas
 ## Structure
 
 ```
-ai-skills/
+oss-claw/
   README.md
-  oss-contribution/           # Open source contribution workflows
+  oss/                        # Open source contribution workflows
     apache/
       hadoop/                 # Apache Hadoop PR (JIRA, Yetus CI, Maven)
       spark/                  # Apache Spark PR (JIRA, sbt, GitHub Actions)
@@ -38,11 +40,11 @@ ai-skills/
 
 | Skill | Path | Use when |
 |-------|------|----------|
-| **Hadoop PR** | [oss-contribution/apache/hadoop/SKILL.md](oss-contribution/apache/hadoop/SKILL.md) | New or existing Hadoop/HDFS/YARN PR; JIRA; Yetus CI; "work on this Hadoop PR" with URL. |
-| **Spark PR** | [oss-contribution/apache/spark/SKILL.md](oss-contribution/apache/spark/SKILL.md) | New or existing Spark PR; JIRA (SPARK-xxxxx); sbt tests; "here is my Spark PR URL — take actions". |
-| **Airflow PR** | [oss-contribution/apache/airflow/SKILL.md](oss-contribution/apache/airflow/SKILL.md) | New or existing Airflow PR; GitHub issues; prek, breeze, Helm tests. |
-| **OpenClaw PR** | [oss-contribution/openclaw/SKILL.md](oss-contribution/openclaw/SKILL.md) | New OpenClaw PR; GitHub issues; pnpm; "follow the openclaw PR recipe". |
-| **Slurm patch** | [oss-contribution/slurm/SKILL.md](oss-contribution/slurm/SKILL.md) | Slurm contributions; SchedMD tracker; patch workflow; "Slurm contribution" / "Slurm patch". |
+| **Hadoop PR** | [oss/apache/hadoop/SKILL.md](oss/apache/hadoop/SKILL.md) | New or existing Hadoop/HDFS/YARN PR; JIRA; Yetus CI; "work on this Hadoop PR" with URL. |
+| **Spark PR** | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) | New or existing Spark PR; JIRA (SPARK-xxxxx); sbt tests; "here is my Spark PR URL — take actions". |
+| **Airflow PR** | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) | New or existing Airflow PR; GitHub issues; prek, breeze, Helm tests. |
+| **OpenClaw PR** | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) | New OpenClaw PR; GitHub issues; pnpm; "follow the openclaw PR recipe". |
+| **Slurm patch** | [oss/slurm/SKILL.md](oss/slurm/SKILL.md) | Slurm contributions; SchedMD tracker; patch workflow; "Slurm contribution" / "Slurm patch". |
 
 ## How to use
 
@@ -52,4 +54,4 @@ ai-skills/
 
 ## Repo
 
-- **GitHub:** [deepujain/ai-skills](https://github.com/deepujain/ai-skills)
+- **GitHub:** [deepujain/oss-claw](https://github.com/deepujain/oss-claw)
