@@ -18,6 +18,7 @@ Open source has reshaped the world: from the internet and cloud to mobile and AI
 | **Apache Spark** | SPARK (SQL, Core, PySpark, etc.), JIRA, sbt, GitHub Actions |
 | **Apache Airflow** | Core, providers, GitHub issues, prek, breeze, Helm |
 | **OpenClaw** | openclaw/openclaw, GitHub issues, pnpm, contributor workflow |
+| **NemoClaw** | NVIDIA/NemoClaw, OpenClaw + OpenShell plugin, GitHub PRs, sign-off (DCO) |
 | **Slurm** | SchedMD Slurm, **patch-based** (no GitHub PRs); SchedMD tracker, git format-patch, C - Contributions |
 
 More projects can be added the same way: one skill per project. **Apache-style** projects use GitHub PRs; **patch-based** projects (e.g. Slurm) use the project’s issue tracker and attached patches.
@@ -37,6 +38,7 @@ oss-claw/
       spark/                  # Apache Spark PR (JIRA, sbt, GitHub Actions)
       airflow/                # Apache Airflow PR (GitHub issues, prek, breeze)
     openclaw/                 # OpenClaw PR (GitHub issues, pnpm)
+    nemoclaw/                 # NemoClaw PR (NVIDIA, OpenShell, GitHub PRs, sign-off)
     slurm/                    # Slurm patch contribution (SchedMD tracker, no GitHub PRs)
 ```
 
@@ -48,6 +50,7 @@ oss-claw/
 | **Spark PR** | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) | New or existing Spark PR; JIRA (SPARK-xxxxx); sbt tests; "here is my Spark PR URL, take actions". |
 | **Airflow PR** | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) | New or existing Airflow PR; GitHub issues; prek, breeze, Helm tests. |
 | **OpenClaw PR** | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) | New OpenClaw PR; GitHub issues; pnpm; "follow the openclaw PR recipe". |
+| **NemoClaw PR** | [oss/nemoclaw/SKILL.md](oss/nemoclaw/SKILL.md) | NVIDIA NemoClaw contributions; GitHub PRs; sign-off; "follow the NemoClaw PR recipe". |
 | **Slurm patch** | [oss/slurm/SKILL.md](oss/slurm/SKILL.md) | Slurm contributions; SchedMD tracker; patch workflow; "Slurm contribution" / "Slurm patch". |
 
 ## How to use
@@ -67,6 +70,7 @@ ln -sf "$(pwd)/oss/apache/airflow"   ~/.cursor/skills/airflow-pr-contribution
 ln -sf "$(pwd)/oss/apache/hadoop"    ~/.cursor/skills/hadoop-pr-contribution
 ln -sf "$(pwd)/oss/apache/spark"     ~/.cursor/skills/spark-pr-contribution
 ln -sf "$(pwd)/oss/openclaw"         ~/.cursor/skills/openclaw-pr-contribution
+ln -sf "$(pwd)/oss/nemoclaw"         ~/.cursor/skills/nemoclaw-pr-contribution
 ln -sf "$(pwd)/oss/slurm"            ~/.cursor/skills/slurm-patch-contribution
 ```
 
