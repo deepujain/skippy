@@ -128,6 +128,55 @@ Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After reba
 - **PR body format:** Summary (what problem, what the fix does); Changes (bullet list: file path + what changed); Testing (e.g. `npm test` passes). Include "Fixes #66" (or Closes #66) in the body so GitHub auto-closes the issue on merge. Optional: Signed-off-by line at end of body.
 - **In the same response as the implement + test steps,** give the user in one go: (1) **Commit command** (full block, with actual files and message). (2) **Push command** (with actual branch name). (3) **PR open steps:** title with issue number, description from `PR_NNNNN_body.md`, open from fork branch to **NVIDIA/NemoClaw** main.
 
+## 8. Fixing an open PR (conflicts, review feedback, or updates)
+
+When the user shares a link to an open PR (e.g. `https://github.com/NVIDIA/NemoClaw/pull/114`) that needs updating — typically because of git conflicts, reviewer feedback, or upstream changes — follow this process:
+
+### 8.1 Investigate
+
+1. **Fetch the PR details** — read the PR page (via web fetch or the URL the user shared) to understand the current state: which files changed, reviewer comments, and what the conflict or requested change is.
+2. **Check out the PR branch locally** — the agent may run `git checkout <branch>` (sync step).
+3. **Fetch upstream** — `git fetch upstream` (sync step).
+4. **Identify the problem** — run `git rebase upstream/main` to surface conflicts, or inspect reviewer comments. The agent may start the rebase to discover conflicts.
+
+### 8.2 Resolve
+
+1. **Edit the conflicted or outdated files** — the agent resolves conflict markers and updates code as needed (implementation step, same as §4).
+2. **Update tests** — if the resolution changes behavior, update test expectations (same as §4).
+3. **Run tests** — `npm test` from repo root. Fix any failures introduced by the resolution.
+
+### 8.3 Rebase — the agent runs the rebase (sync step)
+
+The agent **may** run `git add` and `git rebase --continue` — rebase is a sync step that replays an existing commit, not a fresh commit. Use the correct author/committer env vars:
+
+```bash
+cd /Users/dejain/nvidia/oss/NemoClaw
+git add <list of resolved/changed files>
+GIT_EDITOR=true GIT_AUTHOR_NAME="Deepak Jain" GIT_AUTHOR_EMAIL="deepujain@gmail.com" GIT_COMMITTER_NAME="Deepak Jain" GIT_COMMITTER_EMAIL="deepujain@gmail.com" git rebase --continue
+```
+
+After the rebase, verify the commit author and Signed-off-by are correct (`git log -1`).
+
+### 8.4 Hand off — give the user the push command; do NOT push yourself
+
+Do NOT run `git push` or `gh pr comment`. Give the user the push command:
+
+```bash
+cd /Users/dejain/nvidia/oss/NemoClaw
+git push --no-verify --force-with-lease origin <branch>
+```
+
+Replace `<branch>` with the actual branch name.
+
+### 8.4 PR comment — give as chat text, never run gh commands
+
+After giving the commands, provide a **PR comment as plain text in the chat** for the user to copy-paste onto the GitHub PR conversation. The comment should summarize:
+- What was rebased/resolved
+- What changed during the resolution (e.g. "updated script to honor new `NEMOCLAW_MODEL` env var added upstream")
+- Test status (e.g. "all gateway-config tests pass")
+
+**Do NOT run `gh pr comment` or any GitHub CLI command.** The user pastes the comment manually.
+
 ---
 
 ## Lessons learned (from real contributions)
@@ -144,6 +193,9 @@ Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After reba
 - **Installer/README-only changes:** No new unit tests required; say so in the PR body. Always run `npm test` to ensure nothing regressed.
 - **Commit command: `-c` on `git`, not on `commit`.** Use `git -c user.name="..." -c user.email="..." commit -s ...` so the config applies to the single `git` run. Putting `-c` on `commit` can conflict with `-m` and produce "fatal: options '-m' and '-c' cannot be used together". Keep the commit (and PR) title concise to avoid truncation in the UI.
 - **Always sync from upstream before starting.** Run `git fetch upstream && git checkout main && git pull upstream main` before creating the feature branch so the fix is based on the latest main. Do not create the branch or make code changes until main is updated.
+- **Rebase is a sync step — the agent may run it.** `git rebase --continue` replays an existing commit; the agent can run `git add` + `git rebase --continue` with the correct author/committer env vars. This is different from `git commit` (fresh commits), which the agent must not run.
+- **Never run `gh pr comment` or any GitHub CLI command.** When a PR comment is needed (e.g. after a rebase), write the comment as plain text in the chat for the user to copy-paste onto the PR page manually.
+- **Open PR conflict resolution (§8).** When the user shares an open PR link, follow §8: investigate, resolve files, run tests, run the rebase (sync step), then give the user the push command and a PR comment as chat text. Do not run `git push` yourself.
 
 ---
 
@@ -155,6 +207,8 @@ Say one of these so the agent applies this skill:
 - **"Next NemoClaw PR: find an issue, implement, and prepare branch, commit (with sign-off), and PR."**
 - **"Follow the NemoClaw PR recipe."**
 - **"Contribute to NemoClaw."**
+- **"Fix conflicts on this NemoClaw PR: <link>"** (triggers §8 — open PR conflict resolution)
+- **"Update this NemoClaw PR: <link>"** (triggers §8)
 
 ---
 
@@ -166,3 +220,4 @@ Say one of these so the agent applies this skill:
 | **Local** | Repo at `/Users/dejain/nvidia/oss/NemoClaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then **give the user** commit and push commands (§5–§6); do not run `git commit` or `git push` yourself. |
 | **Commit / Push** | **Give the user** the full command blocks (with `-s`, `--author`, actual message and branch). They run commit and push locally. |
 | **PR** | User opens PR from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Description from `PR_NNNNN_body.md` (copy-paste only; do not commit that file). |
+| **Open PR fix (§8)** | When the user shares an open PR link: investigate, resolve files, run tests, run the rebase (agent runs `add` + `rebase --continue` as sync step), then give the user the push command and a PR comment as chat text. Never run `git push` or `gh pr comment`. |
