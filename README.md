@@ -1,70 +1,109 @@
-# 🦀 oss-claw
+# OSS Claw
 
-**Accelerate your contributions to Open Source Software with OSS Claw.**
+**An autonomous AI agent for contributing to open-source software.**
 
-The world has shifted from writing code to generating code. Generating code is generating tokens, and that is an act of **inference**. The art of hand-written code is now the art of inference: frontier Large Language Models in the AI factory run inference at scale. The larger AI inflection points have been ChatGPT, o1, and now, for code, **Claude Code**, the inference inflection of 2026. Claude Code has extended the context window, so giving better context is more important than ever. Thanks to innovations from Nvidia, Claude, Cursor, GitHub Copilot, and the broader ecosystem, we’re at that inflection point: coding agents and the frontier AI models that power them have changed how software is built forever. 
+OSS Claw is an AI agent that finds issues, implements fixes, writes tests,
+and lands PRs across multiple open-source projects. It works in two modes:
+human-guided (Cursor, Claude Code, Codex) and fully autonomous (OpenClaw).
 
-A proper working context acts as a skill and sharply improves the responses and actions of the models that power these agents. In short, skills translate context into what we give to AI models, and the better the skill, the better the output.
+The agent's behavior is defined by a layered architecture:
 
-Open source has reshaped the world: from the internet and cloud to mobile and AI, most of the software we rely on is built on open source. Contributing back (fixing bugs, adding features, sharing workflows) strengthens the ecosystem for everyone. The more people who contribute with confidence, the faster innovation moves. Doing that well takes the right skills: workflows, conventions, and checklists that turn an agent into an effective contributor. 
+- **SOUL.md** — Identity, principles, judgment criteria, safety boundaries
+- **AGENTS.md** — Multi-project orchestration, task lifecycle, delegation
+- **TOOLS.md** — Tool capabilities, integration patterns, gotchas
+- **MEMORY.md** — Cross-session state: open PRs, contribution history, lessons
+- **SKILL.md** (per project) — Project-specific workflows, conventions, recipes
 
-**OSS Claw** captures and shares those skills. We start with a small set of recipes for contributing to OSS projects; you can add any AI skill that improves how an agent responds. The skills below focus on OSS contribution: open issues, implement fixes, and land PRs. Each skill gives your agent the workflows, conventions, and checklists for a specific project. Use them with Cursor, Claude, Codex, or any agent that can follow structured instructions.
-
-**Currently supported projects:**
-
-| Project | Scope |
-|--------|--------|
-| **Apache Hadoop** | HADOOP, HDFS, YARN, MAPREDUCE, JIRA, Yetus CI, Maven |
-| **Apache Spark** | SPARK (SQL, Core, PySpark, etc.), JIRA, sbt, GitHub Actions |
-| **Apache Airflow** | Core, providers, GitHub issues, prek, breeze, Helm |
-| **OpenClaw** | openclaw/openclaw, GitHub issues, pnpm, contributor workflow |
-| **NemoClaw** | NVIDIA/NemoClaw, OpenClaw + OpenShell plugin, GitHub PRs, sign-off (DCO) |
-| **Slurm** | SchedMD Slurm, **patch-based** (no GitHub PRs); SchedMD tracker, git format-patch, C - Contributions |
-
-More projects can be added the same way: one skill per project. **Apache-style** projects use GitHub PRs; **patch-based** projects (e.g. Slurm) use the project’s issue tracker and attached patches.
+The skills give the agent *how* to contribute to each project. The soul
+gives it *who* it is, *what* it values, and *when* to act.
 
 ---
 
-Structured prompts and recipes for AI-assisted workflows. Organized by **use case** (e.g. open source contribution); vendor-specific overrides can go under `vendor/` later.
+## Supported Projects
 
-## Structure
+| Project | Skill | Submission | Issue Tracker |
+|---------|-------|------------|---------------|
+| **Apache Hadoop** | [oss/apache/hadoop/SKILL.md](oss/apache/hadoop/SKILL.md) | GitHub PR | Apache JIRA |
+| **Apache Spark** | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) | GitHub PR | Apache JIRA |
+| **Apache Airflow** | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) | GitHub PR | GitHub Issues |
+| **OpenClaw** | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) | GitHub PR | GitHub Issues |
+| **NemoClaw** | [oss/nemoclaw/SKILL.md](oss/nemoclaw/SKILL.md) | GitHub PR | GitHub Issues |
+| **Slurm** | [oss/slurm/SKILL.md](oss/slurm/SKILL.md) | Patch file | SchedMD Tracker |
+
+More projects can be added the same way: one `SKILL.md` per project.
+
+---
+
+## Architecture
 
 ```
 oss-claw/
-  README.md
-  oss/                        # Open source contribution workflows
+  SOUL.md                      # Agent identity, principles, safety
+  AGENTS.md                    # Orchestration, lifecycle, delegation
+  TOOLS.md                     # Tool capabilities and gotchas
+  MEMORY.md                    # Open PRs, history, cross-project lessons
+  memory/                      # Daily session logs (YYYY-MM-DD.md)
+  oss/                         # Project-specific contribution skills
     apache/
-      hadoop/                 # Apache Hadoop PR (JIRA, Yetus CI, Maven)
-      spark/                  # Apache Spark PR (JIRA, sbt, GitHub Actions)
-      airflow/                # Apache Airflow PR (GitHub issues, prek, breeze)
-    openclaw/                 # OpenClaw PR (GitHub issues, pnpm)
-    nemoclaw/                 # NemoClaw PR (NVIDIA, OpenShell, GitHub PRs, sign-off)
-    slurm/                    # Slurm patch contribution (SchedMD tracker, no GitHub PRs)
+      hadoop/SKILL.md          # Apache Hadoop (JIRA, Yetus CI, Maven)
+      spark/SKILL.md           # Apache Spark (JIRA, sbt, GitHub Actions)
+      airflow/SKILL.md         # Apache Airflow (GitHub issues, breeze)
+    openclaw/SKILL.md          # OpenClaw (GitHub issues, pnpm)
+    nemoclaw/SKILL.md          # NemoClaw (NVIDIA, sign-off, DCO)
+    slurm/SKILL.md             # Slurm (SchedMD tracker, patches)
 ```
 
-## Skills
+### How the Layers Work Together
 
-| Skill | Path | Use when |
-|-------|------|----------|
-| **Hadoop PR** | [oss/apache/hadoop/SKILL.md](oss/apache/hadoop/SKILL.md) | New or existing Hadoop/HDFS/YARN PR; JIRA; Yetus CI; "work on this Hadoop PR" with URL. |
-| **Spark PR** | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) | New or existing Spark PR; JIRA (SPARK-xxxxx); sbt tests; "here is my Spark PR URL, take actions". |
-| **Airflow PR** | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) | New or existing Airflow PR; GitHub issues; prek, breeze, Helm tests. |
-| **OpenClaw PR** | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) | New OpenClaw PR; GitHub issues; pnpm; "follow the openclaw PR recipe". |
-| **NemoClaw PR** | [oss/nemoclaw/SKILL.md](oss/nemoclaw/SKILL.md) | NVIDIA NemoClaw contributions; GitHub PRs; sign-off; "follow the NemoClaw PR recipe". |
-| **Slurm patch** | [oss/slurm/SKILL.md](oss/slurm/SKILL.md) | Slurm contributions; SchedMD tracker; patch workflow; "Slurm contribution" / "Slurm patch". |
+| Layer | File | Loaded | Purpose |
+|-------|------|--------|---------|
+| **Identity** | `SOUL.md` | Every session | Who the agent is, what it values, safety rules |
+| **Operations** | `AGENTS.md` | Every session | Boot sequence, task lifecycle, scheduling |
+| **Tools** | `TOOLS.md` | Every session | Git, build systems, CI, trackers — with gotchas |
+| **Memory** | `MEMORY.md` | Every session | Open PR state, contribution history, lessons |
+| **Daily** | `memory/YYYY-MM-DD.md` | Today + yesterday | Session-specific notes, decisions, blockers |
+| **Skills** | `oss/*/SKILL.md` | When working on project | Project-specific workflow, conventions, recipes |
 
-## How to use
+---
 
-### Cursor (recommended)
+## Modes of Operation
 
-Clone this repo, then **symlink** skill folders into Cursor’s skills directory so the agent loads them and stays in sync with the repo:
+### Human-Guided (Cursor, Claude Code, Codex)
+
+The human triggers actions. The agent implements and the human authenticates.
+
+```
+Human: "pick next nemoclaw issue"
+Agent: reads SKILL.md → scans issues → implements fix → runs tests
+Agent: "Here are the commit, push, and PR commands."
+Human: runs git commit, git push, opens PR
+```
+
+### Autonomous (OpenClaw + NemoClaw)
+
+The agent runs in an OpenClaw sandbox with NemoClaw governance. It
+independently scans, selects, implements, tests, and submits. Human
+approval gates are configurable per project and change size.
+
+```
+Agent: boot → read SOUL.md + MEMORY.md → scan all projects
+Agent: select highest-priority task → implement → verify → submit
+Agent: monitor for reviews → respond to feedback → learn
+Agent: update MEMORY.md → loop
+```
+
+---
+
+## Quick Start
+
+### Cursor (recommended for human-guided mode)
+
+Clone and symlink skills into Cursor's skills directory:
 
 ```bash
-# Clone oss-claw (or use your existing clone path)
-git clone https://github.com/deepujain/oss-claw.git /path/to/oss-claw
-cd /path/to/oss-claw
+git clone https://github.com/deepujain/oss-claw.git ~/oss-claw
+cd ~/oss-claw
 
-# Symlink each skill into Cursor’s skills directory
 mkdir -p ~/.cursor/skills
 ln -sf "$(pwd)/oss/apache/airflow"   ~/.cursor/skills/airflow-pr-contribution
 ln -sf "$(pwd)/oss/apache/hadoop"    ~/.cursor/skills/hadoop-pr-contribution
@@ -74,23 +113,33 @@ ln -sf "$(pwd)/oss/nemoclaw"         ~/.cursor/skills/nemoclaw-pr-contribution
 ln -sf "$(pwd)/oss/slurm"            ~/.cursor/skills/slurm-patch-contribution
 ```
 
-After that, Cursor loads the skills from the symlinked paths; any `git pull` in the repo updates the skills. You can also copy a single `SKILL.md` into `.cursor/skills/<name>/SKILL.md` if you prefer not to use symlinks.
+Cursor loads skills from the symlinked paths. `git pull` updates them.
 
-### Other agents
+### Other Agents
 
-- **Claude / ChatGPT:** Paste the relevant section or link the file when starting a task (e.g. "Follow the Hadoop contribution recipe" and attach the Hadoop SKILL.md).
-- **Generic:** Each `SKILL.md` has a **Trigger phrases** section; use those when asking the AI to perform the workflow.
+- **Claude Code / Codex:** Attach the relevant `SKILL.md` when starting
+  a task, along with `SOUL.md` for behavioral guidance.
+- **OpenClaw:** Place `SOUL.md`, `AGENTS.md`, `TOOLS.md`, and `MEMORY.md`
+  in `~/.openclaw/workspace/`. Skills go in `~/.openclaw/skills/`.
+- **Generic:** Each `SKILL.md` has a **Trigger phrases** section — use
+  those to activate the workflow.
+
+---
 
 ## Contributing
 
-Contributions are welcome. To add or improve a skill:
+Contributions are welcome. To add or improve:
 
-1. **New project skill:** Add a folder under `oss/` (e.g. `oss/<project>/SKILL.md`) with a `SKILL.md` that follows the pattern of existing skills: trigger phrases, sync/branch steps, implement and test, then submit (PR or patch).
-2. **Improve existing skill:** Edit the relevant `SKILL.md` and open a pull request.
-3. **New use case:** Propose a new top-level folder (like `oss/`) for a different use case and add a short note in the README.
+1. **New project skill:** Add `oss/<project>/SKILL.md` following the
+   pattern of existing skills.
+2. **Improve existing skill:** Edit the relevant `SKILL.md` and open a PR.
+3. **Agent behavior:** Improve `SOUL.md`, `AGENTS.md`, or `TOOLS.md`.
+4. **New use case:** Propose a new top-level folder for a different
+   use case (e.g., `review/` for code review, `docs/` for documentation).
 
-Open an [issue](https://github.com/deepujain/oss-claw/issues) to discuss ideas; PRs against `main` for doc or skill updates are preferred.
+Open an [issue](https://github.com/deepujain/oss-claw/issues) to discuss;
+PRs against `main` are preferred.
 
 ## License
 
-This repository is licensed under the **MIT License**. See [LICENSE](LICENSE) for the full text.
+MIT License. See [LICENSE](LICENSE).
