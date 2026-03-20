@@ -77,7 +77,6 @@ respect limits, and prioritize review responses.
 ## Project States
 
 ### NemoClaw
-- **Local repo**: `/Users/dejain/nvidia/oss/NemoClaw`
 - **Remote**: `upstream` = NVIDIA/NemoClaw, `origin` = deepujain/NemoClaw
 - **Open PRs**: 10+ (at repo limit of 10)
 - **Action needed**: Wait for merges before opening new PRs. Focus on
@@ -86,28 +85,24 @@ respect limits, and prioritize review responses.
   including nitpicks. Repo enforces 10 open PR limit via GitHub Actions.
 
 ### Apache Hadoop / HDFS
-- **Local repo**: `/Users/dejain/nvidia/oss/hadoop` (confirm path)
 - **Remote**: `upstream` = apache/hadoop, `origin` = deepujain/hadoop
 - **Open PRs**: 11 across HADOOP + HDFS JIRAs
 - **Key learning**: Yetus CI checks `test4tests` — always add tests.
   Flaky tests exist; document when failures are pre-existing.
 
 ### Apache Airflow
-- **Local repo**: `/Users/dejain/nvidia/oss/airflow` (confirm path)
 - **Remote**: `upstream` = apache/airflow, `origin` = deepujain/airflow
 - **Open PRs**: 3
 - **Key learning**: Pre-commit hooks may reformat unrelated files — use
   `git restore` before committing. Duplicate PR check is critical.
 
 ### Slurm
-- **Local repo**: (confirm path)
 - **Submission**: Patches on SchedMD tracker, not GitHub PRs
 - **Open patches**: 3 (SLURM-11132, SLURM-15909, SLURM-23081)
 - **Key learning**: Amend commit message before `format-patch` — the
   message is baked into the patch file.
 
 ### OpenClaw
-- **Local repo**: `/Users/dejain/nvidia/oss/openclaw`
 - **Open PRs**: 0 currently tracked
 - **Status**: Available for contributions
 

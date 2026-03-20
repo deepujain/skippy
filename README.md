@@ -8,10 +8,11 @@ human-guided (Cursor, Claude Code, Codex) and fully autonomous (OpenClaw).
 
 The agent's behavior is defined by a layered architecture:
 
-- **SOUL.md** — Identity, principles, judgment criteria, safety boundaries
+- **SOUL.md** — Principles, judgment criteria, safety boundaries
 - **AGENTS.md** — Multi-project orchestration, task lifecycle, delegation
 - **TOOLS.md** — Tool capabilities, integration patterns, gotchas
-- **MEMORY.md** — Cross-session state: open PRs, contribution history, lessons
+- **USER.md** — Contributor identity and local config (gitignored, personal)
+- **MEMORY.md** — Cross-session state: open PRs, contribution history, lessons (gitignored, personal)
 - **SKILL.md** (per project) — Project-specific workflows, conventions, recipes
 
 The skills give the agent *how* to contribute to each project. The soul
@@ -38,10 +39,13 @@ More projects can be added the same way: one `SKILL.md` per project.
 
 ```
 oss-claw/
-  SOUL.md                      # Agent identity, principles, safety
+  SOUL.md                      # Agent principles, safety rules
   AGENTS.md                    # Orchestration, lifecycle, delegation
   TOOLS.md                     # Tool capabilities and gotchas
-  MEMORY.md                    # Open PRs, history, cross-project lessons
+  USER.md.template             # Identity & local config (copy → USER.md)
+  MEMORY.md.template           # Contribution state (copy → MEMORY.md)
+  USER.md                      # Your identity (gitignored)
+  MEMORY.md                    # Your contribution state (gitignored)
   memory/                      # Daily session logs (YYYY-MM-DD.md)
   oss/                         # Project-specific contribution skills
     apache/
@@ -55,14 +59,15 @@ oss-claw/
 
 ### How the Layers Work Together
 
-| Layer | File | Loaded | Purpose |
-|-------|------|--------|---------|
-| **Identity** | `SOUL.md` | Every session | Who the agent is, what it values, safety rules |
-| **Operations** | `AGENTS.md` | Every session | Boot sequence, task lifecycle, scheduling |
-| **Tools** | `TOOLS.md` | Every session | Git, build systems, CI, trackers — with gotchas |
-| **Memory** | `MEMORY.md` | Every session | Open PR state, contribution history, lessons |
-| **Daily** | `memory/YYYY-MM-DD.md` | Today + yesterday | Session-specific notes, decisions, blockers |
-| **Skills** | `oss/*/SKILL.md` | When working on project | Project-specific workflow, conventions, recipes |
+| Layer | File | Committed? | Loaded | Purpose |
+|-------|------|------------|--------|---------|
+| **Principles** | `SOUL.md` | Yes | Every session | What the agent values, safety rules |
+| **Identity** | `USER.md` | No (gitignored) | Every session | Contributor name, email, local paths |
+| **Operations** | `AGENTS.md` | Yes | Every session | Boot sequence, task lifecycle, scheduling |
+| **Tools** | `TOOLS.md` | Yes | Every session | Git, build systems, CI, trackers — with gotchas |
+| **Memory** | `MEMORY.md` | No (gitignored) | Every session | Open PR state, contribution history, lessons |
+| **Daily** | `memory/YYYY-MM-DD.md` | No (gitignored) | Today + yesterday | Session-specific notes, decisions, blockers |
+| **Skills** | `oss/*/SKILL.md` | Yes | When working on project | Project-specific workflow, conventions, recipes |
 
 ---
 
@@ -96,12 +101,24 @@ Agent: update MEMORY.md → loop
 
 ## Quick Start
 
-### Cursor (recommended for human-guided mode)
-
-Clone and symlink skills into Cursor's skills directory:
+### 1. Clone and set up your identity
 
 ```bash
 git clone https://github.com/deepujain/oss-claw.git ~/oss-claw
+cd ~/oss-claw
+
+cp USER.md.template USER.md      # edit with your name, email, GitHub username, local paths
+cp MEMORY.md.template MEMORY.md  # starts empty — populated as you contribute
+```
+
+Both `USER.md` and `MEMORY.md` are gitignored so your personal data
+stays local.
+
+### 2. Cursor (recommended for human-guided mode)
+
+Symlink skills into Cursor's skills directory:
+
+```bash
 cd ~/oss-claw
 
 mkdir -p ~/.cursor/skills
@@ -115,7 +132,7 @@ ln -sf "$(pwd)/oss/slurm"            ~/.cursor/skills/slurm-patch-contribution
 
 Cursor loads skills from the symlinked paths. `git pull` updates them.
 
-### Other Agents
+### 3. Other Agents
 
 - **Claude Code / Codex:** Attach the relevant `SKILL.md` when starting
   a task, along with `SOUL.md` for behavioral guidance.

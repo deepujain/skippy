@@ -1,0 +1,78 @@
+# Memory — OSS Claw
+
+Long-term state that persists across sessions. This file is the source
+of truth for what the agent has done across all projects, what is in
+flight, and what was learned. Updated at the end of every contribution
+cycle.
+
+**This file is gitignored — each contributor maintains their own copy.**
+
+## Setup
+
+```bash
+cp MEMORY.md.template MEMORY.md
+# MEMORY.md will be populated as you contribute
+```
+
+---
+
+## Open PRs
+
+Track every open PR/patch across all projects to prevent conflicts,
+respect limits, and prioritize review responses. Add a section per
+project as you start contributing.
+
+### Project Name
+
+| PR | Issue | Branch | Status | Opened | Last Activity |
+|----|-------|--------|--------|--------|---------------|
+| — | — | — | — | — | — |
+
+---
+
+## Project States
+
+Per-project status summary. Local paths come from `USER.md`.
+
+### Project Name
+- **Remote**: `upstream` = org/repo, `origin` = your-fork/repo
+- **Open PRs**: 0
+- **Action needed**: (describe next step or blocker)
+- **Key learning**: (project-specific insight)
+
+---
+
+## Lessons Learned (Cross-Project)
+
+Lessons that apply across all projects, extracted from real contribution
+experience. Project-specific lessons stay in each project's SKILL.md.
+
+### Git Workflow
+- (Add lessons as you learn them)
+
+### Issue Selection
+- (Add lessons as you learn them)
+
+### Review Process
+- (Add lessons as you learn them)
+
+### Communication
+- (Add lessons as you learn them)
+
+### Per-Project Gotchas
+- (Add lessons as you learn them)
+
+---
+
+## Daily Memory
+
+Session-specific notes are stored in `memory/YYYY-MM-DD.md`. These are
+not loaded automatically — the agent reads today's and yesterday's files
+during boot sequence.
+
+Each daily file should contain:
+- Issues worked on (across all projects)
+- PRs/patches submitted or updated
+- Review comments received and addressed
+- Blockers encountered
+- Decisions made and their reasoning

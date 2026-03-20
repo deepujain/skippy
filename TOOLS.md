@@ -55,7 +55,8 @@ this file. The human copies its contents into the GitHub PR form.
 
 ### Per-Repo PR Limits
 Some repos (e.g., NemoClaw) enforce PR limits via GitHub Actions. Check
-with `gh pr list --author deepujain --state open --repo <owner/repo>`
+with `gh pr list --author <github-username> --state open --repo <owner/repo>`
+(use the GitHub username from `USER.md`)
 before opening new PRs.
 
 ---
@@ -128,7 +129,8 @@ docker run --rm -v $(pwd):/src slurm-build:latest make -j$(nproc) check
 - Issue format: `HADOOP-NNNNN`, `SPARK-NNNNN`
 - PR title format: `[SPARK-NNNNN][Component] Short summary`
 - Check for `pull-request-available` label before starting work
-- Add `JIRA assignee for credit: deepujain` in PR description
+- Add `JIRA assignee for credit: <jira-username>` in PR description
+  (use the JIRA username from `USER.md`)
 - Close syntax: `Fixes HADOOP-NNNNN` in commit message
 
 ### SchedMD Tracker (Slurm)

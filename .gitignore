@@ -1,0 +1,5 @@
+# Personal contributor state (see USER.md.template and MEMORY.md.template)
+USER.md
+MEMORY.md
+memory/*.md
+!memory/.gitkeep
