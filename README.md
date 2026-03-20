@@ -1,21 +1,21 @@
 # 🦞  You Got Clawed!  🦞
 
 ```
-    ╔═══════════════════════════════════════╗
-    ║                                       ║
-    ║    An autonomous AI agent for         ║
-    ║    contributing to open-source        ║
-    ║    software.                          ║
-    ║                                       ║
-    ╚═══════════════════════════════════════╝
-                  \   ||   /
-                   \  ||  /
-                    \_||_/
-                     |  |
-                    /    \
-                   /  <>  \
-                  /________\
-```
+                  ╔═══════════════════════════════════════╗
+                  ║                                       ║
+                  ║    An autonomous AI agent for         ║
+                  ║    contributing to open-source        ║
+                  ║    software.                          ║
+                  ║                                       ║
+                  ╚═══════════════════════════════════════╝
+                                  \   ||   /
+                                   \  ||  /
+                                    \_||_/
+                                     |  |
+                                    /    \
+                                   /  <>  \
+                                  /________\
+  ```
 
 OSS Claw is an AI agent that finds issues, implements fixes, writes tests,
 and lands PRs across multiple open-source projects. It works in two modes:
