@@ -120,6 +120,9 @@ git push --no-verify --set-upstream origin <branch>
 Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After rebase: `git push --no-verify --force-with-lease origin <branch>`.
 
 - **Open the PR:** From the user's fork branch to **NVIDIA/NemoClaw** `main`. Tell the user to use the contents of `PR_NNNNN_body.md` as the PR description and to link the issue (e.g. Closes #NNNNN).
+- **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
+  `https://github.com/NVIDIA/NemoClaw/compare/main...<github-username>:NemoClaw:<branch>?expand=1`
+  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 
 ## 7. PR description and handoff
 

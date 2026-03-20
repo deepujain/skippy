@@ -65,6 +65,9 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 ## 7. Open the PR
 
 - From the user's fork branch → `openclaw/openclaw` `main`.
+- **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
+  `https://github.com/openclaw/openclaw/compare/main...<github-username>:openclaw:<branch>?expand=1`
+  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - Link "Closes #NNNNN" in the description.
 - Use the contents of `PR_NNNNN_body.md` as the PR description.
 

@@ -64,6 +64,9 @@ Use the **actual JIRA number** in the branch name (e.g. `SPARK-38743-missing-sta
 ## 6. Open the PR (GitHub)
 
 - **Where:** GitHub. Create the PR from your fork's branch to **apache/spark** (base branch **master**).
+- **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
+  `https://github.com/apache/spark/compare/master...<github-username>:spark:<branch>?expand=1`
+  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - **Title:** `[SPARK-xxxxx][COMPONENT] Short title` (e.g. `[SPARK-38743][SQL] Test the error class: MISSING_STATIC_PARTITION_COLUMN`). Component examples: SQL, Core, PySpark, MLlib, Build.
 - **Description (format that gets merged):**
   - **Summary** — One short paragraph: what problem and what the fix does.

@@ -106,6 +106,9 @@ Use the **actual issue number** in the branch name (e.g. `fix-62622-s3-dag-bundl
 ## 8. Open the PR (GitHub)
 
 - **Where:** GitHub. Create the PR from your fork's branch to **apache/airflow** (base branch **main**).
+- **Deep link:** Always provide a clickable URL that opens the "New PR" page with source and destination branches pre-selected:
+  `https://github.com/apache/airflow/compare/main...<github-username>:airflow:<branch>?expand=1`
+  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - **Title:** Short summary and issue, e.g. `Fix S3DagBundle to delete stale dags recursively (#62622)`.
 - **Description (format that gets merged):**
   - **Summary** — One short paragraph: what problem and what the fix does.

@@ -73,7 +73,9 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 ## 6. Open the PR (GitHub)
 
 - **Where:** GitHub, not JIRA. Create the PR from your fork's branch to **apache/hadoop** (base branch usually **trunk**).
-- **URL:** https://github.com/apache/hadoop/compare/trunk...deepujain:hadoop:HADOOP-12345-short-description (replace branch name as needed), or use "Compare & pull request" on GitHub after pushing.
+- **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
+  `https://github.com/apache/hadoop/compare/trunk...<github-username>:hadoop:<branch>?expand=1`
+  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - **Title:** Include the JIRA key and short summary, e.g. `HADOOP-12345. Fix MoveToTrash when file inode exists in trash`.
 - **Description (format that gets merged):** Use this structure so reviewers and Yetus are satisfied:
   - **Summary** — One short paragraph: what problem and what the fix does.
