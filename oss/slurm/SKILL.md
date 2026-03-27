@@ -9,11 +9,11 @@ Slurm is **not** an Apache project. **There are no GitHub pull requests.** Contr
 
 **Git commands:** Provide **full git command blocks** for the user to run in their terminal (sync, branch, commit, amend, format-patch, push). The user runs these commands; do not run git for them. When giving commit/amend/patch steps, include an amend block so they can remove "Made with Cursor" / "Made-with: Cursor" and fix author/Signed-off-by before generating the patch.
 
-**Difference from Apache (Airflow/Spark/Hadoop):** Apache projects use GitHub PRs; Slurm uses the [SchedMD tracker](https://support.schedmd.com/) and patch attachments. No "open PR" step — instead: create or use a ticket, set severity **C - Contributions**, attach your patch file(s).
+**Difference from Apache (Airflow/Spark/Hadoop):** Apache projects use GitHub PRs; Slurm uses the [SchedMD tracker](https://support.schedmd.com/) and patch attachments. No "open PR" step  - instead: create or use a ticket, set severity **C - Contributions**, attach your patch file(s).
 
 ## 1. Pick or define the work
 
-- **Issue tracker:** [https://support.schedmd.com/](https://support.schedmd.com/) — all Slurm issues and contributions go here.
+- **Issue tracker:** [https://support.schedmd.com/](https://support.schedmd.com/)  - all Slurm issues and contributions go here.
 - You can **pick an existing ticket** (e.g. a reported bug) and attach a patch that fixes it, or **create a new ticket** for your contribution and attach the patch.
 - Prefer **well-scoped** work (single fix or small feature). Note the ticket number if one exists so you can reference it in the commit message and ticket description.
 
@@ -56,7 +56,7 @@ git stash pop
 
 ## 3.4 Unit tests (add or extend when applicable)
 
-Slurm has **C unit tests** using the **Check** framework (https://libcheck.github.io/). You do **not** need to be asked — when you add or change code that fits existing test patterns, add or extend tests as part of the same patch.
+Slurm has **C unit tests** using the **Check** framework (https://libcheck.github.io/). You do **not** need to be asked  - when you add or change code that fits existing test patterns, add or extend tests as part of the same patch.
 
 - **Where:** `testsuite/slurm_unit/` (e.g. `testsuite/slurm_unit/common/xstring-test.c` for `src/common/xstring.c`).
 - **When:** For **new or changed public API** in `src/common/` (e.g. new helpers in xstring, new parsers), add or extend the corresponding `*-test.c`. For plugin-only or one-off bug fixes, tests are optional but welcome if straightforward.
@@ -64,7 +64,7 @@ Slurm has **C unit tests** using the **Check** framework (https://libcheck.githu
 - **Pattern:** In the existing `*-test.c` file, use `START_TEST(test_name)` / `END_TEST`, `tcase_add_test(tc_core, test_name)`, and `ck_assert_msg(...)` for assertions. See `testsuite/slurm_unit/common/xstring-test.c` for the style.
 - **Run:** `make check` (after `make`). The agent should run build and test in Docker **including** the `check` package so unit tests are executed.
 
-## 3.5 Before commit: build and test (mandatory — use Docker)
+## 3.5 Before commit: build and test (mandatory  - use Docker)
 
 **Do not commit or generate a patch until the code compiles and tests pass.** The patch must be in great shape before it is sent. Slurm is **Linux-only** (e.g. uses `cpu_set_t`, Linux-only headers); on macOS or when build deps are missing, **use a Docker container** to build and test.
 
@@ -76,9 +76,9 @@ Slurm has **C unit tests** using the **Check** framework (https://libcheck.githu
 ### Who runs Docker and when
 
 - **The agent** runs the Docker build-and-test (script or inline command below) **once** after implementing the fix, to verify the patch compiles and tests pass before giving the user the **git** commands (commit, format-patch). The **user does not need to run Docker** unless they want to verify locally.
-- **The user** only runs **git** (sync, branch, add, commit, format-patch) as given by the agent. Do not ask the user to run multiple Docker commands or to "discover" build steps—the agent runs Docker, then provides the git/submit steps.
+- **The user** only runs **git** (sync, branch, add, commit, format-patch) as given by the agent. Do not ask the user to run multiple Docker commands or to "discover" build steps -the agent runs Docker, then provides the git/submit steps.
 
-### What the Docker commands do (reference — do not rediscover)
+### What the Docker commands do (reference  - do not rediscover)
 
 Use **only** the script or the inline command in this skill. Do not invent new Docker invocations.
 
@@ -89,7 +89,7 @@ Use **only** the script or the inline command in this skill. Do not invent new D
 | `-w /build` | Working directory inside the container is `/build` (writable). |
 | `ubuntu:22.04` | Use Ubuntu 22.04 image (Linux). First run may download it; needs network. |
 | `bash -c '...'` | Run the quoted script inside the container. |
-| Inside the script | `apt-get update && apt-get install -y ...` — install build deps and **check** (so unit tests run). `cp -a /src /build/slurm` — copy repo into writable `/build/slurm` (configure and make write there, not into your mount). `./configure --with-munge=no` — configure Slurm (no munge for simplicity). `make -j4` — build. `make check` — run tests. Exit 0 means success. |
+| Inside the script | `apt-get update && apt-get install -y ...`  - install build deps and **check** (so unit tests run). `cp -a /src /build/slurm`  - copy repo into writable `/build/slurm` (configure and make write there, not into your mount). `./configure --with-munge=no`  - configure Slurm (no munge for simplicity). `make -j4`  - build. `make check`  - run tests. Exit 0 means success. |
 
 **Prerequisites:** Docker installed and running; network access (to pull `ubuntu:22.04` and run `apt-get`). First run can take several minutes (pull image + install packages); later runs are faster if the image is cached.
 
@@ -107,16 +107,16 @@ apt-get update -qq && apt-get install -y -qq \
   libreadline-dev libncurses-dev libpq-dev
 ```
 
-- **check** — required for `make check` to build and run unit tests (e.g. xstring-test). Without it, only a subset of tests runs.
+- **check**  - required for `make check` to build and run unit tests (e.g. xstring-test). Without it, only a subset of tests runs.
 - To build **without** munge (optional): use `./configure --with-munge=no`. Otherwise ensure munge is installed (`libmunge-dev`).
 
-### Build and test (Docker — agent runs this, not the user)
+### Build and test (Docker  - agent runs this, not the user)
 
 After implementing a fix, the **agent** runs **one** Docker build-and-test (script or inline command below) to verify the patch. Then the agent gives the user **only git commands** (commit, format-patch) and SchedMD submit steps. Do not ask the user to run Docker or multiple build commands unless they ask to verify locally.
 
-Use one of the following. **Do not invent new Docker commands**—use only these.
+Use one of the following. **Do not invent new Docker commands** -use only these.
 
-**Option A — Script in repo (preferred):** From the slurm repo root, the agent runs:
+**Option A  - Script in repo (preferred):** From the slurm repo root, the agent runs:
 
 ```bash
 cd /Users/dejain/nvidia/oss/slurm
@@ -125,7 +125,7 @@ cd /Users/dejain/nvidia/oss/slurm
 
 The script is at `slurm/build-and-test-docker.sh`: it mounts the repo read-only, copies it into the container, installs deps, runs `./configure --with-munge=no`, `make -j4`, and `make check`. Requires Docker and network.
 
-**Option B — Inline Docker command:** If the script is missing or the agent needs to run it explicitly (same behaviour as the script):
+**Option B  - Inline Docker command:** If the script is missing or the agent needs to run it explicitly (same behaviour as the script):
 
 ```bash
 cd /Users/dejain/nvidia/oss/slurm
@@ -150,7 +150,7 @@ make check
 
 Fix any **compiler errors** or **configure failures** before proceeding. Fix any **test failures** caused by your changes (or note in the ticket if unrelated). Only after build and test succeed, proceed to Commit (section 4) and Generate patch (section 5).
 
-### Patch in great shape — checklist
+### Patch in great shape  - checklist
 
 Before the user commits and sends the patch:
 
@@ -159,7 +159,7 @@ Before the user commits and sends the patch:
 3. **Scope:** Only the intended files are changed; no stray reformats or unrelated edits.
 4. **Commit message:** Has Changelog trailer and Signed-off-by; no "Made with Cursor" or tool attribution.
 
-**If you implement a fix:** run the Docker build-and-test (script or inline command) yourself before giving the user the commit and format-patch commands. Do not skip build/test — that is how the patch is kept in great shape before it is sent.
+**If you implement a fix:** run the Docker build-and-test (script or inline command) yourself before giving the user the commit and format-patch commands. Do not skip build/test  - that is how the patch is kept in great shape before it is sent.
 
 ## 4. Commit
 
@@ -227,7 +227,7 @@ Spelling/docs-only suggestions can be described in the ticket without attaching 
 | Missing Changelog | Add `Changelog: ...` trailer to every commit. |
 | No sign-off | Use `git commit -s` (DCO required). |
 | One big patch with reformat + fix | Split: one patch for functional change, one for formatting if needed. |
-| "Made-with: Cursor" or wrong author in patch | Amend the commit first (remove that line; fix Signed-off-by to "Deepak Jain <deepujain@gmail.com>"), then regenerate patch with `git format-patch -1 -o . master..HEAD`. The patch file contains the commit message—if you format-patch before amending, the bad line is in the attachment. |
+| "Made-with: Cursor" or wrong author in patch | Amend the commit first (remove that line; fix Signed-off-by to "Deepak Jain <deepujain@gmail.com>"), then regenerate patch with `git format-patch -1 -o . master..HEAD`. The patch file contains the commit message -if you format-patch before amending, the bad line is in the attachment. |
 | Wrong format-patch base | Use `master..HEAD` so the patch is for your branch’s commit(s). Using only `-1 master` can output the wrong commit. |
 | Signed-off-by shows "dejain" | Amend with `--author="Deepak Jain <deepujain@gmail.com>"` and a message that has `Signed-off-by: Deepak Jain <deepujain@gmail.com>`. |
 | Committing without building or testing | **Always** build and test before commit and format-patch. Use **Docker** (§3.5) when not on Linux or when deps are missing; include **check** in deps so unit tests run. Fix compiler and test failures so the patch is in great shape. |
@@ -271,11 +271,11 @@ Spelling/docs-only suggestions can be described in the ticket without attaching 
 
 **When the user says "pick up an issue" (or similar), follow this full workflow without being asked:**
 
-1. **Pick the ticket** — Use the issue they chose (e.g. from a list or "Bug 23081").
-2. **Sync and branch** — Fetch upstream, checkout master (or stable), pull, create `fix-<bug>-short-description`. If changes already exist on the wrong branch, stash → sync → new branch → stash pop (§2).
-3. **Implement** — Make the code changes; follow style (§3). Edit only **Makefile.am**, not Makefile.in.
-4. **Unit tests** — If the change adds or changes public API in `src/common/` (e.g. xstring), add or extend tests in `testsuite/slurm_unit/common/*-test.c` using the Check framework (§3.4). Do not wait for the user to ask.
-5. **Build and test** — Run Docker build and test (§3.5): `./build-and-test-docker.sh` or the inline docker command (deps must include **check** so unit tests run). Fix any compile or test failures.
+1. **Pick the ticket**  - Use the issue they chose (e.g. from a list or "Bug 23081").
+2. **Sync and branch**  - Fetch upstream, checkout master (or stable), pull, create `fix-<bug>-short-description`. If changes already exist on the wrong branch, stash → sync → new branch → stash pop (§2).
+3. **Implement**  - Make the code changes; follow style (§3). Edit only **Makefile.am**, not Makefile.in.
+4. **Unit tests**  - If the change adds or changes public API in `src/common/` (e.g. xstring), add or extend tests in `testsuite/slurm_unit/common/*-test.c` using the Check framework (§3.4). Do not wait for the user to ask.
+5. **Build and test**  - Run Docker build and test (§3.5): `./build-and-test-docker.sh` or the inline docker command (deps must include **check** so unit tests run). Fix any compile or test failures.
 6. **Then** give the user: commit block (with Changelog, Signed-off-by, author), amend block if needed, format-patch command, and SchedMD submit steps (§4–§6).
 
 Do not skip unit tests when applicable, and do not skip Docker build/test before commit/format-patch.

@@ -7,18 +7,18 @@ description: Contribute PRs to NVIDIA/NemoClaw (OpenClaw plugin for OpenShell). 
 
 When the user asks to contribute a PR to NemoClaw, pick the next issue, or "follow the recipe", do the following in order. **Before making any code changes:** set upstream if needed, switch to main, pull from upstream, create the new branch; **then** implement the fix.
 
-**Repo:** [NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw) — open source stack for running OpenClaw always-on assistants safely with OpenShell. Apache-2.0. Contributions require **signed-off commits** (`git commit -s`).
+**Repo:** [NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw) - open source stack for running OpenClaw always-on assistants safely with OpenShell. Apache-2.0. Contributions require **signed-off commits** (`git commit -s`) and **verified (SSH-signed) commits** (`-S`).
 
-**Git commands:** Provide **full git command blocks** for the user to run in their terminal (commit, push). **The user runs these commands; do not run git for them.** (Same rule as in the Slurm skill: if the agent runs `git commit` or `git push`, author/sign-off can be wrong, pre-commit may fail, and "Made with Cursor" can end up in the commit; the user runs commit and push locally.) Sync and branch steps may be run by the agent; when you finish implementing and testing, give the user the exact commit and push commands (and PR open steps) so they can run them.
+**Git commands:** The agent **must** run all git commands directly via the integrated terminal. **CRITICAL:** Before executing or suggesting any sync, checkout, or commit, the agent must run `git status` and `git branch` silently to verify the current state. If the local state already matches the target (e.g., already on the correct branch, already up to date with upstream/main), **skip the command and proceed immediately to the next step.** Never use "Fetch" or "Run" UI widgets if terminal access is available—execute directly to maintain flow. Always use `--no-verify` and explicit `-m` messages on commits to prevent `Made-with: Cursor` trailers. Never ask for permission to run git commands.
 
 **Workflow order (do in this sequence):**
-1. **Sync / rebase** — Keep local code latest: fetch upstream, checkout main, pull. Do this before creating your branch or making any code changes.
-2. **Create branch** — From the updated main, create the feature branch (e.g. `fix/NNNNN-short-description`). No code changes before the branch exists.
-3. **Implement** — Make only the changes needed for the issue (§4).
-4. **Build locally** — If the project has a build step (e.g. `npm run build`), run it so the change compiles.
-5. **Add unit tests** — When the change introduces or modifies logic that should be covered, add or extend tests. When existing tests cover the behavior you changed, update their expectations so they match the new behavior.
-6. **Run unit tests** — Run the test suite (e.g. `npm test`). Fix any failures before giving commit commands.
-7. **Give commit commands** — Do not run `git commit` or `git push` yourself. Give the user the full commit block (§5), push command (§6), and PR open steps (§7).
+1. **Sync / rebase** - Keep local code latest: fetch upstream, checkout main, pull. Do this before creating your branch or making any code changes.
+2. **Create branch** - From the updated main, create the feature branch (e.g. `fix/NNNNN-short-description`). No code changes before the branch exists.
+3. **Implement** - Make only the changes needed for the issue (§4).
+4. **Build locally** - If the project has a build step (e.g. `npm run build`), run it so the change compiles.
+5. **Add unit tests** - When the change introduces or modifies logic that should be covered, add or extend tests. When existing tests cover the behavior you changed, update their expectations so they match the new behavior.
+6. **Run unit tests** - Run the test suite (e.g. `npm test`). Fix any failures before committing.
+7. **Commit and push** - Run `git commit` and `git push` directly with the correct flags (§5, §6).
 
 ## 1. Set upstream (one-time per clone)
 
@@ -31,10 +31,31 @@ git remote add upstream https://github.com/NVIDIA/NemoClaw.git
 git fetch upstream
 ```
 
+## 1.1 Set up SSH commit signing (one-time per machine)
+
+NVIDIA/NemoClaw requires verified commit signatures (branch protection rule). Use SSH signing with the existing GitHub SSH key:
+
+```bash
+# Use SSH for commit signing
+git config --global gpg.format ssh
+git config --global user.signingkey /Users/dejain/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true
+
+# Set up local signature verification
+echo "deepujain@gmail.com $(cat ~/.ssh/id_ed25519.pub)" > ~/.ssh/allowed_signers
+git config --global gpg.ssh.allowedSignersFile /Users/dejain/.ssh/allowed_signers
+```
+
+The same SSH key must also be registered as a **Signing Key** on GitHub (not just Authentication): [https://github.com/settings/ssh/new](https://github.com/settings/ssh/new) with **Key type = Signing Key**.
+
+Once `commit.gpgsign` is `true`, all commits (including `git rebase --continue`) are automatically signed. The `-S` flag in commit commands below is explicit but redundant when the global setting is on.
+
 ## 2. Pick an issue
 
 - Prefer well-scoped issues from [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues).
-- Fetch issue details if needed to confirm scope. Avoid issues that touch areas with the user's other open PRs.
+- **Browse issues via web fetch** (no `gh` CLI available): fetch `https://github.com/NVIDIA/NemoClaw/issues?q=is%3Aissue+is%3Aopen` to list open issues, then fetch individual issue pages for details.
+- **Check existing open PRs** to avoid collisions: fetch `https://github.com/NVIDIA/NemoClaw/pulls?q=is%3Apr+is%3Aopen+author%3Adeepujain` to see the user's open PRs. Avoid issues that touch the same files or areas as those PRs.
+- Fetch issue details if needed to confirm scope.
 
 ## 3. Sync and create branch (before any code changes)
 
@@ -75,82 +96,84 @@ cd /Users/dejain/nvidia/oss/NemoClaw
 npm test
 ```
 
-This runs `node --test test/*.test.js`. Fix any build or test failures before giving the user the commit commands (§5).
+This runs `node --test test/*.test.js`. Fix any build or test failures before committing (§5).
 
-## 5. Commit (sign-off required) — give the user the commands; do not run commit yourself
+## 5. Commit (sign-off required)  - the agent runs commit directly
 
-- **Commit command (with sign-off and author):** Give the user the full command block to run in their terminal (they run git; do not run git for them). Use `--author` and `-s`; do not add "Made with Cursor" or similar. See the Slurm skill (§4 Commit) for the same rule.
 - **Sign-off:** NemoClaw requires [DCO](https://github.com/NVIDIA/NemoClaw/blob/main/CONTRIBUTING.md) sign-off. Every commit must use `-s` or `--signoff`.
-- **Author and Signed-off-by:** GitHub username is **deepujain**. Use real name and email so both **Author** and **Signed-off-by** show **Deepak Jain &lt;deepujain@gmail.com&gt;** (not "dejain" or the GitHub username). `git commit -s` adds Signed-off-by from the committer identity, so run commit with `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author="Deepak Jain <deepujain@gmail.com>"` so both lines are correct.
+- **Author and Signed-off-by:** GitHub username is **deepujain**. Use real name and email so both **Author** and **Signed-off-by** show **Deepak Jain &lt;deepujain@gmail.com&gt;** (not "dejain" or the GitHub username). Always use `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author="Deepak Jain <deepujain@gmail.com>"`.
 - **Message:** Clear summary; reference the issue (e.g. `Fixes #NNNNN`). Use **single quotes** in shell to avoid zsh history expansion.
+- **`--no-verify` is mandatory.** This prevents `Made-with: Cursor` trailers and skips pre-commit hooks (hadolint etc. may not be installed).
 - **Commit only the fix files.** Do not add or commit any `PR_NNNNN_body.md` (that file is for copy-paste only).
-- **Amend / no tool attribution:** If the IDE added "Made with Cursor" or Signed-off-by shows "dejain", give the user an **amend block** that uses `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author` so both Author and Signed-off-by read "Deepak Jain &lt;deepujain@gmail.com&gt;".
+- **Verify after commit:** Run `git log -1 --format='%B'` and check for `Made-with: Cursor`. If present, immediately amend to strip it.
 
-**Commit command to give the user (they run it):**
+**Commit command (agent runs this directly):**
 
 ```bash
 cd /Users/dejain/nvidia/oss/NemoClaw
 git add <list of changed files>
-git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'fix(scope): short summary
+git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'fix(scope): short summary
 
 Fixes #NNNNN'
 ```
 
-Replace `<list of changed files>` and the message with the actual paths and message. The `-c user.name` / `-c user.email` ensure **Signed-off-by** is "Deepak Jain &lt;deepujain@gmail.com&gt;", not "dejain".
-
-**If the user needs to fix author or Signed-off-by (e.g. it says "dejain"), give this amend block:**
+**Amend command (if author, Signed-off-by, or Made-with needs fixing):**
 
 ```bash
 cd /Users/dejain/nvidia/oss/NemoClaw
-git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit --amend --no-verify -s --author="Deepak Jain <deepujain@gmail.com>" -m 'fix(scope): short summary
+git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit --amend --no-verify -S -s --author="Deepak Jain <deepujain@gmail.com>" -m 'fix(scope): short summary
 
 Fixes #NNNNN'
 ```
 
-## 6. Push and open PR — give the user the commands; do not run push yourself
+## 6. Push and open PR  - the agent runs push directly
 
-- **Do not run `git push` yourself.** Give the user the push command to run in their terminal.
-- **Push command to give the user:**
+- **Push command (agent runs this):**
 
 ```bash
 cd /Users/dejain/nvidia/oss/NemoClaw
 git push --no-verify --set-upstream origin <branch>
 ```
 
-Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After rebase: `git push --no-verify --force-with-lease origin <branch>`.
+Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After rebase: `git push --no-verify --force-with-lease origin <branch>`. If `--force-with-lease` fails because a reviewer added merge commits to the branch (stale remote ref), use `--force` instead.
 
-- **Open the PR:** From the user's fork branch to **NVIDIA/NemoClaw** `main`. Tell the user to use the contents of `PR_NNNNN_body.md` as the PR description and to link the issue (e.g. Closes #NNNNN).
+- **Open the PR:** From the user's fork branch to **NVIDIA/NemoClaw** `main`. Use the contents of `PR_NNNNN_body.md` as the PR description and link the issue (e.g. Closes #NNNNN).
 - **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
   `https://github.com/NVIDIA/NemoClaw/compare/main...<github-username>:NemoClaw:<branch>?expand=1`
-  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
+  Replace `<github-username>` with `deepujain` and `<branch>` with the actual branch name.
 
 ## 7. PR description and handoff
 
 - Create a local file (e.g. `PR_NNNNN_body.md`) for the PR description; do not commit it. Use it for copy-paste into the GitHub PR description.
 - **PR title:** Include the issue number so the PR links to the issue and is easy to find. Use: `fix: short summary (Fixes #66)` or `fix: short summary (#66)`. Example: `fix: use nvcr.io/nim/nvidia/nemotron-3-nano for NIM local pull (Fixes #66)`.
 - **PR body format:** Summary (what problem, what the fix does); Changes (bullet list: file path + what changed); Testing (e.g. `npm test` passes). Include "Fixes #66" (or Closes #66) in the body so GitHub auto-closes the issue on merge. Optional: Signed-off-by line at end of body.
-- **In the same response as the implement + test steps,** give the user in one go: (1) **Commit command** (full block, with actual files and message). (2) **Push command** (with actual branch name). (3) **PR open steps:** title with issue number, description from `PR_NNNNN_body.md`, open from fork branch to **NVIDIA/NemoClaw** main.
+- After implementing and testing, the agent runs commit and push directly, then provides the PR deep link and description.
 
 ## 8. Fixing an open PR (conflicts, review feedback, or updates)
 
-When the user shares a link to an open PR (e.g. `https://github.com/NVIDIA/NemoClaw/pull/114`) that needs updating — typically because of git conflicts, reviewer feedback, or upstream changes — follow this process:
+When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Always read the PR page first.** NemoClaw uses **CodeRabbit** for automated reviews, so there will almost always be nitpick comments to address. The PR page also shows a conflict banner ("This branch has conflicts that must be resolved") when rebase is needed - **always check for it and rebase if present**.
 
 ### 8.1 Investigate
 
-1. **Fetch the PR details** — read the PR page (via web fetch or the URL the user shared) to understand the current state: which files changed, reviewer comments, and what the conflict or requested change is.
-2. **Check out the PR branch locally** — the agent may run `git checkout <branch>` (sync step).
-3. **Fetch upstream** — `git fetch upstream` (sync step).
-4. **Identify the problem** — run `git rebase upstream/main` to surface conflicts, or inspect reviewer comments. The agent may start the rebase to discover conflicts.
+1. **Fetch the PR page** (via web fetch or the URL the user shared). Look for **all** of these:
+   - **CodeRabbit review comments and nitpicks** - NemoClaw PRs get automated CodeRabbit reviews. Address every nitpick (even optional ones) unless the user says to skip.
+   - **Conflict banner** - GitHub shows "This branch has conflicts that must be resolved" when the branch is behind. If present, a rebase is mandatory.
+   - **CI/CD failures** - check the checks section for failing tests or lint errors.
+   - **Human reviewer comments** - any requested changes from maintainers.
+2. **Check out the PR branch locally** - the agent may run `git checkout <branch>` (sync step).
+3. **Fetch upstream** - `git fetch upstream` (sync step).
+4. **Plan the work** - address CodeRabbit nitpicks first (code changes), then rebase onto `upstream/main`. Rebasing after fixing nitpicks avoids a double force-push.
 
 ### 8.2 Resolve
 
-1. **Edit the conflicted or outdated files** — the agent resolves conflict markers and updates code as needed (implementation step, same as §4).
-2. **Update tests** — if the resolution changes behavior, update test expectations (same as §4).
-3. **Run tests** — `npm test` from repo root. Fix any failures introduced by the resolution.
+1. **Edit the conflicted or outdated files**  - the agent resolves conflict markers and updates code as needed (implementation step, same as §4).
+2. **Update tests**  - if the resolution changes behavior, update test expectations (same as §4).
+3. **Run tests**  - `npm test` from repo root. Fix any failures introduced by the resolution.
+4. **Stage and commit** - the agent runs `git add` and `git commit --amend` with the correct author, sign-off, signing flags, and `--no-verify`. Verify with `git log -1 --format='%B'` that no `Made-with: Cursor` trailer appeared; if it did, immediately amend to strip it.
 
-### 8.3 Rebase — the agent runs the rebase (sync step)
+### 8.3 Rebase  - the agent runs the rebase (sync step)
 
-The agent **may** run `git add` and `git rebase --continue` — rebase is a sync step that replays an existing commit, not a fresh commit. Use the correct author/committer env vars:
+The agent **may** run `git add` and `git rebase --continue`  - rebase is a sync step that replays an existing commit, not a fresh commit. Use the correct author/committer env vars:
 
 ```bash
 cd /Users/dejain/nvidia/oss/NemoClaw
@@ -158,27 +181,36 @@ git add <list of resolved/changed files>
 GIT_EDITOR=true GIT_AUTHOR_NAME="Deepak Jain" GIT_AUTHOR_EMAIL="deepujain@gmail.com" GIT_COMMITTER_NAME="Deepak Jain" GIT_COMMITTER_EMAIL="deepujain@gmail.com" git rebase --continue
 ```
 
-After the rebase, verify the commit author and Signed-off-by are correct (`git log -1`).
+After the rebase, verify the commit author, Signed-off-by, and signature are correct (`git log --show-signature -1`). If `commit.gpgsign = true` globally, the rebase automatically signs the commit with the SSH key.
 
-### 8.4 Hand off — give the user the push command; do NOT push yourself
+**CRITICAL: If the rebase added `Made-with: Cursor`, give the user an amend command to strip it (see §8.4).**
 
-Do NOT run `git push` or `gh pr comment`. Give the user the push command:
+**CRITICAL: If `git log --show-signature -1` shows "No signature", give the user an amend command with `-S` to sign it (see §8.4).**
+
+### 8.4 Push and PR comment  - the agent runs push directly
+
+After the rebase, the agent pushes directly:
 
 ```bash
 cd /Users/dejain/nvidia/oss/NemoClaw
 git push --no-verify --force-with-lease origin <branch>
 ```
 
-Replace `<branch>` with the actual branch name.
+Replace `<branch>` with the actual branch name. If `--force-with-lease` fails (stale ref from reviewer merge commits), use `--force`.
 
-### 8.4 PR comment — give as chat text, never run gh commands
+After pushing, provide a **short PR comment as plain text** for the user to copy-paste onto the GitHub PR. Keep it brief, casual, and human. A touch of humor is welcome. Never use the em dash character.
 
-After giving the commands, provide a **PR comment as plain text in the chat** for the user to copy-paste onto the GitHub PR conversation. The comment should summarize:
-- What was rebased/resolved
-- What changed during the resolution (e.g. "updated script to honor new `NEMOCLAW_MODEL` env var added upstream")
-- Test status (e.g. "all gateway-config tests pass")
+**Style rules for PR comments:**
+- 2-4 sentences max. No walls of text.
+- Sound like a human, not a changelog.
+- Never use the em dash character.
+- A little humor is fine ("should be good to go", "back in business", etc.)
 
-**Do NOT run `gh pr comment` or any GitHub CLI command.** The user pastes the comment manually.
+**Examples:**
+
+- *Rebased on main. Addressed the CodeRabbit nitpicks (edge case handling + version detection). All policy tests pass. Should be good to go!*
+- *Rebased on latest main, no conflicts. Tests still pass (177/187, 10 pre-existing env failures). Ready for review!*
+- *Fixed the merge conflict in nim.js, adopted upstream's shellQuote import alongside our registry import. Tests pass. Back in business.*
 
 ---
 
@@ -188,7 +220,7 @@ After giving the commands, provide a **PR comment as plain text in the chat** fo
 - **Signed-off-by must say "Deepak Jain", not "dejain".** `git commit -s` uses the committer identity (git config `user.name`). If `user.name` is "dejain", the trailer becomes `Signed-off-by: dejain <...>`. Always give the user the commit command with `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author="Deepak Jain <deepujain@gmail.com>"` so both Author and Signed-off-by show the real name. GitHub username is **deepujain**.
 - **Build then test before commit.** Run build (if TypeScript in `nemoclaw/` changed): `cd nemoclaw && npm install --ignore-scripts && npm run build && cd ..`. Then run `npm test` from repo root. Fix any failures before giving commit commands.
 - **Update test expectations when behavior changes.** If the fix changes something that already has a test (e.g. image mapping in `getImageForModel`), update the test’s expected value; do not leave the test asserting the old behavior. Add new tests when the change introduces logic that should be covered.
-- **Give commit and push commands; do not run git yourself.** The user runs commit and push in their terminal so author, sign-off, and pre-commit work correctly. The agent gives the full command blocks with actual paths and message.
+- **Agent runs commit and push directly.** Always use the correct flags: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. The `--no-verify` flag prevents `Made-with: Cursor` trailers and skips pre-commit hooks. After committing, verify with `git log -1 --format='%B'` that no trailer appeared.
 - **PR body:** Summary, Changes (file + what changed), Testing. "Fixes #NN" in the body so merging closes the issue. See [PR #81](https://github.com/NVIDIA/NemoClaw/pull/81) for a good example.
 - **Changes on the wrong branch:** If the fix was made on another branch, stash only the relevant files (`git stash push -m "description" -- file1 file2`), sync with upstream, checkout main, pull, create the correct branch, then `git stash pop`. Commit only the fix files (do not add `package-lock.json` or `PR_NNNNN_body.md`).
 - **One fix, multiple issues:** When the same change addresses another issue, say so in the PR summary and closing line: e.g. "Fixes #54. Also addresses #32 (README one-liner when nvidia.com/nemoclaw.sh is 404)."
@@ -196,9 +228,14 @@ After giving the commands, provide a **PR comment as plain text in the chat** fo
 - **Installer/README-only changes:** No new unit tests required; say so in the PR body. Always run `npm test` to ensure nothing regressed.
 - **Commit command: `-c` on `git`, not on `commit`.** Use `git -c user.name="..." -c user.email="..." commit -s ...` so the config applies to the single `git` run. Putting `-c` on `commit` can conflict with `-m` and produce "fatal: options '-m' and '-c' cannot be used together". Keep the commit (and PR) title concise to avoid truncation in the UI.
 - **Always sync from upstream before starting.** Run `git fetch upstream && git checkout main && git pull upstream main` before creating the feature branch so the fix is based on the latest main. Do not create the branch or make code changes until main is updated.
-- **Rebase is a sync step — the agent may run it.** `git rebase --continue` replays an existing commit; the agent can run `git add` + `git rebase --continue` with the correct author/committer env vars. This is different from `git commit` (fresh commits), which the agent must not run.
-- **Never run `gh pr comment` or any GitHub CLI command.** When a PR comment is needed (e.g. after a rebase), write the comment as plain text in the chat for the user to copy-paste onto the PR page manually.
-- **Open PR conflict resolution (§8).** When the user shares an open PR link, follow §8: investigate, resolve files, run tests, run the rebase (sync step), then give the user the push command and a PR comment as chat text. Do not run `git push` yourself.
+- **Rebase, commit, and push  - the agent runs all of them.** `git rebase --continue` replays an existing commit; the agent runs `git add` + `git rebase --continue` with the correct author/committer env vars. The agent also runs `git commit` and `git push` directly with the correct flags.
+- **PR comments: provide as chat text.** When a PR comment is needed (e.g. after a rebase), write the comment as plain text in the chat for the user to copy-paste onto the PR page.
+- **Open PR conflict resolution (§8).** When the user shares an open PR link, follow §8: investigate, resolve files, run tests, run the rebase, commit, and push directly. Provide a PR comment as chat text.
+- **Always check for conflicts and CodeRabbit.** NemoClaw uses CodeRabbit for automated reviews. When the user shares a PR URL: (1) read the PR page, (2) check for the "This branch has conflicts" banner, (3) check for CodeRabbit nitpicks, (4) check for CI failures, (5) check for human reviewer comments. Address nitpicks first (code changes), then rebase. Never assume "just rebase" without reading the PR page. If there are conflicts, the rebase is mandatory even if no one explicitly asked for it.
+- **CodeRabbit nitpicks: address them.** CodeRabbit posts nitpick suggestions as review comments. Treat them as real feedback - implement the suggestion (or a sensible variant), amend the commit, then rebase. The user expects all nitpicks resolved in one pass.
+- **SSH commit signing is required.** NVIDIA/NemoClaw has branch protection requiring verified signatures. Set up SSH signing once (see section 1.1) and always include `-S` in commit and amend commands. When `commit.gpgsign = true` globally, `git rebase --continue` also signs automatically. If a commit shows "No signature" or "Unverified" on GitHub, amend with `-S` and re-push. The SSH key must be registered as both an Authentication key and a Signing key on [GitHub SSH settings](https://github.com/settings/keys).
+- **Do not batch-rebase multiple PR branches in a shell loop.** Rebases with conflicts cannot be resolved automatically in a script. Handle each PR branch individually following the full workflow (fetch, checkout, rebase, resolve conflicts if any, test, give user push commands).
+- **No `gh` CLI available.** Use web fetch (`WebFetch` tool) to browse GitHub issues, PRs, and PR details instead of `gh` commands. Fetch the issues list page, open PR list page, and individual issue/PR pages as needed.
 
 ---
 
@@ -210,7 +247,7 @@ Say one of these so the agent applies this skill:
 - **"Next NemoClaw PR: find an issue, implement, and prepare branch, commit (with sign-off), and PR."**
 - **"Follow the NemoClaw PR recipe."**
 - **"Contribute to NemoClaw."**
-- **"Fix conflicts on this NemoClaw PR: <link>"** (triggers §8 — open PR conflict resolution)
+- **"Fix conflicts on this NemoClaw PR: <link>"** (triggers §8  - open PR conflict resolution)
 - **"Update this NemoClaw PR: <link>"** (triggers §8)
 
 ---
@@ -220,7 +257,7 @@ Say one of these so the agent applies this skill:
 | Where | What |
 |-------|------|
 | **Issues** | [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues). Pick an open, well-scoped issue (#NNNNN). |
-| **Local** | Repo at `/Users/dejain/nvidia/oss/NemoClaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then **give the user** commit and push commands (§5–§6); do not run `git commit` or `git push` yourself. |
-| **Commit / Push** | **Give the user** the full command blocks (with `-s`, `--author`, actual message and branch). They run commit and push locally. |
+| **Local** | Repo at `/Users/dejain/nvidia/oss/NemoClaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then commit and push directly (§5–§6). |
+| **Commit / Push** | Agent runs directly: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. Verify no `Made-with: Cursor` after commit. |
 | **PR** | User opens PR from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Description from `PR_NNNNN_body.md` (copy-paste only; do not commit that file). |
-| **Open PR fix (§8)** | When the user shares an open PR link: investigate, resolve files, run tests, run the rebase (agent runs `add` + `rebase --continue` as sync step), then give the user the push command and a PR comment as chat text. Never run `git push` or `gh pr comment`. |
+| **Open PR fix (§8)** | When the user shares an open PR link: investigate, resolve files, run tests, rebase, commit, and push directly. Provide a PR comment as chat text. |

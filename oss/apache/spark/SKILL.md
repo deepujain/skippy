@@ -1,6 +1,6 @@
 ---
 name: spark-pr-contribution
-description: (1) New PR: pick JIRA (SPARK-xxxxx), implement, branch, commit, push, open PR. (2) Existing PR: user gives the PR URL; fetch latest, take actions (fixes, rebase, local tests, push), and generate a ready-to-paste PR comment from changes made and local test results (§8.5). Use for "new Spark PR", "follow Spark recipe", or "here is my Spark PR URL — take actions" / "address this PR" / "generate PR comment".
+description: (1) New PR: pick JIRA (SPARK-xxxxx), implement, branch, commit, push, open PR. (2) Existing PR: user gives the PR URL; fetch latest, take actions (fixes, rebase, local tests, push), and generate a ready-to-paste PR comment from changes made and local test results (§8.5). Use for "new Spark PR", "follow Spark recipe", or "here is my Spark PR URL  - take actions" / "address this PR" / "generate PR comment".
 ---
 
 # Apache Spark PR Contribution Recipe
@@ -69,11 +69,11 @@ Use the **actual JIRA number** in the branch name (e.g. `SPARK-38743-missing-sta
   Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - **Title:** `[SPARK-xxxxx][COMPONENT] Short title` (e.g. `[SPARK-38743][SQL] Test the error class: MISSING_STATIC_PARTITION_COLUMN`). Component examples: SQL, Core, PySpark, MLlib, Build.
 - **Description (format that gets merged):**
-  - **Summary** — One short paragraph: what problem and what the fix does.
-  - **Change** — Bullet list: for each file, path then what changed.
-  - **Tests** — What tests were added or how the change was tested (or **Why no new tests** with brief justification).
-  - **Fixes SPARK-xxxxx** — So the JIRA is linked.
-  - **JIRA assignee for credit:** deepujain — Required for Apache projects tracked in JIRA so committers can assign the JIRA to the contributor when the PR is merged.
+  - **Summary**  - One short paragraph: what problem and what the fix does.
+  - **Change**  - Bullet list: for each file, path then what changed.
+  - **Tests**  - What tests were added or how the change was tested (or **Why no new tests** with brief justification).
+  - **Fixes SPARK-xxxxx**  - So the JIRA is linked.
+  - **JIRA assignee for credit:** deepujain  - Required for Apache projects tracked in JIRA so committers can assign the JIRA to the contributor when the PR is merged.
 - Optionally create a local `PR_SPARK-xxxxx_body.md` for copy-paste only; do not commit it.
 
 ## 7. After push: CI and rebase
@@ -81,9 +81,9 @@ Use the **actual JIRA number** in the branch name (e.g. `SPARK-38743-missing-sta
 - **Keep the PR rebased.** Rebase on latest **master**: `git fetch upstream && git rebase upstream/master`, then `git push --no-verify --force-with-lease origin <branch>`.
 - If CI fails: fix and push; re-run may be automatic or trigger with an empty commit if needed.
 
-## 8. Existing PR: user gives URL → fetch latest, take actions
+## 8. Existing PR: user gives URL -> fetch latest, take actions
 
-Use this when the **PR was already created** (e.g. a few days ago). Later, reviewers comment or CI fails. The user **gives you the PR URL**; you fetch the latest from that PR and then take actions (fixes, rebase, tests, push).
+When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, commit/PR statuses, and any requested changes, then act on what you find.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/spark/pull/54694`). Start with **8.0** (fetch PR state and comments), then 8.1 → 8.5 as needed.
 
@@ -150,7 +150,7 @@ git push --no-verify --force-with-lease origin <branch-name>
 
 Use `--force-with-lease` after a rebase so the remote branch is updated safely.
 
-### 8.4 When CI fails or reviewers comment — take actions
+### 8.4 When CI fails or reviewers comment  - take actions
 
 For each **CI failure** or **reviewer comment** identified in 8.0:
 
@@ -164,37 +164,33 @@ For each **CI failure** or **reviewer comment** identified in 8.0:
 6. **Push:** `git push --no-verify --force-with-lease origin <branch-name>` (force-with-lease after rebase).
 7. **Optional:** Reply to the reviewer on GitHub or add a PR comment. **Generate a ready-to-paste PR comment** using **8.5** below.
 
+### 8.4a CI triage rules
+
+- **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not conclude "nothing to do" until both comments and statuses are clean or still running.
+- **Check statuses first, then logs.** Use PR/commit statuses to identify the failing jobs before diving into comments or guessing at the failure.
+- **If GitHub Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or log access is unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user infer that limitation.
+- **If local CI wrappers are blocked, run the closest direct check you can.** For example, if a full CI reproduction path is blocked by the local environment, run the nearest local `sbt` test command for the touched module and say what remains unverified.
+
 ### 8.5 Generate a PR comment (changes + local test results)
 
 After taking actions (rebase, fixes, local tests, push), **generate a short PR comment** the user can paste on the PR. Base it on what was actually done and the local test outcome.
 
 **Include (as applicable):**
 - **Rebase:** e.g. "Rebased on master."
-- **Changes made:** One line per logical change — e.g. "Fixed X in `path/to/file.scala`.", "Addressed review: use error class Y.", "Resolved merge conflict in Z."
-- **Local tests:** Which tests were run and result — e.g. "Ran `./build/sbt \"sql/testOnly org.apache.spark.sql.errors.QueryExecutionErrorsSuite -- -z SPARK-38719\"` — passed." or "Ran `sql/testOnly *QueryCompilationErrorsSuite` — all passed."
+- **Changes made:** One line per logical change  - e.g. "Fixed X in `path/to/file.scala`.", "Addressed review: use error class Y.", "Resolved merge conflict in Z."
+- **Local tests:** Which tests were run and result  - e.g. "Ran `./build/sbt \"sql/testOnly org.apache.spark.sql.errors.QueryExecutionErrorsSuite -- -z SPARK-38719\"`  - passed." or "Ran `sql/testOnly *QueryCompilationErrorsSuite`  - all passed."
 - **Closing line:** e.g. "Ready for CI." / "Ready for re-review." / "Please take another look."
 
-**Template (fill from actual actions):**
-
-```
-Rebased on master.
-[If changes:] [Brief list of changes, one line each.]
-Local tests: [exact sbt test command or suite name] — [passed/failed].
-Ready for CI.
-```
+**Style rules for PR comments:**
+- 2-4 sentences max. Sound like a human, not a changelog. A touch of humor is fine.
+- Never use the em dash character.
+- Only mention tests that were actually run.
 
 **Examples:**
 
-- Rebase + tests only:  
-  *Rebased on master. Ran `sql/testOnly org.apache.spark.sql.errors.QueryExecutionErrorsSuite -- -z SPARK-38719` locally — passed. Ready for CI.*
-
-- After reviewer feedback:  
-  *Addressed comments: renamed X to Y, added test for Z. Ran `sql/testOnly *QueryCompilationErrorsSuite` — all passed. Rebased on master. Ready for re-review.*
-
-- After CI fix:  
-  *Fixed failing test in `QueryExecutionErrorsSuite` (expected error class). Ran `sql/testOnly org.apache.spark.sql.errors.QueryExecutionErrorsSuite` — passed. Rebased and pushed. Ready for CI.*
-
-**Rule:** Only mention tests/commands that were actually run; if no local tests were run, omit the "Local tests" line or say "No local tests run."
+- *Rebased on master. `QueryExecutionErrorsSuite` passes locally. Ready for CI!*
+- *Addressed review: renamed X to Y, added test for Z. All tests pass. Ready for another look!*
+- *Fixed the failing error class assertion. Tests green locally, rebased and pushed. Back in business.*
 
 ---
 
@@ -221,6 +217,7 @@ Ready for CI.
 | **Local** | Repo at `/Users/dejain/nvidia/oss/apache_spark`. Add upstream, branch from **master**, implement (include test when possible), commit with `[SPARK-xxxxx][COMPONENT] Title`. |
 | **GitHub PR** | Push to your fork, open PR into **apache/spark** (base **master**). Title: `[SPARK-xxxxx][COMPONENT] Title`. Include **JIRA assignee for credit: deepujain** in description. |
 | **CI / after submit** | Fetch latest (**§8.0**), checkout, rebase, run local tests, **take actions** (**§8.4**), push with `--no-verify` / `--force-with-lease`. **Generate a PR comment** from changes and test results (**§8.5**) for the user to paste. See **§8**. |
+| **Review checks** | When a PR URL is shared, check statuses even if review comments are empty. If GitHub Actions logs are blocked because `gh` auth is unavailable, say so immediately and ask for `gh auth login` or pasted failure details. |
 
 ---
 
@@ -229,6 +226,6 @@ Ready for CI.
 - "Pick a Spark issue and do the full PR recipe."
 - "Next Spark PR: find a JIRA, implement, and prepare branch, commit, and PR."
 - "Follow the Spark contribution recipe."
-- **Existing PR — user gives URL:** "Here's my Spark PR: … — take actions" / "Go work on this PR" / "Address this Spark PR" → **§8**: Fetch PR (8.0), list actions, checkout (8.1), run tests (8.2), implement fixes (8.4), push (8.3/8.4), **generate PR comment** (8.5) from changes and local test results for user to paste.
+- **Existing PR  - user gives URL:** "Here's my Spark PR: …  - take actions" / "Go work on this PR" / "Address this Spark PR" → **§8**: Fetch PR (8.0), list actions, checkout (8.1), run tests (8.2), implement fixes (8.4), push (8.3/8.4), **generate PR comment** (8.5) from changes and local test results for user to paste.
 - "Generate a PR comment for my Spark PR" / "Write a summary comment for this PR" → Use **§8.5**: produce a short comment based on changes made and local tests run (rebase, files changed, exact test command + result, "Ready for CI").
 - "Spark PR has CI failures" / "Rebase my Spark PR" / "Run local tests for Spark PR" → Same **§8** flow; end with generated PR comment (8.5).

@@ -6,7 +6,7 @@ description: (1) New PR: pick JIRA, implement, branch from trunk, commit, push, 
 # Apache Hadoop PR Contribution Recipe
 
 - **New PR (create from scratch):** User says "pick a Hadoop issue" or "follow the recipe" → follow **§1–§8** (pick JIRA, branch from trunk, implement, commit, push, open PR).
-- **Existing PR (take actions):** User **gives the PR URL** (e.g. [PR #8336](https://github.com/apache/hadoop/pull/8336)) — a PR submitted earlier that now has reviewer comments, CI failures, or needs rebase/local tests → follow **§9**: fetch that PR, get branch + CI + reviewer comments, then take actions (fix, rebase, run local Maven tests, push, generate PR comment).
+- **Existing PR (take actions):** User **gives the PR URL** (e.g. [PR #8336](https://github.com/apache/hadoop/pull/8336))  - a PR submitted earlier that now has reviewer comments, CI failures, or needs rebase/local tests → follow **§9**: fetch that PR, get branch + CI + reviewer comments, then take actions (fix, rebase, run local Maven tests, push, generate PR comment).
 
 **Issues live on JIRA; PRs (fixes) go on GitHub.** Before making any code changes for a new PR: sync with apache, create the branch; then implement.
 
@@ -46,7 +46,7 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 - **Imports:** Ensure all required imports (e.g. `IOException`) are present to avoid CI compile failure.
 - **Flaky tests:** For thread-pool or timing-sensitive assertions (e.g. ForkJoinPool), assert on **configured parallelism** or a stable test getter, not `getPoolSize()` which can lag until threads are created.
 
-## 4. Commit — give the user the commands; do not run commit yourself
+## 4. Commit  - give the user the commands; do not run commit yourself
 
 - **Do not run `git commit` yourself.** Give the user the full command block to run in their terminal so author and hooks are correct.
 - **Commit only the fix files.** Do **not** add or commit any `PR_HADOOP-xxxx_body.md` if you create one for copy-paste.
@@ -56,7 +56,7 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
   `git add <files>` then `git commit --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'HADOOP-12345. Short summary of the fix.'`
 - Or use the user's commit script if they have one: `/Users/dejain/nvidia/oss/commit.sh 'HADOOP-12345. Summary'`
 
-## 5. Push — give the user the commands; do not run push yourself
+## 5. Push  - give the user the commands; do not run push yourself
 
 - **Do not run `git push` yourself.** Give the user the push command to run in their terminal.
 - **When giving push commands to the user**, always prefix with the amend step so they can fix a commit message or author that got "Made with Cursor" or "dejain" from the IDE. Include `--author` so the author stays "Deepak Jain". Give the full block:
@@ -78,10 +78,10 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
   Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - **Title:** Include the JIRA key and short summary, e.g. `HADOOP-12345. Fix MoveToTrash when file inode exists in trash`.
 - **Description (format that gets merged):** Use this structure so reviewers and Yetus are satisfied:
-  - **Summary** — One short paragraph: what problem and what the fix does.
-  - **Change** — Bullet list: for each file, path then what changed (e.g. "**Constants.java**: New config key X, default Y.").
-  - **Why no new tests** — Only if you truly did not add a test; briefly justify and list manual steps. Prefer adding a test so this section is unnecessary.
-  - **JIRA** — Line: `Fixes HADOOP-12345` (or HDFS-xxxx).
+  - **Summary**  - One short paragraph: what problem and what the fix does.
+  - **Change**  - Bullet list: for each file, path then what changed (e.g. "**Constants.java**: New config key X, default Y.").
+  - **Why no new tests**  - Only if you truly did not add a test; briefly justify and list manual steps. Prefer adding a test so this section is unnecessary.
+  - **JIRA**  - Line: `Fixes HADOOP-12345` (or HDFS-xxxx).
 - Optionally create a local `PR_HADOOP-12345_body.md` for copy-paste only; do not commit it.
 
 ## 7. Remotes (one-time setup)
@@ -96,9 +96,9 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 - **Trigger CI after a fix.** Yetus may not re-run on the latest commit. To force a new run: `git commit --allow-empty -m "Trigger CI" && git push origin <branch>`.
 - **JIRA credit.** If a committer asks for your JIRA username after merge, reply with: **deepujain**.
 
-## 9. Existing PR: user gives URL → fetch latest, take actions
+## 9. Existing PR: user gives URL -> fetch latest, take actions
 
-Use this when the **PR was already submitted** (e.g. a few days ago). Now there are reviewer comments, CI failures, or it needs rebase / local unit tests. The user **gives you the PR URL**; you fetch the latest from that PR and then take actions (address review, fix CI, rebase, run local tests, push).
+When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, commit/PR statuses, and any requested changes, then act on what you find.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/hadoop/pull/8336`). Start with **9.0** (fetch PR state and comments), then 9.1–9.5 as needed.
 
@@ -111,7 +111,7 @@ Use this when the **PR was already submitted** (e.g. a few days ago). Now there 
 1. **PR details**
    - **Head branch** (e.g. `deepujain:HDFS-17876-namenode-tracer-null-check`) → local branch name = part after the colon, e.g. `HDFS-17876-namenode-tracer-null-check`.
    - **Base branch** (usually `apache:trunk`).
-   - **CI status:** Yetus / GitHub Actions — failing jobs (compile, unit, test4tests, etc.) and log links if available.
+   - **CI status:** Yetus / GitHub Actions  - failing jobs (compile, unit, test4tests, etc.) and log links if available.
    - **Reviewer comments:** From the Conversation tab and "Files changed" → Review: author, file/line if any, and the requested change (e.g. "drop the test", "use X instead of Y").
 
 2. **List required actions**
@@ -132,7 +132,7 @@ git fetch apache
 git rebase apache/trunk
 ```
 
-The agent may run the above. **Do not run `git push`** — give the user the push command to run (e.g. `git push --no-verify --force-with-lease origin <branch-name>`).
+The agent may run the above. **Do not run `git push`**  - give the user the push command to run (e.g. `git push --no-verify --force-with-lease origin <branch-name>`).
 
 ### 9.2 Run local tests (Maven, from repo root)
 
@@ -174,34 +174,33 @@ For each **CI failure** or **reviewer comment** identified in 9.0:
 5. **Give the user the push command** (do not run `git push` yourself): e.g. `git push --no-verify --force-with-lease origin <branch-name>`. The user runs it.
 6. **Optional:** Reply to the reviewer on GitHub or add a short PR comment (use 9.5 to generate it).
 
+### 9.4a CI triage rules
+
+- **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not conclude "nothing to do" until both comments and statuses are clean or still running.
+- **Check statuses first, then logs.** Use PR/commit statuses to identify the failing jobs before diving into comments or guessing at the failure.
+- **If GitHub Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or log access is unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user infer that limitation.
+- **If local CI wrappers are blocked, run the closest direct check you can.** For example, if a full CI reproduction path is blocked by the local environment, run the nearest local Maven compile/test command for the touched module and say what remains unverified.
+
 ### 9.5 Generate a PR comment (changes + local test results)
 
 After taking actions (rebase, fixes, local tests, push), **generate a short PR comment** the user can paste on the PR. Base it on what was actually done and the local test outcome.
 
 **Include (as applicable):**
 - **Rebase:** e.g. "Rebased on trunk."
-- **Changes made:** One line per logical change — e.g. "Dropped the test as suggested by @ayushtkn.", "Fixed compile: added missing import in X."
-- **Local tests:** Which Maven command was run and result — e.g. "Ran `./mvnw test -pl hadoop-hdfs-project/hadoop-hdfs -am -Dtest=TestNameNodeReconfigure` — passed."
+- **Changes made:** One line per logical change  - e.g. "Dropped the test as suggested by @ayushtkn.", "Fixed compile: added missing import in X."
+- **Local tests:** Which Maven command was run and result  - e.g. "Ran `./mvnw test -pl hadoop-hdfs-project/hadoop-hdfs -am -Dtest=TestNameNodeReconfigure`  - passed."
 - **Closing line:** e.g. "Ready for CI." / "Ready for re-review."
 
-**Template (fill from actual actions):**
-
-```
-Rebased on trunk.
-[If changes:] [Brief list of changes.]
-Local tests: [mvn command] — [passed/failed].
-Ready for CI.
-```
+**Style rules for PR comments:**
+- 2-4 sentences max. Sound like a human, not a changelog. A touch of humor is fine.
+- Never use the em dash character.
+- Only mention tests that were actually run.
 
 **Examples:**
 
-- Rebase + reviewer (drop test):  
-  *Rebased on trunk. Dropped the test as suggested by @ayushtkn. Ran `./mvnw test -pl hadoop-hdfs-project/hadoop-hdfs -am -Dtest=TestNameNodeReconfigure` — passed. Ready for CI.*
-
-- After CI fix:  
-  *Fixed missing `IOException` import; rebased on trunk. Ran `./mvnw compile -pl hadoop-hdfs-project/hadoop-hdfs-client -am` — success. Ready for CI.*
-
-**Rule:** Only mention tests/commands that were actually run; if no local tests were run, omit the "Local tests" line or say "No local tests run."
+- *Rebased on trunk. Dropped the test per @ayushtkn's suggestion. `TestNameNodeReconfigure` passes locally. Should be good to go!*
+- *Fixed the missing `IOException` import, rebased on trunk. Compiles clean now. Back in business.*
+- *Addressed review comments, rebased on trunk. Local tests pass. Ready for another look!*
 
 ---
 
@@ -216,6 +215,8 @@ Ready for CI.
 | **CI not re-running** | Fix pushed but no new Yetus comment. | Push an empty commit to trigger CI (see §8 above). |
 | **Duplicate PR** | Another open PR already fixes the same JIRA; yours gets closed as duplicate. | Before picking an issue: skip JIRA issues with **pull-request-available** or with a linked GitHub PR; search GitHub PRs for the JIRA key and choose an issue with no open PR. |
 | **Agent ran commit/push** | Author shows "dejain" or "Made with Cursor"; pre-push hooks fail. | **Do not run `git commit` or `git push`.** Always give the user the full command block (with `--author`, branch name, message); they run commit and push locally. |
+| **No comments, but failing CI** | PR looks idle if you only read the conversation tab. | Always inspect statuses before saying there is nothing to do. |
+| **Blocked log access** | `gh` auth is invalid or unavailable, so Actions logs cannot be inspected directly. | Say that immediately and ask for `gh auth login` or pasted failure details/logs instead of waiting for the user to guess. |
 
 ---
 
@@ -227,7 +228,7 @@ Ready for CI.
 | **Local**   | Repo at `/Users/dejain/nvidia/oss/hadoop`. Add `apache` remote, branch from `trunk`, implement (include test when possible), commit with JIRA key in message. |
 | **GitHub**  | Push to your fork, open PR into `apache/hadoop` (trunk). Use PR description format in §6; title and description reference the JIRA. |
 | **CI**      | Ensure patch applies to trunk (rebase if needed). If Yetus -1: fix and push; trigger new run with empty commit if no new Yetus comment. |
-| **Existing PR** | User gives PR URL → **§9**: Fetch PR (9.0: branch, CI, reviewer comments), checkout, rebase on `apache/trunk` (9.1), run local Maven tests (9.2), take actions (9.4), push (9.3), **generate PR comment** (9.5) from changes and local test results. |
+| **Existing PR** | User gives PR URL → **§9**: Fetch PR (9.0: branch, CI, reviewer comments), check statuses even if comments are empty, checkout, rebase on `apache/trunk` (9.1), run local Maven tests (9.2), take actions (9.4), push (9.3), **generate PR comment** (9.5) from changes and local test results. |
 
 ---
 
@@ -236,5 +237,5 @@ Ready for CI.
 - "Pick a Hadoop issue and do the full PR recipe."
 - "Next Hadoop PR: find a JIRA issue, implement, and prepare branch, commit, and PR."
 - "Follow the Hadoop contribution recipe."
-- **Existing PR — user gives URL:** "Work on this Hadoop PR: https://github.com/apache/hadoop/pull/8336" / "Address this MR" / "Go work on this PR" → **§9**: Fetch that PR (9.0), list actions (review comments, CI failures), checkout branch (9.1), run local Maven tests (9.2), implement fixes (9.4), push (9.3), **generate PR comment** (9.5) for user to paste.
+- **Existing PR  - user gives URL:** "Work on this Hadoop PR: https://github.com/apache/hadoop/pull/8336" / "Address this MR" / "Go work on this PR" → **§9**: Fetch that PR (9.0), list actions (review comments, CI failures), checkout branch (9.1), run local Maven tests (9.2), implement fixes (9.4), push (9.3), **generate PR comment** (9.5) for user to paste.
 - "Generate a PR comment for my Hadoop PR" → Use **§9.5**: produce a short comment based on changes made and local tests run (rebase, reviewer feedback addressed, mvn command + result, "Ready for CI").

@@ -36,7 +36,7 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 
 ## 4. Commit
 
-- **Commit only the fix files.** Do **not** add or commit `PR_NNNNN_body.md` — that file is for copy-paste into the GitHub PR description only; keep it untracked.
+- **Commit only the fix files.** Do **not** add or commit `PR_NNNNN_body.md`  - that file is for copy-paste into the GitHub PR description only; keep it untracked.
 - **Author:** Deepak Jain &lt;deepujain@gmail.com&gt; (never "dejain").
 - **Message:** Conventional style. Example: `fix(scope): summary` or `feat(scope): summary`, then body, then `Fixes #NNNNN`. No "Made with Cursor" in the message. Use **single quotes** for the commit message in shell commands to avoid zsh history expansion (e.g. `!`).
 - **Always include author in git commit commands:** When generating any `git commit` or `git commit --amend` command, always add:  
@@ -58,9 +58,9 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 
 ## 6. PR description (markdown file)
 
-- Create a file in the repo: `PR_NNNNN_body.md` (e.g. `PR_39094_body.md`). **Do not add or commit this file** — it is for copy-paste only.
+- Create a file in the repo: `PR_NNNNN_body.md` (e.g. `PR_39094_body.md`). **Do not add or commit this file**  - it is for copy-paste only.
 - Fill the openclaw PR template: Summary (Problem, Why it matters, What changed, What did NOT change), Change Type, Scope, Linked Issue/PR (Closes #NNNNN), User-visible/Behavior Changes, Security Impact, Repro + Verification (Environment, Steps, Expected, Actual), Evidence, Human Verification, Compatibility/Migration, Failure Recovery, Risks and Mitigations.
-- **In the same response as the implement + commit steps**, tell the user: (1) Commit command (only fix files). (2) Push command. (3) "PR description is in `PR_NNNNN_body.md` — open it, Select All, Copy, paste into the GitHub PR description when you open the PR." So the user gets everything in one go without asking again.
+- **In the same response as the implement + commit steps**, tell the user: (1) Commit command (only fix files). (2) Push command. (3) "PR description is in `PR_NNNNN_body.md`  - open it, Select All, Copy, paste into the GitHub PR description when you open the PR." So the user gets everything in one go without asking again.
 
 ## 7. Open the PR
 
@@ -70,6 +70,21 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
   Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - Link "Closes #NNNNN" in the description.
 - Use the contents of `PR_NNNNN_body.md` as the PR description.
+
+## 8. Existing PR: user gives URL -> take actions
+
+When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, CI status, and any requested changes, then act on what you find.
+
+1. **Fetch the PR details** - read the PR page to understand: reviewer comments, CI status, merge conflicts.
+2. **Check out the PR branch** and rebase on upstream main if needed.
+3. **Address what you find** - fix code per review comments, resolve conflicts, update tests.
+4. **Run tests** locally before giving push commands.
+5. **Give the user push commands** (do not push yourself).
+6. **Provide a short PR comment** for the user to paste. Keep it 2-4 sentences, human-sounding, a touch of humor is fine. Never use the em dash character.
+
+**Comment examples:**
+- *Rebased on main. Addressed review comments (renamed helper, fixed edge case). Tests pass. Should be good to go!*
+- *Fixed the merge conflict, rebased on latest main. All green locally. Ready for another look!*
 
 ---
 

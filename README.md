@@ -8,13 +8,6 @@
                   ║    software.                          ║
                   ║                                       ║
                   ╚═══════════════════════════════════════╝
-                                  \   ||   /
-                                   \  ||  /
-                                    \_||_/
-                                     |  |
-                                    /    \
-                                   /  <>  \
-                                  /________\
   ```
 
 OSS Claw is an AI agent that finds issues, implements fixes, writes tests,
