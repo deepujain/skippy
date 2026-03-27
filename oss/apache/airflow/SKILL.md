@@ -165,9 +165,11 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not say "nothing to do" until both comments and statuses are clean or still running.
 - **Address every comment.** If a reviewer asks for a follow-up (e.g. "Y also doesn't need this"), apply the same logic to Y and push an update. One round of "same change elsewhere" is common.
 - **Rebase when the branch is out-of-date.** If GitHub shows "This branch is out-of-date with the base branch", run `git fetch apache && git rebase apache/main`, then `git push --no-verify --force-with-lease origin <branch>` so the PR is mergeable.
+- **Rebase and retest before adding more code.** For an existing PR, first rebase onto current `apache/main` and rerun the closest relevant local check. Do not assume the branch needs new edits until the rebased branch still reproduces the problem.
 - **Title changes by maintainers are normal.** A maintainer may change the PR title to match the final scope (e.g. from "Add X to A, B, C" to "Remove X from A, B, C"). No need to object.
 - **Update tests when behavior changes.** If your rework changes which code paths or components get a config/annotation, update the relevant test expectations (e.g. helm test assertions) so CI stays green.
 - **If Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or GitHub log access is otherwise unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user guess why you cannot see the failures.
+- **Leave a short PR comment after every meaningful push.** Rebase-only pushes, CI-refresh pushes, and validation-only updates should still leave a 2-4 sentence comment saying what changed in the branch state and what was verified locally.
 
 ## 10. After push: CI and rebase
 
@@ -199,6 +201,7 @@ Extracted from real contribution experience. Update this section as new patterns
 
 ### PR comment style (when user shares a PR URL)
 - When the user shares a PR URL, there is always something to act on (reviewer comments, CI failures, conflicts). Read the PR page first.
+- After every meaningful push, leave a short PR comment even if no source file changed.
 - If review comments are empty, check failing statuses before concluding the PR is idle.
 - PR comments should be 2-4 sentences max. Sound like a human, not a changelog. A touch of humor is fine.
 - Never use the em dash character in comments.
@@ -208,12 +211,14 @@ Extracted from real contribution experience. Update this section as new patterns
 - **Check statuses, then logs.** Start with PR/commit statuses to identify the failing jobs before looking for review comments.
 - **GitHub Actions log access depends on `gh` auth.** If `gh auth status` is invalid, say that right away and ask for `gh auth login` or pasted failing job details/logs as the fallback.
 - **If local CI wrappers are blocked by Docker, still run the closest direct check you can.** For example, if `mypy-providers` via Breeze cannot run because Docker is unavailable, run direct `mypy` on the changed files plus the relevant targeted tests and note the limitation.
+- **Start with the narrowest relevant local validation.** Run the smallest targeted test/check that covers the changed behavior first, then widen only if needed. If a broader suite fails for an unrelated local reason, record the scoped passing checks and call out the residual risk explicitly.
 
 ### Testing gotchas
 - **`@pytest.mark.enable_redact` is required** for any test that calls `redact()` or `add_mask()` and expects actual masking. Without this marker, `SecretsMasker.redact` is mocked as a passthrough (no-op) by the `tests_common` pytest plugin. The test will silently pass without actually testing masking behavior.
 - **Always run your test locally before committing** (`uv run --project <PROJECT> pytest <test>::<class>::<method> -xvs`). This catches issues like missing markers, import errors, and environment mismatches that CI would catch but waste time on.
 - **For cross-provider regressions, test from the consumer's project too.** If provider A breaks because provider B imports something eagerly at module import time, `uv run --project providers/B ...` may miss the real failure. Reproduce and smoke-test from the package that users actually import.
 - **For chart-doc-only fixes, prefer scoped `prek` over full helm tests first.** `prek run --stage pre-commit --files chart/values.yaml` is fast and already runs the chart linting stack relevant to comment/documentation edits.
+- **Prefer a clean final PR history.** Iterate locally as needed, but before the final push prefer squashing the branch to one clean issue-referenced commit unless there is a clear reason to preserve multiple commits.
 
 ### Code patterns (Airflow 3.x)
 - **`airflow.sdk` vs `airflow.models`:** Airflow 3.x deprecates many `airflow.models` APIs in favor of `airflow.sdk`. When fixing code or docs, use SDK imports (e.g. `from airflow.sdk import Connection` with `Connection.get()` instead of `Connection.get_connection_from_secrets()`).

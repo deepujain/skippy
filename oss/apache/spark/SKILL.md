@@ -162,7 +162,7 @@ For each **CI failure** or **reviewer comment** identified in 8.0:
 4. **Commit** with the same author and message style (§4): `git add <files>` then `git commit --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m '...'`. Use an amend if it's a small follow-up: `git commit --amend --no-verify --author="Deepak Jain <deepujain@gmail.com>" --no-edit`.
 5. **Rebase** if master has moved: `git fetch upstream && git rebase upstream/master`.
 6. **Push:** `git push --no-verify --force-with-lease origin <branch-name>` (force-with-lease after rebase).
-7. **Optional:** Reply to the reviewer on GitHub or add a PR comment. **Generate a ready-to-paste PR comment** using **8.5** below.
+7. **Leave a PR comment after every meaningful push.** Rebase-only pushes, CI-refresh pushes, and validation-only updates should still leave a short PR comment. **Generate a ready-to-paste PR comment** using **8.5** below.
 
 ### 8.4a CI triage rules
 
@@ -170,10 +170,14 @@ For each **CI failure** or **reviewer comment** identified in 8.0:
 - **Check statuses first, then logs.** Use PR/commit statuses to identify the failing jobs before diving into comments or guessing at the failure.
 - **If GitHub Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or log access is unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user infer that limitation.
 - **If local CI wrappers are blocked, run the closest direct check you can.** For example, if a full CI reproduction path is blocked by the local environment, run the nearest local `sbt` test command for the touched module and say what remains unverified.
+- **Rebase and retest before adding more code.** For an existing PR, first rebase onto current `upstream/master` and rerun the closest relevant local check. Do not assume the branch needs more edits until the rebased branch still reproduces the problem.
+- **Start with the narrowest relevant local validation.** Run the smallest targeted `build/sbt` or `python/run-tests` command that covers the changed behavior first, then widen only if needed. If a broader suite fails for an unrelated local reason, document the scoped passing checks and call out the residual risk explicitly.
 
 ### 8.5 Generate a PR comment (changes + local test results)
 
 After taking actions (rebase, fixes, local tests, push), **generate a short PR comment** the user can paste on the PR. Base it on what was actually done and the local test outcome.
+
+**Do this after every meaningful PR update**, including rebase-only pushes, CI-refresh pushes, or validation-only updates where no source file changed.
 
 **Include (as applicable):**
 - **Rebase:** e.g. "Rebased on master."
@@ -206,6 +210,7 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 
 - **Issues:** Tracked in [ASF JIRA (SPARK)](https://issues.apache.org/jira/projects/SPARK). No GitHub issues for Spark.
 - **JIRA id for credit:** In every Spark PR description include `**JIRA assignee for credit:** deepujain` so committers can assign the JIRA to you when the PR is merged.
+- **Prefer a clean final PR history.** Iterate locally as needed, but before the final push prefer squashing the branch to one clean `[SPARK-xxxxx][COMPONENT]` commit unless there is a clear reason to preserve multiple commits.
 
 ---
 

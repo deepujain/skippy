@@ -10,7 +10,7 @@ description: (1) New PR: pick JIRA, implement, branch from trunk, commit, push, 
 
 **Issues live on JIRA; PRs (fixes) go on GitHub.** Before making any code changes for a new PR: sync with apache, create the branch; then implement.
 
-**Git: user runs commit and push.** Give the user the **full git command blocks** to run in their terminal (commit, push). **Do not run `git commit` or `git push` yourself.** If the agent runs commit or push, author can be wrong, hooks may fail, or tool attribution can end up in the commit. Sync, checkout, rebase, and code edits may be run by the agent; when you finish implementing or fixing, give the user the exact commit and push commands so they run them locally.
+**Git: the agent may commit and push.** When the task is to work on a Hadoop PR end-to-end, the agent may run `git commit` and `git push` directly after local validation. Keep the author as **Deepak Jain <deepujain@gmail.com>**, push to **origin** (never `apache`), and use `--no-verify` when local hooks or environment issues would otherwise block progress. If the user explicitly prefers to run git commands themselves, provide the exact commit/push blocks instead.
 
 ## 1. Pick an issue (JIRA)
 
@@ -46,29 +46,29 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 - **Imports:** Ensure all required imports (e.g. `IOException`) are present to avoid CI compile failure.
 - **Flaky tests:** For thread-pool or timing-sensitive assertions (e.g. ForkJoinPool), assert on **configured parallelism** or a stable test getter, not `getPoolSize()` which can lag until threads are created.
 
-## 4. Commit  - give the user the commands; do not run commit yourself
+## 4. Commit
 
-- **Do not run `git commit` yourself.** Give the user the full command block to run in their terminal so author and hooks are correct.
 - **Commit only the fix files.** Do **not** add or commit any `PR_HADOOP-xxxx_body.md` if you create one for copy-paste.
 - **Author:** Deepak Jain &lt;deepujain@gmail.com&gt; (must show as "Deepak Jain", not the GitHub username dejain). Always use `--author` on both commit and amend.
 - **Message:** Start with the JIRA key, then summary. Example: `HADOOP-12345. Fix MoveToTrash when file inode exists in trash.` or `HDFS-17760. Fix ParentNotDirectoryException in trash.` Use **single quotes** in shell to avoid zsh history expansion.
-- **Commit command to give the user (they run it):** Use `--author` with `-m` (Git does not allow `-c` and `-m` together):
+- **Commit command:** Use `--author` with `-m` (Git does not allow `-c` and `-m` together):
   `git add <files>` then `git commit --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'HADOOP-12345. Short summary of the fix.'`
-- Or use the user's commit script if they have one: `/Users/dejain/nvidia/oss/commit.sh 'HADOOP-12345. Summary'`
+- **No tool attribution:** Do not add "Made with Cursor" or similar to commit messages. If the IDE added it, amend before push.
+- If the user prefers to run commit locally, give them the exact command block above instead of running it yourself.
 
-## 5. Push  - give the user the commands; do not run push yourself
+## 5. Push
 
-- **Do not run `git push` yourself.** Give the user the push command to run in their terminal.
-- **When giving push commands to the user**, always prefix with the amend step so they can fix a commit message or author that got "Made with Cursor" or "dejain" from the IDE. Include `--author` so the author stays "Deepak Jain". Give the full block:
+- **Push to your fork** (`origin`), not `apache`.
+- **Before push, fix author or message if needed** so the final commit shows "Deepak Jain" and no tool attribution:
   ```bash
   cd /Users/dejain/nvidia/oss/hadoop
   git commit --amend --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'HADOOP-12345. Short summary of the fix.'
   git push --no-verify --set-upstream origin HADOOP-12345-short-description
   ```
-  Use the **actual** JIRA key and commit message for the current PR.
-- Push to **your fork** (origin), not apache:
-  `git push --no-verify --set-upstream origin HADOOP-12345-short-description`
-- After rewriting history: `git push --no-verify --force-with-lease origin <branch>`
+  Use the **actual** JIRA key, commit message, and branch for the current PR.
+- First push for a branch: `git push --no-verify --set-upstream origin <branch>`
+- After rewriting history or rebasing: `git push --no-verify --force-with-lease origin <branch>`
+- If the user prefers to run push locally, give them the full amend + push block instead of running it yourself.
 
 ## 6. Open the PR (GitHub)
 
@@ -93,7 +93,7 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 ## 8. After push: CI and follow-up
 
 - **Patch must apply to trunk.** If Yetus reports "patch does not apply to trunk" (e.g. [#8309](https://github.com/apache/hadoop/pull/8309)): `git fetch apache && git rebase apache/trunk` (resolve conflicts if any), then `git push --no-verify --force-with-lease origin <branch>`. If the branch history is wrong, rebuild with `git reset --hard apache/trunk` and `git cherry-pick <commit>` then force-push.
-- **Trigger CI after a fix.** Yetus may not re-run on the latest commit. To force a new run: `git commit --allow-empty -m "Trigger CI" && git push origin <branch>`.
+- **Trigger CI after a fix.** Yetus may not re-run on the latest commit. To force a new run: `git commit --allow-empty --author="Deepak Jain <deepujain@gmail.com>" -m "Trigger CI" && git push --no-verify origin <branch>`.
 - **JIRA credit.** If a committer asks for your JIRA username after merge, reply with: **deepujain**.
 
 ## 9. Existing PR: user gives URL -> fetch latest, take actions
@@ -132,7 +132,7 @@ git fetch apache
 git rebase apache/trunk
 ```
 
-The agent may run the above. **Do not run `git push`**  - give the user the push command to run (e.g. `git push --no-verify --force-with-lease origin <branch-name>`).
+The agent may run the above, then push the rebased branch with `git push --no-verify --force-with-lease origin <branch-name>`. If the user prefers to run the push themselves, provide that exact command.
 
 ### 9.2 Run local tests (Maven, from repo root)
 
@@ -157,7 +157,7 @@ If dependency resolution fails (e.g. missing artifact in `~/.m2`), run a broader
 - First push for the branch: `git push --no-verify --set-upstream origin <branch-name>`.
 - After rebase or history change: `git push --no-verify --force-with-lease origin <branch-name>`.
 - If pre-push hooks fail (e.g. local env issues) and the PR does not depend on them: use `--no-verify`.
-- To trigger Yetus CI again: `git commit --allow-empty -m "Trigger CI" && git push --no-verify origin <branch-name>`.
+- To trigger Yetus CI again: `git commit --allow-empty --author="Deepak Jain <deepujain@gmail.com>" -m "Trigger CI" && git push --no-verify origin <branch-name>`.
 
 ### 9.4 Take actions on CI failures or reviewer comments
 
@@ -169,9 +169,9 @@ For each **CI failure** or **reviewer comment** identified in 9.0:
    - **CI (unit):** Fix the failing test or assertion (avoid flaky patterns; see "Lessons from past PRs"); run the failing test class locally with `-Dtest=TestName`.
    - **CI (patch does not apply):** Rebase on `apache/trunk` (9.1), resolve conflicts, then force-push.
 2. **Run relevant local tests** (9.2) for the touched module.
-3. **Give the user the commit command** (do not run `git commit` yourself): e.g. `git add <files>` then `git commit --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'JIRA-xxxx. Summary.'` with the actual files and message. The user runs it.
+3. **Commit the fix** with the correct author: e.g. `git add <files>` then `git commit --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'JIRA-xxxx. Summary.'` with the actual files and message.
 4. **Rebase** if trunk moved: the agent may run `git fetch apache && git rebase apache/trunk`.
-5. **Give the user the push command** (do not run `git push` yourself): e.g. `git push --no-verify --force-with-lease origin <branch-name>`. The user runs it.
+5. **Push the branch**: e.g. `git push --no-verify --force-with-lease origin <branch-name>`.
 6. **Optional:** Reply to the reviewer on GitHub or add a short PR comment (use 9.5 to generate it).
 
 ### 9.4a CI triage rules
@@ -184,6 +184,8 @@ For each **CI failure** or **reviewer comment** identified in 9.0:
 ### 9.5 Generate a PR comment (changes + local test results)
 
 After taking actions (rebase, fixes, local tests, push), **generate a short PR comment** the user can paste on the PR. Base it on what was actually done and the local test outcome.
+
+**Do this after every meaningful PR update**, including rebase-only pushes, CI-refresh pushes, or validation-only updates where no source file changed. If the branch moved or CI was retriggered, leave a short comment so reviewers can see what changed and what was verified.
 
 **Include (as applicable):**
 - **Rebase:** e.g. "Rebased on trunk."
@@ -214,9 +216,15 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 | **-1 unit** | Real failure or flaky test. Flaky example: asserting `ForkJoinPool.getPoolSize()` which can be &lt; parallelism until threads start ([#8308](https://github.com/apache/hadoop/pull/8308)). | Fix assertions to use stable values (e.g. `getParallelism()` or a test-only getter); fix real failures from the CI log. |
 | **CI not re-running** | Fix pushed but no new Yetus comment. | Push an empty commit to trigger CI (see §8 above). |
 | **Duplicate PR** | Another open PR already fixes the same JIRA; yours gets closed as duplicate. | Before picking an issue: skip JIRA issues with **pull-request-available** or with a linked GitHub PR; search GitHub PRs for the JIRA key and choose an issue with no open PR. |
-| **Agent ran commit/push** | Author shows "dejain" or "Made with Cursor"; pre-push hooks fail. | **Do not run `git commit` or `git push`.** Always give the user the full command block (with `--author`, branch name, message); they run commit and push locally. |
+| **Wrong author / tool attribution** | Commit author shows "dejain" or message includes "Made with Cursor". | Amend with `--author="Deepak Jain <deepujain@gmail.com>"`, fix the message, then `git push --no-verify --force-with-lease origin <branch>`. |
 | **No comments, but failing CI** | PR looks idle if you only read the conversation tab. | Always inspect statuses before saying there is nothing to do. |
 | **Blocked log access** | `gh` auth is invalid or unavailable, so Actions logs cannot be inspected directly. | Say that immediately and ask for `gh auth login` or pasted failure details/logs instead of waiting for the user to guess. |
+| **Rebase-only or validation-only push with no PR comment** | Reviewers cannot tell whether the branch was just rebased, CI was retriggered, or local checks were rerun. | After every push, leave a 2-4 sentence PR comment with what changed in the branch state and the exact local Maven command/result, even if no source files changed. |
+| **Shared API/config change breaks initialization or default paths** | A change passes the direct feature test but fails where Hadoop constructs default objects, working directories, URIs, or config-derived values during startup. | For changes to shared APIs, URI/path behavior, filesystem semantics, or config validation, test both the direct behavior and at least one initialization/default-path consumer in the affected module. |
+| **Failure-mode tests are too specific about the exact exception text/path** | Hadoop can surface the same underlying failure through different wrapper exceptions depending on timing, replica count, transport path, or retry path. | In negative-path tests, assert the behavioral contract and accept equivalent error surfaces when they preserve the same outcome, instead of overfitting to one exact message or wrapper exception. |
+| **Broad local suite fails for unrelated reasons** | A large Maven suite can include environment-specific or pre-existing failures that are not caused by the PR, which can waste time and blur the real signal. | Start with the narrowest module/class-level Maven check that covers the changed behavior, then widen only as needed. If a broader suite fails for an unrelated local reason, document the scoped passing checks and call out the residual risk explicitly. |
+| **Adding code before retesting on current trunk** | A PR can look stale or broken when the real issue is simply that it needs a rebase and a fresh targeted local run on top of current `apache/trunk`. | For existing PRs, rebase first, then run the closest relevant Maven check before deciding whether new code changes are actually needed. |
+| **Messy final PR history** | Iteration commits like "Trigger CI", import-only fixes, or partial experiments make the PR harder to review and obscure the real change. | Iterate locally as needed, but before final push prefer squashing the branch down to one clean JIRA-referenced commit unless there is a clear reason to preserve multiple commits. |
 
 ---
 
