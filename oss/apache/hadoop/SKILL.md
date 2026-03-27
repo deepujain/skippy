@@ -93,7 +93,7 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 ## 8. After push: CI and follow-up
 
 - **Patch must apply to trunk.** If Yetus reports "patch does not apply to trunk" (e.g. [#8309](https://github.com/apache/hadoop/pull/8309)): `git fetch apache && git rebase apache/trunk` (resolve conflicts if any), then `git push --no-verify --force-with-lease origin <branch>`. If the branch history is wrong, rebuild with `git reset --hard apache/trunk` and `git cherry-pick <commit>` then force-push.
-- **Trigger CI after a fix.** Yetus may not re-run on the latest commit. To force a new run: `git commit --allow-empty --author="Deepak Jain <deepujain@gmail.com>" -m "Trigger CI" && git push --no-verify origin <branch>`.
+- **Trigger CI after a fix.** Yetus may not re-run on the latest commit. A PR comment does **not** retrigger CI by itself. To force a new run, create and push a new commit, usually an empty one: `git commit --allow-empty --author="Deepak Jain <deepujain@gmail.com>" -m "Trigger CI" && git push --no-verify origin <branch>`.
 - **JIRA credit.** If a committer asks for your JIRA username after merge, reply with: **deepujain**.
 
 ## 9. Existing PR: user gives URL -> fetch latest, take actions
@@ -111,7 +111,7 @@ When the user shares a PR URL, it means there is something to act on: reviewer c
 1. **PR details**
    - **Head branch** (e.g. `deepujain:HDFS-17876-namenode-tracer-null-check`) → local branch name = part after the colon, e.g. `HDFS-17876-namenode-tracer-null-check`.
    - **Base branch** (usually `apache:trunk`).
-   - **CI status:** Yetus / GitHub Actions  - failing jobs (compile, unit, test4tests, etc.) and log links if available.
+   - **CI status:** Yetus / GitHub Actions  - failing jobs (compile, unit, test4tests, etc.) and log links if available. Check the PR page's merge/status summary first, not just the conversation tab, so you see the actual failing checks and whether GitHub says the commit cannot be built or is cleanly mergeable.
    - **Reviewer comments:** From the Conversation tab and "Files changed" → Review: author, file/line if any, and the requested change (e.g. "drop the test", "use X instead of Y").
 
 2. **List required actions**
@@ -157,7 +157,7 @@ If dependency resolution fails (e.g. missing artifact in `~/.m2`), run a broader
 - First push for the branch: `git push --no-verify --set-upstream origin <branch-name>`.
 - After rebase or history change: `git push --no-verify --force-with-lease origin <branch-name>`.
 - If pre-push hooks fail (e.g. local env issues) and the PR does not depend on them: use `--no-verify`.
-- To trigger Yetus CI again: `git commit --allow-empty --author="Deepak Jain <deepujain@gmail.com>" -m "Trigger CI" && git push --no-verify origin <branch-name>`.
+- To trigger Yetus CI again, you must push a new commit. A comment alone will not rerun checks. The usual pattern is: `git commit --allow-empty --author="Deepak Jain <deepujain@gmail.com>" -m "Trigger CI" && git push --no-verify origin <branch-name>`.
 
 ### 9.4 Take actions on CI failures or reviewer comments
 
@@ -177,6 +177,7 @@ For each **CI failure** or **reviewer comment** identified in 9.0:
 ### 9.4a CI triage rules
 
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not conclude "nothing to do" until both comments and statuses are clean or still running.
+- **Read the merge/status summary directly.** The PR page may show a compact merge block such as "Some checks were not successful" with failing check names. Treat that as the source of truth for what to inspect next.
 - **Check statuses first, then logs.** Use PR/commit statuses to identify the failing jobs before diving into comments or guessing at the failure.
 - **If GitHub Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or log access is unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user infer that limitation.
 - **If local CI wrappers are blocked, run the closest direct check you can.** For example, if a full CI reproduction path is blocked by the local environment, run the nearest local Maven compile/test command for the touched module and say what remains unverified.
@@ -219,7 +220,7 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 | **Wrong author / tool attribution** | Commit author shows "dejain" or message includes "Made with Cursor". | Amend with `--author="Deepak Jain <deepujain@gmail.com>"`, fix the message, then `git push --no-verify --force-with-lease origin <branch>`. |
 | **No comments, but failing CI** | PR looks idle if you only read the conversation tab. | Always inspect statuses before saying there is nothing to do. |
 | **Blocked log access** | `gh` auth is invalid or unavailable, so Actions logs cannot be inspected directly. | Say that immediately and ask for `gh auth login` or pasted failure details/logs instead of waiting for the user to guess. |
-| **Rebase-only or validation-only push with no PR comment** | Reviewers cannot tell whether the branch was just rebased, CI was retriggered, or local checks were rerun. | After every push, leave a 2-4 sentence PR comment with what changed in the branch state and the exact local Maven command/result, even if no source files changed. |
+| **Rebase-only or validation-only push with no PR comment** | Reviewers cannot tell whether the branch was just rebased, CI was retriggered, or local checks were rerun. | After every push, leave a 2-4 sentence PR comment with what changed in the branch state and the exact local Maven command/result, even if no source files changed. The comment documents the work; the push is what retriggers CI. |
 | **Shared API/config change breaks initialization or default paths** | A change passes the direct feature test but fails where Hadoop constructs default objects, working directories, URIs, or config-derived values during startup. | For changes to shared APIs, URI/path behavior, filesystem semantics, or config validation, test both the direct behavior and at least one initialization/default-path consumer in the affected module. |
 | **Failure-mode tests are too specific about the exact exception text/path** | Hadoop can surface the same underlying failure through different wrapper exceptions depending on timing, replica count, transport path, or retry path. | In negative-path tests, assert the behavioral contract and accept equivalent error surfaces when they preserve the same outcome, instead of overfitting to one exact message or wrapper exception. |
 | **Broad local suite fails for unrelated reasons** | A large Maven suite can include environment-specific or pre-existing failures that are not caused by the PR, which can waste time and blur the real signal. | Start with the narrowest module/class-level Maven check that covers the changed behavior, then widen only as needed. If a broader suite fails for an unrelated local reason, document the scoped passing checks and call out the residual risk explicitly. |
