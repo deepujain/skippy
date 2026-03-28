@@ -53,8 +53,12 @@ Once `commit.gpgsign` is `true`, all commits (including `git rebase --continue`)
 ## 2. Pick an issue
 
 - Prefer well-scoped issues from [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues).
-- **Browse issues via web fetch** (no `gh` CLI available): fetch `https://github.com/NVIDIA/NemoClaw/issues?q=is%3Aissue+is%3Aopen` to list open issues, then fetch individual issue pages for details.
-- **Check existing open PRs** to avoid collisions: fetch `https://github.com/NVIDIA/NemoClaw/pulls?q=is%3Apr+is%3Aopen+author%3Adeepujain` to see the user's open PRs. Avoid issues that touch the same files or areas as those PRs.
+- **Prefer `gh` for issue and PR discovery.** Run `gh auth status` first. If auth is healthy, use:
+  - `gh issue list --repo NVIDIA/NemoClaw --state open --limit 100`
+  - `gh issue view <number> --repo NVIDIA/NemoClaw`
+  - `gh pr list --repo NVIDIA/NemoClaw --author deepujain --state open`
+- **Fallback when `gh` is unavailable or unauthenticated:** use web fetch on the GitHub issues and PR list pages, then fetch individual issue pages for details.
+- **Check existing open PRs** to avoid collisions. Avoid issues that touch the same files or areas as the user's existing open PRs.
 - Fetch issue details if needed to confirm scope.
 
 ## 3. Sync and create branch (before any code changes)
@@ -98,6 +102,8 @@ npm test
 
 This runs `node --test test/*.test.js`. Fix any build or test failures before committing (§5).
 
+If the full suite reproduces **pre-existing unrelated failures** in the current environment, do not pretend the suite is green. Record the exact failing files/tests, run the narrowest relevant local validation for the changed area (for example `npx vitest run test/cli.test.js`), and call out both the scoped passing check and the unrelated failures in the PR body.
+
 ## 5. Commit (sign-off required)  - the agent runs commit directly
 
 - **Sign-off:** NemoClaw requires [DCO](https://github.com/NVIDIA/NemoClaw/blob/main/CONTRIBUTING.md) sign-off. Every commit must use `-s` or `--signoff`.
@@ -137,7 +143,16 @@ git push --no-verify --set-upstream origin <branch>
 
 Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After rebase: `git push --no-verify --force-with-lease origin <branch>`. If `--force-with-lease` fails because a reviewer added merge commits to the branch (stale remote ref), use `--force` instead.
 
-- **Open the PR:** From the user's fork branch to **NVIDIA/NemoClaw** `main`. Use the contents of `PR_NNNNN_body.md` as the PR description and link the issue (e.g. Closes #NNNNN).
+- **Open the PR:** Prefer `gh` when authenticated. Run `gh auth status` first.
+- **PR create command (preferred):**
+
+```bash
+cd /Users/dejain/nvidia/oss/NemoClaw
+gh pr create --repo NVIDIA/NemoClaw --base main --head deepujain:<branch> --title 'fix: short summary (Fixes #NNNNN)' --body-file PR_NNNNN_body.md
+```
+
+Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The agent should run this directly when `gh auth status` is healthy.
+- **Fallback if `gh` auth is broken or unavailable:** provide the deep link and PR body path so the user can open it manually.
 - **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
   `https://github.com/NVIDIA/NemoClaw/compare/main...<github-username>:NemoClaw:<branch>?expand=1`
   Replace `<github-username>` with `deepujain` and `<branch>` with the actual branch name.
@@ -147,7 +162,7 @@ Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After reba
 - Create a local file (e.g. `PR_NNNNN_body.md`) for the PR description; do not commit it. Use it for copy-paste into the GitHub PR description.
 - **PR title:** Include the issue number so the PR links to the issue and is easy to find. Use: `fix: short summary (Fixes #66)` or `fix: short summary (#66)`. Example: `fix: use nvcr.io/nim/nvidia/nemotron-3-nano for NIM local pull (Fixes #66)`.
 - **PR body format:** Summary (what problem, what the fix does); Changes (bullet list: file path + what changed); Testing (e.g. `npm test` passes). Include "Fixes #66" (or Closes #66) in the body so GitHub auto-closes the issue on merge. Optional: Signed-off-by line at end of body.
-- After implementing and testing, the agent runs commit and push directly, then provides the PR deep link and description.
+- After implementing and testing, the agent runs commit and push directly, then creates the PR with `gh` when auth is available. If PR creation fails because of auth or repo permissions, say that explicitly and provide the deep link plus the local PR body path.
 
 ## 8. Fixing an open PR (conflicts, review feedback, or updates)
 
@@ -155,7 +170,11 @@ When the user shares a PR URL, it means there is something to act on: reviewer c
 
 ### 8.1 Investigate
 
-1. **Fetch the PR page** (via web fetch or the URL the user shared). Look for **all** of these:
+1. **Read the PR first.** Prefer `gh` when authenticated:
+   - `gh pr view <url-or-number> --repo NVIDIA/NemoClaw --comments`
+   - `gh pr checks <url-or-number> --repo NVIDIA/NemoClaw`
+   If `gh` is unavailable or unauthenticated, fall back to web fetch on the PR page.
+   Look for **all** of these:
    - **CodeRabbit review comments and nitpicks** - NemoClaw PRs get automated CodeRabbit reviews. Address every nitpick (even optional ones) unless the user says to skip.
    - **Conflict banner** - GitHub shows "This branch has conflicts that must be resolved" when the branch is behind. If present, a rebase is mandatory.
    - **CI/CD failures** - check the checks section for failing tests or lint errors.
@@ -198,7 +217,14 @@ git push --no-verify --force-with-lease origin <branch>
 
 Replace `<branch>` with the actual branch name. If `--force-with-lease` fails (stale ref from reviewer merge commits), use `--force`.
 
-After pushing, provide a **short PR comment as plain text** for the user to copy-paste onto the GitHub PR. Keep it brief, casual, and human. A touch of humor is welcome. Never use the em dash character.
+After pushing, prefer posting a short PR comment with `gh` when auth is healthy:
+
+```bash
+cd /Users/dejain/nvidia/oss/NemoClaw
+gh pr comment <url-or-number> --repo NVIDIA/NemoClaw --body 'Rebased on main. Addressed the CodeRabbit nitpicks and reran the relevant tests locally. Should be good to go!'
+```
+
+If `gh` auth is broken or unavailable, provide the comment as plain text in chat for the user to copy-paste onto the PR. Keep it brief, casual, and human. A touch of humor is welcome. Never use the em dash character.
 
 **Style rules for PR comments:**
 - 2-4 sentences max. No walls of text.
@@ -229,13 +255,18 @@ After pushing, provide a **short PR comment as plain text** for the user to copy
 - **Commit command: `-c` on `git`, not on `commit`.** Use `git -c user.name="..." -c user.email="..." commit -s ...` so the config applies to the single `git` run. Putting `-c` on `commit` can conflict with `-m` and produce "fatal: options '-m' and '-c' cannot be used together". Keep the commit (and PR) title concise to avoid truncation in the UI.
 - **Always sync from upstream before starting.** Run `git fetch upstream && git checkout main && git pull upstream main` before creating the feature branch so the fix is based on the latest main. Do not create the branch or make code changes until main is updated.
 - **Rebase, commit, and push  - the agent runs all of them.** `git rebase --continue` replays an existing commit; the agent runs `git add` + `git rebase --continue` with the correct author/committer env vars. The agent also runs `git commit` and `git push` directly with the correct flags.
-- **PR comments: provide as chat text.** When a PR comment is needed (e.g. after a rebase), write the comment as plain text in the chat for the user to copy-paste onto the PR page.
+- **Prefer `gh` for PR comments.** When a PR comment is needed (e.g. after a rebase), run `gh pr comment` directly if `gh auth status` is healthy. If not, give the comment as plain text in chat for the user to paste.
 - **Open PR conflict resolution (§8).** When the user shares an open PR link, follow §8: investigate, resolve files, run tests, run the rebase, commit, and push directly. Provide a PR comment as chat text.
 - **Always check for conflicts and CodeRabbit.** NemoClaw uses CodeRabbit for automated reviews. When the user shares a PR URL: (1) read the PR page, (2) check for the "This branch has conflicts" banner, (3) check for CodeRabbit nitpicks, (4) check for CI failures, (5) check for human reviewer comments. Address nitpicks first (code changes), then rebase. Never assume "just rebase" without reading the PR page. If there are conflicts, the rebase is mandatory even if no one explicitly asked for it.
 - **CodeRabbit nitpicks: address them.** CodeRabbit posts nitpick suggestions as review comments. Treat them as real feedback - implement the suggestion (or a sensible variant), amend the commit, then rebase. The user expects all nitpicks resolved in one pass.
+- **`gh` can work even when the GitHub app cannot.** If app-based PR creation or commenting fails with repo permission errors (for example `403 Resource not accessible by integration`), check `gh auth status` from the current shell and fall back to `gh pr create`, `gh pr view`, `gh pr checks`, and `gh pr comment` before giving up.
+- **Check `gh auth status` in the same environment you plan to use.** Do not assume the user's terminal auth state and the agent shell auth state are identical. If `gh` looks unauthenticated from the agent shell, say that explicitly and prefer a retry once auth is confirmed healthy.
+- **Worktree test setup may need shared dependencies.** When using isolated worktrees, it is acceptable to symlink `node_modules` from the main clone to run local verification. Do not commit the `node_modules` symlink, and do not commit incidental lockfile churn caused by dependency setup in a worktree.
+- **Be explicit about pre-existing test failures.** If full `npm test` fails for unrelated reasons, list the exact failing files/tests in the PR body and pair that with the focused passing check for the touched code path.
+- **Do not invent CodeRabbit release-note blocks.** PR bodies should remain human-written. CodeRabbit may add its own auto-generated walkthrough or summary comments after PR creation, and the exact format can vary by run/config. The agent should not paste fake or guessed CodeRabbit blocks into the PR description.
 - **SSH commit signing is required.** NVIDIA/NemoClaw has branch protection requiring verified signatures. Set up SSH signing once (see section 1.1) and always include `-S` in commit and amend commands. When `commit.gpgsign = true` globally, `git rebase --continue` also signs automatically. If a commit shows "No signature" or "Unverified" on GitHub, amend with `-S` and re-push. The SSH key must be registered as both an Authentication key and a Signing key on [GitHub SSH settings](https://github.com/settings/keys).
 - **Do not batch-rebase multiple PR branches in a shell loop.** Rebases with conflicts cannot be resolved automatically in a script. Handle each PR branch individually following the full workflow (fetch, checkout, rebase, resolve conflicts if any, test, give user push commands).
-- **No `gh` CLI available.** Use web fetch (`WebFetch` tool) to browse GitHub issues, PRs, and PR details instead of `gh` commands. Fetch the issues list page, open PR list page, and individual issue/PR pages as needed.
+- **Prefer `gh`, but check auth first.** Use `gh` for issue discovery, PR creation, PR inspection, checks, and PR comments when `gh auth status` is healthy. If `gh` auth is invalid or unavailable, say that explicitly and fall back to web fetch plus deep links.
 
 ---
 
@@ -259,5 +290,5 @@ Say one of these so the agent applies this skill:
 | **Issues** | [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues). Pick an open, well-scoped issue (#NNNNN). |
 | **Local** | Repo at `/Users/dejain/nvidia/oss/NemoClaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then commit and push directly (§5–§6). |
 | **Commit / Push** | Agent runs directly: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. Verify no `Made-with: Cursor` after commit. |
-| **PR** | User opens PR from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Description from `PR_NNNNN_body.md` (copy-paste only; do not commit that file). |
-| **Open PR fix (§8)** | When the user shares an open PR link: investigate, resolve files, run tests, rebase, commit, and push directly. Provide a PR comment as chat text. |
+| **PR** | Prefer `gh pr create` from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Use `PR_NNNNN_body.md` as `--body-file`. If `gh` auth is unavailable, provide the deep link and PR body path. |
+| **Open PR fix (§8)** | When the user shares an open PR link: inspect it with `gh` when available, resolve files, run tests, rebase, commit, push directly, then prefer `gh pr comment` for the follow-up note. |
