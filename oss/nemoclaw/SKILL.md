@@ -58,6 +58,10 @@ Once `commit.gpgsign` is `true`, all commits (including `git rebase --continue`)
   - `gh issue view <number> --repo NVIDIA/NemoClaw`
   - `gh pr list --repo NVIDIA/NemoClaw --author deepujain --state open`
 - **Fallback when `gh` is unavailable or unauthenticated:** use web fetch on the GitHub issues and PR list pages, then fetch individual issue pages for details.
+- **Read the full issue before choosing it.** Check the issue body, comments, linked PRs, referenced commits, and any maintainer guidance.
+- **Do not pick an issue that already has an active PR** unless the user explicitly asks you to work on that existing PR. If the issue timeline or linked development shows an open PR for the same fix direction, skip the issue.
+- **Search beyond the issue number.** Before starting, search PRs by issue number, issue title keywords, error text, and touched subsystem/file names. A PR may already exist without mentioning the issue number directly.
+- **Treat maintainer design feedback as binding.** If issue or PR discussion says an approach is wrong for NemoClaw, do not re-open that approach in a fresh PR.
 - **Check existing open PRs** to avoid collisions. Avoid issues that touch the same files or areas as the user's existing open PRs.
 - Fetch issue details if needed to confirm scope.
 
@@ -81,6 +85,7 @@ If there are uncommitted changes: `git stash push -m "description"` then run the
 - NemoClaw uses TypeScript/JavaScript, Python (blueprint), and Shell. Follow existing style and the project's `.editorconfig` if present.
 - **Tests:** Run the project test suite (§4.1) after making changes. When your change affects behavior that is already covered by tests (e.g. a mapping or CLI output), **update the test expectations** so they match the new behavior. Add or extend tests when the change introduces or modifies logic that should be covered (e.g. new helper, changed config). Do not leave tests failing or outdated; fix or add tests as part of the same PR.
 - Optionally run the installer or smoke steps in a supported environment (e.g. `./install.sh`); project is alpha and may have rough edges.
+- **Do not rely on code reading or AI intuition alone.** If the issue is runtime-, environment-, install-, networking-, container-, onboarding-, or integration-sensitive, gather real execution evidence in a matching local or scripted environment before opening or updating a PR.
 
 ## 4.1 Build and test locally (before push or PR)
 
@@ -103,6 +108,14 @@ npm test
 This runs `node --test test/*.test.js`. Fix any build or test failures before committing (§5).
 
 If the full suite reproduces **pre-existing unrelated failures** in the current environment, do not pretend the suite is green. Record the exact failing files/tests, run the narrowest relevant local validation for the changed area (for example `npx vitest run test/cli.test.js`), and call out both the scoped passing check and the unrelated failures in the PR body.
+
+For environment-sensitive fixes, the narrowest relevant validation is often **not enough by itself**. Add at least one realistic check that exercises the reported workflow, such as:
+- installer/docs change: run the documented command or smoke script
+- onboarding/session bug: run the relevant onboard or resume flow
+- container/runtime bug: run the affected shell script or e2e/smoke scenario
+- network/policy bug: run the policy or gateway test that reproduces the behavior
+
+If you cannot produce real-environment evidence, say so plainly and do not present the PR as validated.
 
 ## 5. Commit (sign-off required)  - the agent runs commit directly
 
@@ -161,12 +174,16 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
 
 - Create a local file (e.g. `PR_NNNNN_body.md`) for the PR description; do not commit it. Use it for copy-paste into the GitHub PR description.
 - **PR title:** Include the issue number so the PR links to the issue and is easy to find. Use: `fix: short summary (Fixes #66)` or `fix: short summary (#66)`. Example: `fix: use nvcr.io/nim/nvidia/nemotron-3-nano for NIM local pull (Fixes #66)`.
-- **PR body format:** Summary (what problem, what the fix does); Changes (bullet list: file path + what changed); Testing (e.g. `npm test` passes). Include "Fixes #66" (or Closes #66) in the body so GitHub auto-closes the issue on merge. Optional: Signed-off-by line at end of body.
+- **PR body format:** Summary (what problem, what the fix does); Changes (bullet list: file path + what changed); Testing; **Evidence it works**. Include "Fixes #66" (or Closes #66) in the body so GitHub auto-closes the issue on merge. Optional: Signed-off-by line at end of body.
+- **Evidence it works is mandatory.** Every PR must show concrete validation, not just "looks correct". For normal code changes, include the exact local test/build commands and outcomes. For environment-sensitive fixes, include the real workflow or smoke/e2e evidence that matches the bug report.
+- **Do not open PRs based on AI alone.** If you only have code inspection and no meaningful validation, stop and gather evidence before opening the PR.
 - After implementing and testing, the agent runs commit and push directly, then creates the PR with `gh` when auth is available. If PR creation fails because of auth or repo permissions, say that explicitly and provide the deep link plus the local PR body path.
 
 ## 8. Fixing an open PR (conflicts, review feedback, or updates)
 
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Always read the PR page first.** NemoClaw uses **CodeRabbit** for automated reviews, so there will almost always be nitpick comments to address. The PR page also shows a conflict banner ("This branch has conflicts that must be resolved") when rebase is needed - **always check for it and rebase if present**.
+
+If the user shares a PR URL, **use that PR**. Do not open a second PR for the same issue. Check out the PR branch, make the fix there, commit, and push back to that existing PR unless the user explicitly asks for a replacement branch.
 
 ### 8.1 Investigate
 
@@ -179,6 +196,7 @@ When the user shares a PR URL, it means there is something to act on: reviewer c
    - **Conflict banner** - GitHub shows "This branch has conflicts that must be resolved" when the branch is behind. If present, a rebase is mandatory.
    - **CI/CD failures** - check the checks section for failing tests or lint errors.
    - **Human reviewer comments** - any requested changes from maintainers.
+   - **Workflow/config correctness** - for GitHub Actions or release automation changes, verify permissions, trigger patterns, and conditional branches are internally consistent. Example: `npm publish --provenance` on Actions needs `permissions: { contents: read, id-token: write }`, and prerelease tag logic must not be excluded by the workflow trigger.
 2. **Check out the PR branch locally** - the agent may run `git checkout <branch>` (sync step).
 3. **Fetch upstream** - `git fetch upstream` (sync step).
 4. **Plan the work** - address CodeRabbit nitpicks first (code changes), then rebase onto `upstream/main`. Rebasing after fixing nitpicks avoids a double force-push.
@@ -226,6 +244,10 @@ gh pr comment <url-or-number> --repo NVIDIA/NemoClaw --body 'Rebased on main. Ad
 
 If `gh` auth is broken or unavailable, provide the comment as plain text in chat for the user to copy-paste onto the PR. Keep it brief, casual, and human. A touch of humor is welcome. Never use the em dash character.
 
+**Re-read the PR after each push before declaring it done.** CodeRabbit often posts a fresh actionable review on the new head commit within minutes. For open-PR work, do one more read of the latest PR comments/checks after your push or rebase. If a new actionable comment appears, address it in the same thread instead of stopping early.
+
+**When handling multiple NemoClaw PRs in parallel worktrees, do not rely on `git stash` as a per-worktree scratchpad.** Stashes are repo-global and can be restored in the wrong worktree. Prefer leaving helper files like `PR_NNNNN_body.md` untracked, or move them aside within the same worktree instead of using shared stash entries.
+
 **Style rules for PR comments:**
 - 2-4 sentences max. No walls of text.
 - Sound like a human, not a changelog.
@@ -248,6 +270,11 @@ If `gh` auth is broken or unavailable, provide the comment as plain text in chat
 - **Update test expectations when behavior changes.** If the fix changes something that already has a test (e.g. image mapping in `getImageForModel`), update the test’s expected value; do not leave the test asserting the old behavior. Add new tests when the change introduces logic that should be covered.
 - **Agent runs commit and push directly.** Always use the correct flags: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. The `--no-verify` flag prevents `Made-with: Cursor` trailers and skips pre-commit hooks. After committing, verify with `git log -1 --format='%B'` that no trailer appeared.
 - **PR body:** Summary, Changes (file + what changed), Testing. "Fixes #NN" in the body so merging closes the issue. See [PR #81](https://github.com/NVIDIA/NemoClaw/pull/81) for a good example.
+- **Issue triage must include linked development.** Before starting an issue, read the issue comments, linked PRs, and referenced commits. If there is already an active PR for the same fix, skip the issue or work on that PR only.
+- **Duplicate checking needs keyword search, not just issue-number search.** Search PRs by issue number, title keywords, error strings, and affected subsystem/file names before opening a PR.
+- **Evidence is part of the recipe, not an optional extra.** PR bodies should include an `Evidence it works` section, and PR comments should summarize the same evidence when you push follow-up fixes to an existing PR.
+- **Environment-sensitive issues need environment-sensitive proof.** For installer, runtime, container, onboarding, network-policy, and integration bugs, do not claim success from unit tests alone when the reported failure happens in a fuller workflow.
+- **Do not raise AI-only PRs.** If the fix is based only on reading code or issue speculation, stop and validate it before opening the PR.
 - **Changes on the wrong branch:** If the fix was made on another branch, stash only the relevant files (`git stash push -m "description" -- file1 file2`), sync with upstream, checkout main, pull, create the correct branch, then `git stash pop`. Commit only the fix files (do not add `package-lock.json` or `PR_NNNNN_body.md`).
 - **One fix, multiple issues:** When the same change addresses another issue, say so in the PR summary and closing line: e.g. "Fixes #54. Also addresses #32 (README one-liner when nvidia.com/nemoclaw.sh is 404)."
 - **Testable logic: extract and add tests.** When adding logic that's hard to test end-to-end (e.g. SSH + parsing), extract a **pure function** (e.g. `parseDashboardUrlFromOutput(output)`), export it for testing, and add unit tests in a new `test/<module>.test.js`. Integration paths can stay untested.
@@ -290,5 +317,5 @@ Say one of these so the agent applies this skill:
 | **Issues** | [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues). Pick an open, well-scoped issue (#NNNNN). |
 | **Local** | Repo at `/Users/dejain/nvidia/oss/NemoClaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then commit and push directly (§5–§6). |
 | **Commit / Push** | Agent runs directly: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. Verify no `Made-with: Cursor` after commit. |
-| **PR** | Prefer `gh pr create` from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Use `PR_NNNNN_body.md` as `--body-file`. If `gh` auth is unavailable, provide the deep link and PR body path. |
-| **Open PR fix (§8)** | When the user shares an open PR link: inspect it with `gh` when available, resolve files, run tests, rebase, commit, push directly, then prefer `gh pr comment` for the follow-up note. |
+| **PR** | Prefer `gh pr create` from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Use `PR_NNNNN_body.md` as `--body-file`, and include Testing plus **Evidence it works**. If `gh` auth is unavailable, provide the deep link and PR body path. |
+| **Open PR fix (§8)** | When the user shares an open PR link: inspect it with `gh` when available, use that existing PR branch, resolve files, run tests, rebase, commit, push directly, then prefer `gh pr comment` for the follow-up note including evidence. |
