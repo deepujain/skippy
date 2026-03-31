@@ -63,6 +63,7 @@ Once `commit.gpgsign` is `true`, all commits (including `git rebase --continue`)
 - **Search beyond the issue number.** Before starting, search PRs by issue number, issue title keywords, error text, and touched subsystem/file names. A PR may already exist without mentioning the issue number directly.
 - **Treat maintainer design feedback as binding.** If issue or PR discussion says an approach is wrong for NemoClaw, do not re-open that approach in a fresh PR.
 - **Check existing open PRs** to avoid collisions. Avoid issues that touch the same files or areas as the user's existing open PRs.
+- **Check all open PRs that touch the same hot files, not just the issue number or the user's PR list.** For NemoClaw, files like `bin/nemoclaw.js`, `bin/lib/onboard.js`, workflow files, and core tests often have multiple concurrent PRs. Before picking an issue or declaring a PR "clear", search open PRs by file path / subsystem and note overlapping work.
 - Fetch issue details if needed to confirm scope.
 
 ## 3. Sync and create branch (before any code changes)
@@ -197,6 +198,8 @@ If the user shares a PR URL, **use that PR**. Do not open a second PR for the sa
    - **CI/CD failures** - check the checks section for failing tests or lint errors.
    - **Human reviewer comments** - any requested changes from maintainers.
    - **Workflow/config correctness** - for GitHub Actions or release automation changes, verify permissions, trigger patterns, and conditional branches are internally consistent. Example: `npm publish --provenance` on Actions needs `permissions: { contents: read, id-token: write }`, and prerelease tag logic must not be excluded by the workflow trigger.
+   - **Approval / fork-runner state** - note when checks are waiting on maintainer approval for fork workflows. That is not a code defect by itself, but it is part of the true PR status and should be mentioned in the handoff.
+   - **Other overlapping open PRs** - if the PR touches shared hot files (`bin/nemoclaw.js`, onboarding helpers, workflow files, common tests), inspect other open PRs touching the same files so you do not miss collision context or hidden rebase pressure.
 2. **Check out the PR branch locally** - the agent may run `git checkout <branch>` (sync step).
 3. **Fetch upstream** - `git fetch upstream` (sync step).
 4. **Plan the work** - address CodeRabbit nitpicks first (code changes), then rebase onto `upstream/main`. Rebasing after fixing nitpicks avoids a double force-push.
@@ -272,6 +275,7 @@ If `gh` auth is broken or unavailable, provide the comment as plain text in chat
 - **PR body:** Summary, Changes (file + what changed), Testing. "Fixes #NN" in the body so merging closes the issue. See [PR #81](https://github.com/NVIDIA/NemoClaw/pull/81) for a good example.
 - **Issue triage must include linked development.** Before starting an issue, read the issue comments, linked PRs, and referenced commits. If there is already an active PR for the same fix, skip the issue or work on that PR only.
 - **Duplicate checking needs keyword search, not just issue-number search.** Search PRs by issue number, title keywords, error strings, and affected subsystem/file names before opening a PR.
+- **Open-PR awareness includes file overlap.** Even when the user asks about a specific set of PRs, note other open PRs that touch the same files if that overlap is likely to matter for rebases, conflicts, or duplicated effort.
 - **Evidence is part of the recipe, not an optional extra.** PR bodies should include an `Evidence it works` section, and PR comments should summarize the same evidence when you push follow-up fixes to an existing PR.
 - **Environment-sensitive issues need environment-sensitive proof.** For installer, runtime, container, onboarding, network-policy, and integration bugs, do not claim success from unit tests alone when the reported failure happens in a fuller workflow.
 - **Do not raise AI-only PRs.** If the fix is based only on reading code or issue speculation, stop and validate it before opening the PR.
