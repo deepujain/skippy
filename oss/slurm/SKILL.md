@@ -199,6 +199,7 @@ This produces `0001-Short-subject.patch`, etc. **Attach these files** to the Sch
 3. Set **Severity** to **C - Contributions** (for new tickets).
 4. **Attach** the `.patch` file(s) from step 5.
 5. In the ticket description: short summary of the change, which branch the patch is based on (e.g. `master` or `slurm-24.11`), and reference any related ticket.
+6. Before handing off a ticket description, patch summary, or follow-up tracker comment, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep ticket numbers, commands, evidence, and exact claims unchanged.
 
 **Attachment form (when adding the patch):** File = choose the `.patch` file. **Description** = one-line summary (e.g. "Patch: replace --export-dynamic with -export-dynamic in Makefile.am (Bug 11132, refreshed for current master)"). **Content type** = check the **patch** box. **Obsoletes** = if your patch replaces an older attachment on the same ticket, check that attachment so it is marked obsolete. **Comment** (optional) = short note for reviewers (e.g. "Same fix as in attachment 18529; refreshed for current master; applies cleanly.").
 

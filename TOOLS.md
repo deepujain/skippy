@@ -52,6 +52,11 @@ it here so it never bites again.
 ### PR Description Pattern
 Create a local `PR_NNNNN_body.md` file for the description. Never commit
 this file. The human copies its contents into the GitHub PR form.
+Before finalizing any PR body, PR comment, review reply, or ticket update,
+run the final prose through the local `humanizer-zh` skill at
+`/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep the
+technical facts, issue references, commands, and test evidence exactly the
+same; only remove hype, filler, and obvious AI phrasing.
 
 ### Per-Repo PR Limits
 Some repos (e.g., NemoClaw) enforce PR limits via GitHub Actions. Check

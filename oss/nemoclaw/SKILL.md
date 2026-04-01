@@ -177,6 +177,7 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
 - **PR title:** Include the issue number so the PR links to the issue and is easy to find. Use: `fix: short summary (Fixes #66)` or `fix: short summary (#66)`. Example: `fix: use nvcr.io/nim/nvidia/nemotron-3-nano for NIM local pull (Fixes #66)`.
 - **PR body format:** Summary (what problem, what the fix does); Changes (bullet list: file path + what changed); Testing; **Evidence it works**. Include "Fixes #66" (or Closes #66) in the body so GitHub auto-closes the issue on merge. Optional: Signed-off-by line at end of body.
 - **Evidence it works is mandatory.** Every PR must show concrete validation, not just "looks correct". For normal code changes, include the exact local test/build commands and outcomes. For environment-sensitive fixes, include the real workflow or smoke/e2e evidence that matches the bug report.
+- **Writing pass:** Before handing off `PR_NNNNN_body.md` or any PR comment/review reply, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep issue numbers, commands, evidence, and exact claims unchanged.
 - **Do not open PRs based on AI alone.** If you only have code inspection and no meaningful validation, stop and gather evidence before opening the PR.
 - After implementing and testing, the agent runs commit and push directly, then creates the PR with `gh` when auth is available. If PR creation fails because of auth or repo permissions, say that explicitly and provide the deep link plus the local PR body path.
 
@@ -254,6 +255,7 @@ If `gh` auth is broken or unavailable, provide the comment as plain text in chat
 **Style rules for PR comments:**
 - 2-4 sentences max. No walls of text.
 - Sound like a human, not a changelog.
+- Before posting a PR comment or review reply, run the final text through `humanizer-zh` and preserve the same issue number, commands, and test evidence.
 - Never use the em dash character.
 - A little humor is fine ("should be good to go", "back in business", etc.)
 
