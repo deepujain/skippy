@@ -248,6 +248,8 @@ gh pr comment <url-or-number> --repo NVIDIA/NemoClaw --body 'Rebased on main. Ad
 
 If `gh` auth is broken or unavailable, provide the comment as plain text in chat for the user to copy-paste onto the PR. Keep it brief, casual, and human. A touch of humor is welcome. Never use the em dash character.
 
+Use PR comments to tell reviewers what changed and what relevant validation passed. Do not dump local-only environment problems, agent-shell auth quirks, worktree setup oddities, or unrelated test failures into a routine PR comment unless that detail directly explains the reviewer-facing status of the PR or blocks merge.
+
 **Re-read the PR after each push before declaring it done.** CodeRabbit often posts a fresh actionable review on the new head commit within minutes. For open-PR work, do one more read of the latest PR comments/checks after your push or rebase. If a new actionable comment appears, address it in the same thread instead of stopping early.
 
 **When handling multiple NemoClaw PRs in parallel worktrees, do not rely on `git stash` as a per-worktree scratchpad.** Stashes are repo-global and can be restored in the wrong worktree. Prefer leaving helper files like `PR_NNNNN_body.md` untracked, or move them aside within the same worktree instead of using shared stash entries.
@@ -258,11 +260,12 @@ If `gh` auth is broken or unavailable, provide the comment as plain text in chat
 - Before posting a PR comment or review reply, run the final text through `humanizer-zh` and preserve the same issue number, commands, and test evidence.
 - Never use the em dash character.
 - A little humor is fine ("should be good to go", "back in business", etc.)
+- Keep the comment reviewer-facing: summarize the fix, the relevant passing validation, and readiness for another look. Save unrelated local failures for the PR body or chat handoff, not the GitHub comment.
 
 **Examples:**
 
 - *Rebased on main. Addressed the CodeRabbit nitpicks (edge case handling + version detection). All policy tests pass. Should be good to go!*
-- *Rebased on latest main, no conflicts. Tests still pass (177/187, 10 pre-existing env failures). Ready for review!*
+- *Rebased on latest main, no conflicts. Relevant tests still pass. Ready for review!*
 - *Fixed the merge conflict in nim.js, adopted upstream's shellQuote import alongside our registry import. Tests pass. Back in business.*
 
 ---
@@ -279,6 +282,7 @@ If `gh` auth is broken or unavailable, provide the comment as plain text in chat
 - **Duplicate checking needs keyword search, not just issue-number search.** Search PRs by issue number, title keywords, error strings, and affected subsystem/file names before opening a PR.
 - **Open-PR awareness includes file overlap.** Even when the user asks about a specific set of PRs, note other open PRs that touch the same files if that overlap is likely to matter for rebases, conflicts, or duplicated effort.
 - **Evidence is part of the recipe, not an optional extra.** PR bodies should include an `Evidence it works` section, and PR comments should summarize the same evidence when you push follow-up fixes to an existing PR.
+- **PR comments are not the place for local-only noise.** Do not mention unrelated local environment failures, sandbox/network quirks, or worktree setup problems in GitHub comments unless they are the actual blocker a reviewer needs to understand. Put that detail in the PR body or user handoff instead.
 - **Environment-sensitive issues need environment-sensitive proof.** For installer, runtime, container, onboarding, network-policy, and integration bugs, do not claim success from unit tests alone when the reported failure happens in a fuller workflow.
 - **Do not raise AI-only PRs.** If the fix is based only on reading code or issue speculation, stop and validate it before opening the PR.
 - **Changes on the wrong branch:** If the fix was made on another branch, stash only the relevant files (`git stash push -m "description" -- file1 file2`), sync with upstream, checkout main, pull, create the correct branch, then `git stash pop`. Commit only the fix files (do not add `package-lock.json` or `PR_NNNNN_body.md`).
@@ -296,6 +300,7 @@ If `gh` auth is broken or unavailable, provide the comment as plain text in chat
 - **Check `gh auth status` in the same environment you plan to use.** Do not assume the user's terminal auth state and the agent shell auth state are identical. If `gh` looks unauthenticated from the agent shell, say that explicitly and prefer a retry once auth is confirmed healthy.
 - **Worktree test setup may need shared dependencies.** When using isolated worktrees, it is acceptable to symlink `node_modules` from the main clone to run local verification. Do not commit the `node_modules` symlink, and do not commit incidental lockfile churn caused by dependency setup in a worktree.
 - **Be explicit about pre-existing test failures.** If full `npm test` fails for unrelated reasons, list the exact failing files/tests in the PR body and pair that with the focused passing check for the touched code path.
+- **Keep PR-body disclosure separate from PR-comment disclosure.** It is fine to document unrelated local failures in the PR body when honesty requires it. Follow-up PR comments should usually mention only the fix, the relevant passing checks, and whether the branch is ready for review.
 - **Do not invent CodeRabbit release-note blocks.** PR bodies should remain human-written. CodeRabbit may add its own auto-generated walkthrough or summary comments after PR creation, and the exact format can vary by run/config. The agent should not paste fake or guessed CodeRabbit blocks into the PR description.
 - **SSH commit signing is required.** NVIDIA/NemoClaw has branch protection requiring verified signatures. Set up SSH signing once (see section 1.1) and always include `-S` in commit and amend commands. When `commit.gpgsign = true` globally, `git rebase --continue` also signs automatically. If a commit shows "No signature" or "Unverified" on GitHub, amend with `-S` and re-push. The SSH key must be registered as both an Authentication key and a Signing key on [GitHub SSH settings](https://github.com/settings/keys).
 - **Do not batch-rebase multiple PR branches in a shell loop.** Rebases with conflicts cannot be resolved automatically in a script. Handle each PR branch individually following the full workflow (fetch, checkout, rebase, resolve conflicts if any, test, give user push commands).
