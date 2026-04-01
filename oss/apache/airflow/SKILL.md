@@ -24,8 +24,10 @@ When the user asks to contribute a PR to Airflow, pick a GitHub issue, or "follo
 - Prefer **well-scoped** issues (clear problem, single fix). `priority:high` + `area:core` or `area:logging` bugs are especially good picks -- impactful, unclaimed, and well-defined.
 - **Mandatory -- no duplicate work:** Do **not** start implementing until you have confirmed that **no open PR** already fixes this issue. Otherwise your PR will be closed as duplicate and the work is wasted (e.g. [PR #63201 was closed as duplicate of #63104](https://github.com/apache/airflow/pull/63201)). For **every** candidate issue before you branch or code:
   1. Open the issue page and check the **timeline** for "mentioned in PR #..." or "linked pull request" from another author.
-  2. Search [apache/airflow pull requests](https://github.com/apache/airflow/pulls) for the issue number (e.g. `62622` or `Fixes #62622`). Confirm **0 open + 0 closed PRs** for that issue number.
+  2. Read the **issue comments** and any linked PR discussion. If a maintainer already explained why an approach is wrong in a linked PR, treat that as binding design guidance and do not repeat it.
+  3. Search [apache/airflow pull requests](https://github.com/apache/airflow/pulls) for the issue number (e.g. `62622` or `Fixes #62622`). Confirm **0 open + 0 closed PRs** for that issue number.
   **Skip the issue** if any open PR from someone else already targets it; pick a different issue.
+  If there is a **closed** PR, read why it was closed before doing anything. If maintainers rejected the approach, either skip the issue or explicitly choose a different fix direction.
 - Note the **issue number** (e.g. `#62622`). The PR title and commit message should reference it (e.g. `Fix ... (#62622)`).
 - Fetch issue details if needed to confirm scope and component (core, providers, UI, etc.).
 
@@ -96,6 +98,19 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 - For **comment-only or docs-only** chart changes (for example `chart/values.yaml` documentation), run the scoped static checks first: `prek run --stage pre-commit --files chart/values.yaml`. This already exercises chart lint, kubeconform, YAML lint, and related hooks for the touched file.
 - **When your change alters behavior** (e.g. which components get an env var or annotation), **update the relevant test expectations** (e.g. in `test_airflow_common.py` or `test_annotations.py`) so CI passes.
 
+### 4f. Evidence gate for environment-sensitive fixes
+
+- **Do not open a PR based on code reading or AI intuition alone.** You must have concrete evidence that the fix works for the reported behavior.
+- For **environment-sensitive** issues -- especially **CeleryExecutor**, worker health, brokers, triggerer/executor interactions, Helm/Kubernetes behavior, networking/proxy behavior, auth flows, and external-service integrations -- unit tests alone are often insufficient.
+- Before commit/push for those issues, collect at least one piece of **realistic evidence**:
+  - reproduce and verify the fix in a **real Celery / docker-compose / Breeze / integration-style environment**, or
+  - add or update an **integration/system test** that exercises the real failing code path, or
+  - reproduce the exact failure locally and show it no longer happens after the change.
+- If you cannot produce that evidence, **do not open a ready PR**. Either:
+  - stop and tell the user what evidence is missing, or
+  - keep the work local / draft-only with an explicit note that the fix was **not validated in a real environment**.
+- For **Celery worker / broker / queue-health** issues specifically: prove the behavior with a real Celery worker and broker setup. A pure unit-test-only change is not enough evidence for opening a confident PR.
+
 ### Commit only your files
 
 - Stage and commit **only the files you changed**. Do not commit unrelated reformats from ruff-format or other hooks. Use `git restore` on any files that were auto-formatted but are out of scope.
@@ -123,7 +138,9 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 ## 7. Before opening the PR (design and scope)
 
 - **Fix direction:** Consider whether the minimal "symptom" fix is what maintainers want. Sometimes the better fix is the opposite: e.g. instead of extending a behavior to more components, remove it from components that don't need it. Check existing patterns in the codebase for *which components* get a given config or annotation, not only syntax.
+- **Read linked history first:** If the issue already has a linked PR, prior attempt, or maintainer design explanation, read it before deciding on the fix. Do not reopen the same argument with a fresh PR.
 - **Scope:** Make only the changes needed; keep the PR easy to review. If the issue suggests one approach but the codebase pattern suggests another (e.g. "only component X and Y need this"), prefer aligning with the pattern.
+- **Evidence before PR:** Do not raise a PR unless you can point to concrete validation for the reported behavior. "Looks right from reading the code" is not sufficient for Airflow.
 - **No tool attribution:** Do not add "Made with Cursor" or similar to commit messages. If the IDE added it, amend before push (S6).
 
 ## 8. Open the PR (GitHub)
@@ -154,7 +171,9 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
   - **Summary** -- One short paragraph: what problem and what the fix does.
   - **Changes** -- Bullet list: for each file, path then what changed.
   - **Why no new tests** -- Only if you truly did not add a test; briefly justify. Prefer adding a test so this section is unnecessary.
+  - **Evidence it works** -- For environment-sensitive fixes, include the concrete environment or reproducer you used (for example docker-compose Celery worker + Redis broker, Breeze integration test, Helm test, or the exact smoke test).
   - **Fixes #NNNNN** -- So GitHub auto-links and can close the issue.
+- **Writing pass:** Before handing off `PR_NNNNN_body.md` or any PR reply/comment text, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep issue numbers, commands, test evidence, and maintainer-facing facts unchanged.
 - **Apache projects tracked in JIRA (Spark, Hadoop, HDFS, etc.):** In the PR description, include the contributor's **JIRA id for credit** (e.g. `**JIRA assignee for credit:** deepujain`). Issues are tracked in JIRA; committers use this to assign the JIRA to the contributor when the PR is merged.
 
 ## 9. During review (after the PR is created)
@@ -195,6 +214,7 @@ Extracted from real contribution experience. Update this section as new patterns
 - **`priority:high` bugs are good targets** -- they are impactful, usually well-described, and often unclaimed because contributors shy away from them. Issues like #63921 (secrets not masked in task logs) had 0 PRs and a clear culprit identified by the reporter.
 - **Check comments for competing contributors.** Even without a linked PR, a comment like "I'd love to contribute" may signal someone is working on it. If no PR appears within a day, it's fair game.
 - **Verify 0 PRs means 0 open AND 0 closed.** A closed PR may indicate a failed attempt with useful context (reviewer feedback, rejected approach).
+- **Read linked PR explanations, not just PR existence.** If maintainers already said "this approach is not right for Airflow" in a linked PR, do not submit the same idea again.
 
 ### PR body
 - **Always create `PR_NNNNN_body.md`** with a `**Title:**` line at the top. The user copies the title into the GitHub PR title field and the rest into the body. Missing the title causes extra friction.
@@ -204,6 +224,7 @@ Extracted from real contribution experience. Update this section as new patterns
 - After every meaningful push, leave a short PR comment even if no source file changed.
 - If review comments are empty, check failing statuses before concluding the PR is idle.
 - PR comments should be 2-4 sentences max. Sound like a human, not a changelog. A touch of humor is fine.
+- Before posting a PR comment or review reply, run the final text through `humanizer-zh` and keep the same facts, commands, and test results.
 - Never use the em dash character in comments.
 - Example: *Rebased on main. Fixed the test to use `@pytest.mark.enable_redact` so masking actually kicks in. All green locally. Should be good to go!*
 
@@ -219,6 +240,8 @@ Extracted from real contribution experience. Update this section as new patterns
 - **For cross-provider regressions, test from the consumer's project too.** If provider A breaks because provider B imports something eagerly at module import time, `uv run --project providers/B ...` may miss the real failure. Reproduce and smoke-test from the package that users actually import.
 - **For chart-doc-only fixes, prefer scoped `prek` over full helm tests first.** `prek run --stage pre-commit --files chart/values.yaml` is fast and already runs the chart linting stack relevant to comment/documentation edits.
 - **Prefer a clean final PR history.** Iterate locally as needed, but before the final push prefer squashing the branch to one clean issue-referenced commit unless there is a clear reason to preserve multiple commits.
+- **Environment-sensitive bugs need environment-sensitive proof.** For Celery, broker, triggerer, auth, Helm/K8s, and networking issues, do not rely on unit tests alone if the reported bug depends on real runtime behavior.
+- **Do not open AI-only PRs.** Code reading, speculative reasoning, or a unit test for a guessed design is not enough. Airflow maintainers expect evidence tied to the real reported failure.
 
 ### Code patterns (Airflow 3.x)
 - **`airflow.sdk` vs `airflow.models`:** Airflow 3.x deprecates many `airflow.models` APIs in favor of `airflow.sdk`. When fixing code or docs, use SDK imports (e.g. `from airflow.sdk import Connection` with `Connection.get()` instead of `Connection.get_connection_from_secrets()`).

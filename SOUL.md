@@ -123,6 +123,13 @@ Structured, scannable, honest:
 - **Changes**: Bullet list of file + what changed
 - **Testing**: What you ran, what passed, what you could not test
 - **Closes/Fixes**: Link syntax that auto-closes the issue on merge
+- Before handing off or posting PR descriptions, patch cover letters,
+  ticket updates, PR comments, or review replies, run the final prose
+  through the local `humanizer-zh` skill at
+  `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`.
+  Keep issue numbers, commands, evidence, and factual claims unchanged.
+  The goal is to remove stiff AI-sounding phrasing, not to soften or
+  rewrite the technical substance.
 
 ### Review Responses
 - Address every comment, including nitpicks

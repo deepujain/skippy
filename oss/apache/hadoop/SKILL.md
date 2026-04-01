@@ -20,7 +20,14 @@ description: (1) New PR: pick JIRA, implement, branch from trunk, commit, push, 
   - [YARN](https://issues.apache.org/jira/projects/YARN/issues)
   - [MAPREDUCE](https://issues.apache.org/jira/projects/MAPREDUCE/issues)
 - Prefer **well-scoped** issues (clear problem, single fix). Labels like "good first issue" or "Starter" often indicate that but are not required; any open JIRA bug or improvement that is well-scoped is fine.
-- **Avoid duplicates:** Before implementing, confirm no **open** PR already targets this JIRA. On JIRA, issues with the **pull-request-available** label usually have a linked PR; skip those if you want to avoid your PR being closed as duplicate. On GitHub, search [apache/hadoop pull requests](https://github.com/apache/hadoop/pulls) for the JIRA key (e.g. `HDFS-17850` or `Fixes HDFS-17850`) and pick a different issue if an open PR from another author already fixes it.
+- **Read the full JIRA before choosing it.** Check the description, comments, linked development, referenced commits, and any prior PR discussion before you branch or code.
+- **Mandatory -- no duplicate work:** Do **not** start implementing until you have confirmed that no active PR already covers the same fix direction. For every candidate issue before you branch or code:
+  1. Check the JIRA for linked development, the **pull-request-available** label, referenced commits, and comments from other contributors.
+  2. Search [apache/hadoop pull requests](https://github.com/apache/hadoop/pulls) for the JIRA key (for example `HDFS-17850` or `Fixes HDFS-17850`).
+  3. Also search by **keywords from the issue title, failing error text, and touched subsystem**, because not every PR mentions the JIRA key in the title or body.
+  4. If there is a **closed** PR or prior attempt, read why it was closed before doing anything. If maintainers rejected the approach, either skip the issue or explicitly choose a different fix direction.
+  5. If a maintainer or reviewer already explained that an approach is wrong in linked discussion, treat that as binding design guidance and do not reopen the same argument with a fresh PR.
+- **Skip the issue** if any open PR from someone else already targets it or clearly fixes the same behavior.
 - Note the **JIRA key** (e.g. `HADOOP-12345`, `HDFS-17760`). The PR title and commit message must reference it.
 - Fetch issue details if needed (e.g. web search or JIRA link) to confirm scope and component (common, hdfs, yarn, etc.).
 
@@ -76,13 +83,27 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 - **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
   `https://github.com/apache/hadoop/compare/trunk...<github-username>:hadoop:<branch>?expand=1`
   Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
+- **If PR creation is blocked locally** (for example `gh auth status` is invalid or PR creation tooling is unavailable), say that immediately and still provide the exact compare link, PR title, PR body, and short PR comment so the final open step is trivial once auth is fixed.
 - **Title:** Include the JIRA key and short summary, e.g. `HADOOP-12345. Fix MoveToTrash when file inode exists in trash`.
 - **Description (format that gets merged):** Use this structure so reviewers and Yetus are satisfied:
   - **Summary**  - One short paragraph: what problem and what the fix does.
   - **Change**  - Bullet list: for each file, path then what changed (e.g. "**Constants.java**: New config key X, default Y.").
+  - **Evidence it works**  - This is mandatory. Include the exact local build/test commands you ran and what they proved. For environment-sensitive fixes, include the realistic reproducer, smoke test, integration setup, or before/after behavior that matches the report.
   - **Why no new tests**  - Only if you truly did not add a test; briefly justify and list manual steps. Prefer adding a test so this section is unnecessary.
   - **JIRA**  - Line: `Fixes HADOOP-12345` (or HDFS-xxxx).
+- **Writing pass:** Before handing off `PR_HADOOP-12345_body.md` or any PR comment/review reply, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep the JIRA key, commands, evidence, and exact claims unchanged.
 - Optionally create a local `PR_HADOOP-12345_body.md` for copy-paste only; do not commit it.
+
+### 6a. Evidence gate before PR
+
+- **Do not open a PR based on code reading or AI intuition alone.** You must have concrete evidence that the fix works for the reported behavior.
+- **Normal code changes:** At minimum, run the narrowest relevant local Maven compile/test command that covers the changed behavior, and include the exact command and result in the PR body.
+- **Environment-sensitive fixes:** For issues involving timing, concurrency, native behavior, network/auth flows, shell/CLI integration, external services, filesystem semantics, or cluster/distributed behavior, unit tests alone may be insufficient.
+- For those issues, collect at least one realistic piece of evidence before opening a ready PR:
+  - reproduce and verify the fix in a realistic local workflow, or
+  - add/update an integration-style test that exercises the real failing path, or
+  - show that the exact reported failure no longer happens after the change.
+- If you cannot produce that evidence, **do not open a confident ready PR**. Either stop and report what evidence is missing, or keep the work local/draft-only with an explicit note that it was not validated in a realistic environment.
 
 ## 7. Remotes (one-time setup)
 
@@ -99,6 +120,8 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 ## 9. Existing PR: user gives URL -> fetch latest, take actions
 
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, commit/PR statuses, and any requested changes, then act on what you find.
+
+**Use the existing PR only.** Do not open a second PR for the same JIRA when the user has already given a Hadoop PR URL. Work on the PR head branch, rebase it on `apache/trunk`, commit there, and push back to that same PR unless the user explicitly asks for a replacement branch.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/hadoop/pull/8336`). Start with **9.0** (fetch PR state and comments), then 9.1–9.5 as needed.
 
@@ -152,6 +175,8 @@ Hadoop uses **Maven**. Run from the **repository root** (`/Users/dejain/nvidia/o
 
 If dependency resolution fails (e.g. missing artifact in `~/.m2`), run a broader install first: `./mvnw install -DskipTests -pl <module> -am` or fix the missing dependency.
 
+If the Maven wrapper, local Java setup, or `~/.m2` permissions block progress, rerun the closest direct Maven command you can with an explicit `JAVA_HOME` and a writable temp repo cache, e.g. `JAVA_HOME=/path/to/jdk mvn -Dmaven.repo.local=/tmp/codex-m2 test -pl <module> -am -Dtest=<TestClass> -DskipTests=false`. Document the exact fallback command and any remaining environment limitation.
+
 ### 9.3 Push (including after rebase)
 
 - First push for the branch: `git push --no-verify --set-upstream origin <branch-name>`.
@@ -179,6 +204,8 @@ For each **CI failure** or **reviewer comment** identified in 9.0:
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not conclude "nothing to do" until both comments and statuses are clean or still running.
 - **Read the merge/status summary directly.** The PR page may show a compact merge block such as "Some checks were not successful" with failing check names. Treat that as the source of truth for what to inspect next.
 - **Check statuses first, then logs.** Use PR/commit statuses to identify the failing jobs before diving into comments or guessing at the failure.
+- **For Yetus red checks, inspect the raw artifact or console before changing code.** Do not rely only on the short PR summary line such as "unit failed" or "shadedclient failed". Open the linked artifact/console and identify the exact failing command, module, and first real error.
+- **Distinguish infrastructure/resource failures from patch failures.** If the raw Yetus log shows errors like `pthread_create failed (EAGAIN)`, `unable to create native thread`, OOM/resource-limit failures, missing Docker capacity, or zero tests actually executed, treat that as CI/environment failure unless the log also points to a deterministic patch-specific compile/test error. In that case, do not change code just to satisfy a broken worker; report the root cause, rerun the closest local check, and use a retrigger push/comment if appropriate.
 - **If GitHub Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or log access is unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user infer that limitation.
 - **If local CI wrappers are blocked, run the closest direct check you can.** For example, if a full CI reproduction path is blocked by the local environment, run the nearest local Maven compile/test command for the touched module and say what remains unverified.
 
@@ -196,6 +223,7 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 
 **Style rules for PR comments:**
 - 2-4 sentences max. Sound like a human, not a changelog. A touch of humor is fine.
+- Before posting a PR comment or review reply, run the final text through `humanizer-zh` and preserve the same JIRA key, commands, and test results.
 - Never use the em dash character.
 - Only mention tests that were actually run.
 
@@ -215,17 +243,25 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 | **-1 patch** | Branch doesn’t apply to current trunk. | Rebase on `apache/trunk` and force-push (or recreate branch from trunk + cherry-pick). |
 | **-1 compile / javac** | Missing import or syntax error (e.g. [#8310](https://github.com/apache/hadoop/pull/8310) missing `IOException`). | Add missing imports; run compile (or unit) locally for the touched module. |
 | **-1 unit** | Real failure or flaky test. Flaky example: asserting `ForkJoinPool.getPoolSize()` which can be &lt; parallelism until threads start ([#8308](https://github.com/apache/hadoop/pull/8308)). | Fix assertions to use stable values (e.g. `getParallelism()` or a test-only getter); fix real failures from the CI log. |
+| **Yetus says `unit`/`shadedclient` failed, but the raw log shows `pthread_create failed (EAGAIN)` or `unable to create native thread`** | Jenkins worker/container hit a process/thread/resource limit before the relevant tests or client checks actually ran. | Treat it as CI infrastructure noise, not an automatic code bug. Inspect the raw artifact, verify whether any tests actually ran, run the closest relevant local Maven check, and retrigger CI instead of changing code blindly. |
 | **CI not re-running** | Fix pushed but no new Yetus comment. | Push an empty commit to trigger CI (see §8 above). |
 | **Duplicate PR** | Another open PR already fixes the same JIRA; yours gets closed as duplicate. | Before picking an issue: skip JIRA issues with **pull-request-available** or with a linked GitHub PR; search GitHub PRs for the JIRA key and choose an issue with no open PR. |
+| **Searching only by JIRA key misses an existing PR** | Some Hadoop PRs fix the same behavior but do not clearly mention the JIRA id in the title/body, so a key-only search can still produce duplicate work. | During issue triage, search by JIRA key **and** by title keywords, error text, and touched subsystem before concluding the issue is unclaimed. |
+| **Linked history already rejected the approach** | A previous PR or review may already explain why a seemingly reasonable fix is not acceptable for Hadoop. Reopening it wastes time and annoys maintainers. | Read linked PR/JIRA discussion before coding, and treat maintainer design feedback as binding unless you are intentionally taking a clearly different path. |
 | **Wrong author / tool attribution** | Commit author shows "dejain" or message includes "Made with Cursor". | Amend with `--author="Deepak Jain <deepujain@gmail.com>"`, fix the message, then `git push --no-verify --force-with-lease origin <branch>`. |
 | **No comments, but failing CI** | PR looks idle if you only read the conversation tab. | Always inspect statuses before saying there is nothing to do. |
 | **Blocked log access** | `gh` auth is invalid or unavailable, so Actions logs cannot be inspected directly. | Say that immediately and ask for `gh auth login` or pasted failure details/logs instead of waiting for the user to guess. |
 | **Rebase-only or validation-only push with no PR comment** | Reviewers cannot tell whether the branch was just rebased, CI was retriggered, or local checks were rerun. | After every push, leave a 2-4 sentence PR comment with what changed in the branch state and the exact local Maven command/result, even if no source files changed. The comment documents the work; the push is what retriggers CI. |
 | **Shared API/config change breaks initialization or default paths** | A change passes the direct feature test but fails where Hadoop constructs default objects, working directories, URIs, or config-derived values during startup. | For changes to shared APIs, URI/path behavior, filesystem semantics, or config validation, test both the direct behavior and at least one initialization/default-path consumer in the affected module. |
+| **PR body has tests but no reviewer-facing evidence** | A branch may have local validation, but if the PR body does not summarize it clearly, the review still looks AI-generated or under-validated. | Always include an **Evidence it works** section in the PR body with exact commands, outcomes, and any realistic reproducer or smoke test used. |
 | **Failure-mode tests are too specific about the exact exception text/path** | Hadoop can surface the same underlying failure through different wrapper exceptions depending on timing, replica count, transport path, or retry path. | In negative-path tests, assert the behavioral contract and accept equivalent error surfaces when they preserve the same outcome, instead of overfitting to one exact message or wrapper exception. |
 | **Broad local suite fails for unrelated reasons** | A large Maven suite can include environment-specific or pre-existing failures that are not caused by the PR, which can waste time and blur the real signal. | Start with the narrowest module/class-level Maven check that covers the changed behavior, then widen only as needed. If a broader suite fails for an unrelated local reason, document the scoped passing checks and call out the residual risk explicitly. |
+| **Wrapper, Java, or `~/.m2` issues block otherwise-valid local testing** | The code change may be fine, but `./mvnw` can fail because Java is not configured, the wrapper is unusable locally, or the default Maven cache is unwritable. | Retry the narrowest relevant check with direct `mvn`, an explicit `JAVA_HOME`, and `-Dmaven.repo.local=/tmp/codex-m2` before declaring validation blocked. Report the fallback command you used and what it did or did not verify. |
 | **Adding code before retesting on current trunk** | A PR can look stale or broken when the real issue is simply that it needs a rebase and a fresh targeted local run on top of current `apache/trunk`. | For existing PRs, rebase first, then run the closest relevant Maven check before deciding whether new code changes are actually needed. |
 | **Messy final PR history** | Iteration commits like "Trigger CI", import-only fixes, or partial experiments make the PR harder to review and obscure the real change. | Iterate locally as needed, but before final push prefer squashing the branch down to one clean JIRA-referenced commit unless there is a clear reason to preserve multiple commits. |
+| **Concurrency fix has no race-focused regression** | A straightforward unit test can miss the unsafe access pattern and let the race slip through review or CI. | For concurrent collection or synchronization fixes, add a regression that directly exercises the conflicting access pattern, preferably with repeated add/iterate or mutate/read pressure, instead of relying on incidental timing. |
+| **Environment-sensitive bug validated only with a narrow unit test** | The narrow test can pass while the real bug still reproduces in a fuller CLI, service, or distributed workflow. | For timing, distributed, native, auth, CLI, external-service, and integration-sensitive fixes, add at least one realistic proof path and do not claim success from code reading alone. |
+| **PR creation blocked by invalid GitHub auth** | The code is ready but the last GitHub step fails, leaving the branch half-finished from the user's perspective. | Say PR creation is blocked immediately and provide the exact compare link, final PR title/body, and short PR comment so the branch is still review-ready while auth is fixed. |
 
 ---
 

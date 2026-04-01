@@ -74,6 +74,7 @@ Use the **actual JIRA number** in the branch name (e.g. `SPARK-38743-missing-sta
   - **Tests**  - What tests were added or how the change was tested (or **Why no new tests** with brief justification).
   - **Fixes SPARK-xxxxx**  - So the JIRA is linked.
   - **JIRA assignee for credit:** deepujain  - Required for Apache projects tracked in JIRA so committers can assign the JIRA to the contributor when the PR is merged.
+- **Writing pass:** Before handing off `PR_SPARK-xxxxx_body.md` or any PR comment/review reply, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep the JIRA id, commands, tests, and reviewer-facing facts unchanged.
 - Optionally create a local `PR_SPARK-xxxxx_body.md` for copy-paste only; do not commit it.
 
 ## 7. After push: CI and rebase
@@ -187,6 +188,7 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 
 **Style rules for PR comments:**
 - 2-4 sentences max. Sound like a human, not a changelog. A touch of humor is fine.
+- Before posting a PR comment or review reply, run the final text through `humanizer-zh` and preserve the same JIRA id, commands, and test results.
 - Never use the em dash character.
 - Only mention tests that were actually run.
 

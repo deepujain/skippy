@@ -12,7 +12,12 @@ When the user asks to contribute a PR, pick the next issue, or "follow the recip
 - Prefer low-hanging, well-scoped issues from [openclaw/openclaw issues](https://github.com/openclaw/openclaw/issues).
 - When the user asks for **size M** or **size L/XL** (or "excess"), prefer issues that will produce a medium or larger PR (e.g. multi-file, config + wiring, or non-trivial logic).
 - **Avoid files** already touched by the user's open PRs (e.g. if a voice-call or pre-commit PR is open, do not touch those files).
-- Fetch issue details if needed (e.g. via mcp_web_fetch or search) to confirm scope.
+- **Prefer `gh` for issue and PR discovery.** Run `gh auth status` first. If auth is healthy, use:
+  - `gh issue list --repo openclaw/openclaw --state open --limit 100`
+  - `gh issue view <number> --repo openclaw/openclaw`
+  - `gh pr list --repo openclaw/openclaw --author deepujain --state open`
+- **Fallback when `gh` is unavailable or unauthenticated:** use web fetch/search to inspect issues and the user's open PRs.
+- Fetch issue details if needed to confirm scope.
 - **Run commands yourself** where possible (git, pnpm, tests); only ask the user to run when auth or an interactive prompt is required (e.g. `git push` to their fork, or a local `pre-commit` that needs their env).
 
 ## 2. Switch to main, rebase, create branch (before any code changes)
@@ -60,11 +65,22 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 
 - Create a file in the repo: `PR_NNNNN_body.md` (e.g. `PR_39094_body.md`). **Do not add or commit this file**  - it is for copy-paste only.
 - Fill the openclaw PR template: Summary (Problem, Why it matters, What changed, What did NOT change), Change Type, Scope, Linked Issue/PR (Closes #NNNNN), User-visible/Behavior Changes, Security Impact, Repro + Verification (Environment, Steps, Expected, Actual), Evidence, Human Verification, Compatibility/Migration, Failure Recovery, Risks and Mitigations.
+- Before handing off `PR_NNNNN_body.md` or any PR comment/review reply, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep issue numbers, commands, evidence, and exact claims unchanged.
 - **In the same response as the implement + commit steps**, tell the user: (1) Commit command (only fix files). (2) Push command. (3) "PR description is in `PR_NNNNN_body.md`  - open it, Select All, Copy, paste into the GitHub PR description when you open the PR." So the user gets everything in one go without asking again.
 
 ## 7. Open the PR
 
 - From the user's fork branch → `openclaw/openclaw` `main`.
+- **Prefer `gh` when authenticated.** Run `gh auth status` first.
+- **PR create command (preferred):**
+
+```bash
+cd /Users/dejain/nvidia/oss/openclaw
+gh pr create --repo openclaw/openclaw --base main --head deepujain:<branch> --title 'fix: short summary (Fixes #NNNNN)' --body-file PR_NNNNN_body.md
+```
+
+Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The agent should run this directly when `gh auth status` is healthy.
+- **Fallback if `gh` auth is broken or unavailable:** provide the deep link and PR body path so the user can open it manually.
 - **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
   `https://github.com/openclaw/openclaw/compare/main...<github-username>:openclaw:<branch>?expand=1`
   Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
@@ -75,12 +91,24 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, CI status, and any requested changes, then act on what you find.
 
-1. **Fetch the PR details** - read the PR page to understand: reviewer comments, CI status, merge conflicts.
+1. **Read the PR first.** Prefer `gh` when authenticated:
+   - `gh pr view <url-or-number> --repo openclaw/openclaw --comments`
+   - `gh pr checks <url-or-number> --repo openclaw/openclaw`
+   If `gh` is unavailable or unauthenticated, fall back to reading the PR page via web fetch.
+   Understand: reviewer comments, CI status, and merge conflicts.
 2. **Check out the PR branch** and rebase on upstream main if needed.
 3. **Address what you find** - fix code per review comments, resolve conflicts, update tests.
 4. **Run tests** locally before giving push commands.
 5. **Give the user push commands** (do not push yourself).
-6. **Provide a short PR comment** for the user to paste. Keep it 2-4 sentences, human-sounding, a touch of humor is fine. Never use the em dash character.
+6. **Prefer posting a short PR comment with `gh`** when auth is healthy:
+
+```bash
+cd /Users/dejain/nvidia/oss/openclaw
+gh pr comment <url-or-number> --repo openclaw/openclaw --body 'Rebased on main. Addressed the review comments and reran the relevant tests locally. Should be good to go!'
+```
+
+If `gh` auth is broken or unavailable, provide the comment for the user to paste. Keep it 2-4 sentences, human-sounding, a touch of humor is fine. Never use the em dash character.
+Run that final comment text through `humanizer-zh` first, while preserving the same issue number, test results, and branch-status facts.
 
 **Comment examples:**
 - *Rebased on main. Addressed review comments (renamed helper, fixed edge case). Tests pass. Should be good to go!*
