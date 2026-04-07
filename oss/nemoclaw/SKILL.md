@@ -198,6 +198,7 @@ If the user shares a PR URL, **use that PR**. Do not open a second PR for the sa
    - **Conflict banner** - GitHub shows "This branch has conflicts that must be resolved" when the branch is behind. If present, a rebase is mandatory.
    - **CI/CD failures** - check the checks section for failing tests or lint errors.
    - **Human reviewer comments** - any requested changes from maintainers.
+   - **Scope-check reviewer concerns** - when a reviewer raises a broader product/design concern, compare it against the issue's stated bug, repro, and expected behavior before changing code. If the PR already fixes the issue as written, prefer a short clarification comment over silently expanding the scope.
    - **Workflow/config correctness** - for GitHub Actions or release automation changes, verify permissions, trigger patterns, and conditional branches are internally consistent. Example: `npm publish --provenance` on Actions needs `permissions: { contents: read, id-token: write }`, and prerelease tag logic must not be excluded by the workflow trigger.
    - **Approval / fork-runner state** - note when checks are waiting on maintainer approval for fork workflows. That is not a code defect by itself, but it is part of the true PR status and should be mentioned in the handoff.
    - **Other overlapping open PRs** - if the PR touches shared hot files (`bin/nemoclaw.js`, onboarding helpers, workflow files, common tests), inspect other open PRs touching the same files so you do not miss collision context or hidden rebase pressure.
