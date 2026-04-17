@@ -198,6 +198,7 @@ If the user shares a PR URL, **use that PR**. Do not open a second PR for the sa
    - **Conflict banner** - GitHub shows "This branch has conflicts that must be resolved" when the branch is behind. If present, a rebase is mandatory.
    - **CI/CD failures** - check the checks section for failing tests or lint errors.
    - **Human reviewer comments** - any requested changes from maintainers.
+   - **Informational bot comments** - comments like "Possibly related open issues" are usually just issue-linkage FYI. Do not treat them as duplicate-PR warnings unless the comment explicitly points to another open PR or asks for a change.
    - **Scope-check reviewer concerns** - when a reviewer raises a broader product/design concern, compare it against the issue's stated bug, repro, and expected behavior before changing code. If the PR already fixes the issue as written, prefer a short clarification comment over silently expanding the scope.
    - **Workflow/config correctness** - for GitHub Actions or release automation changes, verify permissions, trigger patterns, and conditional branches are internally consistent. Example: `npm publish --provenance` on Actions needs `permissions: { contents: read, id-token: write }`, and prerelease tag logic must not be excluded by the workflow trigger.
    - **Approval / fork-runner state** - note when checks are waiting on maintainer approval for fork workflows. That is not a code defect by itself, but it is part of the true PR status and should be mentioned in the handoff.
@@ -225,6 +226,8 @@ GIT_EDITOR=true GIT_AUTHOR_NAME="Deepak Jain" GIT_AUTHOR_EMAIL="deepujain@gmail.
 
 After the rebase, verify the commit author, Signed-off-by, and signature are correct (`git log --show-signature -1`). If `commit.gpgsign = true` globally, the rebase automatically signs the commit with the SSH key.
 
+**CRITICAL: Rebases that replay multiple commits through the same file can leave a later conflict marker or stale hunk in a file you already "resolved" earlier in the sequence.** After the rebase completes, rerun the relevant build/typecheck/tests before pushing, even if the first conflict looked fully handled.
+
 **CRITICAL: If the rebase added `Made-with: Cursor`, give the user an amend command to strip it (see §8.4).**
 
 **CRITICAL: If `git log --show-signature -1` shows "No signature", give the user an amend command with `-S` to sign it (see §8.4).**
@@ -249,9 +252,13 @@ gh pr comment <url-or-number> --repo NVIDIA/NemoClaw --body 'Rebased on main. Ad
 
 If `gh` auth is broken or unavailable, provide the comment as plain text in chat for the user to copy-paste onto the PR. Keep it brief, casual, and human. A touch of humor is welcome. Never use the em dash character.
 
+**Use shell-safe comment bodies.** Prefer plain single-quoted text without backticks, `$()`, or other shell interpolation inside `gh pr comment --body ...`, or write the body to a file first. Do not let command substitution garble the comment or accidentally execute local commands.
+
 Use PR comments to tell reviewers what changed and what relevant validation passed. Do not dump local-only environment problems, agent-shell auth quirks, worktree setup oddities, or unrelated test failures into a routine PR comment unless that detail directly explains the reviewer-facing status of the PR or blocks merge.
 
 **Re-read the PR after each push before declaring it done.** CodeRabbit often posts a fresh actionable review on the new head commit within minutes. For open-PR work, do one more read of the latest PR comments/checks after your push or rebase. If a new actionable comment appears, address it in the same thread instead of stopping early.
+
+**Do not treat GitHub's `mergeStateStatus: BLOCKED` as proof the branch is still stale.** After a rebase/push, verify locally with `git merge-base --is-ancestor upstream/main HEAD`. If that succeeds, the branch already contains current `main`, and `BLOCKED` usually means required checks or review state rather than "out of date".
 
 **When handling multiple NemoClaw PRs in parallel worktrees, do not rely on `git stash` as a per-worktree scratchpad.** Stashes are repo-global and can be restored in the wrong worktree. Prefer leaving helper files like `PR_NNNNN_body.md` untracked, or move them aside within the same worktree instead of using shared stash entries.
 
@@ -282,6 +289,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 - **Issue triage must include linked development.** Before starting an issue, read the issue comments, linked PRs, and referenced commits. If there is already an active PR for the same fix, skip the issue or work on that PR only.
 - **Duplicate checking needs keyword search, not just issue-number search.** Search PRs by issue number, title keywords, error strings, and affected subsystem/file names before opening a PR.
 - **Open-PR awareness includes file overlap.** Even when the user asks about a specific set of PRs, note other open PRs that touch the same files if that overlap is likely to matter for rebases, conflicts, or duplicated effort.
+- **"Possibly related open issues" bot comments are usually FYI.** They link the PR back to the issue; they do not, by themselves, mean a duplicate PR already exists. Treat them as informational unless another PR is explicitly referenced.
 - **Evidence is part of the recipe, not an optional extra.** PR bodies should include an `Evidence it works` section, and PR comments should summarize the same evidence when you push follow-up fixes to an existing PR.
 - **PR comments are not the place for local-only noise.** Do not mention unrelated local environment failures, sandbox/network quirks, or worktree setup problems in GitHub comments unless they are the actual blocker a reviewer needs to understand. Put that detail in the PR body or user handoff instead.
 - **Environment-sensitive issues need environment-sensitive proof.** For installer, runtime, container, onboarding, network-policy, and integration bugs, do not claim success from unit tests alone when the reported failure happens in a fuller workflow.
@@ -297,6 +305,9 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 - **Open PR conflict resolution (§8).** When the user shares an open PR link, follow §8: investigate, resolve files, run tests, run the rebase, commit, and push directly. Provide a PR comment as chat text.
 - **Always check for conflicts and CodeRabbit.** NemoClaw uses CodeRabbit for automated reviews. When the user shares a PR URL: (1) read the PR page, (2) check for the "This branch has conflicts" banner, (3) check for CodeRabbit nitpicks, (4) check for CI failures, (5) check for human reviewer comments. Address nitpicks first (code changes), then rebase. Never assume "just rebase" without reading the PR page. If there are conflicts, the rebase is mandatory even if no one explicitly asked for it.
 - **CodeRabbit nitpicks: address them.** CodeRabbit posts nitpick suggestions as review comments. Treat them as real feedback - implement the suggestion (or a sensible variant), amend the commit, then rebase. The user expects all nitpicks resolved in one pass.
+- **Multi-commit rebases can re-break the same file twice.** If two branch commits both touch `src/lib/debug.ts`, `src/lib/debug.test.ts`, or another hot file, the first conflict resolution may not be the last one. Watch the rest of the replay, then run focused validation before pushing so a leftover conflict marker or stale hunk does not sneak through.
+- **Current `main` vs GitHub UI state: verify locally.** After rebasing an open PR, use `git merge-base --is-ancestor upstream/main HEAD` to confirm the branch really contains current `main`. GitHub can still show `BLOCKED` for normal review/check reasons even when the stale-branch problem is already solved.
+- **Keep `gh pr comment` bodies shell-safe.** Use plain single-quoted text or a `--body-file`; avoid backticks and command substitution in the shell command itself.
 - **`gh` can work even when the GitHub app cannot.** If app-based PR creation or commenting fails with repo permission errors (for example `403 Resource not accessible by integration`), check `gh auth status` from the current shell and fall back to `gh pr create`, `gh pr view`, `gh pr checks`, and `gh pr comment` before giving up.
 - **Check `gh auth status` in the same environment you plan to use.** Do not assume the user's terminal auth state and the agent shell auth state are identical. If `gh` looks unauthenticated from the agent shell, say that explicitly and prefer a retry once auth is confirmed healthy.
 - **Worktree test setup may need shared dependencies.** When using isolated worktrees, it is acceptable to symlink `node_modules` from the main clone to run local verification. Do not commit the `node_modules` symlink, and do not commit incidental lockfile churn caused by dependency setup in a worktree.
