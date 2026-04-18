@@ -12,6 +12,15 @@ description: (1) New PR: pick JIRA, implement, branch from trunk, commit, push, 
 
 **Git: the agent may commit and push.** When the task is to work on a Hadoop PR end-to-end, the agent may run `git commit` and `git push` directly after local validation. Keep the author as **Deepak Jain <deepujain@gmail.com>**, push to **origin** (never `apache`), and use `--no-verify` when local hooks or environment issues would otherwise block progress. If the user explicitly prefers to run git commands themselves, provide the exact commit/push blocks instead.
 
+## Shared execution guardrails
+
+Apply these rules throughout the recipe:
+
+- **Think before coding.** Do not silently assume JIRA scope, reviewer intent, or the right fix direction. If JIRA comments, PR comments, linked work, or overlapping open PRs point in different directions, stop and resolve that ambiguity before editing code.
+- **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the JIRA or reviewer explicitly calls for them.
+- **Surgical changes.** Touch only the files and lines that trace directly to the JIRA, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
+- **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
+
 ## 1. Pick an issue (JIRA)
 
 - Find issues on **Apache JIRA**, not GitHub Issues:

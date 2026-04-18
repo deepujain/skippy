@@ -7,6 +7,15 @@ description: Picks a non-conflicting openclaw GitHub issue, implements the fix, 
 
 When the user asks to contribute a PR, pick the next issue, or "follow the recipe", do the following in order. **Before making any code changes:** switch to main, pull from upstream, create the new branch; **then** implement the fix.
 
+## Shared execution guardrails
+
+Apply these rules throughout the recipe:
+
+- **Think before coding.** Do not silently assume issue scope, reviewer intent, or the right fix direction. If issue comments, PR comments, linked work, or overlapping open PRs point in different directions, stop and resolve that ambiguity before editing code.
+- **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the issue or reviewer explicitly calls for them.
+- **Surgical changes.** Touch only the files and lines that trace directly to the issue, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
+- **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
+
 ## 1. Pick an issue
 
 - Prefer low-hanging, well-scoped issues from [openclaw/openclaw issues](https://github.com/openclaw/openclaw/issues).

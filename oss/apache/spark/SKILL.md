@@ -10,6 +10,15 @@ description: (1) New PR: pick JIRA (SPARK-xxxxx), implement, branch, commit, pus
 
 **Issues are tracked in JIRA (SPARK-xxxxx); PRs are on GitHub.** Before making any code changes for a new PR: sync with upstream, create the branch; then implement.
 
+## Shared execution guardrails
+
+Apply these rules throughout the recipe:
+
+- **Think before coding.** Do not silently assume JIRA scope, reviewer intent, or the right fix direction. If JIRA comments, PR comments, linked work, or overlapping open PRs point in different directions, stop and resolve that ambiguity before editing code.
+- **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the JIRA or reviewer explicitly calls for them.
+- **Surgical changes.** Touch only the files and lines that trace directly to the JIRA, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
+- **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
+
 ## 1. Pick an issue (JIRA)
 
 - Find issues in **JIRA**: [Apache Spark JIRA](https://issues.apache.org/jira/projects/SPARK/issues). Filter for open/unresolved; label **starter** often indicates smaller scope.
