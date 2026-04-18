@@ -11,6 +11,15 @@ Slurm is **not** an Apache project. **There are no GitHub pull requests.** Contr
 
 **Difference from Apache (Airflow/Spark/Hadoop):** Apache projects use GitHub PRs; Slurm uses the [SchedMD tracker](https://support.schedmd.com/) and patch attachments. No "open PR" step  - instead: create or use a ticket, set severity **C - Contributions**, attach your patch file(s).
 
+## Shared execution guardrails
+
+Apply these rules throughout the recipe:
+
+- **Think before coding.** Do not silently assume ticket scope, reviewer intent, target branch, or the right fix direction. If ticket comments, linked history, or release-branch expectations conflict, stop and resolve that ambiguity before editing code.
+- **Simplicity first.** Ship the smallest patch that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the ticket or reviewer explicitly calls for them.
+- **Surgical changes.** Touch only the files and lines that trace directly to the ticket, build failure, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
+- **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For Slurm, the loop ends with a clean patch artifact: build/test -> commit -> format-patch -> attach with a short tracker comment.
+
 ## 1. Pick or define the work
 
 - **Issue tracker:** [https://support.schedmd.com/](https://support.schedmd.com/)  - all Slurm issues and contributions go here.
