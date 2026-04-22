@@ -278,6 +278,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 - Never use the em dash character.
 - A little humor is fine ("should be good to go", "back in business", etc.)
 - Keep the comment reviewer-facing: summarize the fix, the relevant passing validation, and readiness for another look. Save unrelated local failures for the PR body or chat handoff, not the GitHub comment.
+- Do not narrate reviewer ownership in the comment. Avoid phrases like "maintainer-requested", "reviewer-requested", "per review", or "addressed X's feedback" unless the reviewer explicitly asked for public attribution. Just state the change directly.
 
 **Examples:**
 
