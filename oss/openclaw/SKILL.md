@@ -26,6 +26,10 @@ Apply these rules throughout the recipe:
   - `gh issue view <number> --repo openclaw/openclaw`
   - `gh pr list --repo openclaw/openclaw --author deepujain --state open`
 - **Fallback when `gh` is unavailable or unauthenticated:** use web fetch/search to inspect issues and the user's open PRs.
+- **Read the full issue before choosing it.** Check the issue body, comments, linked PRs, referenced commits, and any maintainer guidance.
+- **Do not pick an issue that already has an active PR** unless the user explicitly asks to work on that existing PR.
+- **Search beyond the issue number.** Search PRs by issue number, title keywords, error text, and affected subsystem/file names before starting.
+- **Check overlapping open PRs** when the issue touches hot files or shared subsystems so we do not duplicate work or walk into avoidable conflicts.
 - Fetch issue details if needed to confirm scope.
 - **Run commands yourself** where possible (git, pnpm, tests); only ask the user to run when auth or an interactive prompt is required (e.g. `git push` to their fork, or a local `pre-commit` that needs their env).
 
@@ -47,6 +51,15 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 
 - Make only the changes needed for the issue; keep scope clear.
 - No edits to files that would conflict with the user's other open PRs.
+- Do not rely on code reading or AI intuition alone for runtime-, install-, network-, onboarding-, or integration-sensitive issues. Gather real execution evidence that matches the reported workflow before opening or updating a PR.
+
+## 3.1 Build and test locally
+
+- Run the relevant build/test commands before commit and before opening or updating a PR.
+- If the full suite reproduces **pre-existing unrelated failures** in the current environment, do not pretend the suite is green. Record the exact failing files/tests, run the narrowest relevant validation for the changed area, and keep both facts in the PR body.
+- For environment-sensitive fixes, add at least one realistic workflow check, not just narrow unit coverage.
+- For external CLI integration bugs, verify the real subcommand contract before trusting a mock. Check the actual tool help/schema or compare against a known-good in-repo call site. If the test double only records argv and exits `0`, treat that as arg-construction coverage, not proof that the real CLI accepts the invocation.
+- If you cannot produce meaningful validation evidence, say so plainly and do not present the PR as fully validated.
 
 ## 4. Commit
 
@@ -104,12 +117,21 @@ When the user shares a PR URL, it means there is something to act on: reviewer c
    - `gh pr view <url-or-number> --repo openclaw/openclaw --comments`
    - `gh pr checks <url-or-number> --repo openclaw/openclaw`
    If `gh` is unavailable or unauthenticated, fall back to reading the PR page via web fetch.
-   Understand: reviewer comments, CI status, and merge conflicts.
-2. **Check out the PR branch** and rebase on upstream main if needed.
-3. **Address what you find** - fix code per review comments, resolve conflicts, update tests.
-4. **Run tests** locally before giving push commands.
-5. **Give the user push commands** (do not push yourself).
-6. **Prefer posting a short PR comment with `gh`** when auth is healthy:
+   Look for all of these:
+   - reviewer comments and requested changes
+   - CodeRabbit or other bot nitpicks, if the repo uses them
+   - failing CI/CD checks
+   - conflict / out-of-date banners
+   - informational bot comments that may just be FYI, not action items
+   - approval or fork-workflow pending state
+   - overlapping open PRs touching the same files or subsystem
+   - external CLI call sites that need a real contract check, not just argv tests
+2. **Use that PR branch.** Do not open a replacement PR unless the user explicitly asks for one.
+3. **Check out the PR branch** and rebase on upstream main if needed.
+4. **Address what you find** - fix code per review comments, resolve conflicts, update tests.
+5. **Run the relevant validation** locally before pushing.
+6. **Push the branch yourself** unless the user explicitly wants commands only.
+7. **Prefer posting a short PR comment with `gh`** when auth is healthy:
 
 ```bash
 cd /Users/dejain/nvidia/oss/openclaw
@@ -118,6 +140,16 @@ gh pr comment <url-or-number> --repo openclaw/openclaw --body 'Rebased on main. 
 
 If `gh` auth is broken or unavailable, provide the comment for the user to paste. Keep it 2-4 sentences, human-sounding, a touch of humor is fine. Never use the em dash character.
 Run that final comment text through `humanizer-zh` first, while preserving the same issue number, test results, and branch-status facts.
+
+Additional rules for open-PR work:
+
+- Use shell-safe `gh pr comment` bodies. Prefer plain single-quoted text without backticks or command substitution, or write the body to a file first.
+- PR comments should be reviewer-facing: what changed, what relevant validation passed, and whether it is ready for another look.
+- Do not dump unrelated local environment failures, auth quirks, worktree setup issues, or other local-only noise into routine PR comments.
+- Re-read the PR after each push before declaring it done. Fresh bot comments or new checks often appear on the new head commit.
+- Do not treat GitHub `BLOCKED` state as proof the branch is stale. Verify locally whether the branch already contains current `main`.
+- When working across multiple worktrees, do not rely on repo-global `git stash` as a scratchpad. Prefer untracked helper files or same-worktree temp moves instead.
+- Do not narrate reviewer ownership in PR comments. Avoid phrases like "maintainer-requested", "reviewer-requested", "per review", or "addressed X's feedback" unless public attribution is explicitly needed. Just state the change directly.
 
 **Comment examples:**
 - *Rebased on main. Addressed review comments (renamed helper, fixed edge case). Tests pass. Should be good to go!*
