@@ -124,6 +124,7 @@ For environment-sensitive fixes, the narrowest relevant validation is often **no
 - onboarding/session bug: run the relevant onboard or resume flow
 - container/runtime bug: run the affected shell script or e2e/smoke scenario
 - network/policy bug: run the policy or gateway test that reproduces the behavior
+- external CLI integration bug: verify the real subcommand contract before trusting a mock. Check the actual tool help/schema (`<tool> --help`, subcommand help, clap/argparse definitions) or compare against a known-good in-repo call site. If the test double only records argv and exits `0`, treat that as arg-construction coverage, not proof that the real CLI accepts the invocation.
 
 If you cannot produce real-environment evidence, say so plainly and do not present the PR as validated.
 
@@ -210,6 +211,7 @@ If the user shares a PR URL, **use that PR**. Do not open a second PR for the sa
    - **Informational bot comments** - comments like "Possibly related open issues" are usually just issue-linkage FYI. Do not treat them as duplicate-PR warnings unless the comment explicitly points to another open PR or asks for a change.
    - **Scope-check reviewer concerns** - when a reviewer raises a broader product/design concern, compare it against the issue's stated bug, repro, and expected behavior before changing code. If the PR already fixes the issue as written, prefer a short clarification comment over silently expanding the scope.
    - **Workflow/config correctness** - for GitHub Actions or release automation changes, verify permissions, trigger patterns, and conditional branches are internally consistent. Example: `npm publish --provenance` on Actions needs `permissions: { contents: read, id-token: write }`, and prerelease tag logic must not be excluded by the workflow trigger.
+   - **External CLI contract checks** - if the PR shells out to `openshell`, `docker`, `npm`, or another external CLI, do not stop at argv tests with a permissive mock. Verify the real subcommand shape against the tool help or parser definitions, and compare it with any known-good in-repo call sites before declaring the PR correct.
    - **Approval / fork-runner state** - note when checks are waiting on maintainer approval for fork workflows. That is not a code defect by itself, but it is part of the true PR status and should be mentioned in the handoff.
    - **Other overlapping open PRs** - if the PR touches shared hot files (`bin/nemoclaw.js`, onboarding helpers, workflow files, common tests), inspect other open PRs touching the same files so you do not miss collision context or hidden rebase pressure.
 2. **Check out the PR branch locally** - the agent may run `git checkout <branch>` (sync step).
