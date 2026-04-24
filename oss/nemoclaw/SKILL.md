@@ -205,6 +205,7 @@ If the user shares a PR URL, **use that PR**. Do not open a second PR for the sa
    If `gh` is unavailable or unauthenticated, fall back to web fetch on the PR page.
    Look for **all** of these:
    - **CodeRabbit review comments and nitpicks** - NemoClaw PRs get automated CodeRabbit reviews. Address every nitpick (even optional ones) unless the user says to skip.
+   - **CodeRabbit pre-merge warning tables** - treat the main review body and inline review comments as actionable. Generic pre-merge warning rows, such as docstring coverage warnings on TypeScript or test-only PRs, are status signals unless CodeRabbit also posts a concrete inline/requested change. Do not add low-value docstrings just to satisfy a generic warning if it conflicts with repo style.
    - **Conflict banner** - GitHub shows "This branch has conflicts that must be resolved" when the branch is behind. If present, a rebase is mandatory.
    - **CI/CD failures** - check the checks section for failing tests or lint errors.
    - **Human reviewer comments** - any requested changes from maintainers.
@@ -212,7 +213,7 @@ If the user shares a PR URL, **use that PR**. Do not open a second PR for the sa
    - **Scope-check reviewer concerns** - when a reviewer raises a broader product/design concern, compare it against the issue's stated bug, repro, and expected behavior before changing code. If the PR already fixes the issue as written, prefer a short clarification comment over silently expanding the scope.
    - **Workflow/config correctness** - for GitHub Actions or release automation changes, verify permissions, trigger patterns, and conditional branches are internally consistent. Example: `npm publish --provenance` on Actions needs `permissions: { contents: read, id-token: write }`, and prerelease tag logic must not be excluded by the workflow trigger.
    - **External CLI contract checks** - if the PR shells out to `openshell`, `docker`, `npm`, or another external CLI, do not stop at argv tests with a permissive mock. Verify the real subcommand shape against the tool help or parser definitions, and compare it with any known-good in-repo call sites before declaring the PR correct.
-   - **Approval / fork-runner state** - note when checks are waiting on maintainer approval for fork workflows. That is not a code defect by itself, but it is part of the true PR status and should be mentioned in the handoff.
+   - **Approval / fork-runner state** - note when checks are waiting on maintainer approval for fork workflows. NVIDIA may post a `copy-pr-bot` comment saying "This pull request requires additional validation before any workflows can run on NVIDIA's runners" with contributor/vetter links. That is a runner-approval gate, not a code defect. Do not try to fix it in code; mention it in the handoff and continue addressing CodeRabbit, human comments, conflicts, and actual CI failures.
    - **Other overlapping open PRs** - if the PR touches shared hot files (`bin/nemoclaw.js`, onboarding helpers, workflow files, common tests), inspect other open PRs touching the same files so you do not miss collision context or hidden rebase pressure.
 2. **Check out the PR branch locally** - the agent may run `git checkout <branch>` (sync step).
 3. **Fetch upstream** - `git fetch upstream` (sync step).
