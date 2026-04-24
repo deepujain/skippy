@@ -1,6 +1,6 @@
 ---
 name: openclaw-pr-contribution
-description: Picks a non-conflicting openclaw GitHub issue, implements the fix, and prepares branch/commit/PR using the contributor's workflow (fresh main, author Deepak Jain, no "Made with Cursor", PR body .md file). Use when the user wants to contribute a PR to openclaw, pick the next issue, do an openclaw PR, or says "follow the openclaw PR recipe" or "next issue for openclaw".
+description: Picks non-conflicting OpenClaw issues, creates merge-ready PRs, and sweeps existing PRs through CI/review feedback until they are ready or truly blocked. Use when the user wants to contribute a PR to OpenClaw, pick issues, do an OpenClaw PR, sweep open MRs/PRs, address bot reviews, fix CI, or says "follow the openclaw PR recipe" or "next issue for openclaw".
 ---
 
 # OpenClaw PR Contribution Recipe
@@ -15,6 +15,8 @@ Apply these rules throughout the recipe:
 - **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the issue or reviewer explicitly calls for them.
 - **Surgical changes.** Touch only the files and lines that trace directly to the issue, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
+- **Parallelize by PR when it helps.** If the user asks to sweep multiple open MRs/PRs and parallel work would reduce latency, split work by PR so each agent has one branch/comment/CI loop to own.
+- **Merge-ready means more than green checks.** Treat a PR as ready only when CI is green or explained, bot and human actionable comments are handled on the current head, the Greptile score is understood, the PR body is truthful, and stale/out-of-date state is resolved or explicitly blocked.
 
 ## Closed-loop MR quality loop
 
@@ -26,12 +28,14 @@ Use this loop to write MRs that are more likely to pass bot review, CI, and main
 4. **Test the bug, the non-bug, and the edge seam.** Add a regression for the reported failure, keep an existing happy-path assertion green, and cover one boundary/negative case when the fix changes branching, fallback, auth, config, or persistence.
 5. **Self-review the diff before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead branches, debug output, over-broad comments, and unrelated formatting.
 6. **Close the loop after push.** Re-read CI and bot comments on the current head. If feedback is actionable, fix it. If feedback is stale, verify the current head and retrigger the least-invasive way. If the same intervention repeats, update this skill.
+7. **Make human intervention exceptional.** Keep working until the branch is merge-ready or the blocker is product direction, private credentials, permissions, destructive git history, or unclear reviewer intent.
 
 ## 1. Pick an issue
 
 - Prefer low-hanging, well-scoped issues from [openclaw/openclaw issues](https://github.com/openclaw/openclaw/issues).
 - When the user asks for **size M** or **size L/XL** (or "excess"), prefer issues that will produce a medium or larger PR (e.g. multi-file, config + wiring, or non-trivial logic).
 - Prefer issues whose success criteria can be proven with focused tests or clear runtime evidence. Avoid starting issues where "done" depends on hidden maintainer judgment unless the user explicitly wants that risk.
+- Prefer high-signal issue shapes: exact error output, missing docs with a clear target audience, broken command/workflow, stale generated artifact, security hardening seam, or a small behavior gap with an obvious regression test.
 - **Avoid files** already touched by the user's open PRs (e.g. if a voice-call or pre-commit PR is open, do not touch those files).
 - **Prefer `gh` for issue and PR discovery.** Run `gh auth status` first. If auth is healthy, use:
   - `gh issue list --repo openclaw/openclaw --state open --limit 100`
@@ -123,6 +127,7 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
   Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
 - Link "Closes #NNNNN" in the description.
 - Use the contents of `PR_NNNNN_body.md` as the PR description.
+- After opening the PR, immediately inspect live CI and review/bot comments. If checks or bot reviews appear quickly and are actionable, fix them before handing off. Do not treat "PR created" as finished when the platform has already produced feedback.
 
 ## 8. Existing PR: user gives URL -> take actions
 
