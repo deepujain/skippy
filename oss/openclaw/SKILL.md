@@ -16,10 +16,22 @@ Apply these rules throughout the recipe:
 - **Surgical changes.** Touch only the files and lines that trace directly to the issue, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
 
+## Closed-loop MR quality loop
+
+Use this loop to write MRs that are more likely to pass bot review, CI, and maintainer scrutiny without repeated human intervention:
+
+1. **Prove the issue shape before editing.** Identify the failing path, user-visible symptom, or missing guard. If the issue is vague, reproduce with the narrowest command, test, or code path inspection that turns it into a concrete failure.
+2. **Match existing patterns.** Before adding new logic, inspect nearby helpers/tests for naming, error handling, generated artifacts, persistence semantics, and cleanup behavior. Prefer extending the local pattern over introducing a parallel one.
+3. **Pre-answer reviewer questions.** Ask what Greptile/Codex/security bots are likely to flag: stale generated files, missing negative tests, fallback paths, cleanup paths, spoofable metadata, broad scope, dead code, or unvalidated external contracts. Fix those before opening or updating the PR.
+4. **Test the bug, the non-bug, and the edge seam.** Add a regression for the reported failure, keep an existing happy-path assertion green, and cover one boundary/negative case when the fix changes branching, fallback, auth, config, or persistence.
+5. **Self-review the diff before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead branches, debug output, over-broad comments, and unrelated formatting.
+6. **Close the loop after push.** Re-read CI and bot comments on the current head. If feedback is actionable, fix it. If feedback is stale, verify the current head and retrigger the least-invasive way. If the same intervention repeats, update this skill.
+
 ## 1. Pick an issue
 
 - Prefer low-hanging, well-scoped issues from [openclaw/openclaw issues](https://github.com/openclaw/openclaw/issues).
 - When the user asks for **size M** or **size L/XL** (or "excess"), prefer issues that will produce a medium or larger PR (e.g. multi-file, config + wiring, or non-trivial logic).
+- Prefer issues whose success criteria can be proven with focused tests or clear runtime evidence. Avoid starting issues where "done" depends on hidden maintainer judgment unless the user explicitly wants that risk.
 - **Avoid files** already touched by the user's open PRs (e.g. if a voice-call or pre-commit PR is open, do not touch those files).
 - **Prefer `gh` for issue and PR discovery.** Run `gh auth status` first. If auth is healthy, use:
   - `gh issue list --repo openclaw/openclaw --state open --limit 100`
@@ -28,6 +40,7 @@ Apply these rules throughout the recipe:
 - **Fallback when `gh` is unavailable or unauthenticated:** use web fetch/search to inspect issues and the user's open PRs.
 - **Read the full issue before choosing it.** Check the issue body, comments, linked PRs, referenced commits, and any maintainer guidance.
 - **Do not pick an issue that already has an active PR** unless the user explicitly asks to work on that existing PR.
+- **Explicitly search PRs by issue number before picking it.** Run `gh search prs --repo openclaw/openclaw '<issue-number> in:title,body' --state open` so you do not miss already-open work that does not share the exact title.
 - **Search beyond the issue number.** Search PRs by issue number, title keywords, error text, and affected subsystem/file names before starting.
 - **Check overlapping open PRs** when the issue touches hot files or shared subsystems so we do not duplicate work or walk into avoidable conflicts.
 - Fetch issue details if needed to confirm scope.
@@ -59,6 +72,8 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 - If the full suite reproduces **pre-existing unrelated failures** in the current environment, do not pretend the suite is green. Record the exact failing files/tests, run the narrowest relevant validation for the changed area, and keep both facts in the PR body.
 - For environment-sensitive fixes, add at least one realistic workflow check, not just narrow unit coverage.
 - For external CLI integration bugs, verify the real subcommand contract before trusting a mock. Check the actual tool help/schema or compare against a known-good in-repo call site. If the test double only records argv and exits `0`, treat that as arg-construction coverage, not proof that the real CLI accepts the invocation.
+- For config/schema changes, check whether the repo keeps generated artifacts in sync. In OpenClaw that often means running `pnpm run config:schema:check`, and if needed `pnpm run config:schema:gen`, before pushing so CI does not fail on stale generated output.
+- Before committing, run a quick self-review against the closed-loop MR quality loop above. If the diff would likely draw a P1/P2 bot comment, fix that now rather than relying on the bot to catch it later.
 - If you cannot produce meaningful validation evidence, say so plainly and do not present the PR as fully validated.
 
 ## 4. Commit
@@ -113,13 +128,47 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
 
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, CI status, and any requested changes, then act on what you find.
 
+### 8a. Open-MRs URL shortcut
+
+If the user shares an OpenClaw author PR-list URL such as:
+
+- `https://github.com/openclaw/openclaw/pulls/deepujain`
+- `https://github.com/openclaw/openclaw/pulls?q=is%3Apr+author%3Adeepujain`
+- any wording like "open MRs", "my open PRs", "all open MRs", or "sweep the open PRs"
+
+treat that as a request to run the **full open-PR sweep** across every currently open PR for that author in `openclaw/openclaw`.
+
+For that sweep:
+
+1. List all open PRs for the author.
+2. For **each** PR, inspect:
+   - review summaries
+   - inline review comments
+   - bot comments from `chatgpt-codex-connector`, `greptile-apps`, CodeRabbit, Aisle/security reviewers, and similar reviewers
+   - Greptile Summary confidence score, if present
+   - current CI/check state
+   - stale/out-of-date/conflict state
+3. Fix every **actionable** comment or CI failure you can address safely.
+4. If a CI failure is stale or unrelated to the current head, rerun or retrigger it when possible. If the token cannot rerun jobs, use the least-invasive safe fallback (for example a no-op retrigger commit) only when that is clearly justified.
+5. Leave a short reviewer-facing PR comment on branches you changed or retriggered.
+6. Re-check all PRs at the end and report:
+   - which PRs are green
+   - Greptile confidence score for each PR when the user asks about scores or merge-readiness
+   - which PRs are rerunning
+   - which PRs still have unresolved actionable review comments
+   - which PRs are blocked by permissions, maintainer decisions, or unclear reviewer intent
+
+Do **not** answer the sweep with only a link summary. The default meaning of an open-MRs URL is "inspect and take care of the open PRs."
+
 1. **Read the PR first.** Prefer `gh` when authenticated:
    - `gh pr view <url-or-number> --repo openclaw/openclaw --comments`
    - `gh pr checks <url-or-number> --repo openclaw/openclaw`
+   - If the repo is using bot reviews, also inspect the PR review feed for `chatgpt-codex-connector` ("💡 Codex Review") and `greptile-apps`, because their actionable feedback may appear as review comments instead of plain issue comments.
+   - If `gh pr view --comments` does not show the full bot feedback, fetch the review/comment payload directly with `gh api` (for example `repos/openclaw/openclaw/pulls/<number>/reviews` and `repos/openclaw/openclaw/pulls/<number>/comments`) before deciding there is nothing to do.
    If `gh` is unavailable or unauthenticated, fall back to reading the PR page via web fetch.
    Look for all of these:
    - reviewer comments and requested changes
-   - CodeRabbit or other bot nitpicks, if the repo uses them
+   - CodeRabbit, `chatgpt-codex-connector` Codex Review, `greptile-apps`, or other bot nitpicks, if the repo uses them
    - failing CI/CD checks
    - conflict / out-of-date banners
    - informational bot comments that may just be FYI, not action items
@@ -145,9 +194,20 @@ Additional rules for open-PR work:
 
 - Use shell-safe `gh pr comment` bodies. Prefer plain single-quoted text without backticks or command substitution, or write the body to a file first.
 - PR comments should be reviewer-facing: what changed, what relevant validation passed, and whether it is ready for another look.
+- Treat `chatgpt-codex-connector` Codex Review and `greptile-apps` comments as first-class review input: inspect them explicitly, separate actionable suggestions from summaries, and only ignore a bot comment when it is purely informational or already satisfied by the current head.
+- For Greptile Summary comments, extract `Confidence Score: N/5` when present. Treat scores below 5/5 as a signal to read the full summary and fix the concrete findings. Do not equate GitHub's green check mark with a 5/5 Greptile score: green checks mean CI/status checks passed, while the Greptile score is review confidence.
+- If a low Greptile score is stale because the current branch head already contains the requested fix, verify the code and focused tests first, then retrigger Greptile with the least-invasive safe action (for example an empty retrigger commit if direct retrigger is unavailable). Leave a short PR comment explaining that the current head already contains the fix and the retrigger is for review refresh.
+- Treat security-review bot comments, including top-level issue comments from tools like Aisle, as first-class review input too. If the finding is about spoofable client metadata, prefer gating sensitive behavior on server-granted authorization state (for example scopes) rather than self-declared client name/mode alone.
+- For open-MRs sweeps, do not assume "no comments" from `gh pr view --comments` is enough. Always check review summaries **and** inline comments via `gh api` before declaring a PR comment-clean.
+- When a specific review comment is clearly addressed, add a lightweight reaction on that comment so the user can spot handled feedback quickly:
+  - prefer `rocket` for "fixed/pushed"
+  - `heart` is also acceptable if the user asked for that convention
+- Only react when the comment is **actually handled on the current branch head**. Do not use reactions as placeholders for "probably fixed" or "I plan to fix this next."
 - Do not dump unrelated local environment failures, auth quirks, worktree setup issues, or other local-only noise into routine PR comments.
 - Re-read the PR after each push before declaring it done. Fresh bot comments or new checks often appear on the new head commit.
 - Do not treat GitHub `BLOCKED` state as proof the branch is stale. Verify locally whether the branch already contains current `main`.
+- If the PR branch is badly stale but current `upstream/main` already contains the intended fix in the current code layout, prefer refreshing the existing branch to `upstream/main` and leaving a short clarifying PR comment instead of replaying obsolete commits onto moved code.
+- When the stale bot comments on an otherwise-valid PR, leave a short reviewer-facing status update so the branch stays alive and the thread captures the current state (green, rerunning, refreshed on main, etc.).
 - When working across multiple worktrees, do not rely on repo-global `git stash` as a scratchpad. Prefer untracked helper files or same-worktree temp moves instead.
 - Do not narrate reviewer ownership in PR comments. Avoid phrases like "maintainer-requested", "reviewer-requested", "per review", or "addressed X's feedback" unless public attribution is explicitly needed. Just state the change directly.
 
@@ -164,3 +224,6 @@ Say one of these so the agent applies this skill and picks an issue + follows th
 - **"Pick the next openclaw issue and do the full PR recipe."**
 - **"Next openclaw PR: find an issue, implement, and prepare branch, commit, and PR body."**
 - **"Follow the openclaw PR recipe for the next issue."**
+- **"Sweep my open OpenClaw MRs."**
+- **"Handle my open OpenClaw PRs."**
+- **Share the OpenClaw open-PR list URL** and the agent should treat it as the full PR sweep request.
