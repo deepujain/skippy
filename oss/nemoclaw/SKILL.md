@@ -270,6 +270,11 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 
 **Re-read the PR after each push before declaring it done.** CodeRabbit often posts a fresh actionable review on the new head commit within minutes. For open-PR work, do one more read of the latest PR comments/checks after your push or rebase. If a new actionable comment appears, address it in the same thread instead of stopping early.
 
+**React to handled review comments.** When a specific CodeRabbit, bot, or human review comment is clearly fixed on the current branch head, add a lightweight reaction on that comment so the user and reviewers can spot handled feedback quickly:
+- prefer `rocket` for fixed and pushed
+- `heart` is also acceptable when the user asked for that convention
+- only react after the fix is actually present on the current branch head; never use reactions as placeholders for planned work
+
 **Do not treat GitHub's `mergeStateStatus: BLOCKED` as proof the branch is still stale.** After a rebase/push, verify locally with `git merge-base --is-ancestor upstream/main HEAD`. If that succeeds, the branch already contains current `main`, and `BLOCKED` usually means required checks or review state rather than "out of date".
 
 **When handling multiple NemoClaw PRs in parallel worktrees, do not rely on `git stash` as a per-worktree scratchpad.** Stashes are repo-global and can be restored in the wrong worktree. Prefer leaving helper files like `PR_NNNNN_body.md` untracked, or move them aside within the same worktree instead of using shared stash entries.
