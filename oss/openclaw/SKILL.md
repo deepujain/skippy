@@ -153,15 +153,29 @@ For that sweep:
    - Greptile Summary confidence score, if present
    - current CI/check state
    - stale/out-of-date/conflict state
+   - the newest stale/assigned-stale bot or maintainer comment timestamp versus the newest author status comment timestamp
 3. Fix every **actionable** comment or CI failure you can address safely.
 4. If a CI failure is stale or unrelated to the current head, rerun or retrigger it when possible. If the token cannot rerun jobs, use the least-invasive safe fallback (for example a no-op retrigger commit) only when that is clearly justified.
 5. Leave a short reviewer-facing PR comment on branches you changed or retriggered.
-6. Re-check all PRs at the end and report:
-   - which PRs are green
-   - Greptile confidence score for each PR when the user asks about scores or merge-readiness
-   - which PRs are rerunning
-   - which PRs still have unresolved actionable review comments
-   - which PRs are blocked by permissions, maintainer decisions, or unclear reviewer intent
+6. If a stale/assigned-stale comment is newer than the latest author status comment, treat it as an action item even when no code change is needed: verify whether current `main` still lacks the PR fix, confirm CI/review state, then post a fresh keep-open/status comment with that evidence.
+7. Re-check all PRs at the end and report:
+   - a table with **one row for every open PR**, so it is obvious none were skipped
+   - PR number/title/link
+   - requested action found during the sweep, such as stale ping, CI failure, review comment, conflict, low Greptile score, or "none"
+   - CI/check status and named failures, or "green"
+   - review-comment status, including actionable comments and whether they were fixed, stale, already addressed, or still blocked
+   - stale/out-of-date/conflict/mergeability status
+   - Greptile confidence score when available
+   - action actually taken, such as code fix pushed, rebase pushed, PR comment posted, reaction added, rerun requested, or no action needed
+   - final state, such as green, rerunning, mergeable, waiting on maintainer, or blocked
+
+Use this table format for OpenClaw open-MR URL sweeps unless the user explicitly asks for a different format:
+
+| PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | fixed / already addressed / no unresolved comments / blocked reason | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+
+Do not collapse multiple PRs into a prose summary. The table is the audit trail the user relies on to see that every open MR was checked.
 
 Do **not** answer the sweep with only a link summary. The default meaning of an open-MRs URL is "inspect and take care of the open PRs."
 
@@ -212,7 +226,8 @@ Additional rules for open-PR work:
 - Re-read the PR after each push before declaring it done. Fresh bot comments or new checks often appear on the new head commit.
 - Do not treat GitHub `BLOCKED` state as proof the branch is stale. Verify locally whether the branch already contains current `main`.
 - If the PR branch is badly stale but current `upstream/main` already contains the intended fix in the current code layout, prefer refreshing the existing branch to `upstream/main` and leaving a short clarifying PR comment instead of replaying obsolete commits onto moved code.
-- When the stale bot comments on an otherwise-valid PR, leave a short reviewer-facing status update so the branch stays alive and the thread captures the current state (green, rerunning, refreshed on main, etc.).
+- When a stale bot, assigned-stale bot, or maintainer stale comment appears after the latest author status comment on an otherwise-valid PR, leave a short reviewer-facing status update so the branch stays alive and the thread captures the current state (for example: current main still needs this fix, CI green, Greptile score, mergeable/clean, or refreshed on main).
+- For a one-line or otherwise tiny PR that is stale but still needed, explicitly re-check the exact line or behavior on current `main` and the PR head before commenting. Do not rely only on old CI or old bot summaries.
 - When working across multiple worktrees, do not rely on repo-global `git stash` as a scratchpad. Prefer untracked helper files or same-worktree temp moves instead.
 - Do not narrate reviewer ownership in PR comments. Avoid phrases like "maintainer-requested", "reviewer-requested", "per review", or "addressed X's feedback" unless public attribution is explicitly needed. Just state the change directly.
 

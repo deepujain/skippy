@@ -1,6 +1,6 @@
 ---
 name: hadoop-pr-contribution
-description: (1) New PR: pick JIRA, implement, branch from trunk, commit, push, open PR. (2) Existing PR: user gives the PR URL; fetch latest (branch, CI status, reviewer comments), rebase on apache/trunk, run local Maven tests, take actions (address review, fix CI), push, generate PR comment. Use for "new Hadoop PR", "follow Hadoop recipe", or "work on this Hadoop PR" / "address this MR" when the PR was submitted earlier and now has review comments, CI failures, or needs rebase/local tests.
+description: (1) New PR: pick JIRA, implement, branch from trunk, commit, push, open PR. (2) Existing/open PRs: user gives a PR URL or author PR-list URL; fetch latest (branch, CI status, reviewer/bot comments), rebase on apache/trunk, run local Maven tests, take actions (address review, fix CI, refresh stale status), push, and generate PR comments. Use for "new Hadoop PR", "follow Hadoop recipe", or "work on this Hadoop PR" / "address this MR" / "sweep my Hadoop PRs" when PRs have review comments, CI failures, or need rebase/local tests.
 ---
 
 # Apache Hadoop PR Contribution Recipe
@@ -20,6 +20,20 @@ Apply these rules throughout the recipe:
 - **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the JIRA or reviewer explicitly calls for them.
 - **Surgical changes.** Touch only the files and lines that trace directly to the JIRA, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
+- **Merge-ready means more than pushed code.** Treat a Hadoop PR as ready only when it applies to current `apache/trunk`, Yetus/GitHub checks are green or explicitly explained as infrastructure noise, actionable reviewer/bot comments are handled on the current head, local Maven evidence is recorded, and the PR body/comment truthfully describes validation.
+- **Make human intervention exceptional.** Keep going until the branch is merge-ready or blocked by permissions, unavailable logs/credentials, maintainer design direction, or a local environment limitation that cannot be worked around safely.
+
+## Closed-loop PR quality loop
+
+Use this loop for both new Hadoop PRs and existing PR sweeps:
+
+1. **Prove the issue shape before editing.** Turn the JIRA/report into a concrete failing path, log line, contract expectation, or test gap before changing code.
+2. **Match existing patterns.** Inspect nearby Hadoop tests/helpers/config keys for naming, compatibility, deprecation, logging, and filesystem/contract-test conventions before adding a new pattern.
+3. **Pre-answer reviewer and bot concerns.** Before opening or updating the PR, ask what Yetus, reviewers, or static checks are likely to flag: missing `test4tests`, no contract coverage, flaky timing assertions, missing imports, patch not applying, over-broad scope, or dependency/API compatibility.
+4. **Test the bug, the non-bug, and the edge seam.** Prefer a regression test for the reported failure, keep an existing happy path green, and cover one boundary/negative case when the fix changes branching, config, filesystem semantics, concurrency, or compatibility.
+5. **Self-review before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead code, debug output, unrelated formatting, and untracked PR body files from the commit.
+6. **Close the loop after push.** Re-read live CI and review comments on the current head. If feedback is actionable, fix it. If a red check is stale/cancelled/unrelated, verify the current head and retrigger with the least-invasive safe action, usually an empty commit when direct rerun is unavailable.
+7. **Report exact state.** End with which PRs are green, which are rerunning, which still have actionable comments, and which are blocked by permissions, infrastructure, or maintainer direction.
 
 ## 1. Pick an issue (JIRA)
 
@@ -130,6 +144,8 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, commit/PR statuses, and any requested changes, then act on what you find.
 
+If the user shares a Hadoop author PR-list URL or says "open Hadoop PRs/MRs", treat that as a request to sweep every currently open PR for that author in `apache/hadoop`: list PRs, inspect review comments, Yetus/GitHub checks, out-of-date state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report green/rerunning/blocked status.
+
 **Use the existing PR only.** Do not open a second PR for the same JIRA when the user has already given a Hadoop PR URL. Work on the PR head branch, rebase it on `apache/trunk`, commit there, and push back to that same PR unless the user explicitly asks for a replacement branch.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/hadoop/pull/8336`). Start with **9.0** (fetch PR state and comments), then 9.1–9.5 as needed.
@@ -215,6 +231,7 @@ For each **CI failure** or **reviewer comment** identified in 9.0:
 - **Check statuses first, then logs.** Use PR/commit statuses to identify the failing jobs before diving into comments or guessing at the failure.
 - **For Yetus red checks, inspect the raw artifact or console before changing code.** Do not rely only on the short PR summary line such as "unit failed" or "shadedclient failed". Open the linked artifact/console and identify the exact failing command, module, and first real error.
 - **Distinguish infrastructure/resource failures from patch failures.** If the raw Yetus log shows errors like `pthread_create failed (EAGAIN)`, `unable to create native thread`, OOM/resource-limit failures, missing Docker capacity, or zero tests actually executed, treat that as CI/environment failure unless the log also points to a deterministic patch-specific compile/test error. In that case, do not change code just to satisfy a broken worker; report the root cause, rerun the closest local check, and use a retrigger push/comment if appropriate.
+- **Handle stale/cancelled duplicate statuses deliberately.** If a newer check with the same name passed but an older cancelled/failing status still makes the PR red, verify the current head SHA. If direct rerun is unavailable, use a no-code empty commit to refresh checks and leave a short PR comment explaining the refresh.
 - **If GitHub Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or log access is unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user infer that limitation.
 - **If local CI wrappers are blocked, run the closest direct check you can.** For example, if a full CI reproduction path is blocked by the local environment, run the nearest local Maven compile/test command for the touched module and say what remains unverified.
 

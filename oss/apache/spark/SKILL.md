@@ -1,6 +1,6 @@
 ---
 name: spark-pr-contribution
-description: (1) New PR: pick JIRA (SPARK-xxxxx), implement, branch, commit, push, open PR. (2) Existing PR: user gives the PR URL; fetch latest, take actions (fixes, rebase, local tests, push), and generate a ready-to-paste PR comment from changes made and local test results (§8.5). Use for "new Spark PR", "follow Spark recipe", or "here is my Spark PR URL  - take actions" / "address this PR" / "generate PR comment".
+description: (1) New PR: pick JIRA (SPARK-xxxxx), implement, branch, commit, push, open PR. (2) Existing/open PRs: user gives a PR URL or author PR-list URL; fetch latest, take actions (fixes, rebase, local tests, stale CI/status refresh, push), and generate a ready-to-paste PR comment from changes made and local test results (§8.5). Use for "new Spark PR", "follow Spark recipe", "here is my Spark PR URL  - take actions", "address this PR", "sweep my Spark PRs", or "generate PR comment".
 ---
 
 # Apache Spark PR Contribution Recipe
@@ -18,6 +18,20 @@ Apply these rules throughout the recipe:
 - **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the JIRA or reviewer explicitly calls for them.
 - **Surgical changes.** Touch only the files and lines that trace directly to the JIRA, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
+- **Merge-ready means more than pushed code.** Treat a Spark PR as ready only when it is current with `upstream/master`, CI is green or any remaining red check is explained, actionable reviewer/bot comments are handled on the current head, scoped sbt/Python evidence is recorded, and the PR body/comment truthfully describes validation.
+- **Make human intervention exceptional.** Keep working until the branch is merge-ready or blocked by permissions, unavailable logs/credentials, maintainer design direction, or a local environment limitation that cannot be worked around safely.
+
+## Closed-loop PR quality loop
+
+Use this loop for both new Spark PRs and existing PR sweeps:
+
+1. **Prove the issue shape before editing.** Turn the JIRA/report into a concrete failing path, error class, golden-file expectation, test gap, or module-level behavior before changing code.
+2. **Match existing patterns.** Inspect nearby Spark tests/helpers/error classes/golden files for naming, compatibility, tags, SQLConf behavior, PySpark parity, and style before adding a new pattern.
+3. **Pre-answer reviewer and bot concerns.** Before opening or updating the PR, ask what reviewers, linters, and CI are likely to flag: missing test coverage, stale golden output, missed PySpark/Scala parity, broad scope, style/formatting, or touching generated docs without regeneration.
+4. **Test the bug, the non-bug, and the edge seam.** Prefer a regression test for the reported failure, keep an existing happy path green, and cover one boundary/negative case when the fix changes SQL behavior, error classes, compatibility, config, or Python/Scala bridging.
+5. **Self-review before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead code, debug output, unrelated formatting, and untracked PR body files from the commit.
+6. **Close the loop after push.** Re-read live CI and review comments on the current head. If feedback is actionable, fix it. If a red check is stale/cancelled/unrelated, verify the current head and retrigger with the least-invasive safe action, usually an empty commit when direct rerun is unavailable.
+7. **Report exact state.** End with which PRs are green, which are rerunning, which still have actionable comments, and which are blocked by permissions, infrastructure, or maintainer direction.
 
 ## 1. Pick an issue (JIRA)
 
@@ -94,6 +108,8 @@ Use the **actual JIRA number** in the branch name (e.g. `SPARK-38743-missing-sta
 ## 8. Existing PR: user gives URL -> fetch latest, take actions
 
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, commit/PR statuses, and any requested changes, then act on what you find.
+
+If the user shares a Spark author PR-list URL or says "open Spark PRs/MRs", treat that as a request to sweep every currently open PR for that author in `apache/spark`: list PRs, inspect review comments, CI checks, out-of-date state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report green/rerunning/blocked status.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/spark/pull/54694`). Start with **8.0** (fetch PR state and comments), then 8.1 → 8.5 as needed.
 
@@ -178,6 +194,7 @@ For each **CI failure** or **reviewer comment** identified in 8.0:
 
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not conclude "nothing to do" until both comments and statuses are clean or still running.
 - **Check statuses first, then logs.** Use PR/commit statuses to identify the failing jobs before diving into comments or guessing at the failure.
+- **Handle stale/cancelled duplicate statuses deliberately.** If a newer check with the same name passed but an older cancelled/failing status still makes the PR red, verify the current head SHA. If direct rerun is unavailable, use a no-code empty commit to refresh checks and leave a short PR comment explaining the refresh.
 - **If GitHub Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or log access is unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user infer that limitation.
 - **If local CI wrappers are blocked, run the closest direct check you can.** For example, if a full CI reproduction path is blocked by the local environment, run the nearest local `sbt` test command for the touched module and say what remains unverified.
 - **Rebase and retest before adding more code.** For an existing PR, first rebase onto current `upstream/master` and rerun the closest relevant local check. Do not assume the branch needs more edits until the rebased branch still reproduces the problem.

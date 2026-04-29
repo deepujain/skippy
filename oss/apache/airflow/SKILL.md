@@ -1,6 +1,6 @@
 ---
 name: airflow-pr-contribution
-description: Picks an Apache Airflow GitHub issue, implements the fix, and prepares branch/commit/PR on GitHub (fork -> apache/airflow). Use when the user wants to contribute to Airflow, pick an Airflow issue, do an Airflow PR, or says "follow the Airflow contribution recipe" or "next Airflow fix".
+description: Picks an Apache Airflow GitHub issue, implements the fix, and prepares branch/commit/PR on GitHub (fork -> apache/airflow). Also sweeps existing/open Airflow PRs when the user shares a PR URL or author PR-list URL: inspect CI, reviewer/bot comments, stale/out-of-date state, fix actionable issues, push follow-up commits, and leave PR status comments. Use when the user wants to contribute to Airflow, pick an Airflow issue, do an Airflow PR, sweep open Airflow PRs/MRs, or says "follow the Airflow contribution recipe" or "next Airflow fix".
 ---
 
 # Apache Airflow PR Contribution Recipe
@@ -15,6 +15,20 @@ Apply these rules throughout the recipe:
 - **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the issue or reviewer explicitly calls for them.
 - **Surgical changes.** Touch only the files and lines that trace directly to the issue, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
+- **Merge-ready means more than pushed code.** Treat an Airflow PR as ready only when it is current with `apache/main`, CI is green or any remaining red check is explained, actionable reviewer/bot comments are handled on the current head, scoped validation evidence is recorded, and the PR body/comment truthfully describes validation.
+- **Make human intervention exceptional.** Keep working until the branch is merge-ready or blocked by permissions, unavailable logs/credentials, maintainer design direction, or a local environment limitation that cannot be worked around safely.
+
+## Closed-loop PR quality loop
+
+Use this loop for both new Airflow PRs and existing PR sweeps:
+
+1. **Prove the issue shape before editing.** Turn the issue into a concrete failing path, log line, traceback, test gap, or runtime workflow before changing code.
+2. **Match existing patterns.** Inspect nearby Airflow/provider tests, SDK imports, deprecation patterns, provider boundaries, and docs/tests expectations before adding a new pattern.
+3. **Pre-answer reviewer and bot concerns.** Before opening or updating the PR, ask what reviewers, ruff, mypy, prek, provider tests, and docs checks are likely to flag: missing marker, wrong project, import-time optional dependency failure, stale chart expectation, over-broad scope, or unvalidated runtime behavior.
+4. **Test the bug, the non-bug, and the edge seam.** Prefer a regression test for the reported failure, keep an existing happy path green, and cover one boundary/negative case when the fix changes branching, config, auth, provider imports, Helm/K8s behavior, or executor/runtime behavior.
+5. **Self-review before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead code, debug output, unrelated formatting, and untracked PR body files from the commit.
+6. **Close the loop after push.** Re-read live CI and review comments on the current head. If feedback is actionable, fix it. If a red check is stale/cancelled/unrelated, verify the current head and retrigger with the least-invasive safe action, usually an empty commit when direct rerun is unavailable.
+7. **Report exact state.** End with which PRs are green, which are rerunning, which still have actionable comments, and which are blocked by permissions, infrastructure, or maintainer direction.
 
 ## New PR vs update to existing PR
 
@@ -189,6 +203,8 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 
 **When the user shares a PR URL, it means there is something to act on:** reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, commit/PR statuses, and any requested changes, then act on what you find.
 
+If the user shares an Airflow author PR-list URL or says "open Airflow PRs/MRs", treat that as a request to sweep every currently open PR for that author in `apache/airflow`: list PRs, inspect review comments, CI checks, out-of-date state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report green/rerunning/blocked status.
+
 - **Be open to reversing the approach.** Reviewers may suggest the opposite fix (e.g. "don't add X here; remove X from places that don't need it"). Treat that as valid design feedback and rework the PR accordingly; don't defend the original approach unless there's a strong reason.
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not say "nothing to do" until both comments and statuses are clean or still running.
 - **Address every comment.** If a reviewer asks for a follow-up (e.g. "Y also doesn't need this"), apply the same logic to Y and push an update. One round of "same change elsewhere" is common.
@@ -197,6 +213,7 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 - **Title changes by maintainers are normal.** A maintainer may change the PR title to match the final scope (e.g. from "Add X to A, B, C" to "Remove X from A, B, C"). No need to object.
 - **Update tests when behavior changes.** If your rework changes which code paths or components get a config/annotation, update the relevant test expectations (e.g. helm test assertions) so CI stays green.
 - **If Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or GitHub log access is otherwise unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user guess why you cannot see the failures.
+- **Handle stale/cancelled duplicate statuses deliberately.** If a newer check with the same name passed but an older cancelled/failing status still makes the PR red, verify the current head SHA. If direct rerun is unavailable, use a no-code empty commit to refresh checks and leave a short PR comment explaining the refresh.
 - **Leave a short PR comment after every meaningful push.** Rebase-only pushes, CI-refresh pushes, and validation-only updates should still leave a 2-4 sentence comment saying what changed in the branch state and what was verified locally.
 
 ## 10. After push: CI and rebase
