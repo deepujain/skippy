@@ -1,6 +1,6 @@
 ---
 name: nemoclaw-pr-contribution
-description: Contribute PRs to NVIDIA/NemoClaw (OpenClaw plugin for OpenShell). Pick an issue, implement, and prepare branch/commit/PR with sign-off. Use when the user wants to contribute to NemoClaw, pick a NemoClaw issue, do a NemoClaw PR, or says "follow the NemoClaw PR recipe" or "next issue for NemoClaw".
+description: Contribute PRs to NVIDIA/NemoClaw (OpenClaw plugin for OpenShell). Pick an issue, implement, prepare branch/commit/PR with sign-off, or sweep existing NemoClaw PRs/MRs through CI/review feedback. Use when the user wants to contribute to NemoClaw, pick a NemoClaw issue, do a NemoClaw PR, sweep open NemoClaw PRs/MRs, or says "follow the NemoClaw PR recipe" or "next issue for NemoClaw".
 ---
 
 # NemoClaw PR Contribution Recipe
@@ -21,6 +21,7 @@ Apply these rules throughout the recipe:
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
 
 **Workflow order (do in this sequence):**
+0. **Recent merged PR scan** - Before picking a new issue, scan the latest 10 merged NemoClaw PRs from other contributors and extract current repo practices (§2.0).
 1. **Sync / rebase** - Keep local code latest: fetch upstream, checkout main, pull. Do this before creating your branch or making any code changes.
 2. **Create branch** - From the updated main, create the feature branch (e.g. `fix/NNNNN-short-description`). No code changes before the branch exists.
 3. **Implement** - Make only the changes needed for the issue (§4).
@@ -61,6 +62,7 @@ Once `commit.gpgsign` is `true`, all commits (including `git rebase --continue`)
 
 ## 2. Pick an issue
 
+- **First run the recent merged contributor scan (§2.0).** Do not start a new issue from stale mental models; NemoClaw changes quickly, especially around onboarding, installer, policy, E2E, and migrated TypeScript paths.
 - Prefer well-scoped issues from [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues).
 - **Prefer `gh` for issue and PR discovery.** Run `gh auth status` first. If auth is healthy, use:
   - `gh issue list --repo NVIDIA/NemoClaw --state open --limit 100`
@@ -74,6 +76,41 @@ Once `commit.gpgsign` is `true`, all commits (including `git rebase --continue`)
 - **Check existing open PRs** to avoid collisions. Avoid issues that touch the same files or areas as the user's existing open PRs.
 - **Check all open PRs that touch the same hot files, not just the issue number or the user's PR list.** For NemoClaw, files like `bin/nemoclaw.js`, `bin/lib/onboard.js`, workflow files, and core tests often have multiple concurrent PRs. Before picking an issue or declaring a PR "clear", search open PRs by file path / subsystem and note overlapping work.
 - Fetch issue details if needed to confirm scope.
+
+## 2.0 Recent merged contributor scan
+
+Before picking or implementing a new issue, scan the latest merged PRs from other contributors so the fix follows the current repo shape, tools, and validation standard. This is a quick calibration step, not an excuse to copy unrelated code.
+
+Use `gh` when authenticated:
+
+```bash
+gh pr list --repo NVIDIA/NemoClaw --state merged --limit 30 \
+  --json number,title,author,mergedAt,headRefName,url \
+  --jq '[.[] | select(.author.login != "deepujain")][0:10]'
+```
+
+For each of the 10 PRs, inspect files, PR body, review feedback, and comments:
+
+```bash
+gh pr view <number> --repo NVIDIA/NemoClaw \
+  --json number,title,author,mergedAt,body,files,reviews,comments
+```
+
+If the PR touches the same subsystem as the issue candidate, also inspect the diff:
+
+```bash
+gh pr diff <number> --repo NVIDIA/NemoClaw --patch
+```
+
+Extract these learnings before selecting the final issue:
+
+- **Current file locations.** Watch for recent migrations such as inference helpers under `src/lib/inference/**`, onboard support under `src/lib/onboard/**`, and session state under `src/lib/state/**`. Do not edit old migrated paths unless the current tree still uses them.
+- **Validation commands by area.** Borrow the latest relevant validation from merged PRs, not just the generic test suite.
+- **Design patterns.** Prefer shared helpers and constants that recent PRs introduced, especially for installer messages, PATH refresh, policy mirroring, gateway/dashboard state, provider credential envs, and E2E job registration.
+- **Reviewer expectations.** Treat recent CodeRabbit and human review fixes as living style guidance: no duplicate helper logic, no hardcoded stale paths, ambient `PATH` should be preserved in tests, security-sensitive policy/build-context changes need explicit assertions, and workflow changes need static tests.
+- **Scope discipline.** If a recent merged PR already solved the issue candidate or moved the subsystem in a conflicting direction, skip that issue or work on the existing PR instead.
+
+Recent merged PR scan output should influence the work plan and PR body. Mention only the relevant borrowed pattern or validation in the PR, not the whole scan.
 
 ## 3. Sync and create branch (before any code changes)
 
@@ -127,6 +164,16 @@ For environment-sensitive fixes, the narrowest relevant validation is often **no
 - external CLI integration bug: verify the real subcommand contract before trusting a mock. Check the actual tool help/schema (`<tool> --help`, subcommand help, clap/argparse definitions) or compare against a known-good in-repo call site. If the test double only records argv and exits `0`, treat that as arg-construction coverage, not proof that the real CLI accepts the invocation.
 
 If you cannot produce real-environment evidence, say so plainly and do not present the PR as validated.
+
+Use the recent merged PR scan (§2.0) to choose extra validation for the touched area:
+
+- **TypeScript CLI / onboard / inference:** `npm run build:cli`, `npm run typecheck:cli`, focused `npx vitest run ...`, and `npm run source-shape:check` when paths/import layout changed.
+- **Formatting-sensitive changes:** `npm run format:check -- <files>` or the repo's current formatter check from recent merged PRs.
+- **Installer scripts:** `bash -n scripts/install.sh`, focused installer/preflight tests, and copy-paste validation for any documented shell one-liner.
+- **E2E shell scripts:** `bash -n test/e2e/<script>.sh`, `test/validate-e2e-coverage.test.ts`, and a selective E2E job when the PR changes nightly coverage or real sandbox flows.
+- **Docs / generated skills:** run the docs generator used by the repo, commonly `python3 scripts/docs-to-skills.py docs/ .agents/skills/ --prefix nemoclaw-user`, then `make docs` when docs build behavior changed.
+- **GitHub Actions / automation:** add or update static workflow tests; verify triggers, permissions, no unsafe interpolation, no unnecessary checkout, shell syntax, and required token permissions such as `id-token: write` for provenance.
+- **Policy / blueprint:** update policy validation tests and assert important fields explicitly, not just object presence.
 
 ## 5. Commit (sign-off required)  - the agent runs commit directly
 
@@ -196,6 +243,16 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Always read the PR page first.** NemoClaw uses **CodeRabbit** for automated reviews, so there will almost always be nitpick comments to address. The PR page also shows a conflict banner ("This branch has conflicts that must be resolved") when rebase is needed - **always check for it and rebase if present**.
 
 If the user shares a PR URL, **use that PR**. Do not open a second PR for the same issue. Check out the PR branch, make the fix there, commit, and push back to that existing PR unless the user explicitly asks for a replacement branch.
+
+If the user shares a NemoClaw author PR-list URL or says "open NemoClaw PRs/MRs", treat that as a request to sweep every currently open PR for that author in `NVIDIA/NemoClaw`: list PRs, inspect CodeRabbit, bot, human review comments, CI checks, out-of-date/conflict state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report a table with one row per PR.
+
+Use this table format for NemoClaw open-PR sweeps unless the user explicitly asks for a different format:
+
+| PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `coderabbitai[bot]`: addressed / not addressed / n/a; `greptile-apps[bot]`: addressed / not addressed / n/a; `chatgpt-codex-connector[bot]` / Codex Review: addressed / not addressed / n/a; `copy-pr-bot` / NVIDIA runner bot: informational / blocked / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+
+For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, especially CodeRabbit, Greptile, Codex Review, copy-pr-bot / runner-approval bots, and security bots. Include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 
 ### 8.1 Investigate
 
@@ -300,6 +357,14 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 
 ## Lessons learned (from real contributions)
 
+- **Start new issue work with a merged-PR scan.** Before picking an issue, read the latest 10 merged non-deepujain NemoClaw PRs. Current merged work is the best signal for file layout, validation commands, review standards, and recently introduced helpers.
+- **Recent merged practices to mirror when relevant:** `npm run typecheck:cli`, `npm run source-shape:check`, `npm run format:check -- <files>`, `bash -n` for shell scripts, static workflow tests, selective E2E runs/comments, docs-to-skills regeneration, and `make docs`.
+- **Do not edit migrated legacy paths.** Recent refactors moved inference support under `src/lib/inference/**`, onboard support under `src/lib/onboard/**`, and session state under `src/lib/state/**`. Check the current tree and recent merged PRs before touching old paths or resurrecting removed shims.
+- **Prefer repo helpers over duplicated snippets.** Recent merged PRs extracted shared helpers for installer TTY guidance, E2E PATH refresh, gateway/dashboard state, model-router credential defaults, and policy/E2E validation. Search for a helper or constant before adding a new local copy.
+- **Workflow PRs need tests like code PRs.** For GitHub Actions changes, add static tests that verify events, permissions, shell syntax, no unsafe title/body interpolation, no unnecessary checkout, and token scopes.
+- **Docs updates may require generated skill updates.** If docs feed `.agents/skills/nemoclaw-user-*`, regenerate those skills and include that command in testing.
+- **Policy changes need explicit semantic assertions.** Mirror policy entries across variants carefully and assert key fields like protocol, port, and provider identity instead of only checking that an entry exists.
+- **E2E changes need coverage registration.** When adding or changing nightly E2E scripts, update workflow job maps, CodeRabbit mappings when present, and `test/validate-e2e-coverage.test.ts`.
 - **PR title with issue number.** Use e.g. `fix: short summary (Fixes #66)` so the PR is linked and discoverable. Without it, reviewers have to open the description to see which issue it fixes.
 - **Signed-off-by must say "Deepak Jain", not "dejain".** `git commit -s` uses the committer identity (git config `user.name`). If `user.name` is "dejain", the trailer becomes `Signed-off-by: dejain <...>`. Always give the user the commit command with `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author="Deepak Jain <deepujain@gmail.com>"` so both Author and Signed-off-by show the real name. GitHub username is **deepujain**.
 - **Build then test before commit.** Run build (if TypeScript in `nemoclaw/` changed): `cd nemoclaw && npm install --ignore-scripts && npm run build && cd ..`. Then run `npm test` from repo root. Fix any failures before giving commit commands.

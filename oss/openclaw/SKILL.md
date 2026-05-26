@@ -33,9 +33,33 @@ Use this loop to write MRs that are more likely to pass bot review, CI, and main
 ## 1. Pick an issue
 
 - Prefer low-hanging, well-scoped issues from [openclaw/openclaw issues](https://github.com/openclaw/openclaw/issues).
+- Optimize for **merge probability**, not just importance. Recent merged OpenClaw PRs skew toward small, bounded fixes with clear proof, low blast radius, and little maintainer-policy ambiguity.
 - When the user asks for **size M** or **size L/XL** (or "excess"), prefer issues that will produce a medium or larger PR (e.g. multi-file, config + wiring, or non-trivial logic).
 - Prefer issues whose success criteria can be proven with focused tests or clear runtime evidence. Avoid starting issues where "done" depends on hidden maintainer judgment unless the user explicitly wants that risk.
 - Prefer high-signal issue shapes: exact error output, missing docs with a clear target audience, broken command/workflow, stale generated artifact, security hardening seam, or a small behavior gap with an obvious regression test.
+- Prefer issue labels that imply a bounded patch:
+  - `clawsweeper:queueable-fix`
+  - `clawsweeper:fix-shape-clear`
+  - `clawsweeper:source-repro`
+  - `issue-rating: 🦞 diamond lobster`
+  - `issue-rating: 🐚 platinum hermit`
+- Prefer issue shapes that match recently merged PRs:
+  - `size: XS/S/M` style fixes
+  - one subsystem, one bug, one proof path
+  - fix + narrow regression test
+  - config/schema/docs mismatches with an obvious source of truth
+  - routing/state bugs where the bad branch is easy to isolate and assert
+- Prefer issues with **no assignee**, no maintainer-only ownership signals, and no evidence that another author is already actively carrying the fix.
+- Avoid issues labeled or shaped like:
+  - `clawsweeper:no-new-fix-pr`
+  - `clawsweeper:needs-maintainer-review`
+  - `clawsweeper:needs-product-decision`
+  - `clawsweeper:needs-security-review`
+  - `clawsweeper:needs-live-repro`
+  - `clawsweeper:needs-info`
+  - `clawsweeper:linked-pr-open`
+  - `maintainer`
+- Treat `P1` issues carefully. A `P1` with policy/security/repro ambiguity is often **less mergeable** than a crisp `P2`/`P3` with a narrow source-level fix.
 - **Avoid files** already touched by the user's open PRs (e.g. if a voice-call or pre-commit PR is open, do not touch those files).
 - **Prefer `gh` for issue and PR discovery.** Run `gh auth status` first. If auth is healthy, use:
   - `gh issue list --repo openclaw/openclaw --state open --limit 100`
@@ -47,6 +71,7 @@ Use this loop to write MRs that are more likely to pass bot review, CI, and main
 - **Explicitly search PRs by issue number before picking it.** Run `gh search prs --repo openclaw/openclaw '<issue-number> in:title,body' --state open` so you do not miss already-open work that does not share the exact title.
 - **Search beyond the issue number.** Search PRs by issue number, title keywords, error text, and affected subsystem/file names before starting.
 - **Check overlapping open PRs** when the issue touches hot files or shared subsystems so we do not duplicate work or walk into avoidable conflicts.
+- If GitHub search rate limits or access issues prevent full de-duplication, say so plainly and prefer candidates with the strongest label/proof signal rather than guessing that an issue is unclaimed.
 - Fetch issue details if needed to confirm scope.
 - **Run commands yourself** where possible (git, pnpm, tests); only ask the user to run when auth or an interactive prompt is required (e.g. `git push` to their fork, or a local `pre-commit` that needs their env).
 
@@ -173,7 +198,9 @@ Use this table format for OpenClaw open-MR URL sweeps unless the user explicitly
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | fixed / already addressed / no unresolved comments / blocked reason | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `greptile-apps[bot]`: addressed / not addressed / n/a; `chatgpt-codex-connector[bot]`: addressed / not addressed / n/a; `CodeRabbit/Aisle/security bot`: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+
+For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, especially `greptile-apps[bot]`, `chatgpt-codex-connector[bot]` / Codex Review, CodeRabbit, Aisle, security-review bots, and similar reviewers. Include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`. If there are no comments from a category, say `n/a` for that category or omit the category when the column remains readable.
 
 Do not collapse multiple PRs into a prose summary. The table is the audit trail the user relies on to see that every open MR was checked.
 

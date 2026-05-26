@@ -33,6 +33,10 @@ agent MUST read the project's skill before starting any work on it.
 | Apache Spark | `oss/apache/spark/SKILL.md` | GitHub PR | `master` | Apache JIRA |
 | OpenClaw | `oss/openclaw/SKILL.md` | GitHub PR | `main` | GitHub Issues |
 | NemoClaw | `oss/nemoclaw/SKILL.md` | GitHub PR | `main` | GitHub Issues |
+| Hermes Agent | `oss/hermes-agent/SKILL.md` | GitHub PR | `main` | GitHub Issues |
+| Inspect Petri | `oss/inspect-petri/SKILL.md` | GitHub PR | `main` | GitHub Issues |
+| Inspect AI | `oss/inspect-ai/SKILL.md` | GitHub PR | `main` | GitHub Issues |
+| PyTorch | `oss/pytorch/SKILL.md` | GitHub PR | `main` | GitHub Issues |
 | Slurm | `oss/slurm/SKILL.md` | Patch file | `master` | SchedMD Tracker |
 
 ---

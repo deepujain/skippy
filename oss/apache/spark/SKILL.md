@@ -109,7 +109,15 @@ Use the **actual JIRA number** in the branch name (e.g. `SPARK-38743-missing-sta
 
 When the user shares a PR URL, it means there is something to act on: reviewer comments, CI/CD failures, merge conflicts, or a requested rebase. **Read the PR page first** to find out what needs attention before assuming "just rebase". Check reviewer comments, commit/PR statuses, and any requested changes, then act on what you find.
 
-If the user shares a Spark author PR-list URL or says "open Spark PRs/MRs", treat that as a request to sweep every currently open PR for that author in `apache/spark`: list PRs, inspect review comments, CI checks, out-of-date state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report green/rerunning/blocked status.
+If the user shares a Spark author PR-list URL or says "open Spark PRs/MRs", treat that as a request to sweep every currently open PR for that author in `apache/spark`: list PRs, inspect review comments, CI checks, out-of-date state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report green/rerunning/blocked status in a table with one row per PR.
+
+Use this table format for Spark open-PR sweeps unless the user explicitly asks for a different format:
+
+| PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `sparkqa` / Jenkins bot if present: addressed / not addressed / n/a; `greptile-apps[bot]` / Codex / CodeRabbit if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+
+For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/spark/pull/54694`). Start with **8.0** (fetch PR state and comments), then 8.1 → 8.5 as needed.
 

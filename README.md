@@ -37,6 +37,10 @@ gives it *who* it is, *what* it values, and *when* to act.
 | **Apache Airflow** | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) | GitHub PR | GitHub Issues |
 | **OpenClaw** | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) | GitHub PR | GitHub Issues |
 | **NemoClaw** | [oss/nemoclaw/SKILL.md](oss/nemoclaw/SKILL.md) | GitHub PR | GitHub Issues |
+| **Hermes Agent** | [oss/hermes-agent/SKILL.md](oss/hermes-agent/SKILL.md) | GitHub PR | GitHub Issues |
+| **Inspect Petri** | [oss/inspect-petri/SKILL.md](oss/inspect-petri/SKILL.md) | GitHub PR | GitHub Issues |
+| **Inspect AI** | [oss/inspect-ai/SKILL.md](oss/inspect-ai/SKILL.md) | GitHub PR | GitHub Issues |
+| **PyTorch** | [oss/pytorch/SKILL.md](oss/pytorch/SKILL.md) | GitHub PR | GitHub Issues |
 | **Slurm** | [oss/slurm/SKILL.md](oss/slurm/SKILL.md) | Patch file | SchedMD Tracker |
 
 More projects can be added the same way: one `SKILL.md` per project.
@@ -62,6 +66,10 @@ oss-claw/
       airflow/SKILL.md         # Apache Airflow (GitHub issues, breeze)
     openclaw/SKILL.md          # OpenClaw (GitHub issues, pnpm)
     nemoclaw/SKILL.md          # NemoClaw (NVIDIA, sign-off, DCO)
+    hermes-agent/SKILL.md      # Hermes Agent (Python, gateway, TUI, skills)
+    inspect-petri/SKILL.md     # Inspect Petri (GitHub issues, uv)
+    inspect-ai/SKILL.md        # Inspect AI (GitHub issues, pip/make)
+    pytorch/SKILL.md           # PyTorch (GitHub issues, Dr. CI, PyTorchBot)
     slurm/SKILL.md             # Slurm (SchedMD tracker, patches)
 ```
 
@@ -135,6 +143,10 @@ ln -sf "$(pwd)/oss/apache/hadoop"    ~/.cursor/skills/hadoop-pr-contribution
 ln -sf "$(pwd)/oss/apache/spark"     ~/.cursor/skills/spark-pr-contribution
 ln -sf "$(pwd)/oss/openclaw"         ~/.cursor/skills/openclaw-pr-contribution
 ln -sf "$(pwd)/oss/nemoclaw"         ~/.cursor/skills/nemoclaw-pr-contribution
+ln -sf "$(pwd)/oss/hermes-agent"     ~/.cursor/skills/hermes-agent-pr-contribution
+ln -sf "$(pwd)/oss/inspect-petri"    ~/.cursor/skills/inspect-petri-pr-contribution
+ln -sf "$(pwd)/oss/inspect-ai"       ~/.cursor/skills/inspect-ai-pr-contribution
+ln -sf "$(pwd)/oss/pytorch"          ~/.cursor/skills/pytorch-pr-contribution
 ln -sf "$(pwd)/oss/slurm"            ~/.cursor/skills/slurm-patch-contribution
 ```
 
