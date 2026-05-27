@@ -59,7 +59,7 @@ More projects can be added the same way: one `SKILL.md` per project.
 `deepujain`'s open-source contributions across GitHub pull requests and
 tracker-based patch submissions.
 
-| Project Name | PRs Created | Open PRs | Merged PRs |
+| Project | PRs Created | Open PRs | Merged PRs |
 |--------------|-------------|----------|------------|
 | <img src="https://raw.githubusercontent.com/NVIDIA/NemoClaw/main/fern/assets/NVIDIA_symbol.svg" alt="NemoClaw logo" height="18"> [NemoClaw](https://github.com/NVIDIA/NemoClaw) | [50](https://github.com/NVIDIA/NemoClaw/pulls/deepujain) | 9 | 23 |
 | <img src="https://raw.githubusercontent.com/openclaw/clawhub/main/public/og-logo.png" alt="ClawHub logo" height="18"> [ClawHub](https://github.com/openclaw/clawhub) | [20](https://github.com/openclaw/clawhub/pulls/deepujain) | 0 | 8 |
