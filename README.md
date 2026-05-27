@@ -54,11 +54,11 @@ identity, safety boundaries, memory, and review-response discipline.
 
 More projects can be added the same way: one `SKILL.md` per project.
 
-## Success Matrix
+## Open Source Contributions
 
-The matrix tracks `deepujain` contributions. `PRs Created` includes GitHub
-PRs and tracker patch submissions; `Open PRs` and `Merged PRs` show the
-current open and merged subsets.
+This table summarizes `deepujain`'s open-source contributions across GitHub
+pull requests and tracker-based patch submissions. `PRs Created` counts all
+submitted PRs or patches; `Open PRs` and `Merged PRs` show their current status.
 
 | Project Name | PRs Created | Open PRs | Merged PRs |
 |--------------|-------------|----------|------------|
