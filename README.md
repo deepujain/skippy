@@ -62,17 +62,17 @@ submitted PRs or patches; `Open PRs` and `Merged PRs` show their current status.
 
 | Project Name | PRs Created | Open PRs | Merged PRs |
 |--------------|-------------|----------|------------|
-| Apache Hadoop | [13](https://github.com/apache/hadoop/pulls/deepujain) | 10 | 3 |
-| Apache Spark | [3](https://github.com/apache/spark/pulls/deepujain) | 3 | 0 |
-| Apache Airflow | [17](https://github.com/apache/airflow/pulls/deepujain) | 0 | 3 |
-| OpenClaw | [18](https://github.com/openclaw/openclaw/pulls/deepujain) | 4 | 2 |
-| ClawHub | [20](https://github.com/openclaw/clawhub/pulls/deepujain) | 0 | 8 |
-| NemoClaw | [50](https://github.com/NVIDIA/NemoClaw/pulls/deepujain) | 9 | 23 |
-| Hermes Agent | [10](https://github.com/NousResearch/hermes-agent/pulls/deepujain) | 10 | 0 |
-| Inspect Petri | [3](https://github.com/meridianlabs-ai/inspect_petri/pulls/deepujain) | 0 | 1 |
-| Inspect AI | [18](https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain) | 10 | 6 |
-| PyTorch | [10](https://github.com/pytorch/pytorch/pulls/deepujain) | 10 | 0 |
-| Slurm | [3](https://support.schedmd.com/buglist.cgi?email3=deepujain%40gmail.com&emaillongdesc3=1&emailtype3=substring&list_id=418332&product=Slurm&query_format=advanced&resolution=---) | 3 | 0 |
+| <img src="https://apache.org/logos/res/hadoop/hadoop.png" alt="Apache Hadoop logo" height="18"> Apache Hadoop | [13](https://github.com/apache/hadoop/pulls/deepujain) | 10 | 3 |
+| <img src="https://apache.org/logos/res/spark/spark.png" alt="Apache Spark logo" height="18"> Apache Spark | [3](https://github.com/apache/spark/pulls/deepujain) | 3 | 0 |
+| <img src="https://apache.org/logos/res/airflow/default.png" alt="Apache Airflow logo" height="18"> Apache Airflow | [17](https://github.com/apache/airflow/pulls/deepujain) | 0 | 3 |
+| <img src="https://raw.githubusercontent.com/openclaw/openclaw/main/docs/assets/openclaw-logo-text.svg" alt="OpenClaw logo" height="18"> OpenClaw | [18](https://github.com/openclaw/openclaw/pulls/deepujain) | 4 | 2 |
+| <img src="https://raw.githubusercontent.com/openclaw/clawhub/main/public/og-logo.png" alt="ClawHub logo" height="18"> ClawHub | [20](https://github.com/openclaw/clawhub/pulls/deepujain) | 0 | 8 |
+| <img src="https://raw.githubusercontent.com/NVIDIA/NemoClaw/main/fern/assets/NVIDIA_symbol.svg" alt="NemoClaw logo" height="18"> NemoClaw | [50](https://github.com/NVIDIA/NemoClaw/pulls/deepujain) | 9 | 23 |
+| <img src="https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/static/img/logo.png" alt="Hermes Agent logo" height="18"> Hermes Agent | [10](https://github.com/NousResearch/hermes-agent/pulls/deepujain) | 10 | 0 |
+| <img src="https://raw.githubusercontent.com/meridianlabs-ai/inspect_petri/main/docs/images/petri.svg" alt="Inspect Petri logo" height="18"> Inspect Petri | [3](https://github.com/meridianlabs-ai/inspect_petri/pulls/deepujain) | 0 | 1 |
+| <img src="https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_ai/main/docs/images/inspect.png" alt="Inspect AI logo" height="18"> Inspect AI | [18](https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain) | 10 | 6 |
+| <img src="https://raw.githubusercontent.com/pytorch/pytorch/main/docs/source/_static/img/pytorch-logo-flame.svg" alt="PyTorch logo" height="18"> PyTorch | [10](https://github.com/pytorch/pytorch/pulls/deepujain) | 10 | 0 |
+| <img src="https://raw.githubusercontent.com/SchedMD/slurm/master/doc/html/slurm_logo.png" alt="Slurm logo" height="18"> Slurm | [3](https://support.schedmd.com/buglist.cgi?email3=deepujain%40gmail.com&emaillongdesc3=1&emailtype3=substring&list_id=418332&product=Slurm&query_format=advanced&resolution=---) | 3 | 0 |
 | **Total PRs** | **165** | **59** | **46** |
 
 ---
