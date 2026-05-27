@@ -44,6 +44,7 @@ identity, safety boundaries, memory, and review-response discipline.
 | **Apache Spark** | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) | GitHub PR | Apache JIRA |
 | **Apache Airflow** | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) | GitHub PR | GitHub Issues |
 | **OpenClaw** | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) | GitHub PR | GitHub Issues |
+| **ClawHub** | [oss/clawhub/SKILL.md](oss/clawhub/SKILL.md) | GitHub PR | GitHub Issues |
 | **NemoClaw** | [oss/nemoclaw/SKILL.md](oss/nemoclaw/SKILL.md) | GitHub PR | GitHub Issues |
 | **Hermes Agent** | [oss/hermes-agent/SKILL.md](oss/hermes-agent/SKILL.md) | GitHub PR | GitHub Issues |
 | **Inspect Petri** | [oss/inspect-petri/SKILL.md](oss/inspect-petri/SKILL.md) | GitHub PR | GitHub Issues |
@@ -53,35 +54,50 @@ identity, safety boundaries, memory, and review-response discipline.
 
 More projects can be added the same way: one `SKILL.md` per project.
 
+## Success Matrix
+
+GitHub PR counts are for `deepujain` as of 2026-05-27. `PRs Created`
+means all PRs opened in that repository; `Open PRs` and `Merged PRs` are
+the current open and merged subsets.
+
+| Project Name | PRs Created | Open PRs | Merged PRs |
+|--------------|-------------|----------|------------|
+| Apache Hadoop | 13 | 10 | 3 |
+| Apache Spark | 3 | 3 | 0 |
+| Apache Airflow | 17 | 0 | 3 |
+| OpenClaw | 18 | 4 | 2 |
+| ClawHub | 20 | 0 | 8 |
+| NemoClaw | 42 | 2 | 23 |
+| Hermes Agent | 10 | 10 | 0 |
+| Inspect Petri | 3 | 0 | 1 |
+| Inspect AI | 18 | 10 | 6 |
+| PyTorch | 5 | 5 | 0 |
+| **Total GitHub PRs** | **149** | **44** | **46** |
+
+Slurm uses SchedMD tracker patch submissions rather than GitHub PRs; the
+current tracked contribution set includes 3 Slurm tickets.
+
 ---
 
 ## Architecture
 
-```
-oss-claw/
-  SOUL.md                      # Agent principles, safety rules
-  AGENTS.md                    # Orchestration, lifecycle, delegation
-  TOOLS.md                     # Tool capabilities and gotchas
-  USER.md.template             # Identity & local config (copy → USER.md)
-  MEMORY.md.template           # Contribution state (copy → MEMORY.md)
-  USER.md                      # Your identity (gitignored)
-  MEMORY.md                    # Your contribution state (gitignored)
-  memory/                      # Daily session logs (YYYY-MM-DD.md)
-  oss/                         # Project-specific contribution skills
-    apache/
-      hadoop/SKILL.md          # Apache Hadoop (JIRA, Yetus CI, Maven)
-      spark/SKILL.md           # Apache Spark (JIRA, sbt, GitHub Actions)
-      airflow/SKILL.md         # Apache Airflow (GitHub issues, breeze)
-    openclaw/SKILL.md          # OpenClaw (GitHub issues, pnpm)
-    nemoclaw/SKILL.md          # NemoClaw (NVIDIA, sign-off, DCO)
-    hermes-agent/SKILL.md      # Hermes Agent (Python, gateway, TUI, skills)
-    inspect-petri/SKILL.md     # Inspect Petri (GitHub issues, uv)
-    inspect-ai/SKILL.md        # Inspect AI (GitHub issues, pip/make)
-    pytorch/SKILL.md           # PyTorch (GitHub issues, Dr. CI, PyTorchBot)
-    slurm/SKILL.md             # Slurm (SchedMD tracker, patches)
-```
+OSS Claw has three layers:
 
-### How the Layers Work Together
+1. **Project skills** in `oss/`: the reusable contribution recipes. Each
+   skill captures issue selection, repo setup, implementation rules,
+   validation commands, PR body standards, review handling, and CI gotchas
+   for one upstream project.
+2. **Operating manuals** at the repo root: shared behavior for agents that
+   need identity, safety rules, multi-project scheduling, tool policy, and
+   review-response discipline.
+3. **Local state** in gitignored files: contributor identity, memory,
+   daily notes, open PR state, and lessons learned.
+
+The skills can stand alone. The operating manuals make them work together
+when a coding agent is managing several projects or maintaining many open
+PRs at once.
+
+### Layer Map
 
 | Layer | File | Committed? | Loaded | Purpose |
 |-------|------|------------|--------|---------|
@@ -92,6 +108,31 @@ oss-claw/
 | **Memory** | `MEMORY.md` | No (gitignored) | Every session | Open PR state, contribution history, lessons |
 | **Daily** | `memory/YYYY-MM-DD.md` | No (gitignored) | Today + yesterday | Session-specific notes, decisions, blockers |
 | **Skills** | `oss/*/SKILL.md` | Yes | When working on project | Project-specific workflow, conventions, recipes |
+
+### Repository Layout
+
+```
+oss-claw/
+  SOUL.md
+  AGENTS.md
+  TOOLS.md
+  USER.md.template
+  MEMORY.md.template
+  memory/
+  oss/
+    apache/
+      airflow/SKILL.md
+      hadoop/SKILL.md
+      spark/SKILL.md
+    clawhub/SKILL.md
+    hermes-agent/SKILL.md
+    inspect-ai/SKILL.md
+    inspect-petri/SKILL.md
+    nemoclaw/SKILL.md
+    openclaw/SKILL.md
+    pytorch/SKILL.md
+    slurm/SKILL.md
+```
 
 ---
 
@@ -111,12 +152,12 @@ Human: runs git commit, git push, opens PR
 This mode fits IDE and CLI coding assistants. Attach or symlink the relevant
 project skill, then ask the assistant to follow that workflow.
 
-### Autonomous (OpenClaw + NemoClaw)
+### Autonomous Runtime
 
 An autonomous runtime can load the top-level operating files plus project
 skills. It scans, selects, implements, tests, submits, monitors reviews, and
-updates memory. Human approval gates are configurable per project and change
-size.
+updates memory across any supported project. Human approval gates are
+configurable per project and change size.
 
 ```
 Agent: boot → read SOUL.md + MEMORY.md → scan all projects
@@ -142,44 +183,51 @@ cp MEMORY.md.template MEMORY.md  # starts empty — populated as you contribute
 Both `USER.md` and `MEMORY.md` are gitignored so your personal data
 stays local.
 
-### 2. Use with a coding-agent client
+### 2. Use with any coding agent
 
-The most important artifact is the relevant project `SKILL.md`. Use it with
-the client you prefer.
+The most important artifact is the relevant project `SKILL.md`. Give the
+skill to whichever coding agent you use and ask it to follow that workflow.
 
-#### Cursor
+For a one-project task:
 
-Symlink skills into Cursor's skills directory:
+- Attach the relevant `oss/<project>/SKILL.md`.
+- Add `SOUL.md` if you want the broader contribution principles.
+- Add `TOOLS.md` if the task involves publishing, CI, review comments, or
+  tracker-specific tooling.
+
+For cross-project work:
+
+- Attach `SOUL.md`, `AGENTS.md`, `TOOLS.md`, and the project skills that
+  are in scope.
+- Keep `USER.md` and `MEMORY.md` local and gitignored.
+- Let the coding agent read the relevant skill before selecting or editing
+  any issue.
+
+#### Optional Skills Directory
+
+Clients that load skills from a directory can symlink the project folders:
 
 ```bash
 cd ~/oss-claw
 
-mkdir -p ~/.cursor/skills
-ln -sf "$(pwd)/oss/apache/airflow"   ~/.cursor/skills/airflow-pr-contribution
-ln -sf "$(pwd)/oss/apache/hadoop"    ~/.cursor/skills/hadoop-pr-contribution
-ln -sf "$(pwd)/oss/apache/spark"     ~/.cursor/skills/spark-pr-contribution
-ln -sf "$(pwd)/oss/openclaw"         ~/.cursor/skills/openclaw-pr-contribution
-ln -sf "$(pwd)/oss/nemoclaw"         ~/.cursor/skills/nemoclaw-pr-contribution
-ln -sf "$(pwd)/oss/hermes-agent"     ~/.cursor/skills/hermes-agent-pr-contribution
-ln -sf "$(pwd)/oss/inspect-petri"    ~/.cursor/skills/inspect-petri-pr-contribution
-ln -sf "$(pwd)/oss/inspect-ai"       ~/.cursor/skills/inspect-ai-pr-contribution
-ln -sf "$(pwd)/oss/pytorch"          ~/.cursor/skills/pytorch-pr-contribution
-ln -sf "$(pwd)/oss/slurm"            ~/.cursor/skills/slurm-patch-contribution
+export AGENT_SKILLS_DIR="$HOME/.your-agent/skills"
+mkdir -p "$AGENT_SKILLS_DIR"
+
+ln -sf "$(pwd)/oss/apache/airflow"   "$AGENT_SKILLS_DIR/airflow-pr-contribution"
+ln -sf "$(pwd)/oss/apache/hadoop"    "$AGENT_SKILLS_DIR/hadoop-pr-contribution"
+ln -sf "$(pwd)/oss/apache/spark"     "$AGENT_SKILLS_DIR/spark-pr-contribution"
+ln -sf "$(pwd)/oss/clawhub"          "$AGENT_SKILLS_DIR/clawhub-pr-contribution"
+ln -sf "$(pwd)/oss/hermes-agent"     "$AGENT_SKILLS_DIR/hermes-agent-pr-contribution"
+ln -sf "$(pwd)/oss/inspect-ai"       "$AGENT_SKILLS_DIR/inspect-ai-pr-contribution"
+ln -sf "$(pwd)/oss/inspect-petri"    "$AGENT_SKILLS_DIR/inspect-petri-pr-contribution"
+ln -sf "$(pwd)/oss/nemoclaw"         "$AGENT_SKILLS_DIR/nemoclaw-pr-contribution"
+ln -sf "$(pwd)/oss/openclaw"         "$AGENT_SKILLS_DIR/openclaw-pr-contribution"
+ln -sf "$(pwd)/oss/pytorch"          "$AGENT_SKILLS_DIR/pytorch-pr-contribution"
+ln -sf "$(pwd)/oss/slurm"            "$AGENT_SKILLS_DIR/slurm-patch-contribution"
 ```
 
-Cursor loads skills from the symlinked paths. `git pull` updates them.
-
-#### Other Clients
-
-- Attach the relevant `SKILL.md` when starting a task.
-- Add `SOUL.md` when the client should follow the broader contribution
-  principles and communication rules.
-- Add `AGENTS.md` and `TOOLS.md` when the client should manage multi-step
-  issue selection, PR maintenance, CI triage, or cross-project work.
-- **OpenClaw:** Place `SOUL.md`, `AGENTS.md`, `TOOLS.md`, and `MEMORY.md`
-  in `~/.openclaw/workspace/`. Skills go in `~/.openclaw/skills/`.
-- **Generic:** Each `SKILL.md` has a **Trigger phrases** section — use
-  those to activate the workflow.
+Point your coding-agent client at `AGENT_SKILLS_DIR`. A `git pull` in this
+repo updates every symlinked skill.
 
 ---
 
