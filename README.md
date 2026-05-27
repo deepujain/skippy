@@ -1,20 +1,27 @@
-# 🦞  You Got Clawed!  🦞
+# OSS Claw
 
 ```
                   ╔═══════════════════════════════════════╗
                   ║                                       ║
-                  ║    An autonomous AI agent for         ║
-                  ║    contributing to open-source        ║
-                  ║    software.                          ║
+                  ║    Skills and operating manuals       ║
+                  ║    for coding agents that contribute  ║
+                  ║    to open-source software.           ║
                   ║                                       ║
                   ╚═══════════════════════════════════════╝
   ```
 
-OSS Claw is an AI agent that finds issues, implements fixes, writes tests,
-and lands PRs across multiple open-source projects. It works in two modes:
-human-guided (Cursor, Claude Code, Codex) and fully autonomous (OpenClaw).
+OSS Claw is a portable contribution knowledge base for coding agents. It
+contains project-specific skills, repo conventions, CI recipes, review
+handling playbooks, and optional autonomous-agent operating files for
+contributing to open-source projects.
 
-The agent's behavior is defined by a layered architecture:
+It is not tied to one client. The `oss/*/SKILL.md` files can be used from
+IDE assistants, CLI coding agents, or autonomous runtimes. The top-level
+agent files (`SOUL.md`, `AGENTS.md`, `TOOLS.md`, `MEMORY.md.template`, and
+`USER.md.template`) provide a fuller operating model for systems that want
+cross-project planning, memory, and autonomous review follow-up.
+
+The repository is organized as a layered architecture:
 
 - **SOUL.md** — Principles, judgment criteria, safety boundaries
 - **AGENTS.md** — Multi-project orchestration, task lifecycle, delegation
@@ -23,8 +30,9 @@ The agent's behavior is defined by a layered architecture:
 - **MEMORY.md** — Cross-session state: open PRs, contribution history, lessons (gitignored, personal)
 - **SKILL.md** (per project) — Project-specific workflows, conventions, recipes
 
-The skills give the agent *how* to contribute to each project. The soul
-gives it *who* it is, *what* it values, and *when* to act.
+The skills give a coding agent *how* to contribute to each project. The
+agent files give a runtime *how to behave across projects*, including
+identity, safety boundaries, memory, and review-response discipline.
 
 ---
 
@@ -89,7 +97,7 @@ oss-claw/
 
 ## Modes of Operation
 
-### Human-Guided (Cursor, Claude Code, Codex)
+### Human-Guided Coding Agents
 
 The human triggers actions. The agent implements and the human authenticates.
 
@@ -100,11 +108,15 @@ Agent: "Here are the commit, push, and PR commands."
 Human: runs git commit, git push, opens PR
 ```
 
+This mode fits IDE and CLI coding assistants. Attach or symlink the relevant
+project skill, then ask the assistant to follow that workflow.
+
 ### Autonomous (OpenClaw + NemoClaw)
 
-The agent runs in an OpenClaw sandbox with NemoClaw governance. It
-independently scans, selects, implements, tests, and submits. Human
-approval gates are configurable per project and change size.
+An autonomous runtime can load the top-level operating files plus project
+skills. It scans, selects, implements, tests, submits, monitors reviews, and
+updates memory. Human approval gates are configurable per project and change
+size.
 
 ```
 Agent: boot → read SOUL.md + MEMORY.md → scan all projects
@@ -130,7 +142,12 @@ cp MEMORY.md.template MEMORY.md  # starts empty — populated as you contribute
 Both `USER.md` and `MEMORY.md` are gitignored so your personal data
 stays local.
 
-### 2. Cursor (recommended for human-guided mode)
+### 2. Use with a coding-agent client
+
+The most important artifact is the relevant project `SKILL.md`. Use it with
+the client you prefer.
+
+#### Cursor
 
 Symlink skills into Cursor's skills directory:
 
@@ -152,10 +169,13 @@ ln -sf "$(pwd)/oss/slurm"            ~/.cursor/skills/slurm-patch-contribution
 
 Cursor loads skills from the symlinked paths. `git pull` updates them.
 
-### 3. Other Agents
+#### Other Clients
 
-- **Claude Code / Codex:** Attach the relevant `SKILL.md` when starting
-  a task, along with `SOUL.md` for behavioral guidance.
+- Attach the relevant `SKILL.md` when starting a task.
+- Add `SOUL.md` when the client should follow the broader contribution
+  principles and communication rules.
+- Add `AGENTS.md` and `TOOLS.md` when the client should manage multi-step
+  issue selection, PR maintenance, CI triage, or cross-project work.
 - **OpenClaw:** Place `SOUL.md`, `AGENTS.md`, `TOOLS.md`, and `MEMORY.md`
   in `~/.openclaw/workspace/`. Skills go in `~/.openclaw/skills/`.
 - **Generic:** Each `SKILL.md` has a **Trigger phrases** section — use
