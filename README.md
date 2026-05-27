@@ -56,9 +56,9 @@ More projects can be added the same way: one `SKILL.md` per project.
 
 ## Success Matrix
 
-Contribution counts are for `deepujain` as of 2026-05-27. `PRs Created`
-means all PRs or tracker patch submissions opened for that project; the
-`Open PRs` and `Merged PRs` columns show the current open and merged subsets.
+The matrix tracks `deepujain` contributions. `PRs Created` includes GitHub
+PRs and tracker patch submissions; `Open PRs` and `Merged PRs` show the
+current open and merged subsets.
 
 | Project Name | PRs Created | Open PRs | Merged PRs |
 |--------------|-------------|----------|------------|
