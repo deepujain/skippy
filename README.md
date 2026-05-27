@@ -62,17 +62,17 @@ the current open and merged subsets.
 
 | Project Name | PRs Created | Open PRs | Merged PRs |
 |--------------|-------------|----------|------------|
-| Apache Hadoop | 13 | 10 | 3 |
-| Apache Spark | 3 | 3 | 0 |
-| Apache Airflow | 17 | 0 | 3 |
-| OpenClaw | 18 | 4 | 2 |
-| ClawHub | 20 | 0 | 8 |
-| NemoClaw | 42 | 2 | 23 |
-| Hermes Agent | 10 | 10 | 0 |
-| Inspect Petri | 3 | 0 | 1 |
-| Inspect AI | 18 | 10 | 6 |
-| PyTorch | 5 | 5 | 0 |
-| **Total GitHub PRs** | **149** | **44** | **46** |
+| Apache Hadoop | [13](https://github.com/apache/hadoop/pulls/deepujain) | 10 | 3 |
+| Apache Spark | [3](https://github.com/apache/spark/pulls/deepujain) | 3 | 0 |
+| Apache Airflow | [17](https://github.com/apache/airflow/pulls/deepujain) | 0 | 3 |
+| OpenClaw | [18](https://github.com/openclaw/openclaw/pulls/deepujain) | 4 | 2 |
+| ClawHub | [20](https://github.com/openclaw/clawhub/pulls/deepujain) | 0 | 8 |
+| NemoClaw | [50](https://github.com/NVIDIA/NemoClaw/pulls/deepujain) | 9 | 23 |
+| Hermes Agent | [10](https://github.com/NousResearch/hermes-agent/pulls/deepujain) | 10 | 0 |
+| Inspect Petri | [3](https://github.com/meridianlabs-ai/inspect_petri/pulls/deepujain) | 0 | 1 |
+| Inspect AI | [18](https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain) | 10 | 6 |
+| PyTorch | [10](https://github.com/pytorch/pytorch/pulls/deepujain) | 10 | 0 |
+| **Total GitHub PRs** | **162** | **56** | **46** |
 
 Slurm uses SchedMD tracker patch submissions rather than GitHub PRs; the
 current tracked contribution set includes 3 Slurm tickets.
