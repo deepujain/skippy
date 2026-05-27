@@ -56,9 +56,9 @@ More projects can be added the same way: one `SKILL.md` per project.
 
 ## Success Matrix
 
-GitHub PR counts are for `deepujain` as of 2026-05-27. `PRs Created`
-means all PRs opened in that repository; `Open PRs` and `Merged PRs` are
-the current open and merged subsets.
+Contribution counts are for `deepujain` as of 2026-05-27. `PRs Created`
+means all PRs or tracker patch submissions opened for that project; the
+`Open PRs` and `Merged PRs` columns show the current open and merged subsets.
 
 | Project Name | PRs Created | Open PRs | Merged PRs |
 |--------------|-------------|----------|------------|
@@ -72,10 +72,8 @@ the current open and merged subsets.
 | Inspect Petri | [3](https://github.com/meridianlabs-ai/inspect_petri/pulls/deepujain) | 0 | 1 |
 | Inspect AI | [18](https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain) | 10 | 6 |
 | PyTorch | [10](https://github.com/pytorch/pytorch/pulls/deepujain) | 10 | 0 |
-| **Total GitHub PRs** | **162** | **56** | **46** |
-
-Slurm uses SchedMD tracker patch submissions rather than GitHub PRs; the
-current tracked contribution set includes 3 Slurm tickets.
+| Slurm | [3](https://support.schedmd.com/buglist.cgi?email3=deepujain%40gmail.com&emaillongdesc3=1&emailtype3=substring&list_id=418332&product=Slurm&query_format=advanced&resolution=---) | 3 | 0 |
+| **Total PRs** | **165** | **59** | **46** |
 
 ---
 
