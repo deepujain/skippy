@@ -21,6 +21,7 @@ Apply these rules throughout the recipe:
 - **Do not add published skills into repo source as product content.** ClawHub-hosted skills belong in the registry and should be uploaded/published through the CLI, not committed under a repo `skills/` directory as app content.
 - **Parallelize by PR when it helps.** If the user asks to sweep multiple open PRs/MRs and parallel work would reduce latency, split work by PR so each agent owns one branch/comment/CI loop.
 - **Merge-ready means more than green checks.** Treat a PR as ready only when CI is green or explained, bot and human actionable comments are handled on the current head, the Greptile score is understood, the PR body is truthful, and stale/out-of-date/conflict state is resolved or explicitly blocked.
+- **Use merged-PR proof standards.** Recent accepted PRs pair a concise summary with exact validation, real behavior proof when behavior changes, and short review notes explaining accepted bot findings or known local caveats.
 
 ## Closed-loop MR quality loop
 
@@ -44,8 +45,13 @@ Apply these lessons before declaring a PR ready:
 - **Treat P2 Greptile findings as merge-friction.** Add missing negative tests, screenshots for UI copy changes, no-token/no-auth cases, and edge-case guards before a maintainer has to do it.
 - **Prefer exact maintainer wording in docs/product copy.** Avoid soft wording such as "currently" when documenting hard product boundaries unless the issue or maintainer explicitly frames the feature as temporary.
 - **Include changelog/docs release notes when maintainers repeatedly add them.** For user-visible docs, scanner, CLI, auth, publish, or moderation changes, check the repo's changelog/release-note convention and update it when appropriate.
+- **Make proof reviewer-friendly.** For UI/product changes, include visual proof, DOM/count checks, route names, and console-error notes. For backend/API/security changes, include exact endpoint behavior, malformed/negative cases, and docs/spec updates.
+- **Run the repo CI aliases, not only ad hoc tests.** Merged PRs commonly report `bun run ci:static`, `bun run ci:unit`, `bun run ci:types-build`, `bun run ci:packages`, `bun run ci:e2e-http`, and Playwright smoke/local-auth when relevant.
+- **Use autoreview before asking humans.** Run repo-local autoreview when available, fix accepted/actionable findings, and mention either "clean" or the exact reason it could not complete.
+- **Docs must name exact surfaces.** Avoid ambiguous phrases. Name the CLI command, API endpoint, route, or UI location; keep wording consistent across skills/plugins/packages/comments; do not promise reporting paths that are not documented or implemented.
 - **For scanner/moderation changes, test both false-positive and bypass paths.** Cover legitimate examples, malicious/broad-access examples, placeholder examples, blank-token/no-token cases, and evidence redaction with repeated secrets.
 - **For backfills and repair jobs, narrow the blast radius.** Prefer scanner-managed/manual-safe eligibility checks over broad table rewrites; explicitly skip removed/manual/non-scanner rows unless the issue proves they must be touched.
+- **Avoid recurring review traps.** Do not expose internal IDs in public API responses unless schemas/docs require them; paginate or bound work beyond the first 100 rows; keep filter combinations independent; ensure helper names match enforced behavior; update stale nominations/state when scores regress to `pass`.
 
 ## Workflow order
 
@@ -61,6 +67,8 @@ Apply these lessons before declaring a PR ready:
 - Prefer well-scoped issues from [openclaw/clawhub issues](https://github.com/openclaw/clawhub/issues).
 - Prefer issues whose success criteria can be proven with focused tests, a screenshot/browser smoke, a Convex function check, or CLI/runtime evidence. Avoid issues where "done" depends on hidden product direction unless the user explicitly wants that risk.
 - Prefer high-signal issue shapes: exact error output, broken command/workflow, missing docs with a clear reader, stale generated artifact, security hardening seam, or a small UI/data behavior gap with an obvious regression test.
+- Prefer issues where the PR can include accepted proof: focused tests, exact CI aliases, screenshots/DOM checks, isolated e2e evidence, production-data dry-run counts, or a clearly documented "not configured locally" caveat.
+- Be cautious with broad product-policy, scanner, or trust-surface issues unless the scope can be narrowed to a specific endpoint, UI route, doc, or dry-run path. Maintainers accept larger changes when the PR states what intentionally did **not** change.
 - Prefer `gh` for issue and PR discovery. Run `gh auth status` first. If auth is healthy, use:
   - `gh issue list --repo openclaw/clawhub --state open --limit 100`
   - `gh issue view <number> --repo openclaw/clawhub`
@@ -115,14 +123,17 @@ If there are uncommitted changes, stash only if needed, then reapply after creat
 - Follow the repo's existing TypeScript, Bun, and file-layout patterns.
 - Keep UI changes aligned with the existing ClawHub design language unless the issue explicitly asks for a redesign.
 - If you touch `packages/clawhub/`, treat it as a user-facing CLI surface and verify both source tests and built-artifact checks.
+- If you touch CLI release behavior, update `CHANGELOG.md`, package metadata/lockfile when needed, and verify package-local commands such as `bun run --cwd packages/clawhub verify`, `bun clawhub --cli-version`, and relevant `--help` output.
 - If you touch `convex/`, follow the repo's data-access guardrails from `AGENTS.md`:
   - Prefer `.withIndex()` over `.filter()` for indexed lookups.
   - Avoid full-table scans and looped large-doc reads.
   - Use `readCanonicalStat()` when reading migrated skill stat fields.
   - Use `applySkillStatDeltas()` when updating migrated stat values.
 - If the change depends on a real Convex function, local auth, or publish/install behavior, gather real execution evidence instead of relying on code inspection alone.
-- For UI changes, verify the route renders and capture a screenshot or browser smoke note when practical. Keep the existing ClawHub visual language unless the issue explicitly asks for a design change.
+- For UI changes, verify the route renders and capture screenshot/browser smoke evidence when practical. For visible label/badge/state changes, add component or route tests and record DOM counts or before/after notes for both light and dark mode when relevant.
 - For upload, publish, import, auth, moderation, token, or security changes, prefer server-side authorization/state checks over client-declared names or modes. Add negative tests for spoofing or unauthorized paths when relevant.
+- For public API or schema changes, update `docs/http-api.md`, copied package schemas, generated `packages/schema/dist` artifacts, and examples together. Do not add response fields that are absent from the public schema/docs.
+- For generated Convex API/schema changes, run `bun run setup:worktree -- --quiet && bunx convex codegen` when needed and include whether it was a tracked no-op.
 
 ## 4. Validation
 
@@ -131,6 +142,7 @@ Start with the narrowest relevant validation for the changed area, then widen to
 ### Focused checks
 
 - Route/component change: run the nearest Vitest tests and, when applicable, a browser smoke or screenshot check.
+- UI/badge/route change: run touched component/route Vitest tests plus `bun run ci:static`; include screenshots or DOM proof for visible changes.
 - CLI change in `packages/clawhub/`: run the package-local verify contract:
 
 ```bash
@@ -142,7 +154,9 @@ bun run --cwd packages/clawhub verify
 ```
 
 - Convex/backend change: run the targeted backend tests and, if local env is configured, push/check functions with `bunx convex dev --once` before relying on `convex run`.
+- API/security/moderation change: add tests for malformed/null/scalar bodies, negative auth/spoofing paths, capped/paginated data, and any public-doc examples. Run targeted backend Vitest, `bun run ci:unit`, `bun run ci:types-build`, and `git diff --check`.
 - Publish/install/search bug: use the flows in `docs/manual-testing.md` or `docs/quickstart.md` to reproduce the real workflow.
+- E2E or flake fix: provide pre-fix reproduction and post-fix repeated passes, preferably in an isolated local-auth/browser runner. If local ports or credentials block a check, say exactly what blocked it and what isolated runner covered instead.
 
 ### Pre-PR checks
 
@@ -153,6 +167,9 @@ cd /Users/dejain/nvidia/oss/clawhub
 bun run lint
 bun run test
 bun run build
+bun run ci:static
+bun run ci:unit
+bun run ci:types-build
 bunx tsc --noEmit
 bunx tsc -p packages/schema/tsconfig.json --noEmit
 bunx tsc -p packages/clawhub/tsconfig.json --noEmit
@@ -161,8 +178,12 @@ bunx tsc -p packages/clawhub/tsconfig.json --noEmit
 Additional checks when relevant:
 
 - If `packages/clawhub/` changed: `bun run --cwd packages/clawhub verify`
+- If package/artifact behavior changed: `bun run ci:packages`
+- If HTTP/API behavior changed: `bun run ci:e2e-http`
+- If local-auth, publish lifecycle, or major UI behavior changed: run the relevant Playwright smoke/local-auth workflow or record why an isolated runner was used instead.
 - If Convex deploy/contract-sensitive code changed: `bun run verify:convex-contract`
 - If UI behavior changed: include screenshots and run the most relevant manual or Playwright smoke flow
+- If autoreview is available: run `.agents/skills/autoreview/scripts/autoreview --mode branch --base origin/main` or the repo-appropriate invocation, fix accepted findings, and record the clean result or exact tool failure.
 
 If the full suite has unrelated pre-existing failures, say so plainly and record exactly what passed and what did not.
 
@@ -218,6 +239,14 @@ The PR body should include:
 - Exact validation commands run
 - Screenshots for UI changes
 - Any Convex/deploy/manual-release note if relevant
+- Bot/review notes: accepted autoreview/ClawSweeper/Copilot/Vercel findings fixed, remaining non-actionable caveats, or why a check could not run locally
+
+Prefer this structure when the PR is non-trivial:
+
+- `## Summary`
+- `## What changed` or short bullets under Summary
+- `## Validation` / `## Verification` with exact commands
+- `## Review Notes` for bot findings, real-behavior proof, screenshots/DOM/prod-data checks, or explicit caveats
 
 Important ClawHub release note:
 
@@ -241,7 +270,7 @@ For that sweep:
 2. For **each** PR, inspect:
    - review summaries
    - inline review comments
-   - bot comments from `chatgpt-codex-connector`, `greptile-apps`, CodeRabbit, Aisle/security reviewers, and similar reviewers
+   - bot comments from AI review connectors, `greptile-apps`, CodeRabbit, Aisle/security reviewers, and similar reviewers
    - Greptile Summary confidence score, if present
    - current CI/check state
    - stale/out-of-date/conflict state
@@ -256,7 +285,7 @@ Use this table format for ClawHub open-MR URL sweeps unless the user explicitly 
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `greptile-apps[bot]`: addressed / not addressed / n/a; `chatgpt-codex-connector[bot]` or ClawSweeper/Codex Review: addressed / not addressed / n/a; `CodeRabbit/Aisle/Vercel/security bot`: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `greptile-apps[bot]`: addressed / not addressed / n/a; AI review connector: addressed / not addressed / n/a; `CodeRabbit/Aisle/Vercel/security bot`: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
 
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`. If there are no comments from a category, say `n/a` for that category or omit the category when the column remains readable.
 
@@ -268,7 +297,7 @@ Do not collapse multiple PRs into a prose summary. The table is the audit trail 
    - If `gh pr view --comments` does not show the full bot feedback, fetch the review/comment payload directly with `gh api repos/openclaw/clawhub/pulls/<number>/reviews`, `gh api repos/openclaw/clawhub/pulls/<number>/comments --paginate`, and `gh api repos/openclaw/clawhub/issues/<number>/comments --paginate`.
 2. Look for:
    - human review comments
-   - bot review comments from Greptile, Codex Review, CodeRabbit, Aisle/security reviewers, or similar tools
+   - bot review comments from Greptile, AI review connectors, CodeRabbit, Aisle/security reviewers, or similar tools
    - failing CI checks
    - conflict / out-of-date state
    - mismatches with `AGENTS.md`, `CONTRIBUTING.md`, or the CI workflow

@@ -49,6 +49,8 @@ Use this loop to write MRs that are more likely to pass bot review, CI, and main
   - fix + narrow regression test
   - config/schema/docs mismatches with an obvious source of truth
   - routing/state bugs where the bad branch is easy to isolate and assert
+- Prefer issues where you can produce **real local proof** without private production access: source-level runtime probes, isolated local gateway startup, real WebSocket/client repros, local CLI subprocess repros, or platform-specific local behavior with exact commands.
+- Prefer issues whose likely diff is **source + adjacent tests**, with docs/generated artifacts added only when the behavior/config/security surface actually changes.
 - Prefer issues with **no assignee**, no maintainer-only ownership signals, and no evidence that another author is already actively carrying the fix.
 - Avoid issues labeled or shaped like:
   - `clawsweeper:no-new-fix-pr`
@@ -94,16 +96,27 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 - Make only the changes needed for the issue; keep scope clear.
 - No edits to files that would conflict with the user's other open PRs.
 - Do not rely on code reading or AI intuition alone for runtime-, install-, network-, onboarding-, or integration-sensitive issues. Gather real execution evidence that matches the reported workflow before opening or updating a PR.
+- Match the shape that is getting merged now: fix the production path, add adjacent regression coverage, and avoid opportunistic cleanup unless it is required for correctness.
+- When the change affects user-facing behavior, config validation, security boundaries, docs, or generated policy/schema artifacts, update the directly-related docs/generated files in the same PR. Do not add broad docs/changelog churn for internal-only fixes.
 
 ## 3.1 Build and test locally
 
 - Run the relevant build/test commands before commit and before opening or updating a PR.
+- Follow the validation style recent merged PRs are using:
+  - one focused `node scripts/run-vitest.mjs ...` command covering the touched files or subsystem
+  - one **real behavior proof** command using production code paths where practical (for example `tsx --eval`, `node --import tsx --input-type=module`, isolated local gateway startup, real `ws` client, real CLI subprocess, or a local platform/runtime repro)
+  - `git diff --check`
+  - targeted format/lint/build/docs/schema checks for the files or subsystem you touched
 - If the full suite reproduces **pre-existing unrelated failures** in the current environment, do not pretend the suite is green. Record the exact failing files/tests, run the narrowest relevant validation for the changed area, and keep both facts in the PR body.
 - For environment-sensitive fixes, add at least one realistic workflow check, not just narrow unit coverage.
 - For external CLI integration bugs, verify the real subcommand contract before trusting a mock. Check the actual tool help/schema or compare against a known-good in-repo call site. If the test double only records argv and exits `0`, treat that as arg-construction coverage, not proof that the real CLI accepts the invocation.
 - For config/schema changes, check whether the repo keeps generated artifacts in sync. In OpenClaw that often means running `pnpm run config:schema:check`, and if needed `pnpm run config:schema:gen`, before pushing so CI does not fail on stale generated output.
+- For docs or generated-policy/config PRs, run the narrow docs/format/schema parity checks that match the touched files instead of hand-waving docs as “not relevant”.
+- For extension/channel/runtime work, prefer the extension-specific lane or focused runtime tests when available instead of generic broad-suite claims.
+- Capture the exact commands and the important result shape while you work; merged PRs often quote pass counts, proof output, or guard-boundary behavior directly in the PR body.
 - Before committing, run a quick self-review against the closed-loop MR quality loop above. If the diff would likely draw a P1/P2 bot comment, fix that now rather than relying on the bot to catch it later.
 - If you cannot produce meaningful validation evidence, say so plainly and do not present the PR as fully validated.
+- If you could not run a full live E2E/platform repro, say exactly what was tested instead, why it is still meaningful, and what remains untested. Recent merged PRs are explicit about proof limits instead of bluffing.
 
 ## 4. Commit
 
@@ -130,7 +143,25 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 ## 6. PR description (markdown file)
 
 - Create a file in the repo: `PR_NNNNN_body.md` (e.g. `PR_39094_body.md`). **Do not add or commit this file**  - it is for copy-paste only.
-- Fill the openclaw PR template: Summary (Problem, Why it matters, What changed, What did NOT change), Change Type, Scope, Linked Issue/PR (Closes #NNNNN), User-visible/Behavior Changes, Security Impact, Repro + Verification (Environment, Steps, Expected, Actual), Evidence, Human Verification, Compatibility/Migration, Failure Recovery, Risks and Mitigations.
+- Use the structure that recent merged PRs are already following. Keep it concise, factual, and command/evidence driven:
+  - `## Summary`
+  - optional linked issue context such as `Fixes #NNNNN` or superseded/replaced PR context when true
+  - `## Testing` / `## Tests and validation` / `## Verification`
+  - `## Real behavior proof`
+  - `## Risk` / `## Risks`
+  - optional `## Current review state` when the branch has a known proof gap, unrelated CI failure, or maintainer-only decision still pending
+- In `Summary`, explain the user-visible bug, the narrow fix, and the important non-goals. Reviewers appear to prefer “what changed” and “what did not change” over broad architecture narration.
+- In `Testing` / `Validation`, list the exact commands run and the meaningful result, not generic claims like “tests passed”.
+- In `Real behavior proof`, include:
+  - behavior addressed
+  - real environment tested
+  - exact command or steps run after the patch
+  - evidence after the fix
+  - observed result
+  - what was not tested
+  - proof limitations or environment constraints when relevant
+- In `Risk`, name the compatibility/security/runtime risk plainly and explain why the fix is still narrow enough to accept.
+- If there is an unrelated or pre-existing failing check, say so explicitly and identify it precisely. Recent merged PRs are honest about unchanged red lanes instead of pretending the branch is fully green.
 - Before handing off `PR_NNNNN_body.md` or any PR comment/review reply, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep issue numbers, commands, evidence, and exact claims unchanged.
 - **In the same response as the implement + commit steps**, tell the user: (1) Commit command (only fix files). (2) Push command. (3) "PR description is in `PR_NNNNN_body.md`  - open it, Select All, Copy, paste into the GitHub PR description when you open the PR." So the user gets everything in one go without asking again.
 
@@ -153,6 +184,7 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
 - Link "Closes #NNNNN" in the description.
 - Use the contents of `PR_NNNNN_body.md` as the PR description.
 - After opening the PR, immediately inspect live CI and review/bot comments. If checks or bot reviews appear quickly and are actionable, fix them before handing off. Do not treat "PR created" as finished when the platform has already produced feedback.
+- Expect recent contributor PRs to be judged on both body quality and CI shape. Commonly relevant checks include `Real behavior proof`, `check-guards`, `check-lint`, `check-test-types`, `check-prod-types`, targeted docs or extension lanes, and Critical Quality / security shards. Validate locally with the narrowest commands that de-risk those lanes for your touched area.
 
 ## 8. Existing PR: user gives URL -> take actions
 
@@ -174,7 +206,7 @@ For that sweep:
 2. For **each** PR, inspect:
    - review summaries
    - inline review comments
-   - bot comments from `chatgpt-codex-connector`, `greptile-apps`, CodeRabbit, Aisle/security reviewers, and similar reviewers
+   - bot comments from AI review connectors, `greptile-apps`, CodeRabbit, Aisle/security reviewers, and similar reviewers
    - Greptile Summary confidence score, if present
    - current CI/check state
    - stale/out-of-date/conflict state
@@ -198,9 +230,9 @@ Use this table format for OpenClaw open-MR URL sweeps unless the user explicitly
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `greptile-apps[bot]`: addressed / not addressed / n/a; `chatgpt-codex-connector[bot]`: addressed / not addressed / n/a; `CodeRabbit/Aisle/security bot`: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `greptile-apps[bot]`: addressed / not addressed / n/a; AI review connector: addressed / not addressed / n/a; `CodeRabbit/Aisle/security bot`: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
 
-For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, especially `greptile-apps[bot]`, `chatgpt-codex-connector[bot]` / Codex Review, CodeRabbit, Aisle, security-review bots, and similar reviewers. Include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`. If there are no comments from a category, say `n/a` for that category or omit the category when the column remains readable.
+For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, especially `greptile-apps[bot]`, AI review connectors, CodeRabbit, Aisle, security-review bots, and similar reviewers. Include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`. If there are no comments from a category, say `n/a` for that category or omit the category when the column remains readable.
 
 Do not collapse multiple PRs into a prose summary. The table is the audit trail the user relies on to see that every open MR was checked.
 
@@ -209,12 +241,12 @@ Do **not** answer the sweep with only a link summary. The default meaning of an 
 1. **Read the PR first.** Prefer `gh` when authenticated:
    - `gh pr view <url-or-number> --repo openclaw/openclaw --comments`
    - `gh pr checks <url-or-number> --repo openclaw/openclaw`
-   - If the repo is using bot reviews, also inspect the PR review feed for `chatgpt-codex-connector` ("💡 Codex Review") and `greptile-apps`, because their actionable feedback may appear as review comments instead of plain issue comments.
+   - If the repo is using bot reviews, also inspect the PR review feed for AI review connectors and `greptile-apps`, because their actionable feedback may appear as review comments instead of plain issue comments.
    - If `gh pr view --comments` does not show the full bot feedback, fetch the review/comment payload directly with `gh api` (for example `repos/openclaw/openclaw/pulls/<number>/reviews` and `repos/openclaw/openclaw/pulls/<number>/comments`) before deciding there is nothing to do.
    If `gh` is unavailable or unauthenticated, fall back to reading the PR page via web fetch.
    Look for all of these:
    - reviewer comments and requested changes
-   - CodeRabbit, `chatgpt-codex-connector` Codex Review, `greptile-apps`, or other bot nitpicks, if the repo uses them
+   - CodeRabbit, AI review connectors, `greptile-apps`, or other bot nitpicks, if the repo uses them
    - failing CI/CD checks
    - conflict / out-of-date banners
    - informational bot comments that may just be FYI, not action items
@@ -240,10 +272,12 @@ Additional rules for open-PR work:
 
 - Use shell-safe `gh pr comment` bodies. Prefer plain single-quoted text without backticks or command substitution, or write the body to a file first.
 - PR comments should be reviewer-facing: what changed, what relevant validation passed, and whether it is ready for another look.
-- Treat `chatgpt-codex-connector` Codex Review and `greptile-apps` comments as first-class review input: inspect them explicitly, separate actionable suggestions from summaries, and only ignore a bot comment when it is purely informational or already satisfied by the current head.
+- Treat AI review connector and `greptile-apps` comments as first-class review input: inspect them explicitly, separate actionable suggestions from summaries, and only ignore a bot comment when it is purely informational or already satisfied by the current head.
+- In the latest merged-contributor sample, the most recurring actionable bot pattern was **ClawSweeper asking for better real behavior proof or narrower risk framing**. When that happens, update the PR body with exact commands, evidence, and proof limits; do not answer only with a vague “addressed” comment.
 - For Greptile Summary comments, extract `Confidence Score: N/5` when present. Treat scores below 5/5 as a signal to read the full summary and fix the concrete findings. Do not equate GitHub's green check mark with a 5/5 Greptile score: green checks mean CI/status checks passed, while the Greptile score is review confidence.
 - If a low Greptile score is stale because the current branch head already contains the requested fix, verify the code and focused tests first, then retrigger Greptile with the least-invasive safe action (for example an empty retrigger commit if direct retrigger is unavailable). Leave a short PR comment explaining that the current head already contains the fix and the retrigger is for review refresh.
 - Treat security-review bot comments, including top-level issue comments from tools like Aisle, as first-class review input too. If the finding is about spoofable client metadata, prefer gating sensitive behavior on server-granted authorization state (for example scopes) rather than self-declared client name/mode alone.
+- When a reviewer or bot questions proof sufficiency, prefer a **production-path local repro** over adding more mock-only tests. Recent merged PRs frequently use isolated temp config/state, real gateway startup, real WebSocket clients, real subprocess invocations, or local platform/runtime behavior probes to close that gap.
 - For open-MRs sweeps, do not assume "no comments" from `gh pr view --comments` is enough. Always check review summaries **and** inline comments via `gh api` before declaring a PR comment-clean.
 - When a specific review comment is clearly addressed, add a lightweight reaction on that comment so the user can spot handled feedback quickly:
   - prefer `rocket` for "fixed/pushed"
@@ -255,6 +289,7 @@ Additional rules for open-PR work:
 - If the PR branch is badly stale but current `upstream/main` already contains the intended fix in the current code layout, prefer refreshing the existing branch to `upstream/main` and leaving a short clarifying PR comment instead of replaying obsolete commits onto moved code.
 - When a stale bot, assigned-stale bot, or maintainer stale comment appears after the latest author status comment on an otherwise-valid PR, leave a short reviewer-facing status update so the branch stays alive and the thread captures the current state (for example: current main still needs this fix, CI green, Greptile score, mergeable/clean, or refreshed on main).
 - For a one-line or otherwise tiny PR that is stale but still needed, explicitly re-check the exact line or behavior on current `main` and the PR head before commenting. Do not rely only on old CI or old bot summaries.
+- If CI is partly red for reasons outside your diff, keep the branch honest and specific: name the exact unrelated lane, keep focused local validation in the PR body/comment, and avoid claiming “all checks pass” unless they actually do. Recent merged PRs are often explicit about unchanged failing or unavailable lanes.
 - When working across multiple worktrees, do not rely on repo-global `git stash` as a scratchpad. Prefer untracked helper files or same-worktree temp moves instead.
 - Do not narrate reviewer ownership in PR comments. Avoid phrases like "maintainer-requested", "reviewer-requested", "per review", or "addressed X's feedback" unless public attribution is explicitly needed. Just state the change directly.
 
