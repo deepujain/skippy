@@ -56,9 +56,8 @@ More projects can be added the same way: one `SKILL.md` per project.
 
 ## Open Source Contributions
 
-This table summarizes `deepujain`'s open-source contributions across GitHub
-pull requests and tracker-based patch submissions. `PRs Created` counts all
-submitted PRs or patches; `Open PRs` and `Merged PRs` show their current status.
+`deepujain`'s open-source contributions across GitHub pull requests and
+tracker-based patch submissions.
 
 | Project Name | PRs Created | Open PRs | Merged PRs |
 |--------------|-------------|----------|------------|
