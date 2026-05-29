@@ -5,6 +5,11 @@ description: Contribute PRs to NVIDIA/NemoClaw (OpenClaw plugin for OpenShell). 
 
 # NemoClaw PR Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 When the user asks to contribute a PR to NemoClaw, pick the next issue, or "follow the recipe", do the following in order. **Before making any code changes:** set upstream if needed, switch to main, pull from upstream, create the new branch; **then** implement the fix.
 
 **Repo:** [NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw) - open source stack for running OpenClaw always-on assistants safely with OpenShell. Apache-2.0. Contributions require **signed-off commits** (`git commit -s`) and **verified (SSH-signed) commits** (`-S`).

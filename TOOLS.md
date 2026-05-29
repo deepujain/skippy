@@ -64,6 +64,17 @@ with `gh pr list --author <github-username> --state open --repo <owner/repo>`
 (use the GitHub username from `USER.md`)
 before opening new PRs.
 
+### Source-of-Truth Rules
+- Live PR pages, issue trackers, CI logs, and repository files override stale
+  memory or skill text.
+- If a query returns no data, say so and try the next reliable source. Do not
+  infer a green state from missing data.
+- For CI failures, inspect the failing job log before choosing a fix.
+- For bot feedback, separate stale comments from actionable comments on the
+  current head.
+- When a tool cannot fetch checks, comments, artifacts, or preview links, note
+  that limitation in the validation or PR maintenance report.
+
 ---
 
 ## Build Systems
@@ -167,11 +178,14 @@ docker run --rm -v $(pwd):/src slurm-build:latest make -j$(nproc) check
 
 ## Editor / IDE
 
-### Cursor
-- Skills loaded from `~/.cursor/skills/*/SKILL.md`
-- Ignores `SOUL.md`, `AGENTS.md`, `TOOLS.md`, `MEMORY.md`
-- May inject "Made with Cursor" in commits — always amend to remove
-- May set wrong `user.name` — always use `-c user.name` override
+### IDE and Agent Clients
+- Some clients load only `SKILL.md` and ignore the top-level operating files.
+  Put essential project rules in the project skill, and shared rules in
+  `oss/references/contribution-quality.md`.
+- Some clients may inject tool attribution trailers in commits. Always inspect
+  `git log -1 --format='%B'` before publishing and amend to remove them.
+- Some clients may use a local machine username for commits. Always use the
+  contributor identity from `USER.md` through explicit git config or `--author`.
 
 ### OpenClaw (future)
 - Workspace files injected at session start: `SOUL.md`, `AGENTS.md`,

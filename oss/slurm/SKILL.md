@@ -5,6 +5,11 @@ description: Implements fixes or features for Slurm, prepares patches with git f
 
 # Slurm Patch Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 Slurm is **not** an Apache project. **There are no GitHub pull requests.** Contributions are submitted as **patches attached to tickets** on the SchedMD issue tracker. Use this skill when contributing code to Slurm.
 
 **Git commands:** Provide **full git command blocks** for the user to run in their terminal (sync, branch, commit, amend, format-patch, push). The user runs these commands; do not run git for them. When giving commit/amend/patch steps, include an amend block so they can remove "Made with Cursor" / "Made-with: Cursor" and fix author/Signed-off-by before generating the patch.

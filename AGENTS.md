@@ -11,20 +11,24 @@ and coordination rules.
 On every session start, execute in order:
 
 1. **Read `SOUL.md`** — load identity, principles, safety boundaries
-2. **Read `MEMORY.md`** — load open PR tracker, project states, lessons
-3. **Read today's `memory/YYYY-MM-DD.md`** — load recent session context
-4. **Scan project states** — for each supported project, check:
+2. **Read `oss/references/contribution-quality.md`** — load shared
+   evidence, risk, validation, PR maintenance, and learning rules
+3. **Read `MEMORY.md`** — load open PR tracker, project states, lessons
+4. **Read today's `memory/YYYY-MM-DD.md`** — load recent session context
+5. **Scan project states** — for each supported project, check:
    - How many PRs are currently open (respect per-repo limits)
    - Which branches have uncommitted work
    - Which PRs have new review comments needing response
-5. **Decide action** — pick the highest-priority task from the task queue
+6. **Decide action** — pick the highest-priority task from the task queue
 
 ---
 
 ## Supported Projects
 
 Each project has a `SKILL.md` that defines its specific workflow. The
-agent MUST read the project's skill before starting any work on it.
+agent MUST read the project's skill before starting any work on it. Use
+`oss/references/contribution-quality.md` with every project skill; the
+project-specific skill wins when the two conflict.
 
 | Project | Skill Path | Submission | Default Branch | Issue Tracker |
 |---------|-----------|------------|----------------|---------------|
@@ -75,7 +79,11 @@ SCAN → SELECT → CLAIM → IMPLEMENT → VERIFY → HANDOFF → MONITOR → L
 
 ### 5. VERIFY — Build and Test
 - Run the project's full test suite (or targeted tests per SKILL.md)
+- Match the evidence gate to the change type: docs render, bug repro,
+  unit regression, integration command, generated-artifact check, or CI log
 - Fix any failures before proceeding
+- Record exact commands, results, what each command proves, and what was
+  not tested
 - Verify commit metadata (author, sign-off) will be correct
 
 ### 6. HANDOFF — Deliver to Human
@@ -83,21 +91,27 @@ In a single response, provide:
 - Full `git add` + `git commit` command block (with correct author/sign-off)
 - Full `git push` command (with correct remote and branch)
 - PR/patch submission instructions (title, body file, target branch)
+- Validation and risk notes ready to paste into the PR or tracker
 - Any PR comment text needed (for rebases or review responses)
 
 ### 7. MONITOR — Track Post-Submission
 - Watch for CI results and reviewer feedback
+- Treat live PR, issue, tracker, and CI state as the source of truth
 - When review comments arrive, enter the review response cycle:
   1. Read all comments
   2. Implement requested changes
   3. Re-run tests
   4. Rebase if needed (agent may run rebase as sync step)
   5. Hand off push command and PR comment to human
+- When sweeping multiple PRs, report every PR with action found, CI state,
+  reviews or bot feedback, stale/conflict state, action taken, and final state
 
 ### 8. LEARN — Update Memory and Skills
 - Record outcome in `MEMORY.md` (merged, rejected, stale)
 - Update project SKILL.md "Lessons learned" if anything non-obvious happened
 - Update `memory/YYYY-MM-DD.md` with session notes
+- Codify reusable reviewer preferences, CI lanes, tool gaps, and mistakes
+  to avoid. Do not add one-off trivia.
 
 ---
 
@@ -129,7 +143,7 @@ Do not over-index on one project. When choosing new work:
 
 ## Delegation Patterns
 
-### Single-Agent Mode (Cursor, current)
+### Single-Agent Mode (human-guided)
 The agent runs inside an IDE. The human triggers actions ("pick next",
 "fix this PR"). The agent implements and the human authenticates.
 

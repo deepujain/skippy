@@ -5,6 +5,11 @@ description: Contribute high-quality PRs/MRs to pytorch/pytorch. Pick actionable
 
 # PyTorch PR Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 PyTorch uses GitHub pull requests. If the user says "MR", treat it as a GitHub PR unless they explicitly point to a different forge.
 
 **Repo:** [pytorch/pytorch](https://github.com/pytorch/pytorch) - large C++/Python ML framework. Contributions are reviewed by humans, routed by labels and module ownership, and validated through Dr. CI, HUD, PyTorchBot, EasyCLA, and `ciflow/*` CI labels.
@@ -128,6 +133,14 @@ cd docs
 make html
 ```
 
+For docs PRs, also capture rendered evidence:
+
+- Prefer the Dr. CI docs-preview URL once available.
+- If the public preview is 404 but `linux-docs` passed, download the `docs-preview-*` artifact from the Actions run and render the changed HTML page locally.
+- If workflows are still `action_required` or no docs artifact exists, do not fabricate a preview screenshot. Report that maintainer workflow approval/docs CI is needed before a true screenshot can be captured.
+- Save a screenshot of the relevant generated page or docs section. Reviewers often prefer seeing the rendered docs, not only source diffs.
+- If programmatic upload is not available, give the user the local PNG path and a short upload-ready caption.
+
 Validation rules:
 
 - Add or update tests for behavior changes. If a test is impractical, explain why and provide the strongest available repro, smoke test, benchmark, or CI label.
@@ -174,7 +187,7 @@ Test Plan:
 - `exact command` - result
 ```
 
-For docs PRs, include rendered evidence or docs-preview screenshots when useful. For perf PRs, include benchmark tables. For issue fixes, include a minimal repro if the failure is subtle. For cherry-picks, include the original PR and commit; for normal contributor PRs, do not use a body that only points somewhere else for the explanation.
+For docs PRs, include exact docs validation plus rendered evidence. For generated API docs, attach or offer a screenshot of the built page after `linux-docs`/docs-preview succeeds. For perf PRs, include benchmark tables. For issue fixes, include a minimal repro if the failure is subtle. For cherry-picks, include the original PR and commit; for normal contributor PRs, do not use a body that only points somewhere else for the explanation.
 
 Every PR needs either one `release notes: <module>` label or `topic: not user facing`. Let the autolabel bot work first; if missing after a reasonable delay, add one with PyTorchBot or ask the reviewer which label is right.
 
@@ -206,6 +219,7 @@ Interpretation:
 - **Merge failed:** read the merge-bot failure, rerun/rebase/fix as appropriate, then ask the reviewer to retry.
 - **Workflow-file changes:** CI may use workflow definitions from the PR/main merge result while tests use PR head. Rebase when workflow drift causes impossible failures.
 - **Label bot comments:** resolve `check-labels` by adding one `release notes: <module>` or `topic: not user facing`; do not leave this for reviewers.
+- **Docs preview evidence:** for docs PRs, check both Dr. CI docs-preview links and Actions artifacts. If a reviewer asks for a screenshot, provide the rendered page directly; if only the artifact is available, say which artifact/page was rendered.
 
 Common gates to expect:
 
@@ -252,6 +266,8 @@ git fetch upstream
 
 Address concrete reviewer, bot, and CI feedback, run focused validation, push to the existing branch, and leave a short reviewer-facing comment with the exact fix and validation. If reviews are only terse approvals, still verify bot comments, labels, and Dr. CI/HUD before considering the PR healthy.
 
+For docs PR sweeps, prepare screenshots for each open docs PR whose preview/artifact exists. Put them in a clearly named local folder (`pytorch-pr-screenshots/PR_NUMBER-brief-name.png`) and report missing previews separately.
+
 For open-PR sweeps, report:
 
 | PR | Linked Issue / Actionable | CLA | Labels | Dr. CI / HUD | Reviews | Action Taken | Final State |
@@ -267,6 +283,7 @@ High-probability merge patterns:
 - Merged bug fixes usually include a regression test in the same subsystem as the changed code. Add tests before review where possible.
 - Accepted test plans are specific: exact command, exact test class or `-k` selector, `-v` output when useful, and backend/RC validation when the fix is platform-specific.
 - Dr. CI, HUD, and bot comments are part of review. Resolve label-bot feedback quickly, and do not dismiss red jobs without HUD/trunk/maintainer evidence.
+- Docs reviewers may ask for screenshots. Treat rendered screenshots as standard evidence for docs PRs, especially generated API pages.
 - Terse approvals are common when the PR body, tests, labels, and CI evidence are already strong.
 - EasyCLA identity issues are avoidable: use a GitHub-linked email and valid coauthor trailers only.
 - Native/codegen/API changes trigger extra scrutiny around forward compatibility, BC, generated files, and platform coverage.

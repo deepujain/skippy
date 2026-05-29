@@ -26,6 +26,8 @@ The repository is organized as a layered architecture:
 - **SOUL.md** — Principles, judgment criteria, safety boundaries
 - **AGENTS.md** — Multi-project orchestration, task lifecycle, delegation
 - **TOOLS.md** — Tool capabilities, integration patterns, gotchas
+- **oss/references/contribution-quality.md** — Shared evidence, validation,
+  risk, PR maintenance, and learning protocol
 - **USER.md** — Contributor identity and local config (gitignored, personal)
 - **MEMORY.md** — Cross-session state: open PRs, contribution history, lessons (gitignored, personal)
 - **SKILL.md** (per project) — Project-specific workflows, conventions, recipes
@@ -108,6 +110,7 @@ PRs at once.
 | **Identity** | `USER.md` | No (gitignored) | Every session | Contributor name, email, local paths |
 | **Operations** | `AGENTS.md` | Yes | Every session | Boot sequence, task lifecycle, scheduling |
 | **Tools** | `TOOLS.md` | Yes | Every session | Git, build systems, CI, trackers — with gotchas |
+| **Shared Quality** | `oss/references/contribution-quality.md` | Yes | Every project task | Evidence gates, risk, PR structure, open-PR sweeps |
 | **Memory** | `MEMORY.md` | No (gitignored) | Every session | Open PR state, contribution history, lessons |
 | **Daily** | `memory/YYYY-MM-DD.md` | No (gitignored) | Today + yesterday | Session-specific notes, decisions, blockers |
 | **Skills** | `oss/*/SKILL.md` | Yes | When working on project | Project-specific workflow, conventions, recipes |
@@ -123,6 +126,8 @@ oss-claw/
   MEMORY.md.template
   memory/
   oss/
+    references/
+      contribution-quality.md
     apache/
       airflow/SKILL.md
       hadoop/SKILL.md
@@ -195,6 +200,8 @@ skill to whichever coding agent you use and ask it to follow that workflow.
 For a one-project task:
 
 - Attach the relevant `oss/<project>/SKILL.md`.
+- Attach `oss/references/contribution-quality.md` when the task involves PR
+  descriptions, validation, CI, reviews, or open-PR maintenance.
 - Add `SOUL.md` if you want the broader contribution principles.
 - Add `TOOLS.md` if the task involves publishing, CI, review comments, or
   tracker-specific tooling.

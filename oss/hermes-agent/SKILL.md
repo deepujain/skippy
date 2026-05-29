@@ -5,6 +5,11 @@ description: Contribute PRs to NousResearch/hermes-agent. Pick focused issues, i
 
 # Hermes Agent PR Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 Use this recipe for [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent), the self-improving AI agent with a Python core, messaging gateway, bundled skills, optional skills, an Ink-based TUI, and a React dashboard/docs site.
 
 ## Project facts
@@ -168,7 +173,7 @@ Validation evidence for PRs should be specific enough that a maintainer can trus
 For local evidence, follow the recent merged-PR pattern:
 
 - Run the smallest focused suite that proves the bug and include pass counts.
-- Add a wider adjacent sweep when shared runtime behavior is touched, such as CLI modal tests, gateway progress tests, auth provider tests, or Codex response adapter tests.
+- Add a wider adjacent sweep when shared runtime behavior is touched, such as CLI modal tests, gateway progress tests, auth provider tests, or model response adapter tests.
 - Include a manual repro/smoke for Docker, installer, TUI, gateway, browser, platform, or model-provider behavior.
 - If a file type triggers specialized CI, run the matching local check where practical: shellcheck/hadolint for Docker, docs build for `website/**`, generated docs scripts for skills, `uv lock --check` for dependency changes.
 - After pushing, verify CI: ruff enforcement, ruff + ty diff, Windows footguns, CodeQL/GHAS, E2E, Nix, Docker build, test shards, supply-chain, attribution, and common-ancestor.

@@ -5,6 +5,11 @@ description: Contribute PRs to openclaw/clawhub. Pick ClawHub issues, create mer
 
 # ClawHub PR Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 When the user asks to contribute to ClawHub, pick an issue, or "follow the recipe", do the following in order. **Before making any code changes:** inspect remotes, sync the repo, and create the branch; **then** implement the fix.
 
 **Repo:** [openclaw/clawhub](https://github.com/openclaw/clawhub) - the public skill registry for OpenClaw, built with TanStack Start, Convex, and a Bun-based CLI/workspace layout.
@@ -29,7 +34,7 @@ Use this loop to write PRs that are more likely to pass bot review, CI, and main
 
 1. **Prove the issue shape before editing.** Identify the failing path, user-visible symptom, missing guard, or missing doc. If the issue is vague, reproduce with the narrowest command, test, UI route, Convex function, or CLI flow that turns it into a concrete failure.
 2. **Match existing patterns.** Before adding logic, inspect nearby helpers/tests for naming, data-access style, TanStack route patterns, Convex indexes, CLI output shape, generated artifacts, and error handling. Prefer extending the local pattern over introducing a parallel one.
-3. **Pre-answer reviewer questions.** Ask what Greptile, Codex, CodeRabbit, Aisle/security bots, and maintainers are likely to flag: stale generated route trees, missing negative tests, unsafe full-table scans, broad scope, spoofable metadata, missing artifact tests, unredacted secrets, or unvalidated publish/install flows. Fix those before opening or updating the PR.
+3. **Pre-answer reviewer questions.** Ask what Greptile, CodeRabbit, Aisle/security bots, and maintainers are likely to flag: stale generated route trees, missing negative tests, unsafe full-table scans, broad scope, spoofable metadata, missing artifact tests, unredacted secrets, or unvalidated publish/install flows. Fix those before opening or updating the PR.
 4. **Test the bug, the non-bug, and the edge seam.** Add a regression for the reported failure, keep a happy-path assertion green, and cover one boundary/negative case when the fix changes branching, auth, publishing, upload safety, Convex access, search/filtering, or persistence.
 5. **Self-review the diff before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, debug output, unrelated formatting, dead branches, and over-broad comments.
 6. **Close the loop after push.** Re-read CI and bot comments on the current head. If feedback is actionable, fix it. If feedback is stale, verify current head and retrigger the least-invasive way. If the same intervention repeats, update this skill.

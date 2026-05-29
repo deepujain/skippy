@@ -64,6 +64,13 @@ Never claim "all tests pass" unless you ran them. Never claim "no
 regressions" unless you verified. Maintainers trust contributors who
 report accurately — including when something didn't work.
 
+### 8. Proof Before Confidence
+Every claimed fix needs an evidence ladder: the narrow proof that exercises
+the reported behavior, the adjacent test or build that protects nearby code,
+and any broader CI or manual validation needed for the touched surface. If
+full validation is blocked, say what was run, what passed, what did not run,
+and why. Do not replace missing proof with confident wording.
+
 ---
 
 ## Identity and Attribution

@@ -1,9 +1,21 @@
 ---
 name: spark-pr-contribution
-description: (1) New PR: pick JIRA (SPARK-xxxxx), implement, branch, commit, push, open PR. (2) Existing/open PRs: user gives a PR URL or author PR-list URL; fetch latest, take actions (fixes, rebase, local tests, stale CI/status refresh, push), and generate a ready-to-paste PR comment from changes made and local test results (§8.5). Use for "new Spark PR", "follow Spark recipe", "here is my Spark PR URL  - take actions", "address this PR", "sweep my Spark PRs", or "generate PR comment".
+description: >-
+  New PR: pick JIRA (SPARK-xxxxx), implement, branch, commit, push, open PR.
+  Existing/open PRs: user gives a PR URL or author PR-list URL; fetch latest,
+  take actions such as fixes, rebase, local tests, stale CI/status refresh,
+  and push; then generate a ready-to-paste PR comment from changes made and
+  local test results. Use for "new Spark PR", "follow Spark recipe", "here is
+  my Spark PR URL - take actions", "address this PR", "sweep my Spark PRs",
+  or "generate PR comment".
 ---
 
 # Apache Spark PR Contribution Recipe
+
+Also apply the shared OSS contribution quality protocol in
+[../../references/contribution-quality.md](../../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
 
 - **New PR (create from scratch):** User says "pick a Spark issue" or "follow the recipe" → follow **§1–§7** (pick JIRA, branch, implement, commit, push, open PR).
 - **Existing PR (take actions):** User **gives the PR URL** (e.g. a PR created a few days ago; now there are reviewer comments or CI failures) → follow **§8**: fetch that PR, get branch + CI + reviewer comments, then take actions (fix, rebase, test, push, optional reply).
@@ -115,7 +127,7 @@ Use this table format for Spark open-PR sweeps unless the user explicitly asks f
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `sparkqa` / Jenkins bot if present: addressed / not addressed / n/a; `greptile-apps[bot]` / Codex / CodeRabbit if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `sparkqa` / Jenkins bot if present: addressed / not addressed / n/a; `greptile-apps[bot]` / CodeRabbit / AI review bot if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
 
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 

@@ -5,6 +5,11 @@ description: Find, claim, implement, validate, and shepherd focused GitHub PRs f
 
 # Inspect AI PR Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 Use this recipe for [UKGovernmentBEIS/inspect_ai](https://github.com/UKGovernmentBEIS/inspect_ai), the Inspect AI evaluation framework. Follow the upstream contributor guide closely: find an issue, comment to claim it, branch, code, run `make check`, run `make test`, then open a PR.
 
 ## Project facts

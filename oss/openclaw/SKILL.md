@@ -5,6 +5,11 @@ description: Picks non-conflicting OpenClaw issues, creates merge-ready PRs, and
 
 # OpenClaw PR Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 When the user asks to contribute a PR, pick the next issue, or "follow the recipe", do the following in order. **Before making any code changes:** switch to main, pull from upstream, create the new branch; **then** implement the fix.
 
 ## Shared execution guardrails
@@ -24,7 +29,7 @@ Use this loop to write MRs that are more likely to pass bot review, CI, and main
 
 1. **Prove the issue shape before editing.** Identify the failing path, user-visible symptom, or missing guard. If the issue is vague, reproduce with the narrowest command, test, or code path inspection that turns it into a concrete failure.
 2. **Match existing patterns.** Before adding new logic, inspect nearby helpers/tests for naming, error handling, generated artifacts, persistence semantics, and cleanup behavior. Prefer extending the local pattern over introducing a parallel one.
-3. **Pre-answer reviewer questions.** Ask what Greptile/Codex/security bots are likely to flag: stale generated files, missing negative tests, fallback paths, cleanup paths, spoofable metadata, broad scope, dead code, or unvalidated external contracts. Fix those before opening or updating the PR.
+3. **Pre-answer reviewer questions.** Ask what Greptile, CodeRabbit, security bots, and maintainers are likely to flag: stale generated files, missing negative tests, fallback paths, cleanup paths, spoofable metadata, broad scope, dead code, or unvalidated external contracts. Fix those before opening or updating the PR.
 4. **Test the bug, the non-bug, and the edge seam.** Add a regression for the reported failure, keep an existing happy-path assertion green, and cover one boundary/negative case when the fix changes branching, fallback, auth, config, or persistence.
 5. **Self-review the diff before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead branches, debug output, over-broad comments, and unrelated formatting.
 6. **Close the loop after push.** Re-read CI and bot comments on the current head. If feedback is actionable, fix it. If feedback is stale, verify the current head and retrigger the least-invasive way. If the same intervention repeats, update this skill.

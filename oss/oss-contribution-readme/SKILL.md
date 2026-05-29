@@ -5,6 +5,12 @@ description: Create or update a polished README that showcases a contributor's o
 
 # OSS Contribution README Skill
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md)
+for source-of-truth checks, evidence, and public artifact quality. This skill's
+README-specific rendering and portfolio rules override the shared protocol when
+they conflict.
+
 ## Purpose
 
 Create a public-facing README that accurately presents a contributor's

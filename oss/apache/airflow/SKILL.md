@@ -1,9 +1,22 @@
 ---
 name: airflow-pr-contribution
-description: Picks an Apache Airflow GitHub issue, implements the fix, and prepares branch/commit/PR on GitHub (fork -> apache/airflow). Also sweeps existing/open Airflow PRs when the user shares a PR URL or author PR-list URL: inspect CI, reviewer/bot comments, stale/out-of-date state, fix actionable issues, push follow-up commits, and leave PR status comments. Use when the user wants to contribute to Airflow, pick an Airflow issue, do an Airflow PR, sweep open Airflow PRs/MRs, or says "follow the Airflow contribution recipe" or "next Airflow fix".
+description: >-
+  Picks an Apache Airflow GitHub issue, implements the fix, and prepares
+  branch/commit/PR on GitHub from fork to apache/airflow. Also sweeps
+  existing/open Airflow PRs when the user shares a PR URL or author PR-list
+  URL: inspect CI, reviewer/bot comments, stale/out-of-date state, fix
+  actionable issues, push follow-up commits, and leave PR status comments.
+  Use when the user wants to contribute to Airflow, pick an Airflow issue,
+  do an Airflow PR, sweep open Airflow PRs/MRs, or says "follow the Airflow
+  contribution recipe" or "next Airflow fix".
 ---
 
 # Apache Airflow PR Contribution Recipe
+
+Also apply the shared OSS contribution quality protocol in
+[../../references/contribution-quality.md](../../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
 
 When the user asks to contribute a PR to Airflow, pick a GitHub issue, or "follow the recipe", do the following in order. **Issues and PRs both live on GitHub.** Before making any code changes: sync with upstream, create the branch (or use the existing PR branch); then implement. **Applies to both new PRs and updates to existing PRs.**
 
@@ -209,7 +222,7 @@ Use this table format for Airflow open-PR sweeps unless the user explicitly asks
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `pre-commit-ci[bot]`: addressed / not addressed / n/a; `greptile-apps[bot]` / Codex / CodeRabbit if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `pre-commit-ci[bot]`: addressed / not addressed / n/a; `greptile-apps[bot]` / CodeRabbit / AI review bot if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
 
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 

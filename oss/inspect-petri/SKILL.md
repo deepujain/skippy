@@ -5,6 +5,11 @@ description: Find, implement, validate, and shepherd focused GitHub PRs for meri
 
 # Inspect Petri PR Contribution Recipe
 
+Also apply the shared OSS contribution quality protocol in
+[../references/contribution-quality.md](../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
+
 Use this recipe for [meridianlabs-ai/inspect_petri](https://github.com/meridianlabs-ai/inspect_petri). Keep every PR small, issue-linked, and easy for Meridian Labs maintainers to review.
 
 ## Project facts

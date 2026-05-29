@@ -1,9 +1,21 @@
 ---
 name: hadoop-pr-contribution
-description: (1) New PR: pick JIRA, implement, branch from trunk, commit, push, open PR. (2) Existing/open PRs: user gives a PR URL or author PR-list URL; fetch latest (branch, CI status, reviewer/bot comments), rebase on apache/trunk, run local Maven tests, take actions (address review, fix CI, refresh stale status), push, and generate PR comments. Use for "new Hadoop PR", "follow Hadoop recipe", or "work on this Hadoop PR" / "address this MR" / "sweep my Hadoop PRs" when PRs have review comments, CI failures, or need rebase/local tests.
+description: >-
+  New PR: pick JIRA, implement, branch from trunk, commit, push, open PR.
+  Existing/open PRs: user gives a PR URL or author PR-list URL; fetch latest
+  branch, CI status, and reviewer/bot comments; rebase on apache/trunk; run
+  local Maven tests; address review, fix CI, refresh stale status, push, and
+  generate PR comments. Use for "new Hadoop PR", "follow Hadoop recipe",
+  "work on this Hadoop PR", "address this MR", or "sweep my Hadoop PRs" when
+  PRs have review comments, CI failures, or need rebase/local tests.
 ---
 
 # Apache Hadoop PR Contribution Recipe
+
+Also apply the shared OSS contribution quality protocol in
+[../../references/contribution-quality.md](../../references/contribution-quality.md).
+Project-specific instructions below override the shared protocol when they
+conflict.
 
 - **New PR (create from scratch):** User says "pick a Hadoop issue" or "follow the recipe" → follow **§1–§8** (pick JIRA, branch from trunk, implement, commit, push, open PR).
 - **Existing PR (take actions):** User **gives the PR URL** (e.g. [PR #8336](https://github.com/apache/hadoop/pull/8336))  - a PR submitted earlier that now has reviewer comments, CI failures, or needs rebase/local tests → follow **§9**: fetch that PR, get branch + CI + reviewer comments, then take actions (fix, rebase, run local Maven tests, push, generate PR comment).
@@ -160,7 +172,7 @@ Use this table format for Hadoop open-PR sweeps unless the user explicitly asks 
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `hadoop-yetus` / Yetus bot: addressed / not addressed / n/a; `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `greptile-apps[bot]` / Codex / CodeRabbit if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
+| #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `hadoop-yetus` / Yetus bot: addressed / not addressed / n/a; `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `greptile-apps[bot]` / CodeRabbit / AI review bot if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
 
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 
