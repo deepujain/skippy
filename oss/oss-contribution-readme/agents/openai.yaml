@@ -1,0 +1,4 @@
+interface:
+  display_name: "OSS Contribution README"
+  short_description: "Build README contribution matrices"
+  default_prompt: "Use $oss-contribution-readme to create a README showcasing my open-source contributions with logos and PR counts."

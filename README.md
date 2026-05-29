@@ -54,6 +54,12 @@ identity, safety boundaries, memory, and review-response discipline.
 
 More projects can be added the same way: one `SKILL.md` per project.
 
+## Utility Skills
+
+| Use Case | Skill | Purpose |
+|----------|-------|---------|
+| **OSS Contribution README** | [oss/oss-contribution-readme/SKILL.md](oss/oss-contribution-readme/SKILL.md) | Create a public README with contribution matrices, project logos, verified PR or patch counts, and optional featured contribution tables |
+
 ## Open Source Contributions
 
 `deepujain`'s open-source contributions across GitHub pull requests and
@@ -126,6 +132,7 @@ oss-claw/
     inspect-ai/SKILL.md
     inspect-petri/SKILL.md
     nemoclaw/SKILL.md
+    oss-contribution-readme/SKILL.md
     openclaw/SKILL.md
     pytorch/SKILL.md
     slurm/SKILL.md
@@ -218,6 +225,7 @@ ln -sf "$(pwd)/oss/hermes-agent"     "$AGENT_SKILLS_DIR/hermes-agent-pr-contribu
 ln -sf "$(pwd)/oss/inspect-ai"       "$AGENT_SKILLS_DIR/inspect-ai-pr-contribution"
 ln -sf "$(pwd)/oss/inspect-petri"    "$AGENT_SKILLS_DIR/inspect-petri-pr-contribution"
 ln -sf "$(pwd)/oss/nemoclaw"         "$AGENT_SKILLS_DIR/nemoclaw-pr-contribution"
+ln -sf "$(pwd)/oss/oss-contribution-readme" "$AGENT_SKILLS_DIR/oss-contribution-readme"
 ln -sf "$(pwd)/oss/openclaw"         "$AGENT_SKILLS_DIR/openclaw-pr-contribution"
 ln -sf "$(pwd)/oss/pytorch"          "$AGENT_SKILLS_DIR/pytorch-pr-contribution"
 ln -sf "$(pwd)/oss/slurm"            "$AGENT_SKILLS_DIR/slurm-patch-contribution"
