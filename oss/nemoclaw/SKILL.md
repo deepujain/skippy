@@ -162,6 +162,11 @@ npm test
 
 This runs `node --test test/*.test.js`. Fix any build or test failures before committing (§5).
 
+Do not run `npm run build:cli` and tests that import `dist/**` in parallel. Many
+NemoClaw tests import compiled files from `dist`, so the build must finish before
+the focused Vitest command starts; otherwise the test can fail on a missing
+compiled module even when the code is fine.
+
 If the full suite reproduces **pre-existing unrelated failures** in the current environment, do not pretend the suite is green. Record the exact failing files/tests, run the narrowest relevant local validation for the changed area (for example `npx vitest run test/cli.test.js`), and call out both the scoped passing check and the unrelated failures in the PR body.
 
 For environment-sensitive fixes, the narrowest relevant validation is often **not enough by itself**. Add at least one realistic check that exercises the reported workflow, such as:
@@ -314,7 +319,13 @@ git add <list of resolved/changed files>
 GIT_EDITOR=true GIT_AUTHOR_NAME="Deepak Jain" GIT_AUTHOR_EMAIL="deepujain@gmail.com" GIT_COMMITTER_NAME="Deepak Jain" GIT_COMMITTER_EMAIL="deepujain@gmail.com" git rebase --continue
 ```
 
-After the rebase, verify the commit author, Signed-off-by, and signature are correct (`git log --show-signature -1`). If `commit.gpgsign = true` globally, the rebase automatically signs the commit with the SSH key.
+After the rebase, verify the commit author, Signed-off-by, and signature are correct (`git log --show-signature -1`). Do not assume the local worktree has signing enabled. Also run `git log --format='%h %G? %an <%ae> %s' upstream/main..HEAD`; every PR commit should show `G`. If any commit shows `N`, re-sign the stack before pushing:
+
+```bash
+git rebase upstream/main --exec 'git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit --amend --no-edit -S --no-verify'
+```
+
+If `commit.gpgsign = true` globally, the rebase automatically signs the commit with the SSH key, but still verify with `%G?` because local config can drift between worktrees.
 
 **CRITICAL: Rebases that replay multiple commits through the same file can leave a later conflict marker or stale hunk in a file you already "resolved" earlier in the sequence.** After the rebase completes, rerun the relevant build/typecheck/tests before pushing, even if the first conflict looked fully handled.
 
@@ -426,6 +437,8 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 - **Keep PR-body disclosure separate from PR-comment disclosure.** It is fine to document unrelated local failures in the PR body when honesty requires it. Follow-up PR comments should usually mention only the fix, the relevant passing checks, and whether the branch is ready for review.
 - **Do not invent CodeRabbit release-note blocks.** PR bodies should remain human-written. CodeRabbit may add its own auto-generated walkthrough or summary comments after PR creation, and the exact format can vary by run/config. The agent should not paste fake or guessed CodeRabbit blocks into the PR description.
 - **SSH commit signing is required.** NVIDIA/NemoClaw has branch protection requiring verified signatures. Set up SSH signing once (see section 1.1) and always include `-S` in commit and amend commands. When `commit.gpgsign = true` globally, `git rebase --continue` also signs automatically. If a commit shows "No signature" or "Unverified" on GitHub, amend with `-S` and re-push. The SSH key must be registered as both an Authentication key and a Signing key on [GitHub SSH settings](https://github.com/settings/keys).
+- **Verify every rebased PR commit with `%G?`.** Open-PR rebases can silently replay unsigned commits when a worktree has `commit.gpgsign=false`. Before pushing, run `git log --format='%h %G? %s' upstream/main..HEAD`; if any commit is `N`, re-sign the stack with `git rebase upstream/main --exec 'git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit --amend --no-edit -S --no-verify'`.
+- **Build before dist-based tests, not beside them.** Tests that import `../dist/**` need `npm run build:cli` to finish first. Parallel build/test execution can create a false missing-module failure.
 - **Do not batch-rebase multiple PR branches in a shell loop.** Rebases with conflicts cannot be resolved automatically in a script. Handle each PR branch individually following the full workflow (fetch, checkout, rebase, resolve conflicts if any, test, give user push commands).
 - **Prefer `gh`, but check auth first.** Use `gh` for issue discovery, PR creation, PR inspection, checks, and PR comments when `gh auth status` is healthy. If `gh` auth is invalid or unavailable, say that explicitly and fall back to web fetch plus deep links.
 
