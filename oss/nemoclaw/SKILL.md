@@ -167,6 +167,15 @@ NemoClaw tests import compiled files from `dist`, so the build must finish befor
 the focused Vitest command starts; otherwise the test can fail on a missing
 compiled module even when the code is fine.
 
+After TS migration or source-shape refactors, stale untracked generated files in
+`dist` can shadow the freshly generated directory declarations. Example:
+`dist/lib/deploy.d.ts` can take precedence over `dist/lib/deploy/index.d.ts` and
+produce impossible typecheck errors in unrelated tests. If typecheck complains
+about a type that the rebuilt source/declaration clearly contains, check for
+untracked stale sibling files with `git ls-files` and `git status --short` before
+editing source. Remove only untracked stale generated artifacts, rebuild with
+`npm run build:cli`, then rerun `npm run typecheck:cli`.
+
 If the full suite reproduces **pre-existing unrelated failures** in the current environment, do not pretend the suite is green. Record the exact failing files/tests, run the narrowest relevant local validation for the changed area (for example `npx vitest run test/cli.test.js`), and call out both the scoped passing check and the unrelated failures in the PR body.
 
 For environment-sensitive fixes, the narrowest relevant validation is often **not enough by itself**. Add at least one realistic check that exercises the reported workflow, such as:
@@ -440,6 +449,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 - **SSH commit signing is required.** NVIDIA/NemoClaw has branch protection requiring verified signatures. Set up SSH signing once (see section 1.1) and always include `-S` in commit and amend commands. When `commit.gpgsign = true` globally, `git rebase --continue` also signs automatically. If a commit shows "No signature" or "Unverified" on GitHub, amend with `-S` and re-push. The SSH key must be registered as both an Authentication key and a Signing key on [GitHub SSH settings](https://github.com/settings/keys).
 - **Verify every rebased PR commit with `%G?`.** Open-PR rebases can silently replay unsigned commits when a worktree has `commit.gpgsign=false`. Before pushing, run `git log --format='%h %G? %s' upstream/main..HEAD`; if any commit is `N`, re-sign the stack with `git rebase upstream/main --exec 'git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit --amend --no-edit -S --no-verify'`.
 - **Build before dist-based tests, not beside them.** Tests that import `../dist/**` need `npm run build:cli` to finish first. Parallel build/test execution can create a false missing-module failure.
+- **Check stale generated `dist` siblings before patching unrelated type failures.** If a rebuilt directory export exists but typecheck still reads an older sibling file, remove only untracked stale generated artifacts, rebuild, and rerun typecheck.
 - **Do not batch-rebase multiple PR branches in a shell loop.** Rebases with conflicts cannot be resolved automatically in a script. Handle each PR branch individually following the full workflow (fetch, checkout, rebase, resolve conflicts if any, test, give user push commands).
 - **Prefer `gh`, but check auth first.** Use `gh` for issue discovery, PR creation, PR inspection, checks, and PR comments when `gh auth status` is healthy. If `gh` auth is invalid or unavailable, say that explicitly and fall back to web fetch plus deep links.
 
