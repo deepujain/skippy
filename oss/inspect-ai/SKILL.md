@@ -1,6 +1,12 @@
 ---
 name: inspect-ai-pr-contribution
-description: Find, claim, implement, validate, and shepherd focused GitHub PRs for UKGovernmentBEIS/inspect_ai. Use when the user wants to contribute to Inspect AI, work on inspect_ai issues, fix an Inspect AI PR, sweep Inspect AI review feedback or CI, or mentions Inspect AI framework contribution work.
+description: >-
+  Find, claim, implement, validate, and shepherd focused GitHub PRs for
+  UKGovernmentBEIS/inspect_ai. Use when the user wants to contribute to
+  Inspect AI, work on inspect_ai issues, fix an Inspect AI PR, sweep Inspect
+  AI review feedback or CI, shares the Inspect AI author PR-list URL
+  https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain, or mentions
+  Inspect AI framework contribution work.
 ---
 
 # Inspect AI PR Contribution Recipe
@@ -35,6 +41,18 @@ Before creating a new contribution or updating this skill, inspect the live repo
 gh issue list --repo UKGovernmentBEIS/inspect_ai --state open --limit 100
 gh pr list --repo UKGovernmentBEIS/inspect_ai --state open --limit 100
 gh pr list --repo UKGovernmentBEIS/inspect_ai --author deepujain --state open
+```
+
+Treat [deepujain's Inspect AI PR list](https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain)
+as the canonical starting point for "my Inspect AI PRs", open-PR sweeps, CI
+maintenance, and review follow-up. When this URL is supplied, scope the task to
+Inspect AI and inspect every open PR before deciding that no action is needed.
+
+For open-PR sweeps, fetch structured state before editing:
+
+```bash
+gh pr list --repo UKGovernmentBEIS/inspect_ai --author deepujain --state open --limit 100 \
+  --json number,title,url,headRefName,isDraft,mergeable,reviewDecision,statusCheckRollup,updatedAt
 ```
 
 Then search overlap for the issue and affected subsystem:
