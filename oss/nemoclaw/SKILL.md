@@ -24,6 +24,7 @@ Apply these rules throughout the recipe:
 - **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the issue or reviewer explicitly calls for them.
 - **Surgical changes.** Touch only the files and lines that trace directly to the issue, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
 - **Docs-only discipline.** If the issue or reviewer frames the work as documentation, onboarding copy, or docs UX, keep the PR docs-only unless a maintainer explicitly asks for runtime behavior. Do not add source, manifest, config, onboarding prompt, or test changes to "prove" a docs clarification. If code behavior looks wrong, call it out as a separate follow-up instead of expanding the PR.
+- **CI failure discipline.** Treat failing CI as a real failure to investigate and fix, but first check whether the failing files or behavior belong to the PR's intended scope. If CI fails because the PR drifted into source/tests/runtime changes that the issue did not need, narrow the PR back to scope instead of debugging the extra work.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
 
 **Workflow order (do in this sequence):**
@@ -254,6 +255,7 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
 - **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
   `https://github.com/NVIDIA/NemoClaw/compare/main...<github-username>:NemoClaw:<branch>?expand=1`
   Replace `<github-username>` with `deepujain` and `<branch>` with the actual branch name.
+- **Post-create CI follow-up:** After `gh pr create`, checks and CodeRabbit often start asynchronously. Immediately run `gh pr checks <pr> --repo NVIDIA/NemoClaw` and `gh pr view <pr> --repo NVIDIA/NemoClaw --json reviews,comments,mergeStateStatus,statusCheckRollup`. If checks are pending or queued, wait/poll when practical until they become terminal. If a native scheduler/automation tool is available, create a delayed follow-up for the PR (for example 20-30 minutes later, plus a later retry if still pending) to re-check CI, CodeRabbit, human comments, stale/conflict state, and copy-pr-bot runner gates, then take needed action without waiting for the user. If no scheduler is available, say "CI still rerunning" in the handoff and include the exact PR/checks to revisit.
 
 ## 7. PR description and handoff
 
@@ -273,7 +275,7 @@ When the user shares a PR URL, it means there is something to act on: reviewer c
 
 If the user shares a PR URL, **use that PR**. Do not open a second PR for the same issue. Check out the PR branch, make the fix there, commit, and push back to that existing PR unless the user explicitly asks for a replacement branch.
 
-If the user shares a NemoClaw author PR-list URL or says "open NemoClaw PRs/MRs", treat that as a request to sweep every currently open PR for that author in `NVIDIA/NemoClaw`: list PRs, inspect CodeRabbit, bot, human review comments, CI checks, out-of-date/conflict state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report a table with one row per PR. Do not stop at a status-only table. The table is the handoff after action, not a substitute for action.
+If the user shares a NemoClaw author PR-list URL or says "open NemoClaw PRs/MRs", treat that as a request to sweep every currently open PR for that author in `NVIDIA/NemoClaw`: list PRs, inspect CodeRabbit, bot, human review comments, CI checks, out-of-date/conflict state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report a table with one row per PR. Do not stop at a status-only table. The table is the handoff after action, not a substitute for action. If a pushed fix leaves checks pending, schedule a delayed CI/review follow-up when tooling supports it, or poll once more before final handoff and mark the PR as `rerunning`.
 
 Use this table format for NemoClaw open-PR sweeps unless the user explicitly asks for a different format:
 
@@ -295,7 +297,7 @@ For the `Review Comments` column, always categorize by reviewer identity rather 
    - **CodeRabbit review comments and nitpicks** - NemoClaw PRs get automated CodeRabbit reviews. Address every nitpick (even optional ones) unless the user says to skip.
    - **CodeRabbit pre-merge warning tables** - treat the main review body and inline review comments as actionable. Generic pre-merge warning rows, such as docstring coverage warnings on TypeScript or test-only PRs, are status signals unless CodeRabbit also posts a concrete inline/requested change. Do not add low-value docstrings just to satisfy a generic warning if it conflicts with repo style.
    - **Conflict banner** - GitHub shows "This branch has conflicts that must be resolved" when the branch is behind. If present, a rebase is mandatory.
-   - **CI/CD failures** - check the checks section for failing tests or lint errors.
+   - **CI/CD failures** - check the checks section for failing tests or lint errors. Inspect failing logs and treat each failure as actionable, but classify scope before editing: fix in-scope regressions, narrow out-of-scope expansion, or mark external/runner approval gates as blocked/informational.
    - **Human reviewer comments** - any requested changes from maintainers.
    - **Review bodies even when checks are green** - `gh pr checks` can report CodeRabbit/pass while fresh human `COMMENTED` reviews or older CodeRabbit review bodies still contain actionable concerns. Always inspect `gh pr view <pr> --json reviews,comments` after checking CI, especially after a push/rebase, before saying the PR is clear.
    - **Informational bot comments** - comments like "Possibly related open issues" are usually just issue-linkage FYI. Do not treat them as duplicate-PR warnings unless the comment explicitly points to another open PR or asks for a change.
@@ -369,6 +371,13 @@ If `gh` auth is broken or unavailable, provide the comment as plain text in chat
 Use PR comments to tell reviewers what changed and what relevant validation passed. Do not dump local-only environment problems, agent-shell auth quirks, worktree setup oddities, or unrelated test failures into a routine PR comment unless that detail directly explains the reviewer-facing status of the PR or blocks merge.
 
 **Re-read the PR after each push before declaring it done.** CodeRabbit often posts a fresh actionable review on the new head commit within minutes. For open-PR work, do one more read of the latest PR comments/checks after your push or rebase. If a new actionable comment appears, address it in the same thread instead of stopping early.
+
+**Delayed CI follow-up after push.** GitHub checks, CodeRabbit, and NVIDIA runner gates can complete several minutes after the push. After every PR create, rebase, force-push, or follow-up commit:
+- run `gh pr checks <pr> --repo NVIDIA/NemoClaw` and `gh pr view <pr> --repo NVIDIA/NemoClaw --json reviews,comments,mergeStateStatus,statusCheckRollup`
+- if anything is pending, queued, or waiting on CodeRabbit, wait/poll when practical before final status
+- if an automation/scheduler tool is available, create a delayed follow-up to re-check the same PR and take necessary action without asking the user again
+- if no scheduler is available, say the PR is `rerunning` and name the checks that still need follow-up
+- when a delayed check later fails, repeat the full scope-aware CI failure loop rather than only reporting the failure
 
 **React to handled review comments.** When a specific CodeRabbit, bot, or human review comment is clearly fixed on the current branch head, add a lightweight reaction on that comment so the user and reviewers can spot handled feedback quickly:
 - prefer `rocket` for fixed and pushed

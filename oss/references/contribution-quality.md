@@ -35,7 +35,8 @@ For routine new contributions:
 5. **Evidence:** run the narrow proof first, then adjacent tests or broader checks.
 6. **Describe:** write a PR or patch body with summary, exact validation, risk,
    and known limits.
-7. **Monitor:** inspect CI and review comments after push; fix actionable items.
+7. **Monitor:** inspect CI and review comments after push and after CI has had
+   time to report; fix actionable items.
 8. **Learn:** record new repo conventions, tool gaps, or reviewer preferences.
 
 For existing PR or patch work:
@@ -71,9 +72,17 @@ not run, and why. Do not replace missing evidence with confidence language.
   authoritative than stale skill text.
 - The skill may list common commands, but current `README`, `CONTRIBUTING`,
   workflow files, build scripts, and package configs decide what actually runs.
-- For CI failures, inspect the failing job log before guessing.
+- For CI failures, inspect the failing job log before guessing. Treat the
+  failure as actionable, then classify whether the failing area belongs to the
+  PR's intended scope. If the failure came from scope creep, narrow the PR
+  rather than patching unrelated expansion.
 - For bot comments, distinguish stale/informational feedback from current,
   actionable feedback on the latest head.
+- After creating or updating a PR, expect CI and review bots to finish later
+  than the push. If a scheduler or automation tool is available, create a
+  delayed follow-up to re-check checks, review comments, stale/conflict state,
+  and bot feedback. If no scheduler is available, poll until the current run is
+  terminal when practical, and clearly mark the PR as "rerunning" otherwise.
 - If a query, API, or tool returns no data, report "no data" and try the next
   reliable source. Do not fabricate status.
 - If a tool has known limits, record the fallback in the PR body or final report
@@ -148,5 +157,5 @@ Do not add one-off trivia or project-internal secrets to public skills.
 | First check | Load project skill, read live issue/PR state, search overlap |
 | First proof | Narrow command that exercises the reported behavior |
 | Broader proof | Adjacent test file, package check, build, or CI lane relevant to touched area |
-| PR confidence | Current branch, truthful body, exact validation, no actionable comments, CI green or explained |
+| PR confidence | Current branch, truthful body, exact validation, no actionable comments, CI green or explained after delayed/polled follow-up |
 | If blocked | State blocker, evidence gathered, next owner or approval needed |
