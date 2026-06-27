@@ -23,6 +23,7 @@ Apply these rules throughout the recipe:
 - **Think before coding.** Do not silently assume issue scope, reviewer intent, or the right fix direction. If issue comments, PR comments, linked work, or overlapping open PRs point in different directions, stop and resolve that ambiguity before editing code.
 - **Simplicity first.** Ship the smallest change that fixes the reported problem. Do not add new knobs, abstractions, cleanup refactors, or speculative edge-case handling unless the issue or reviewer explicitly calls for them.
 - **Surgical changes.** Touch only the files and lines that trace directly to the issue, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
+- **Docs-only discipline.** If the issue or reviewer frames the work as documentation, onboarding copy, or docs UX, keep the PR docs-only unless a maintainer explicitly asks for runtime behavior. Do not add source, manifest, config, onboarding prompt, or test changes to "prove" a docs clarification. If code behavior looks wrong, call it out as a separate follow-up instead of expanding the PR.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
 
 **Workflow order (do in this sequence):**
