@@ -37,7 +37,8 @@ For routine new contributions:
    and known limits.
 7. **Monitor:** inspect CI and review comments after push and after CI has had
    time to report; fix actionable items.
-8. **Learn:** record new repo conventions, tool gaps, or reviewer preferences.
+8. **Learn:** record new repo conventions, tool gaps, or reviewer preferences
+   only when they are reusable and would change future behavior.
 
 For existing PR or patch work:
 
@@ -76,6 +77,18 @@ not run, and why. Do not replace missing evidence with confidence language.
   failure as actionable, then classify whether the failing area belongs to the
   PR's intended scope. If the failure came from scope creep, narrow the PR
   rather than patching unrelated expansion.
+- Tests are not automatically good. Add tests when they prove changed behavior,
+  prevent a likely regression, or match the repository's accepted review pattern.
+  Do not add tests to docs-only, copy-only, or UX-text PRs unless the project has
+  an explicit docs-test convention or a reviewer asks for it. Avoid brittle tests
+  that grep markdown prose merely to justify a docs change.
+- If a PR's extra tests, generated files, or helper refactors break CI while the
+  issue only needed a narrower fix, remove the out-of-scope additions and rerun
+  the relevant focused validation. Treat scope reduction as a valid CI fix.
+- Respect repository test boundaries. If the repo separates source tests,
+  package-contract tests, integration tests, generated-artifact checks, or
+  docs-preview checks, put new coverage in the matching lane instead of
+  bypassing guardrails.
 - For bot comments, distinguish stale/informational feedback from current,
   actionable feedback on the latest head.
 - After creating or updating a PR, expect CI and review bots to finish later
@@ -87,6 +100,11 @@ not run, and why. Do not replace missing evidence with confidence language.
   reliable source. Do not fabricate status.
 - If a tool has known limits, record the fallback in the PR body or final report
   when it affects confidence.
+- When a repository requires verified commit signatures, checking DCO trailers is
+  not enough. After every rebase, amend, cherry-pick, or history rewrite, verify
+  the full PR range with a command such as
+  `git log --format='%h %G? %an <%ae> %s' <base>..HEAD`; any `N`, `U`, or bad
+  author/sign-off identity is a merge blocker until re-signed or fixed.
 
 ## Risk and Approval Matrix
 
@@ -139,8 +157,9 @@ review, project bots, and AI review bots because the right response differs.
 
 ## Lessons Loop
 
-After a contribution, update memory or the project skill when the lesson is
-reusable:
+After a contribution, update memory or the project skill only when the lesson is
+reusable and would have changed what the agent did. This makes the agent smarter
+without turning skills into noisy transcripts.
 
 - New CI lane, required label, generated artifact, or validation command.
 - Reviewer preference that is likely to recur.
@@ -148,7 +167,22 @@ reusable:
 - Merge-blocking mistake to avoid.
 - High-probability issue shape for future work.
 
-Do not add one-off trivia or project-internal secrets to public skills.
+When a reusable lesson applies across projects, add it to this shared protocol
+first instead of duplicating it in every project skill. Add project-specific
+details only when the exact command, path, bot, or policy differs by repository.
+
+Recommended learning loop:
+
+1. Identify the failure or review surprise.
+2. Decide whether it is reusable, repo-specific, or one-off.
+3. Patch the shared protocol for cross-OSS lessons; patch the project skill for
+   exact repo commands or local policies.
+4. Keep the new guidance short, imperative, and testable.
+5. If the skill repository is under the user's control and the user asked for
+   persistent updates, commit and push the skill change with a concise message.
+
+Do not add one-off trivia, private system details, or project-internal secrets
+to public skills.
 
 ## Quick Reference
 
