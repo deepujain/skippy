@@ -29,6 +29,8 @@ Apply these rules throughout the recipe:
 - **Surgical changes.** Touch only the files and lines that trace directly to the issue, failing check, or requested review follow-up. Clean up only fallout caused by your change; do not restyle or "improve" unrelated nearby code.
 - **Goal-driven execution.** Work in a tight verify loop: identify the concrete failure, implement the smallest fix, run the narrowest relevant validation first, then widen if needed. For open PR work, follow: inspect comments/checks/conflicts -> fix -> rebase -> rerun focused validation -> push -> leave a short PR comment.
 - **Merge-ready means more than pushed code.** Treat an Airflow PR as ready only when it is current with `apache/main`, CI is green or any remaining red check is explained, actionable reviewer/bot comments are handled on the current head, scoped validation evidence is recorded, and the PR body/comment truthfully describes validation.
+- **AI disclosure is a hard gate.** If generative AI helped author the PR or any GitHub comment, follow Airflow's Gen-AI guidelines before asking for review: include the PR-template AI disclosure checkbox plus `Generated-by:` line in every PR body, and add the required `Drafted-by:` footer to agent-drafted GitHub comments. For a batch-wide AI-attribution blocker, update every affected PR body, then post at most one concise acknowledgement in the thread where the maintainer raised it; do not add duplicate attribution comments to every PR when the PR-body disclosure already satisfies the requirement.
+- **Respect maintainer bandwidth.** If maintainers warn about PR volume, do not open additional Airflow PRs. First fix all process issues on existing PRs, reduce review noise, and wait for maintainer direction before creating more work for the project.
 - **Make human intervention exceptional.** Keep working until the branch is merge-ready or blocked by permissions, unavailable logs/credentials, maintainer design direction, or a local environment limitation that cannot be worked around safely.
 
 ## Closed-loop PR quality loop
@@ -57,6 +59,8 @@ Use this loop for both new Airflow PRs and existing PR sweeps:
   - `is:issue is:open label:kind:bug sort:created-desc no:assignee` -- recent unassigned bugs.
   - `is:issue is:open label:priority:high sort:created-desc no:assignee` -- high-priority bugs are impactful and often unclaimed.
   - `is:issue is:open label:kind:bug -label:area:UI created:>YYYY-MM-DD no:assignee` -- recent bugs excluding UI (use a date ~7 days ago).
+- **Batch contribution mix:** When the user asks for multiple PRs and does not explicitly ask for documentation-only work, do not cluster the batch into docs-only changes. Pick a diverse portfolio across code surfaces such as core/runtime, task SDK, CLI/API, providers, UI, Helm, tests, or developer tooling. Aim for at most one docs-only PR in a batch of five, and prefer fixes that add or update regression tests.
+- **Be bold, but prove it.** "Bold" means taking well-scoped code issues with real behavioral impact, not speculative rewrites. Favor issues where you can reproduce the failure or add meaningful test coverage, even if the fix touches trickier Airflow areas. Do not downgrade a broad contribution request into typo/docs-only work just because it is easier to validate.
 - Prefer **well-scoped** issues (clear problem, single fix). `priority:high` + `area:core` or `area:logging` bugs are especially good picks -- impactful, unclaimed, and well-defined.
 - **Mandatory -- no duplicate work:** Do **not** start implementing until you have confirmed that **no open PR** already fixes this issue. Otherwise your PR will be closed as duplicate and the work is wasted (e.g. [PR #63201 was closed as duplicate of #63104](https://github.com/apache/airflow/pull/63201)). For **every** candidate issue before you branch or code:
   1. Open the issue page and check the **timeline** for "mentioned in PR #..." or "linked pull request" from another author.
@@ -177,7 +181,8 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 - **Read linked history first:** If the issue already has a linked PR, prior attempt, or maintainer design explanation, read it before deciding on the fix. Do not reopen the same argument with a fresh PR.
 - **Scope:** Make only the changes needed; keep the PR easy to review. If the issue suggests one approach but the codebase pattern suggests another (e.g. "only component X and Y need this"), prefer aligning with the pattern.
 - **Evidence before PR:** Do not raise a PR unless you can point to concrete validation for the reported behavior. "Looks right from reading the code" is not sufficient for Airflow.
-- **No tool attribution:** Do not add "Made with Cursor" or similar to commit messages. If the IDE added it, amend before push (S6).
+- **Visual evidence for UI/UX changes:** If a PR changes UI appearance, layout, contrast, icons, colors, copy placement, empty states, or interaction affordances, include a screenshot or short before/after visual in the PR body or as an immediate PR comment. Do this proactively before reviewers ask. For dark/light-theme fixes, show the affected theme and the exact component state that changed.
+- **No tool attribution in commits:** Do not add "Made with Cursor" or similar to commit messages. If the IDE added it, amend before push (S6). This is separate from the mandatory PR-body `Generated-by:` disclosure required for Gen-AI assisted work.
 
 ## 8. Open the PR (GitHub)
 
@@ -200,14 +205,22 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
   - [x] <tests added or existing tests that cover the change>
   - [ ] CI passes (ruff, mypy, pytest)
 
+  ##### Was generative AI tooling used to co-author this PR?
+
+  - [X] Yes (OpenAI Codex)
+
+  Generated-by: OpenAI Codex following [the guidelines](https://github.com/apache/airflow/blob/main/contributing-docs/05_pull_requests.rst#gen-ai-assisted-contributions)
+
   Fixes #NNNNN
   ```
   The **Title:** line at the top is mandatory -- the user copies it into the GitHub PR title field.
 - **Description (format that gets merged):**
   - **Summary** -- One short paragraph: what problem and what the fix does.
   - **Changes** -- Bullet list: for each file, path then what changed.
+  - **Screenshots / visual proof** -- Required for UI/UX visual changes. Embed or link a before/after screenshot when appearance, contrast, layout, or interaction visuals changed.
   - **Why no new tests** -- Only if you truly did not add a test; briefly justify. Prefer adding a test so this section is unnecessary.
   - **Evidence it works** -- For environment-sensitive fixes, include the concrete environment or reproducer you used (for example docker-compose Celery worker + Redis broker, Breeze integration test, Helm test, or the exact smoke test).
+  - **AI disclosure** -- If Gen-AI assisted the PR, include the checked checkbox and `Generated-by:` line from `.github/PULL_REQUEST_TEMPLATE.md`. Never omit this from Airflow PRs opened or updated by an agent.
   - **Fixes #NNNNN** -- So GitHub auto-links and can close the issue.
 - **Writing pass:** Before handing off `PR_NNNNN_body.md` or any PR reply/comment text, run the final prose through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md`. Keep issue numbers, commands, test evidence, and maintainer-facing facts unchanged.
 - **Apache projects tracked in JIRA (Spark, Hadoop, HDFS, etc.):** In the PR description, include the contributor's **JIRA id for credit** (e.g. `**JIRA assignee for credit:** deepujain`). Issues are tracked in JIRA; committers use this to assign the JIRA to the contributor when the PR is merged.
@@ -229,13 +242,18 @@ For the `Review Comments` column, always categorize by reviewer identity rather 
 - **Be open to reversing the approach.** Reviewers may suggest the opposite fix (e.g. "don't add X here; remove X from places that don't need it"). Treat that as valid design feedback and rework the PR accordingly; don't defend the original approach unless there's a strong reason.
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not say "nothing to do" until both comments and statuses are clean or still running.
 - **Address every comment.** If a reviewer asks for a follow-up (e.g. "Y also doesn't need this"), apply the same logic to Y and push an update. One round of "same change elsewhere" is common.
+- **Screenshot requests are actionable.** If a reviewer asks for a screenshot, visual diff, recording, or "what does this look like?", produce the artifact, host or attach it, and reply on the PR. Then sweep other open UI/UX PRs for the same missing visual-evidence gap and add screenshots proactively where needed. If the screenshot/repro shows a second UI-consumed endpoint or state still has the bad value, extend the fix and test coverage before posting evidence.
 - **Rebase when the branch is out-of-date.** If GitHub shows "This branch is out-of-date with the base branch", run `git fetch apache && git rebase apache/main`, then `git push --no-verify --force-with-lease origin <branch>` so the PR is mergeable.
 - **Rebase and retest before adding more code.** For an existing PR, first rebase onto current `apache/main` and rerun the closest relevant local check. Do not assume the branch needs new edits until the rebased branch still reproduces the problem.
 - **Title changes by maintainers are normal.** A maintainer may change the PR title to match the final scope (e.g. from "Add X to A, B, C" to "Remove X from A, B, C"). No need to object.
 - **Update tests when behavior changes.** If your rework changes which code paths or components get a config/annotation, update the relevant test expectations (e.g. helm test assertions) so CI stays green.
 - **If Actions logs are blocked, say so immediately.** If `gh` is unauthenticated or GitHub log access is otherwise unavailable, say that explicitly and ask the user either to authenticate `gh` or paste the failing check names/log snippets. Do not make the user guess why you cannot see the failures.
 - **Handle stale/cancelled duplicate statuses deliberately.** If a newer check with the same name passed but an older cancelled/failing status still makes the PR red, verify the current head SHA. If direct rerun is unavailable, use a no-code empty commit to refresh checks and leave a short PR comment explaining the refresh.
-- **Leave a short PR comment after every meaningful push.** Rebase-only pushes, CI-refresh pushes, and validation-only updates should still leave a 2-4 sentence comment saying what changed in the branch state and what was verified locally.
+- **Leave a short PR comment after every meaningful push.** Rebase-only pushes, CI-refresh pushes, and validation-only updates should still leave a 2-4 sentence comment saying what changed in the branch state and what was verified locally. For metadata-only batch fixes such as adding missing AI disclosure to PR bodies, avoid per-PR comment noise unless a maintainer asked for a reply on that specific PR.
+- **Attribute agent-drafted GitHub comments.** Every PR/issue comment drafted by an agent must end with a footer on its own paragraph:
+  `---`
+  `Drafted-by: OpenAI Codex (no human review before posting)`
+  Use the reviewed-by form only when a human has explicitly reviewed the exact draft and approved posting it.
 
 ## 10. After push: CI and rebase
 
@@ -259,6 +277,7 @@ Extracted from real contribution experience. Update this section as new patterns
 ### Issue selection
 - **Do not filter by "good first issue"** -- that pool is heavily contested. Most issues already have PRs or are assigned within hours. Search all open bugs broadly using `no:assignee` and verify 0 PRs (open or closed) before picking.
 - **`priority:high` bugs are good targets** -- they are impactful, usually well-described, and often unclaimed because contributors shy away from them. Issues like #63921 (secrets not masked in task logs) had 0 PRs and a clear culprit identified by the reporter.
+- **For multi-PR requests, diversity is part of quality.** A batch of five Airflow PRs should not all be documentation unless the user asked for docs. Cover multiple subsystems and include code/test changes so the portfolio demonstrates real contribution depth.
 - **Check comments for competing contributors.** Even without a linked PR, a comment like "I'd love to contribute" may signal someone is working on it. If no PR appears within a day, it's fair game.
 - **Verify 0 PRs means 0 open AND 0 closed.** A closed PR may indicate a failed attempt with useful context (reviewer feedback, rejected approach).
 - **Read linked PR explanations, not just PR existence.** If maintainers already said "this approach is not right for Airflow" in a linked PR, do not submit the same idea again.
@@ -274,6 +293,11 @@ Extracted from real contribution experience. Update this section as new patterns
 - Before posting a PR comment or review reply, run the final text through `humanizer-zh` and keep the same facts, commands, and test results.
 - Never use the em dash character in comments.
 - Example: *Rebased on main. Fixed the test to use `@pytest.mark.enable_redact` so masking actually kicks in. All green locally. Should be good to go!*
+
+### UI repro follow-through
+- Treat a reviewer screenshot request as a mini end-to-end repro, not just a picture task. Drive the same route a user would use, inspect the API responses behind that route, and verify the UI state the reviewer cares about.
+- If the first screenshot contradicts the expected fix, keep digging. For example, PR #69158 fixed mapped task list responses, but the mapped task Details tab used the try-details response and still displayed `executor_config` as `None`. The correct action was to extend the serializer/test coverage to `TaskInstanceHistoryResponse` before posting screenshots.
+- When an older bug report no longer reproduces as the original hard failure on current main, say so plainly in the PR comment and show the current-main failure shape that the PR actually fixes.
 
 ### CI triage
 - **Check statuses, then logs.** Start with PR/commit statuses to identify the failing jobs before looking for review comments.
