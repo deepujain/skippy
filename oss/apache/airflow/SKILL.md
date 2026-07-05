@@ -31,6 +31,7 @@ Apply these rules throughout the recipe:
 - **Merge-ready means more than pushed code.** Treat an Airflow PR as ready only when it is current with `apache/main`, CI is green or any remaining red check is explained, actionable reviewer/bot comments are handled on the current head, scoped validation evidence is recorded, and the PR body/comment truthfully describes validation.
 - **AI disclosure is a hard gate.** If generative AI helped author the PR or any GitHub comment, follow Airflow's Gen-AI guidelines before asking for review: include the PR-template AI disclosure checkbox plus `Generated-by:` line in every PR body, and add the required `Drafted-by:` footer to agent-drafted GitHub comments. For a batch-wide AI-attribution blocker, update every affected PR body, then post at most one concise acknowledgement in the thread where the maintainer raised it; do not add duplicate attribution comments to every PR when the PR-body disclosure already satisfies the requirement.
 - **Respect maintainer bandwidth.** If maintainers warn about PR volume, do not open additional Airflow PRs. First fix all process issues on existing PRs, reduce review noise, and wait for maintainer direction before creating more work for the project.
+- **Trust is the scarce resource.** A PR that is technically green can still be harmful if it solves the wrong issue, targets the wrong branch, repeats a rejected approach, or makes maintainers prove that the agent did not check its own work. Treat maintainer trust as a merge blocker.
 - **Make human intervention exceptional.** Keep working until the branch is merge-ready or blocked by permissions, unavailable logs/credentials, maintainer design direction, or a local environment limitation that cannot be worked around safely.
 
 ## Closed-loop PR quality loop
@@ -38,12 +39,13 @@ Apply these rules throughout the recipe:
 Use this loop for both new Airflow PRs and existing PR sweeps:
 
 1. **Prove the issue shape before editing.** Turn the issue into a concrete failing path, log line, traceback, test gap, or runtime workflow before changing code.
-2. **Match existing patterns.** Inspect nearby Airflow/provider tests, SDK imports, deprecation patterns, provider boundaries, and docs/tests expectations before adding a new pattern.
-3. **Pre-answer reviewer and bot concerns.** Before opening or updating the PR, ask what reviewers, ruff, mypy, prek, provider tests, and docs checks are likely to flag: missing marker, wrong project, import-time optional dependency failure, stale chart expectation, over-broad scope, or unvalidated runtime behavior.
-4. **Test the bug, the non-bug, and the edge seam.** Prefer a regression test for the reported failure, keep an existing happy path green, and cover one boundary/negative case when the fix changes branching, config, auth, provider imports, Helm/K8s behavior, or executor/runtime behavior.
-5. **Self-review before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead code, debug output, unrelated formatting, and untracked PR body files from the commit.
-6. **Close the loop after push.** Re-read live CI and review comments on the current head. If feedback is actionable, fix it. If a red check is stale/cancelled/unrelated, verify the current head and retrigger with the least-invasive safe action, usually an empty commit when direct rerun is unavailable.
-7. **Report exact state.** End with which PRs are green, which are rerunning, which still have actionable comments, and which are blocked by permissions, infrastructure, or maintainer direction.
+2. **Verify version and branch target.** If the issue reports Airflow 2.x or a provider release, reproduce on that branch or a supported equivalent before using `main`. If the old bug no longer reproduces on `main`, do not file a `Fixes #NNNNN` PR for an adjacent cleanup unless a maintainer asks for it.
+3. **Match existing patterns.** Inspect nearby Airflow/provider tests, SDK imports, deprecation patterns, provider boundaries, and docs/tests expectations before adding a new pattern.
+4. **Pre-answer reviewer and bot concerns.** Before opening or updating the PR, ask what reviewers, ruff, mypy, prek, provider tests, and docs checks are likely to flag: missing marker, wrong project, import-time optional dependency failure, stale chart expectation, over-broad scope, or unvalidated runtime behavior.
+5. **Test the bug, the non-bug, and the edge seam.** Prefer a regression test for the reported failure, keep an existing happy path green, and cover one boundary/negative case when the fix changes branching, config, auth, provider imports, Helm/K8s behavior, or executor/runtime behavior.
+6. **Self-review before commit.** Run `git diff --check`, read the final diff as a reviewer, and remove accidental refactors, dead code, debug output, unrelated formatting, and untracked PR body files from the commit.
+7. **Close the loop after push.** Re-read live CI and review comments on the current head. If feedback is actionable, fix it. If a red check is stale/cancelled/unrelated, verify the current head and retrigger with the least-invasive safe action, usually an empty commit when direct rerun is unavailable.
+8. **Report exact state.** End with which PRs are green, which are rerunning, which still have actionable comments, and which are blocked by permissions, infrastructure, or maintainer direction.
 
 ## New PR vs update to existing PR
 
@@ -179,8 +181,11 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 
 - **Fix direction:** Consider whether the minimal "symptom" fix is what maintainers want. Sometimes the better fix is the opposite: e.g. instead of extending a behavior to more components, remove it from components that don't need it. Check existing patterns in the codebase for *which components* get a given config or annotation, not only syntax.
 - **Read linked history first:** If the issue already has a linked PR, prior attempt, or maintainer design explanation, read it before deciding on the fix. Do not reopen the same argument with a fresh PR.
+- **Closed-PR postmortem first:** Before opening a new Airflow PR, inspect recent closed PRs by the contributor and any closed PRs for the same issue. If maintainers closed prior work for duplicate scope, wrong target branch, weak evidence, wrong docs claim, or rejected design direction, encode that lesson in the new plan before editing.
+- **Root-cause direction:** Do not hide a symptom when maintainers want the real compatibility or behavior fixed. For example, deferring a broken optional import may be wrong if the issue asks for Python compatibility; fixing the dependency compatibility or skipping the issue is better than masking it.
 - **Scope:** Make only the changes needed; keep the PR easy to review. If the issue suggests one approach but the codebase pattern suggests another (e.g. "only component X and Y need this"), prefer aligning with the pattern.
 - **Evidence before PR:** Do not raise a PR unless you can point to concrete validation for the reported behavior. "Looks right from reading the code" is not sufficient for Airflow.
+- **Docs claims need source-of-truth proof:** For docs PRs, verify the claim against the code, release scripts, rendered docs, or maintainer comments. If you cannot prove the documentation statement is true, do not open the PR. A locally passing docs check only proves formatting, not correctness.
 - **Visual evidence for UI/UX changes:** If a PR changes UI appearance, layout, contrast, icons, colors, copy placement, empty states, or interaction affordances, include a screenshot or short before/after visual in the PR body or as an immediate PR comment. Do this proactively before reviewers ask. For dark/light-theme fixes, show the affected theme and the exact component state that changed.
 - **No tool attribution in commits:** Do not add "Made with Cursor" or similar to commit messages. If the IDE added it, amend before push (S6). This is separate from the mandatory PR-body `Generated-by:` disclosure required for Gen-AI assisted work.
 
@@ -281,9 +286,17 @@ Extracted from real contribution experience. Update this section as new patterns
 - **Check comments for competing contributors.** Even without a linked PR, a comment like "I'd love to contribute" may signal someone is working on it. If no PR appears within a day, it's fair game.
 - **Verify 0 PRs means 0 open AND 0 closed.** A closed PR may indicate a failed attempt with useful context (reviewer feedback, rejected approach).
 - **Read linked PR explanations, not just PR existence.** If maintainers already said "this approach is not right for Airflow" in a linked PR, do not submit the same idea again.
+- **Do not use an old issue as cover for a different cleanup.** PR #69158 was closed because the 2.x UI failure was not reproduced and the main-branch change only addressed an adjacent `None` display behavior. If the reproduced behavior differs from the issue, state that before coding and either skip, ask, or open only with a clear "does not fix X" scope.
+- **Version labels matter.** If an issue is labeled `affected_version:main_branch`, targeting `main` is normal. If the report is for 2.9/2.10/2.11, first decide whether the PR should target `main`, `v2-11-test`, or no PR at all.
 
 ### PR body
 - **Always create `PR_NNNNN_body.md`** with a `**Title:**` line at the top. The user copies the title into the GitHub PR title field and the rest into the body. Missing the title causes extra friction.
+
+### Closure patterns to avoid
+- **Factually wrong docs are worse than no docs PR.** PR #64704 was closed because the Task SDK publishing clarification was wrong even though the docs checks passed. For docs, prove the statement against the real publishing/build path or maintainer guidance before opening.
+- **Duplicate PRs burn trust quickly.** PRs like #63201, #64307, #64306, #64304, #64282, and #64279 were closed as duplicates. Search issue timelines, linked PRs, and closed PRs before starting, and close your own duplicate immediately if you discover one.
+- **Wrong-fix-direction PRs should be skipped, not polished.** PR #64277 hid an import failure when maintainers wanted actual Python 3.14 compatibility. If the likely fix direction is uncertain, ask or skip instead of filing a plausible workaround.
+- **Environment-sensitive fixes need environment proof.** PR #64305 was closed because the Celery health-check change did not show evidence from a real Celery/broker setup and ignored linked PR discussion. Unit tests alone are not enough for executor, broker, auth, Helm/K8s, or networking behavior.
 
 ### PR comment style (when user shares a PR URL)
 - When the user shares a PR URL, there is always something to act on (reviewer comments, CI failures, conflicts). Read the PR page first.
@@ -313,6 +326,7 @@ Extracted from real contribution experience. Update this section as new patterns
 - **Prefer a clean final PR history.** Iterate locally as needed, but before the final push prefer squashing the branch to one clean issue-referenced commit unless there is a clear reason to preserve multiple commits.
 - **Environment-sensitive bugs need environment-sensitive proof.** For Celery, broker, triggerer, auth, Helm/K8s, and networking issues, do not rely on unit tests alone if the reported bug depends on real runtime behavior.
 - **Do not open AI-only PRs.** Code reading, speculative reasoning, or a unit test for a guessed design is not enough. Airflow maintainers expect evidence tied to the real reported failure.
+- **Show the exact failing request or command.** For API/UI bugs, capture the network request, response status/body, traceback, or UI failure path that fails before the fix. A screenshot of an adjacent UI state is not enough if the issue is about a failing request or older branch behavior.
 
 ### Code patterns (Airflow 3.x)
 - **`airflow.sdk` vs `airflow.models`:** Airflow 3.x deprecates many `airflow.models` APIs in favor of `airflow.sdk`. When fixing code or docs, use SDK imports (e.g. `from airflow.sdk import Connection` with `Connection.get()` instead of `Connection.get_connection_from_secrets()`).
