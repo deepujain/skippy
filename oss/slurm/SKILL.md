@@ -1,6 +1,13 @@
 ---
 name: slurm-patch-contribution
-description: Implements fixes or features for Slurm, prepares patches with git format-patch, and submits them via the SchedMD issue tracker (no GitHub PRs). Use when the user wants to contribute to Slurm, do a Slurm patch, follow the Slurm contribution recipe, or says "next Slurm fix" or "Slurm contribution". Covers patch-based workflow and coding guidelines (Linux kernel style, Changelog trailer, sign-off).
+description: >-
+  Implements fixes or features for Slurm, prepares patches with git
+  format-patch, and submits them via the SchedMD issue tracker (no GitHub
+  PRs). Use when the user wants to contribute to Slurm, do a Slurm patch,
+  follow the Slurm contribution recipe, says "next Slurm fix" or "Slurm
+  contribution", or uses the one-word trigger "sweep" when the active
+  repo/thread context identifies Slurm. Covers patch-based workflow and coding
+  guidelines (Linux kernel style, Changelog trailer, sign-off).
 ---
 
 # Slurm Patch Contribution Recipe
@@ -279,6 +286,7 @@ Spelling/docs-only suggestions can be described in the ticket without attaching 
 
 ## Trigger phrases (for the user)
 
+- "sweep" (when the active repo/thread context identifies Slurm.)
 - "Pick a Slurm issue and prepare a patch."
 - "Follow the Slurm contribution recipe."
 - "Next Slurm fix: implement and submit as patch."

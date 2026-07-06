@@ -1,6 +1,12 @@
 ---
 name: inspect-petri-pr-contribution
-description: Find, implement, validate, and shepherd focused GitHub PRs for meridianlabs-ai/inspect_petri. Use when the user wants to contribute to Inspect Petri, work on Petri issues, fix an Inspect Petri PR, sweep Petri review feedback or CI, or mentions Inspect Petri contribution work.
+description: >-
+  Find, implement, validate, and shepherd focused GitHub PRs for
+  meridianlabs-ai/inspect_petri. Use when the user wants to contribute to
+  Inspect Petri, work on Petri issues, fix an Inspect Petri PR, sweep Petri
+  review feedback or CI, mentions Inspect Petri contribution work, or uses the
+  one-word trigger "sweep" when the active repo/thread context identifies
+  Inspect Petri.
 ---
 
 # Inspect Petri PR Contribution Recipe
@@ -144,6 +150,8 @@ Refresh this before acting. If #23 is still the only open issue, do not reopen t
    - If feedback is stale or unrelated, verify current head and explain briefly rather than guessing.
 
 ## Issue selection preferences
+
+- Trigger phrase: **"sweep"** when the active repo/thread context identifies Inspect Petri.
 
 Prefer issues that have concrete acceptance criteria and can be proven locally. Good Inspect Petri issue shapes include audit API gaps, Inspect AI integration mismatches, target tool handling, sample metadata behavior, scorer/judge/rescore flows, multimodal message support, docs examples, and small testable seed/dimension fixes.
 

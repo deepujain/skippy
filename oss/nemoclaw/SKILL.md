@@ -1,6 +1,13 @@
 ---
 name: nemoclaw-pr-contribution
-description: Contribute PRs to NVIDIA/NemoClaw (OpenClaw plugin for OpenShell). Pick an issue, implement, prepare branch/commit/PR with sign-off, or sweep existing NemoClaw PRs/MRs through CI/review feedback. Use when the user wants to contribute to NemoClaw, pick a NemoClaw issue, do a NemoClaw PR, sweep open NemoClaw PRs/MRs, or says "follow the NemoClaw PR recipe" or "next issue for NemoClaw".
+description: >-
+  Contribute PRs to NVIDIA/NemoClaw (OpenClaw plugin for OpenShell). Pick an
+  issue, implement, prepare branch/commit/PR with sign-off, or sweep existing
+  NemoClaw PRs/MRs through CI/review feedback. Use when the user wants to
+  contribute to NemoClaw, pick a NemoClaw issue, do a NemoClaw PR, sweep open
+  NemoClaw PRs/MRs, says "follow the NemoClaw PR recipe" or "next issue for
+  NemoClaw", or uses the one-word trigger "sweep" when the active repo/thread
+  context identifies NemoClaw.
 ---
 
 # NemoClaw PR Contribution Recipe
@@ -479,6 +486,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 
 Say one of these so the agent applies this skill:
 
+- **"sweep"** (when the active repo/thread context identifies NemoClaw.)
 - **"Pick the next NemoClaw issue and do the full PR recipe."**
 - **"Next NemoClaw PR: find an issue, implement, and prepare branch, commit (with sign-off), and PR."**
 - **"Follow the NemoClaw PR recipe."**

@@ -1,6 +1,14 @@
 ---
 name: pytorch-pr-contribution
-description: Contribute high-quality PRs/MRs to pytorch/pytorch. Pick actionable issues, implement fixes, prepare branches, commits, PR descriptions, labels, tests, and CI follow-up, or sweep existing PyTorch PRs through review, Dr. CI, HUD, PyTorchBot, EasyCLA, ghstack, and release-note feedback. Use when the user wants to contribute to PyTorch, pick a PyTorch issue, create or update a PyTorch PR/MR, debug PyTorch CI, handle PyTorch reviewer comments, or asks for the PyTorch contribution recipe.
+description: >-
+  Contribute high-quality PRs/MRs to pytorch/pytorch. Pick actionable issues,
+  implement fixes, prepare branches, commits, PR descriptions, labels, tests,
+  and CI follow-up, or sweep existing PyTorch PRs through review, Dr. CI, HUD,
+  PyTorchBot, EasyCLA, ghstack, and release-note feedback. Use when the user
+  wants to contribute to PyTorch, pick a PyTorch issue, create or update a
+  PyTorch PR/MR, debug PyTorch CI, handle PyTorch reviewer comments, asks for
+  the PyTorch contribution recipe, or uses the one-word trigger "sweep" when
+  the active repo/thread context identifies PyTorch.
 ---
 
 # PyTorch PR Contribution Recipe
@@ -293,6 +301,7 @@ High-probability merge patterns:
 
 Say one of these so the agent applies this skill:
 
+- **"sweep"** (when the active repo/thread context identifies PyTorch.)
 - **"Pick the next PyTorch issue and do the full PR recipe."**
 - **"Contribute to PyTorch."**
 - **"Create a PyTorch PR for this issue: <link>"**

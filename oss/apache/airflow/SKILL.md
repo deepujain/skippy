@@ -9,7 +9,7 @@ description: >-
   Use when the user wants to contribute to Airflow, pick an Airflow issue,
   do an Airflow PR, sweep open Airflow PRs/MRs, or says "follow the Airflow
   contribution recipe", "next Airflow fix", or the one-word trigger
-  "sweep".
+  "sweep" when the active repo/thread context identifies Airflow.
 ---
 
 # Apache Airflow PR Contribution Recipe
@@ -370,7 +370,7 @@ Extracted from real contribution experience. Update this section as new patterns
 
 ## Trigger phrases (for the user)
 
-- "sweep"
+- "sweep" (when the active repo/thread context identifies Airflow.)
 - "Pick an Airflow issue and do the full PR recipe."
 - "Next Airflow PR: find an issue, implement, and prepare branch, commit, and PR."
 - "Follow the Airflow contribution recipe."

@@ -1,6 +1,13 @@
 ---
 name: clawhub-pr-contribution
-description: Contribute PRs to openclaw/clawhub. Pick ClawHub issues, create merge-ready PRs, or sweep existing ClawHub PRs through CI/review feedback using the repo's Bun + Convex workflow. Use when the user wants to contribute to ClawHub, pick issues, do a ClawHub PR, fix or sweep open ClawHub PRs/MRs, address bot reviews, fix CI, or says "follow the ClawHub PR recipe".
+description: >-
+  Contribute PRs to openclaw/clawhub. Pick ClawHub issues, create merge-ready
+  PRs, or sweep existing ClawHub PRs through CI/review feedback using the
+  repo's Bun + Convex workflow. Use when the user wants to contribute to
+  ClawHub, pick issues, do a ClawHub PR, fix or sweep open ClawHub PRs/MRs,
+  address bot reviews, fix CI, says "follow the ClawHub PR recipe", or uses
+  the one-word trigger "sweep" when the active repo/thread context identifies
+  ClawHub.
 ---
 
 # ClawHub PR Contribution Recipe
@@ -322,6 +329,7 @@ Keep reviewer-facing comments short, concrete, and human.
 
 Say one of these so the agent applies this skill:
 
+- **"sweep"** (when the active repo/thread context identifies ClawHub.)
 - **"Pick the next ClawHub issue and do the full PR recipe."**
 - **"Follow the ClawHub PR recipe."**
 - **"Fix this existing ClawHub PR."**

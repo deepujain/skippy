@@ -6,7 +6,8 @@ description: >-
   Inspect AI, work on inspect_ai issues, fix an Inspect AI PR, sweep Inspect
   AI review feedback or CI, shares the Inspect AI author PR-list URL
   https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain, or mentions
-  Inspect AI framework contribution work.
+  Inspect AI framework contribution work. Also use the one-word trigger
+  "sweep" when the active repo/thread context identifies Inspect AI.
 ---
 
 # Inspect AI PR Contribution Recipe
@@ -235,6 +236,8 @@ When calibrating contribution style, also scan recent merged PRs from other cont
    - If maintainer feedback changes the design direction, follow it instead of defending the first implementation.
 
 ## Issue selection preferences
+
+- Trigger phrase: **"sweep"** when the active repo/thread context identifies Inspect AI.
 
 Good Inspect AI contribution targets include small CLI bugs, docs corrections, model/provider integration fixes, scorer/solver behavior gaps, logging/viewer regressions, sandbox/tool edge cases, and narrowly scoped tests for existing behavior.
 

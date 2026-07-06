@@ -1,6 +1,13 @@
 ---
 name: openclaw-pr-contribution
-description: Picks non-conflicting OpenClaw issues, creates merge-ready PRs, and sweeps existing PRs through CI/review feedback until they are ready or truly blocked. Use when the user wants to contribute a PR to OpenClaw, pick issues, do an OpenClaw PR, sweep open MRs/PRs, address bot reviews, fix CI, or says "follow the openclaw PR recipe" or "next issue for openclaw".
+description: >-
+  Picks non-conflicting OpenClaw issues, creates merge-ready PRs, and sweeps
+  existing PRs through CI/review feedback until they are ready or truly
+  blocked. Use when the user wants to contribute a PR to OpenClaw, pick issues,
+  do an OpenClaw PR, sweep open MRs/PRs, address bot reviews, fix CI, says
+  "follow the openclaw PR recipe" or "next issue for openclaw", or uses the
+  one-word trigger "sweep" when the active repo/thread context identifies
+  OpenClaw.
 ---
 
 # OpenClaw PR Contribution Recipe
@@ -308,6 +315,7 @@ Additional rules for open-PR work:
 
 Say one of these so the agent applies this skill and picks an issue + follows the steps:
 
+- **"sweep"** (when the active repo/thread context identifies OpenClaw.)
 - **"Pick the next openclaw issue and do the full PR recipe."**
 - **"Next openclaw PR: find an issue, implement, and prepare branch, commit, and PR body."**
 - **"Follow the openclaw PR recipe for the next issue."**

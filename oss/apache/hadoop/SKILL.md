@@ -7,7 +7,9 @@ description: >-
   local Maven tests; address review, fix CI, refresh stale status, push, and
   generate PR comments. Use for "new Hadoop PR", "follow Hadoop recipe",
   "work on this Hadoop PR", "address this MR", or "sweep my Hadoop PRs" when
-  PRs have review comments, CI failures, or need rebase/local tests.
+  PRs have review comments, CI failures, or need rebase/local tests. Also use
+  the one-word trigger "sweep" when the active repo/thread context identifies
+  Hadoop.
 ---
 
 # Apache Hadoop PR Contribution Recipe
@@ -348,6 +350,7 @@ Before posting, sanity-check that the PR title/body still matches the branch. If
 
 ## Trigger phrases (for the user)
 
+- "sweep" (when the active repo/thread context identifies Hadoop.)
 - "Pick a Hadoop issue and do the full PR recipe."
 - "Next Hadoop PR: find a JIRA issue, implement, and prepare branch, commit, and PR."
 - "Follow the Hadoop contribution recipe."

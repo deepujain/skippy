@@ -1,6 +1,12 @@
 ---
 name: hermes-agent-pr-contribution
-description: Contribute PRs to NousResearch/hermes-agent. Pick focused issues, implement and validate changes across the Python agent core, gateway, skills, docs, TUI, or web surfaces, and shepherd PRs through CI/review feedback.
+description: >-
+  Contribute PRs to NousResearch/hermes-agent. Pick focused issues, implement
+  and validate changes across the Python agent core, gateway, skills, docs,
+  TUI, or web surfaces, and shepherd PRs through CI/review feedback. Use when
+  the user wants to contribute to Hermes Agent, sweep open Hermes Agent PRs,
+  fix Hermes CI/review feedback, or uses the one-word trigger "sweep" when the
+  active repo/thread context identifies Hermes Agent.
 ---
 
 # Hermes Agent PR Contribution Recipe
@@ -338,6 +344,12 @@ When the user gives a Hermes Agent PR URL or asks to sweep open PRs:
 10. Re-check CI/review state after push; do not call the PR ready while fresh feedback is already visible and actionable.
 
 If reviewer intent, product direction, credentials, destructive history, or private infrastructure blocks progress, report the blocker plainly with the next concrete ask.
+
+## Trigger phrases
+
+- **"sweep"** (when the active repo/thread context identifies Hermes Agent.)
+- **"Sweep my open Hermes Agent PRs/MRs."**
+- **"Fix this existing Hermes Agent PR."**
 
 ## Quick reference
 

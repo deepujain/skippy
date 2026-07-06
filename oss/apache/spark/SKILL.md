@@ -7,7 +7,8 @@ description: >-
   and push; then generate a ready-to-paste PR comment from changes made and
   local test results. Use for "new Spark PR", "follow Spark recipe", "here is
   my Spark PR URL - take actions", "address this PR", "sweep my Spark PRs",
-  or "generate PR comment".
+  or "generate PR comment". Also use the one-word trigger "sweep" when the
+  active repo/thread context identifies Spark.
 ---
 
 # Apache Spark PR Contribution Recipe
@@ -276,6 +277,7 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 
 ## Trigger phrases (for the user)
 
+- "sweep" (when the active repo/thread context identifies Spark.)
 - "Pick a Spark issue and do the full PR recipe."
 - "Next Spark PR: find a JIRA, implement, and prepare branch, commit, and PR."
 - "Follow the Spark contribution recipe."
