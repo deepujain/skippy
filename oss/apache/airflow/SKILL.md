@@ -8,7 +8,8 @@ description: >-
   actionable issues, push follow-up commits, and leave PR status comments.
   Use when the user wants to contribute to Airflow, pick an Airflow issue,
   do an Airflow PR, sweep open Airflow PRs/MRs, or says "follow the Airflow
-  contribution recipe" or "next Airflow fix".
+  contribution recipe", "next Airflow fix", or the one-word trigger
+  "airsweep".
 ---
 
 # Apache Airflow PR Contribution Recipe
@@ -369,6 +370,7 @@ Extracted from real contribution experience. Update this section as new patterns
 
 ## Trigger phrases (for the user)
 
+- "airsweep"
 - "Pick an Airflow issue and do the full PR recipe."
 - "Next Airflow PR: find an issue, implement, and prepare branch, commit, and PR."
 - "Follow the Airflow contribution recipe."
