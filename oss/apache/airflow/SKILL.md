@@ -298,12 +298,14 @@ Extracted from real contribution experience. Update this section as new patterns
 - **Duplicate PRs burn trust quickly.** PRs like #63201, #64307, #64306, #64304, #64282, and #64279 were closed as duplicates. Search issue timelines, linked PRs, and closed PRs before starting, and close your own duplicate immediately if you discover one.
 - **Wrong-fix-direction PRs should be skipped, not polished.** PR #64277 hid an import failure when maintainers wanted actual Python 3.14 compatibility. If the likely fix direction is uncertain, ask or skip instead of filing a plausible workaround.
 - **Environment-sensitive fixes need environment proof.** PR #64305 was closed because the Celery health-check change did not show evidence from a real Celery/broker setup and ignored linked PR discussion. Unit tests alone are not enough for executor, broker, auth, Helm/K8s, or networking behavior.
+- **Tiny UI polish still needs exact geometry proof.** PR #69159 was closed because a switch contrast fix still left the switch control circle off-center. For control contrast fixes, prefer non-layout-affecting styles such as inset shadow or outline over real borders, and do not ask for review or reopen until screenshots or pixel/DOM checks prove the exact requested alignment/layout state.
 
 ### PR comment style (when user shares a PR URL)
 - When the user shares a PR URL, there is always something to act on (reviewer comments, CI failures, conflicts). Read the PR page first.
 - After every meaningful push, leave a short PR comment even if no source file changed.
 - If review comments are empty, check failing statuses before concluding the PR is idle.
 - PR comments should be 2-4 sentences max. Sound like a human, not a changelog. A touch of humor is fine.
+- If maintainers say the PR feels agentic or disregards feedback, respond with concrete repair, better validation, or silence. Do not post identity/personhood reassurance as a substitute for addressing the code/review issue.
 - Before posting a PR comment or review reply, run the final text through `humanizer-zh` and keep the same facts, commands, and test results.
 - Never use the em dash character in comments.
 - Example: *Rebased on main. Fixed the test to use `@pytest.mark.enable_redact` so masking actually kicks in. All green locally. Should be good to go!*
