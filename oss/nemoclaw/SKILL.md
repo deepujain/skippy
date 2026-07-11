@@ -5,9 +5,9 @@ description: >-
   issue, implement, prepare branch/commit/PR with sign-off, or sweep existing
   NemoClaw PRs/MRs through CI/review feedback. Use when the user wants to
   contribute to NemoClaw, pick a NemoClaw issue, do a NemoClaw PR, sweep open
-  NemoClaw PRs/MRs, says "follow the NemoClaw PR recipe" or "next issue for
-  NemoClaw", or uses the one-word trigger "sweep" when the active repo/thread
-  context identifies NemoClaw.
+  NemoClaw PRs/MRs, says "follow the NemoClaw PR recipe", "next issue for
+  NemoClaw", "deep batch", or uses the one-word trigger "sweep" when the
+  active repo/thread context identifies NemoClaw.
 ---
 
 # NemoClaw PR Contribution Recipe
@@ -91,6 +91,18 @@ Once `commit.gpgsign` is `true`, all commits (including `git rebase --continue`)
 - **Check existing open PRs** to avoid collisions. Avoid issues that touch the same files or areas as the user's existing open PRs.
 - **Check all open PRs that touch the same hot files, not just the issue number or the user's PR list.** For NemoClaw, files like `bin/nemoclaw.js`, `bin/lib/onboard.js`, workflow files, and core tests often have multiple concurrent PRs. Before picking an issue or declaring a PR "clear", search open PRs by file path / subsystem and note overlapping work.
 - Fetch issue details if needed to confirm scope.
+
+### 2.1 Deep batch mode
+
+When the user says **"deep batch"**, "pick 10 good solid issues", or asks for a batch of substantial NemoClaw PRs:
+
+- Default to **10 issues** unless the user gives a different count.
+- Prefer meaningful product/runtime work over tiny cleanup: CLI behavior, onboarding flows, installer/preflight failures, inference/provider behavior, policy/security posture, workflow correctness, E2E/runtime reliability, performance, or testable bug fixes.
+- Avoid typo-only, copy-only, docs-only, label cleanup, trivial dependency bumps, and small test-only issues unless the user explicitly asks for small tickets or the issue is a blocker for a larger flow.
+- Do the full issue-overlap screen for every candidate before coding: issue comments, linked PRs, referenced commits, assignees, maintainer comments, open PRs by issue number, open PRs by title keywords, and open PRs touching the same hot files.
+- Rank candidates by merge probability and impact. Prefer issues with clear repro/expected behavior, maintainable scope, and a validation path you can actually run locally.
+- Run the full PR recipe for each selected issue independently: sync from upstream, branch from current `main`, implement surgically, validate with focused and broad checks, create a signed commit, push, open the PR, then inspect CI/reviews and act on early feedback.
+- If the batch cannot finish in one session, do not switch to vague status. Report an exact table with each candidate as `PR opened`, `in progress`, `skipped with reason`, or `not started yet`, plus the next concrete action.
 
 ## 2.0 Recent merged contributor scan
 
@@ -487,6 +499,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 Say one of these so the agent applies this skill:
 
 - **"sweep"** (when the active repo/thread context identifies NemoClaw.)
+- **"deep batch"** - pick 10 substantial NemoClaw issues by default and run the full PR recipe end-to-end for each.
 - **"Pick the next NemoClaw issue and do the full PR recipe."**
 - **"Next NemoClaw PR: find an issue, implement, and prepare branch, commit (with sign-off), and PR."**
 - **"Follow the NemoClaw PR recipe."**
