@@ -352,6 +352,14 @@ For the `Review Comments` column, always categorize by reviewer identity rather 
 1. **Edit the conflicted or outdated files**  - the agent resolves conflict markers and updates code as needed (implementation step, same as §4).
 2. **Update tests**  - if the resolution changes behavior, update test expectations (same as §4).
 3. **Run tests**  - `npm test` from repo root. Fix any failures introduced by the resolution.
+   - Do not run full `npm test` matrices for multiple NemoClaw worktrees in
+     parallel on one host. The Vitest integration projects are timing-sensitive;
+     host contention can turn unrelated 5-second tests into a broad false-failure
+     storm. Run focused touched-path tests in parallel if useful, but run the full
+     matrix serially with a generous timeout. If even a serial full matrix times
+     out across many untouched files while `npm run validate:pr` and all focused
+     tests pass, classify it as a local capacity signal, not a branch regression,
+     and rely on the isolated GitHub jobs for the full matrix.
 4. **Stage and commit** - the agent runs `git add` and `git commit --amend` with the correct author, sign-off, signing flags, and `--no-verify`. Verify with `git log -1 --format='%B'` that no `Made-with: Cursor` trailer appeared; if it did, immediately amend to strip it.
 
 ### 8.3 Rebase  - the agent runs the rebase (sync step)
@@ -382,14 +390,34 @@ Verified signatures are a hard NemoClaw policy, not a nice-to-have. Do not ask f
 
 ### 8.4 Push and PR comment  - the agent runs push directly
 
-After the rebase, the agent pushes directly:
+After the rebase, fetch the fork branch again immediately before pushing. A
+reviewer, maintainer, or GitHub automation may have added commits while local
+validation was running. Never assume the lease captured before testing is still
+authoritative.
+
+If the remote head is unchanged, the agent pushes directly:
 
 ```bash
 cd /Users/dejain/nvidia/oss/NemoClaw
 git push --no-verify --force-with-lease origin <branch>
 ```
 
-Replace `<branch>` with the actual branch name. If `--force-with-lease` fails (stale ref from reviewer merge commits), use `--force`.
+Replace `<branch>` with the actual branch name. If `--force-with-lease` fails,
+**do not retry with plain `--force`**. Fetch the branch, inspect every new commit,
+and preserve maintainer/reviewer changes. For base-only staleness on an open PR,
+prefer GitHub's native branch update so the current remote history is retained:
+
+```bash
+head_sha="$(gh pr view <pr> --repo NVIDIA/NemoClaw --json headRefOid --jq .headRefOid)"
+gh api --method PUT repos/NVIDIA/NemoClaw/pulls/<pr>/update-branch \
+  -f expected_head_sha="$head_sha"
+```
+
+Use a new lease only after integrating and validating any substantive remote
+commit. Never erase a maintainer-authored test, fix, or merge merely to preserve
+a locally rebased shape. After a native update, verify `behind_by: 0`, inspect
+the new head's checks/reviews, and verify every PR commit through the GitHub API;
+server-created merge commits should report `verification.verified: true`.
 
 After pushing, prefer posting a short PR comment with `gh` when auth is healthy:
 
