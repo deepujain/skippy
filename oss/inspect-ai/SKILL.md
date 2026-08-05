@@ -17,7 +17,7 @@ Also apply the shared OSS contribution quality protocol in
 Project-specific instructions below override the shared protocol when they
 conflict.
 
-Use this recipe for [UKGovernmentBEIS/inspect_ai](https://github.com/UKGovernmentBEIS/inspect_ai), the Inspect AI evaluation framework. Follow the upstream contributor guide closely: find an issue, comment to claim it, branch, code, run `make check`, run `make test`, then open a PR.
+Use this recipe for [UKGovernmentBEIS/inspect_ai](https://github.com/UKGovernmentBEIS/inspect_ai), the Inspect AI evaluation framework. Follow the upstream contributor guide closely: agree direction in an issue when required, claim accepted work, branch, code, run `make check`, run `make test`, then open a ready-for-review PR.
 
 ## Project facts
 
@@ -33,6 +33,7 @@ Use this recipe for [UKGovernmentBEIS/inspect_ai](https://github.com/UKGovernmen
 - CI: ruff, mypy, pytest, package build on Python 3.10 and 3.11
 - Viewer/frontend CI: `src/inspect_ai/_view/ts-mono` pnpm build, generated schema/types, checked-in `dist`
 - Sandbox-tools CI: special gates for `src/inspect_sandbox_tools`, `src/inspect_ai/tool/**`, and `sandbox_tools_version.txt`
+- Current contribution policy: new contributors need a maintainer-accepted issue before coding, except trivial docs fixes; established contributors are limited to 4 open PRs; draft PRs are not reviewed.
 
 ## Required live reconnaissance
 
@@ -79,6 +80,7 @@ gh search prs --repo UKGovernmentBEIS/inspect_ai '<subsystem keyword or error te
 Also inspect current tooling files before deciding validation:
 
 - `CONTRIBUTING.md`
+- `.github/qualified.yml`
 - `CLAUDE.md`
 - `Makefile`
 - `pyproject.toml`
@@ -96,7 +98,11 @@ When calibrating contribution style, also scan recent merged PRs from other cont
 ## Contribution loop
 
 1. **Pick and claim the issue.**
+   - Read the current `CONTRIBUTING.md` contribution tier rules before opening or reopening PRs.
+   - Determine contributor tier: qualified, established, or new. If the contributor is not qualified/established, do not code or open a PR until the issue is labeled `accepted`, except for trivial typo/broken-link docs fixes.
+   - For established contributors, keep at most 4 Inspect AI PRs open at a time. If there are already 4 open PRs, maintain those or wait for review instead of opening more.
    - Prefer `good first issue` or clearly scoped bugs/docs gaps unless the user asks for a larger change.
+   - Treat `good first issue` as accepted, matching the upstream guide.
    - Prefer issues with a concrete failure mode, a narrow compatibility-preserving fix, and a regression test that can fail on the old behavior.
    - Good targets include provider request/argument precedence, CLI type or option mismatches, scorer/log observability fixes, retry/recovery edge cases, docs gaps tied to existing APIs, and narrowly scoped test stability fixes.
    - Read the full issue, comments, linked PRs, and affected code.
@@ -182,9 +188,10 @@ When calibrating contribution style, also scan recent merged PRs from other cont
    gh pr create \
      --repo UKGovernmentBEIS/inspect_ai \
      --base main \
-     --head deepujain:issue-NN-short-topic \
-     --draft
+     --head deepujain:issue-NN-short-topic
    ```
+
+   Open a PR only when it is intended for review: linked to accepted work when required, locally validated, current with `main`, and within the 4-open-PR limit. Do not open draft PRs for work that should be reviewed; maintainers do not review draft PRs, and repeated draft rebases consume CI without advancing mergeability. If work is not ready, keep it local or in the fork without an upstream PR.
 
    Use a clean maintainer-facing PR title with a repository-style public prefix and no private provenance prefix or attribution.
 
@@ -242,6 +249,9 @@ When calibrating contribution style, also scan recent merged PRs from other cont
 
 8. **Shepherd the PR.**
    - Inspect CI, review comments, and requested changes after pushing.
+   - Do not keep closed, unaccepted, over-limit, or draft PRs alive with routine rebase churn. If a PR is not eligible for review, stop CI-triggering pushes and move the discussion back to the issue with concrete evidence.
+   - If a maintainer says draft PRs are not reviewed, convert only genuinely review-ready, policy-compliant PRs to ready-for-review. Otherwise leave them closed/local and prepare the accepted-issue path first.
+   - If maintainers close a batch for policy reasons, do not reopen by default. Classify it as policy-blocked, record linked issue state and any replacement PRs, then update this skill if the closure reveals a reusable rule.
    - Treat Build and Build Log Viewer jobs as expected PR gates: ruff, mypy, pre-commit, package inspection, Python 3.10/3.11 tests, schema/type checks, submodule-on-main, and dist validation. Do not ignore a required failure just because unrelated deploy-style checks can fail outside the PR gate.
    - Check top-level comments, reviews, and inline review comments. Recent merged PRs often had little public discussion, but actionable inline comments focused on small correctness/style details such as temp-file cleanup, exception safety, and keeping docstrings/descriptions intact.
    - Fix actionable feedback on the current head, rerun relevant validation, and leave a short factual status comment.
