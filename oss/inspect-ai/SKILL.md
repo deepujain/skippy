@@ -7,8 +7,7 @@ description: >-
   AI review feedback or CI, shares the Inspect AI author PR-list URL
   https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain, or mentions
   Inspect AI framework contribution work. Also use the one-word trigger
-  "sweep" or "sweepfix" when the active repo/thread context identifies Inspect
-  AI.
+  "sweep" when the active repo/thread context identifies Inspect AI.
 ---
 
 # Inspect AI PR Contribution Recipe
