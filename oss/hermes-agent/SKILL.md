@@ -332,6 +332,19 @@ Run final PR prose or reviewer replies through the local `humanizer-zh` skill at
 
 When the user gives a Hermes Agent PR URL or asks to sweep open PRs:
 
+Before processing the open set, reconcile it with the previous or recent
+authored PR set. For every PR that disappeared, query its exact state and
+merge/close timestamps, then inspect final comments, reviews, timeline, linked
+issue, overlapping PRs, and any replacement commit. Record merged PRs as merged.
+For a PR closed without merge, establish whether it was duplicate, superseded,
+out of scope, policy-blocked, abandoned, or unresolved, and say whether the
+contribution survived in another PR. If the closure yields a reusable testing,
+design, review, or workflow lesson, add the smallest durable rule at the correct
+place in this skill, validate it, and commit/push the skill repository. Do not
+overfit unexplained closures; report `no skill change needed` when there is no
+reusable lesson. Include a departed-PR table before the open-PR table whenever
+anything merged or closed since the previous sweep.
+
 1. Read the PR metadata, files, comments, reviews, and checks.
 2. Inspect bot and human feedback separately; distinguish actionable findings from stale or informational comments.
 3. Check out the PR branch rather than opening a replacement PR.

@@ -51,6 +51,19 @@ Inspect AI and inspect every open PR before deciding that no action is needed.
 
 For open-PR sweeps, fetch structured state before editing:
 
+First reconcile the previous or recent authored PR set with the current open
+set. For every PR that disappeared, query its exact state and merge/close
+timestamps, then inspect final comments, reviews, timeline, linked issue,
+overlapping PRs, and any replacement commit. Record merged PRs as merged. For a
+PR closed without merge, establish whether it was duplicate, superseded, out of
+scope, policy-blocked, abandoned, or unresolved, and say whether the
+contribution survived in another PR. If the closure yields a reusable testing,
+design, review, or workflow lesson, add the smallest durable rule at the correct
+place in this skill, validate it, and commit/push the skill repository. Do not
+overfit unexplained closures; report `no skill change needed` when there is no
+reusable lesson. Include a departed-PR table before the open-PR table whenever
+anything merged or closed since the previous sweep.
+
 ```bash
 gh pr list --repo UKGovernmentBEIS/inspect_ai --author deepujain --state open --limit 100 \
   --json number,title,url,headRefName,isDraft,mergeable,reviewDecision,statusCheckRollup,updatedAt

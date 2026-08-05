@@ -237,6 +237,19 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 
 If the user shares an Airflow author PR-list URL or says "open Airflow PRs/MRs", treat that as a request to sweep every currently open PR for that author in `apache/airflow`: list PRs, inspect review comments, CI checks, out-of-date state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report green/rerunning/blocked status in a table with one row per PR.
 
+At the start of every repeated sweep, reconcile the previous or recent authored
+PR set with the current open set. For every PR that disappeared, query its exact
+state and merge/close timestamps, then inspect final comments, reviews, timeline,
+linked issue, overlapping PRs, and any replacement commit. Record merged PRs as
+merged. For a PR closed without merge, establish whether it was duplicate,
+superseded, out of scope, policy-blocked, abandoned, or unresolved, and say
+whether the contribution survived in another PR. If the closure yields a
+reusable testing, design, review, or workflow lesson, add the smallest durable
+rule at the correct place in this skill, validate it, and commit/push the skill
+repository. Do not overfit unexplained closures; report `no skill change needed`
+when there is no reusable lesson. Include a departed-PR table before the open-PR
+table whenever anything merged or closed since the previous sweep.
+
 Use this table format for Airflow open-PR sweeps unless the user explicitly asks for a different format:
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |

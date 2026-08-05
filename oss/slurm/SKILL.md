@@ -260,6 +260,20 @@ Spelling/docs-only suggestions can be described in the ticket without attaching 
 
 ## Lessons learned (from real contributions)
 
+At the start of every repeated ticket/patch sweep, reconcile the previous or
+recent contribution set with the current active set. For every ticket or patch
+that disappeared, closed, or became obsolete, inspect the final SchedMD comments,
+ticket resolution, attachment history, replacement patch, and any upstream
+commit. Establish whether it was accepted, duplicate, superseded, out of scope,
+policy-blocked, abandoned, or unresolved, and say whether the contribution
+survived in a newer attachment or landed commit. If the outcome yields a
+reusable testing, design, review, or submission lesson, add the smallest durable
+rule at the correct place in this skill, validate it, and commit/push the skill
+repository. Do not overfit unexplained outcomes; report `no skill change needed`
+when there is no reusable lesson. Include a departed-contribution table before
+the active-ticket table whenever anything landed, closed, or was superseded
+since the previous sweep.
+
 - **Amend then format-patch.** If the IDE added "Made-with: Cursor" or wrong author/Signed-off-by, give the user an **amend command block** first. Only after they run it and the commit message is clean should they run `git format-patch -1 -o . master..HEAD`. Otherwise the attached .patch file will still contain the bad trailer.
 - **Patch base:** `git format-patch -1 -o . master..HEAD` produces a patch for the commit(s) on the current branch that are not in master. Use this form so the right commit is in the patch.
 - **SchedMD form:** When attaching, check the **patch** content-type box and fill **Description**. If replacing an old patch on the same ticket, use **Obsoletes** to mark the old attachment obsolete.

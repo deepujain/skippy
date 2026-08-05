@@ -47,6 +47,19 @@ gh search prs --repo meridianlabs-ai/inspect_petri '<issue-number> in:title,body
 gh search prs --repo meridianlabs-ai/inspect_petri '<key error text or feature phrase>' --state open
 ```
 
+At the start of every repeated sweep, reconcile the previous or recent authored
+PR set with the current open set. For every PR that disappeared, query its exact
+state and merge/close timestamps, then inspect final comments, reviews, timeline,
+linked issue, overlapping PRs, and any replacement commit. Record merged PRs as
+merged. For a PR closed without merge, establish whether it was duplicate,
+superseded, out of scope, policy-blocked, abandoned, or unresolved, and say
+whether the contribution survived in another PR. If the closure yields a
+reusable testing, design, review, or workflow lesson, add the smallest durable
+rule at the correct place in this skill, validate it, and commit/push the skill
+repository. Do not overfit unexplained closures; report `no skill change needed`
+when there is no reusable lesson. Include a departed-PR table before the open-PR
+table whenever anything merged or closed since the previous sweep.
+
 Latest observed state from the 2026-05-08 UTC sweep:
 
 - #60 rescore existing logs with a different judge -> PR #88 merged.
