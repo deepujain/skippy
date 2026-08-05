@@ -306,6 +306,28 @@ If the user shares a PR URL, **use that PR**. Do not open a second PR for the sa
 
 If the user shares a NemoClaw author PR-list URL or says "open NemoClaw PRs/MRs", treat that as a request to sweep every currently open PR for that author in `NVIDIA/NemoClaw`: list PRs, inspect CodeRabbit, bot, human review comments, CI checks, out-of-date/conflict state, and stale/cancelled statuses for each PR; fix actionable issues on existing branches; push follow-up commits directly; leave short PR status comments; then re-check and report a table with one row per PR. Do not stop at a status-only table. The table is the handoff after action, not a substitute for action. If a pushed fix leaves checks pending, especially CodeRabbit `PENDING` after a new head commit, do not call the PR clear. Poll when practical, schedule a delayed CI/review follow-up when tooling supports it, or mark the PR as `rerunning: CodeRabbit pending` with the exact check still open.
 
+At the start of every repeated sweep, reconcile the previous/recent authored PR
+set with the current open set. A PR that disappeared from the open list must
+never disappear from the report silently:
+
+- Query its exact `state`, `mergedAt`, `closedAt`, final comments, reviews, and
+  timeline. Do not infer that it merged merely because it is no longer open.
+- If it merged, record the merge and capture a new testing, design, review, or
+  workflow pattern only when the evidence is genuinely reusable.
+- If it closed without merge, determine why: duplicate/already fixed,
+  superseded by a replacement PR, invalid or expanded scope, policy/signature
+  failure, unresolved CI/review issue, or abandonment. Inspect the linked issue,
+  overlapping PRs, and replacement commit before drawing the conclusion.
+- State whether the contribution survived elsewhere. When a maintainer
+  replacement preserves the contributor's authored commit, distinguish that
+  from a direct merge while crediting the resulting merged fix accurately.
+- Turn an evidence-backed closure lesson into the smallest durable update at
+  the correct place in this skill, validate it, commit it, and push the skill
+  repository. Do not overfit the skill to one unexplained closure; if there is
+  no reusable lesson, report `no skill change needed` and the reason.
+- Include a short departed-PR reconciliation table before the open-PR sweep
+  table whenever any PR merged or closed since the previous sweep.
+
 Use this table format for NemoClaw open-PR sweeps unless the user explicitly asks for a different format:
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |
