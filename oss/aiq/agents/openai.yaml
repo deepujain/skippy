@@ -1,0 +1,4 @@
+interface:
+  display_name: "AIQ PR Contribution"
+  short_description: "Contribute merge-ready PRs to NVIDIA AI-Q"
+  default_prompt: "Use $aiq-pr-contribution to find, implement, validate, and shepherd a focused NVIDIA AI-Q contribution."
