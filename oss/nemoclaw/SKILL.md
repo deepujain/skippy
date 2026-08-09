@@ -405,6 +405,8 @@ git rebase upstream/main --exec 'git -c user.name="Deepak Jain" -c user.email="d
 
 If `commit.gpgsign = true` globally, the rebase automatically signs the commit with the SSH key, but still verify with `%G?` because local config can drift between worktrees.
 
+Before a signing rebase, do not trust worktree-local `user.name` or `user.email`. Recreate the stack with explicit committer identity and signing, for example `GIT_COMMITTER_NAME="Deepak Jain" GIT_COMMITTER_EMAIL="deepujain@gmail.com" git rebase --force-rebase --gpg-sign upstream/main`. Then verify both sides of each commit with `git log --format='%h %G? %an <%ae> | %cn <%ce>' upstream/main..HEAD` and query GitHub's commit API after pushing. A local `G` signature can still appear as GitHub `no_user` when a stale committer identity such as a test fixture leaked from worktree config.
+
 Verified signatures are a hard NemoClaw policy, not a nice-to-have. Do not ask for review, push a final rebase, or report a PR as ready while any commit in `upstream/main..HEAD` is unsigned, unverified, authored as the wrong identity, or missing the correct `Signed-off-by: Deepak Jain <deepujain@gmail.com>` trailer.
 
 **CRITICAL: Rebases that replay multiple commits through the same file can leave a later conflict marker or stale hunk in a file you already "resolved" earlier in the sequence.** After the rebase completes, rerun the relevant build/typecheck/tests before pushing, even if the first conflict looked fully handled.
