@@ -54,10 +54,12 @@ Recent merged and closed-unmerged Hermes PRs show a clear maintainer preference:
 - **The latest merged PRs keep the reviewer path short.** Recent merges such as [#33241](https://github.com/NousResearch/hermes-agent/pull/33241), [#33228](https://github.com/NousResearch/hermes-agent/pull/33228), [#33189](https://github.com/NousResearch/hermes-agent/pull/33189), [#33184](https://github.com/NousResearch/hermes-agent/pull/33184), and [#33156](https://github.com/NousResearch/hermes-agent/pull/33156) use the same pattern: issue link, root cause, scoped changes by file or subsystem, explicit behavior change, validation counts, and attribution when salvaging prior work.
 - **Behavior and state bugs need regression tests around the exact failure boundary.** Accepted fixes tend to add tests that reproduce the bad state, cover the preserved path, and pin compatibility edges such as Windows/POSIX, singleton-vs-pool auth, issuer mismatch, Docker env propagation, or gateway display defaults.
 - **CI breadth is expected after a narrow local proof.** Merged PRs rely on full CI for shards, CodeQL, ruff, ty diff, Windows footguns, Nix, Docker builds, E2E, supply-chain checks, attribution, and common-ancestor freshness. Local evidence should still include the targeted suite and any manual runtime smoke that CI cannot infer.
-- **Bot feedback is part of review.** The lint-diff bot commonly posts ruff and ty deltas. Keep ruff at zero; avoid new ty issues even when advisory, or explain why an advisory delta is unrelated/pre-existing. Treat GitHub Advanced Security or CodeQL comments on secret logging, auth, shell, Docker, or network paths as actionable until audited.
+- **Bot and AI-triage feedback is part of review.** The lint-diff bot commonly posts ruff and ty deltas. Keep ruff at zero; avoid new ty issues even when advisory, or explain why an advisory delta is unrelated/pre-existing. Treat GitHub Advanced Security, CodeQL, and human-posted AI triage comments as actionable when they name a specific testable defect; verify the claim, patch it if valid, and reply with focused validation.
 - **Salvage PRs must document what changed from the old attempt.** When carrying another contributor's work forward, say what was preserved, what was corrected for current `main`, how conflicts were resolved, and whether `scripts/release.py` author mapping is needed.
 - **Use repo-native validation in public evidence.** Prefer `scripts/run_tests.sh` for Python and the relevant package scripts for JS. If plain `pytest`, ad hoc scripts, or partial checks are necessary, explain why and say what risk remains.
 - **When salvaging existing work, preserve useful authorship and remove noise.** Keep the contributor's substantive commits when appropriate, strip unrelated formatting or generated churn, add current-main fixes and regression tests, and update `scripts/release.py` author mapping only when contributor-check requires it.
+- **Maintainer-merged PRs use before/after proof, not vague summaries.** Recent maintainer PRs state the root cause, list changed files by responsibility, include a before/after behavior table, give targeted pass counts plus broader sibling-suite counts, and add conflict-resolution and credit notes for salvaged work.
+- **State, compression, memory, and search PRs must pin invariants.** Accepted changes cover NULL-only inheritance, no-clobber behavior, multi-generation lineage, disabled-by-default config, model-switch re-resolution, plugin-engine passthrough, content-free logging, summary filtering, stale-index safety, and exact fallback boundaries.
 
 ## Required live reconnaissance
 
@@ -70,6 +72,27 @@ gh pr list --repo NousResearch/hermes-agent --state open --limit 100
 gh pr list --repo NousResearch/hermes-agent --state merged --limit 30
 gh pr list --repo NousResearch/hermes-agent --author deepujain --state open
 ```
+
+For the user's open PRs, also inspect review visibility and workflow state before assuming a maintainer has seen them:
+
+```bash
+gh pr view <number> --repo NousResearch/hermes-agent \
+  --json number,title,author,authorAssociation,mergeable,reviewRequests,assignees,statusCheckRollup,updatedAt,viewerPermission
+```
+
+If `gh pr list` reports `mergeStateStatus: UNKNOWN`, do not treat the queue as unchanged. Run per-PR `gh pr view` calls for the user's open PRs and use those direct results to decide whether a branch is `DIRTY`/conflicting, merely `BLOCKED` on review/policy, or ready for CI/review follow-up.
+
+If a PR has no reviews, no requested reviewers, no assignees, or an empty check rollup, treat that as actionable. In this high-volume repo, old PR numbers can be buried quickly, and external-contributor workflow runs may need maintainer approval before checks appear.
+
+Before starting a new batch, check the user's open Hermes PR queue. If there are 5 or more open PRs with no maintainer activity, no CI, or no review, pause new implementation work. First improve the review path: refresh stale/conflicting branches, update one maintainer-facing status comment per PR, and wait for signal. Do not open another large batch just because there are more issues available.
+
+When review is quiet for more than seven days:
+
+1. Re-check that the branch is current, mergeable, and has focused validation evidence.
+2. Try to request review from an active maintainer with `gh pr edit <number> --add-reviewer <maintainer>`.
+3. If GitHub rejects the formal request because the account lacks permission, post or update one concise comment that mentions the maintainer, states the PR is current/mergeable or names the blocker, includes exact validation, and asks for workflow approval/review.
+4. Do not post repeated vague bumps. Update the existing status comment when possible, and only add a new comment when the state materially changed.
+5. After one unanswered seven-day maintainer nudge, stop weekly duplicate pings unless the PR state changes. Switch strategy instead: repair conflicts if they appear, collect maintainer signal from adjacent PRs/issues, or pause new Hermes PRs until review/CI starts.
 
 Search for overlap before committing to work. Use `--state all`, not only open PRs, because many Hermes changes are salvaged, superseded, or closed after main changes:
 
@@ -102,6 +125,7 @@ Inspect `AGENTS.md`, `CONTRIBUTING.md`, `pyproject.toml`, and the relevant workf
 
 ## Pick an issue
 
+0. Gate batch size by review throughput. If the previous batch is not getting CI or maintainer review, do not pick the next 10 as implementation targets. At most shortlist candidates; resume coding only after maintainer signal, workflow approval, or a smaller explicit strategy shift.
 1. Prefer bugs, cross-platform compatibility, security hardening, robustness, and well-scoped docs/skill fixes.
 2. Read the issue body, comments, linked PRs, and current code path before selecting it.
 3. Skip issues that already have an active PR unless the user asks to work on that PR.
@@ -158,6 +182,7 @@ If `main` is not the local upstream baseline, compare against `upstream/main...H
 - Follow `AGENTS.md` subsystem guidance. It is the canonical map for entry points and gotchas.
 - For Python core changes, prefer existing helpers and profile-aware path utilities such as `get_hermes_home()` and `display_hermes_home()`.
 - For config changes, update `hermes_cli/config.py`; do not use `.env` for non-secret settings. Only bump config version when a migration is needed.
+- For config changes, update every runtime surface that consumes the setting: `DEFAULT_CONFIG`, example config, docs, startup/display text, gateway cache-busting or hot-reload keys, and tests for init order plus live model/config switches. Default-disabled config should prove byte-identical or behavior-identical baseline paths.
 - For gateway work, respect the dual message guards in `gateway/platforms/base.py` and `gateway/run.py`; approval/control commands must bypass both when an agent is blocked.
 - For tools, register via `tools/registry.py` patterns and expose the tool in `toolsets.py`; handlers must return strings, often JSON.
 - For skills, keep `SKILL.md` frontmatter and body aligned with the hardline skill standards. New or modernized skills usually need `tests/skills/test_<skill>_skill.py`.
@@ -166,6 +191,8 @@ If `main` is not the local upstream baseline, compare against `upstream/main...H
 - For Docker or s6-overlay work, place boot-time environment discovery in the stage2/supervised-service path that actually propagates to Hermes, validate shell scripts with shellcheck when available, and include a container smoke instead of claiming Python tests are relevant.
 - For the dashboard chat pane, do not rebuild the chat transcript/composer in React. The dashboard embeds the real `hermes --tui`; extend Ink/TUI behavior instead.
 - For security, auth, network, provider, config, or gateway behavior, trace the data flow from every input source to every consuming call site. Add tests for malformed, legacy, profile-aware, and environment-override cases where relevant.
+- For compression, memory, search, telemetry, and persistence behavior, test both the positive path and the safety boundary: content-free logs, no network egress, compaction-summary filtering, stale/degraded indexes not serving reads, explicit values not clobbered by inheritance, and external/plugin engines retaining their own policy.
+- For SQLite/state database work, preserve live-connection lock safety. Do not inspect active database files with raw `open()`/header reads that can cancel POSIX advisory locks; use the repo's `hermes_cli.sqlite_safe_read` helpers or connection-level probes.
 - For auth and provider-state changes, snapshot and restore all mutable state on failure. Cover empty, stale, cooldown, legacy, and cross-provider cases instead of testing only the happy path.
 - For gateway or messaging defaults, separate signal from noise. Preserve user-visible progress that proves the agent is alive, make chatty updates terse or edit-in-place, and document changed defaults in config examples and user docs.
 - For code moved from an old or rejected PR, re-check all touched paths against current `main`; main may already contain partial fixes, renamed helpers, or better abstraction points.
@@ -180,6 +207,10 @@ For local evidence, follow the recent merged-PR pattern:
 
 - Run the smallest focused suite that proves the bug and include pass counts.
 - Add a wider adjacent sweep when shared runtime behavior is touched, such as CLI modal tests, gateway progress tests, auth provider tests, or model response adapter tests.
+- After rebasing a conflicted PR, include any new current-main tests in the same subsystem or behavior path, even if they were not in the original PR body. Old validation can miss contracts added while the branch was stale.
+- For state, compression, search, memory, and provider PRs, include a before/after behavior table in the PR body and back it with boundary tests: disabled config, invalid config, stale data, migration/resume, model switch, plugin passthrough, and no-clobber cases as applicable.
+- For SQLite/state DB header, recovery, backup, WAL, or kanban probe changes, include `tests/test_sqlite_lock_safe_inspection.py` with the focused state suite.
+- When a change affects performance or prompt size, include route or size evidence, not only correctness tests. Examples: `fts_cjk` versus `like_scan`, bounded bookend lengths plus truncation metadata, or token threshold calculations before and after.
 - Include a manual repro/smoke for Docker, installer, TUI, gateway, browser, platform, or model-provider behavior.
 - If a file type triggers specialized CI, run the matching local check where practical: shellcheck/hadolint for Docker, docs build for `website/**`, generated docs scripts for skills, `uv lock --check` for dependency changes.
 - After pushing, verify CI: ruff enforcement, ruff + ty diff, Windows footguns, CodeQL/GHAS, E2E, Nix, Docker build, test shards, supply-chain, attribution, and common-ancestor.
@@ -314,6 +345,7 @@ The PR body should include:
 - What changed and why this layer is the right place
 - A short file/subsystem summary when more than one area changed
 - Before/after behavior when useful
+- A compact before/after table for stateful, provider, search, compression, config, performance, or persistence changes
 - Alternatives considered or intentionally avoided for non-trivial fixes
 - Linked issue, if any
 - Exact validation commands and outcomes
@@ -325,6 +357,8 @@ The PR body should include:
 - Conflict-resolution notes when current `main` changed the same area
 
 When behavior changes are intentional, flag them directly instead of hiding them in implementation detail. Recent accepted PRs call out default changes, Docker tag semantics, fallback behavior, and user-visible message changes in plain language.
+
+For salvages, follow the maintainer pattern: name the old PR and contributor, state what was preserved, explain why the current-main integration changed, keep authorship when possible, and mention competing or superseded PRs only to clarify overlap.
 
 Run final PR prose or reviewer replies through the local `humanizer-zh` skill at `/Users/dejain/nvidia/oss/.agents/skills/humanizer-zh/SKILL.md` before handing them off or posting. Preserve issue numbers, commands, evidence, and exact claims.
 
@@ -347,16 +381,30 @@ anything merged or closed since the previous sweep.
 
 1. Read the PR metadata, files, comments, reviews, and checks.
 2. Inspect bot and human feedback separately; distinguish actionable findings from stale or informational comments.
-3. Check out the PR branch rather than opening a replacement PR.
-4. Rebase onto current `main` when needed, preserving user changes.
-5. Re-run overlap search after rebasing; if main or another PR already solved the work, convert the effort into a narrow follow-up or explain that the PR is superseded.
-6. Fix actionable comments and CI failures with the smallest scoped change.
-7. Run focused validation and any area-specific checks above.
-8. Read lint-diff, GHAS/CodeQL, and other bot comments before replying. Fix new ruff findings, avoid or justify new ty deltas, and audit any sensitive logging or security warning at the source.
-9. Push the branch and leave a short PR comment summarizing what changed, what validation passed, and which bot/human comments were addressed.
-10. Re-check CI/review state after push; do not call the PR ready while fresh feedback is already visible and actionable.
+3. Treat visible PR state as an action queue, not a report. If the list view reports `UNKNOWN` merge state, run direct per-PR views first; if a PR is conflicting, stale, missing CI, or has actionable feedback, take the next safe action in the same turn.
+4. Check out the PR branch rather than opening a replacement PR. If the main checkout is dirty, use a temporary git worktree so user changes are preserved.
+5. Rebase onto current `main` when needed, preserving user changes. Resolve conflicts when the intended current-main behavior is clear; only stop when the conflict requires product judgment.
+6. Re-run overlap search after rebasing; if main or another PR already solved the work, convert the effort into a narrow follow-up or explain that the PR is superseded.
+7. Fix actionable comments and CI failures with the smallest scoped change.
+8. Run focused validation and any area-specific checks above.
+9. Read lint-diff, GHAS/CodeQL, and other bot comments before replying. Fix new ruff findings, avoid or justify new ty deltas, and audit any sensitive logging or security warning at the source.
+10. Push the branch and leave a short PR comment summarizing what changed, what validation passed, and which bot/human comments were addressed.
+11. If an open PR has had no human review or maintainer activity for more than seven days, act on the review path: inspect requested reviewers, assignees, checks, author association, and viewer permission; request review if permitted; otherwise update one maintainer-facing status comment that asks for workflow approval/review and includes the current validation state. If that seven-day nudge is already present and still unanswered, do not post a duplicate unless mergeability, CI, validation, or maintainer context changed.
+12. If checks are empty after push, do not assume CI is fine. Check whether the author is an external contributor, whether workflow approval is likely pending, and mention that explicitly in the maintainer nudge.
+13. Re-check CI/review state after push; do not call the PR ready while fresh feedback is already visible and actionable.
 
 If reviewer intent, product direction, credentials, destructive history, or private infrastructure blocks progress, report the blocker plainly with the next concrete ask.
+
+## Self-improvement loop
+
+After each Hermes PR sweep or maintainer interaction, update this skill when a reusable rule emerges. Keep additions concise and place them where they change future behavior:
+
+- Issue-selection lessons go under `Pick an issue`.
+- Review visibility, permission, CI-approval, and nudge lessons go under `Required live reconnaissance` or `Existing PR loop`.
+- Validation or test-command lessons go under `Validate by area`.
+- PR prose and comment lessons go under `PR description and comments`.
+
+Do not add loose retrospective notes. Convert each lesson into an action rule with a trigger, a next step, and a stop condition. If a rule would have prevented a failed batch, add it before starting another batch.
 
 ## Trigger phrases
 
