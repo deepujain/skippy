@@ -208,6 +208,7 @@ For local evidence, follow the recent merged-PR pattern:
 - Run the smallest focused suite that proves the bug and include pass counts.
 - Add a wider adjacent sweep when shared runtime behavior is touched, such as CLI modal tests, gateway progress tests, auth provider tests, or model response adapter tests.
 - After rebasing a conflicted PR, include any new current-main tests in the same subsystem or behavior path, even if they were not in the original PR body. Old validation can miss contracts added while the branch was stale.
+- After resolving conflicts, scan touched files for duplicate helper/function definitions introduced by concurrent main changes, especially in large modules. A textual rebase can succeed while runtime binds to a later same-name definition.
 - For state, compression, search, memory, and provider PRs, include a before/after behavior table in the PR body and back it with boundary tests: disabled config, invalid config, stale data, migration/resume, model switch, plugin passthrough, and no-clobber cases as applicable.
 - For SQLite/state DB header, recovery, backup, WAL, or kanban probe changes, include `tests/test_sqlite_lock_safe_inspection.py` with the focused state suite.
 - When a change affects performance or prompt size, include route or size evidence, not only correctness tests. Examples: `fts_cjk` versus `like_scan`, bounded bookend lengths plus truncation metadata, or token threshold calculations before and after.
