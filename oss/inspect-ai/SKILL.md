@@ -177,6 +177,7 @@ When calibrating contribution style, also scan recent merged PRs from other cont
    - Model/provider: test request construction, parsing, header merging, default/fallback precedence, and opt-out behavior without requiring secrets; include provider-specific tests.
    - Scorer/log/recovery: test observability fields, event/sample reconstruction, retry carry-forward, legacy log compatibility, and dataframe/export behavior when schema changes.
    - Viewer: run `python src/inspect_ai/_view/schema.py`, build/check `src/inspect_ai/_view/ts-mono`, and include changed `inspect-openapi.json`, generated types/submodule updates, and `src/inspect_ai/_view/dist` when frontend output can change.
+   - For ts-mono viewer PR maintenance, rerun `pnpm install --frozen-lockfile` after fetching or rebasing over dependency updates before trusting typecheck or lint failures; stale dependencies can produce false markdown/typescript errors.
    - ACP/TUI/interactivity: add unit tests plus E2E-style tests for protocol/session routing and textual widgets when UI state or live agent behavior changes.
    - Sandbox tools: bump `sandbox_tools_version.txt` when injectable code changes and run `uv run pytest --runslow -m slow tests/tools/ -x` or the narrower sandbox-tool tests when the local environment can support it.
 
