@@ -289,6 +289,25 @@ Apply this learning loop on every sweep, not only when a PR disappears:
    `no skill change needed` and gives the concrete reason. Never manufacture a
    lesson merely to produce a commit.
 
+### Sweep replenishment after merge
+
+Treat `sweep` as both maintenance and queue replenishment, whether it is
+invoked manually or by a scheduled task.
+
+- If one or more authored Airflow PRs **merged since the previous sweep**, and
+  there is no higher-priority open-PR maintenance still pending, check whether
+  the current open PR queue is healthy enough to start another issue.
+- When Airflow has **no explicit numeric open-PR cap**, use queue health as the
+  gate: do **not** open a new PR if several authored PRs are still stale,
+  conflicting, red, or waiting on follow-up you could handle in the same sweep.
+- If the queue is healthy, pick **one** new well-scoped issue using the normal
+  Airflow issue-selection rules in this skill and run the full new-PR recipe in
+  the same sweep.
+- Report the outcome explicitly in the sweep output: `opened new PR`,
+  `issue selected, PR in progress`, or `replenishment skipped` with the exact
+  blocker such as duplicate risk, queue not healthy, no accepted issue, or no
+  strong candidate.
+
 - **Be open to reversing the approach.** Reviewers may suggest the opposite fix (e.g. "don't add X here; remove X from places that don't need it"). Treat that as valid design feedback and rework the PR accordingly; don't defend the original approach unless there's a strong reason.
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not say "nothing to do" until both comments and statuses are clean or still running.
 - **Address every comment.** If a reviewer asks for a follow-up (e.g. "Y also doesn't need this"), apply the same logic to Y and push an update. One round of "same change elsewhere" is common.

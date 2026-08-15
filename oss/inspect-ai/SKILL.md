@@ -79,6 +79,26 @@ change. When no rule changed, include `no skill change needed` with the reason.
 Do not append loose notes to the end of the skill; put each rule where future
 Inspect AI work will naturally use it.
 
+### Sweep replenishment after merge
+
+Treat `sweep` as both PR maintenance and controlled replenishment, whether it
+is invoked by the user or by a scheduled task.
+
+- If one or more authored Inspect AI PRs **merged since the previous sweep**,
+  and there is no higher-priority open-PR maintenance still pending, evaluate
+  whether the repo's contribution gates allow a new issue PR.
+- Respect the live gate in this skill: accounts without write access keep **at
+  most 4 open PRs**, and non-qualified/non-established contributors still need
+  an `accepted` issue before coding except for trivial docs-only fixes.
+- If the queue is below the cap, contributor policy allows it, and the current
+  open set is healthy enough, pick **one** new well-scoped accepted issue using
+  the normal Inspect AI issue-selection rules in this skill and run the full
+  new-PR recipe in the same sweep.
+- Report the outcome explicitly in the sweep output: `opened new PR`,
+  `issue selected, PR in progress`, or `replenishment skipped` with the exact
+  blocker such as 4-open-PR cap reached, issue not accepted, queue still
+  unhealthy, duplicate risk, or no strong candidate.
+
 ```bash
 gh pr list --repo UKGovernmentBEIS/inspect_ai --author deepujain --state open --limit 100 \
   --json number,title,url,headRefName,isDraft,mergeable,reviewDecision,statusCheckRollup,updatedAt

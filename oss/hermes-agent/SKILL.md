@@ -438,6 +438,26 @@ For sweeps, perform the learning loop before the final report:
 5. Report a `Lessons Learned` table row for every swept PR, including `skill
    updated`, `already covered`, or `no reusable lesson`.
 
+### Sweep replenishment after merge
+
+Treat `sweep` as both PR maintenance and controlled replenishment, whether it
+is triggered manually or by a scheduled task.
+
+- If one or more authored Hermes PRs **merged since the previous sweep**, and
+  there is no higher-priority open-PR maintenance still pending, evaluate
+  whether the review queue is healthy enough to start another issue.
+- Respect the Hermes queue gate in this skill: if there are **5 or more** open
+  PRs with no maintainer activity, no CI, or no review, pause new
+  implementation work and improve the review path first instead of refilling the
+  queue.
+- If the queue is below that pause threshold and otherwise healthy enough, pick
+  **one** new well-scoped issue using the normal Hermes issue-selection rules
+  in this skill and run the full new-PR recipe in the same sweep.
+- Report the outcome explicitly in the sweep output: `opened new PR`,
+  `issue selected, PR in progress`, or `replenishment skipped` with the exact
+  blocker such as review queue still stalled, no maintainer signal, overlap
+  risk, or no strong issue candidate.
+
 Do not overfit repeated transient GitHub states such as temporary
 `mergeStateStatus: UNKNOWN`. Record only durable handling rules, such as when to
 rerun direct PR views, when to avoid duplicate nudges, or when upstream blockers

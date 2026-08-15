@@ -153,6 +153,25 @@ Populate at least one row. If there is no durable lesson, say `none` and explain
 
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 
+### Sweep replenishment after merge
+
+Treat `sweep` as both PR maintenance and controlled replenishment, whether it
+is triggered by the user or by a scheduled task.
+
+- If one or more authored Spark PRs **merged since the previous sweep**, and
+  there is no higher-priority open-PR maintenance still pending, decide whether
+  the queue is healthy enough to start another issue.
+- Spark has **no explicit numeric open-PR cap** in this skill, so use queue
+  health as the gate: do **not** open a new PR when authored branches are still
+  stale, conflicting, red, duplicate-risky, or waiting on follow-up you can
+  handle in the same sweep.
+- If the queue is healthy, pick **one** new well-scoped JIRA issue using the
+  normal Spark issue-selection rules in this skill and run the full new-PR
+  recipe in the same sweep.
+- Report the outcome explicitly in the sweep output: `opened new PR`,
+  `issue selected, PR in progress`, or `replenishment skipped` with the exact
+  blocker such as queue still unhealthy, no good candidate, or duplicate risk.
+
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/spark/pull/54694`). Start with **8.0** (fetch PR state and comments), then 8.1 → 8.5 as needed.
 
 ### 8.0 Fetch latest from PR and reviewer comments (do this first)

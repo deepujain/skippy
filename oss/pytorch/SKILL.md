@@ -294,6 +294,25 @@ anything merged or closed since the previous sweep.
 | PR | Linked Issue / Actionable | CLA | Labels | Dr. CI / HUD | Reviews | Action Taken | Final State |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
+### Sweep replenishment after merge
+
+Treat `sweep` as both PR maintenance and controlled replenishment, whether it
+is run manually or by a scheduled task.
+
+- If one or more authored PyTorch PRs **merged since the previous sweep**, and
+  there is no higher-priority open-PR maintenance still pending, evaluate
+  whether the repo's open-PR gate allows starting another issue.
+- Respect the PyTorch queue cap in this skill: **do not exceed 20 open PRs**
+  for non-writers, and do not refill the queue if the existing open set is
+  still stale, blocked, duplicate-risky, or under-maintained.
+- If the queue is below the cap and healthy enough, pick **one** new
+  well-scoped issue using the normal PyTorch issue-selection rules in this
+  skill and run the full new-PR recipe in the same sweep.
+- Report the outcome explicitly in the sweep output: `opened new PR`,
+  `issue selected, PR in progress`, or `replenishment skipped` with the exact
+  blocker such as open-PR cap reached, queue still unhealthy, no strong issue,
+  or policy/maintainer gate.
+
 ## Lessons from recent PR history
 
 Read [references/pr-history.md](references/pr-history.md) when choosing issues, auditing a PR, or debugging a stalled PyTorch contribution.

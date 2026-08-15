@@ -329,6 +329,26 @@ never disappear from the report silently:
 - Include a short departed-PR reconciliation table before the open-PR sweep
   table whenever any PR merged or closed since the previous sweep.
 
+### Sweep replenishment after merge
+
+Treat `sweep` as both PR maintenance and controlled replenishment, whether it
+is triggered by the user or by a scheduled task.
+
+- If one or more authored NemoClaw PRs **merged since the previous sweep**, and
+  there is no higher-priority open-PR maintenance still pending, evaluate
+  whether the current queue is healthy enough to start another issue.
+- NemoClaw has **no explicit numeric open-PR cap** in this skill, so use queue
+  health as the gate: do **not** open a new PR while authored branches are
+  still stale, conflicting, red, blocked on runner approval you have not
+  surfaced, or waiting on follow-up you can still handle in the same sweep.
+- If the queue is healthy, pick **one** new well-scoped issue using the normal
+  NemoClaw issue-selection rules in this skill and run the full new-PR recipe
+  in the same sweep.
+- Report the outcome explicitly in the sweep output: `opened new PR`,
+  `issue selected, PR in progress`, or `replenishment skipped` with the exact
+  blocker such as queue still unhealthy, overlap risk, no good candidate, or
+  maintainer policy friction.
+
 Use this table format for NemoClaw open-PR sweeps unless the user explicitly asks for a different format:
 
 | PR | Requested Action Found | CI / Failures | Review Comments | Stale / Merge State | Greptile | Action Taken | Final State |

@@ -191,6 +191,26 @@ Use this table format for Hadoop open-PR sweeps unless the user explicitly asks 
 
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 
+### Sweep replenishment after merge
+
+Treat `sweep` as both PR maintenance and controlled replenishment, whether the
+trigger comes from the user or an automated scheduled task.
+
+- If one or more authored Hadoop PRs **merged since the previous sweep**, and
+  there is no higher-priority open-PR maintenance still pending, evaluate
+  whether the current queue is healthy enough to start another contribution.
+- Hadoop has **no explicit numeric open-PR cap** in this skill, so use queue
+  health as the gate: do **not** open a new PR when several authored branches
+  are still stale, conflicting, red, duplicate-risky, or waiting on follow-up
+  you can address in the same sweep.
+- If the queue is healthy, pick **one** new well-scoped JIRA issue using the
+  normal Hadoop issue-selection rules in this skill and run the full new-PR
+  recipe in the same sweep.
+- Report the result explicitly in the sweep output: `opened new PR`,
+  `issue selected, PR in progress`, or `replenishment skipped` with the exact
+  blocker such as queue still unhealthy, duplicate risk, no good JIRA
+  candidate, or maintainer policy friction.
+
 **Use the existing PR only.** Do not open a second PR for the same JIRA when the user has already given a Hadoop PR URL. Work on the PR head branch, rebase it on `apache/trunk`, commit there, and push back to that same PR unless the user explicitly asks for a replacement branch.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/hadoop/pull/8336`). Start with **9.0** (fetch PR state and comments), then 9.1–9.5 as needed.
