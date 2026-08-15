@@ -143,6 +143,14 @@ Use this table format for Spark open-PR sweeps unless the user explicitly asks f
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `sparkqa` / Jenkins bot if present: addressed / not addressed / n/a; `greptile-apps[bot]` / CodeRabbit / AI review bot if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
 
+After every Spark sweep, include a second short table titled **Lessons Learned / Skill Updates** after the PR table:
+
+| Evidence | Lesson | Skill Update | Validation / Publish |
+| --- | --- | --- | --- |
+| PRs/checks/comments inspected | reusable workflow, CI, review, testing, duplicate, or closure lesson; or `none` | exact section updated in this skill; or `no skill change needed` with a reason | validation command and commit/push status; or `not applicable` |
+
+Populate at least one row. If there is no durable lesson, say `none` and explain why no skill change was needed. If there is an evidence-backed reusable lesson, update **Lessons learned (from real Spark contributions)** in this skill during the same sweep, keep the new rule short and imperative, validate the skill with `python3 /Users/dejain/.codex/skills/.system/skill-creator/scripts/quick_validate.py /Users/dejain/nvidia/oss/oss-claw/oss/apache/spark`, then commit and push only the skill change from `/Users/dejain/nvidia/oss/oss-claw`. Do not batch unrelated local edits into the skill commit.
+
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/spark/pull/54694`). Start with **8.0** (fetch PR state and comments), then 8.1 → 8.5 as needed.
@@ -257,6 +265,13 @@ After taking actions (rebase, fixes, local tests, push), **generate a short PR c
 - *Rebased on master. `QueryExecutionErrorsSuite` passes locally. Ready for CI!*
 - *Addressed review: renamed X to Y, added test for Z. All tests pass. Ready for another look!*
 - *Fixed the failing error class assertion. Tests green locally, rebased and pushed. Back in business.*
+
+---
+
+## Lessons learned (from real Spark contributions)
+
+- **Treat global updater failures as infrastructure, not PR defects.** When `apache/spark` `update_build_status.yml` repeatedly fails while mapping a check-run conclusion such as `startup_failure` to GitHub's allowed check conclusions, and the PR head, fork workflow run, review comments, and inline comments are unchanged, do not rebase or push just to shake loose queued `Build` statuses. Report the affected PRs as queued/blocked by updater infrastructure and keep checking until the current-head status changes.
+- **Use fork workflow runs as head evidence when upstream status mirroring is broken.** For forked Spark branches, compare the fork Actions run `head_sha` to the PR `headRefOid` before deciding whether a queued or missing upstream `Build` status is actionable. A green fork run on the exact PR head is useful evidence, but it does not replace maintainer-visible upstream CI when the mirror recovers.
 
 ---
 
