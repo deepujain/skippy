@@ -65,6 +65,20 @@ overfit unexplained closures; report `no skill change needed` when there is no
 reusable lesson. Include a departed-PR table before the open-PR table whenever
 anything merged or closed since the previous sweep.
 
+Use this sweep report shape every time:
+
+- **Departed PRs** - include when any recent authored PR is no longer open.
+- **Open PR Sweep** - include every current authored open PR, or `none open`.
+- **Lessons Learned** - always include a table with `Lesson`, `Evidence`,
+  `Skill Update`, and `Action` columns.
+
+In `Lessons Learned`, distinguish actual reusable process lessons from one-off
+events. When a lesson is reusable, update the correct section of this project
+skill in the same run, validate the diff, commit, and push only the skill
+change. When no rule changed, include `no skill change needed` with the reason.
+Do not append loose notes to the end of the skill; put each rule where future
+Inspect AI work will naturally use it.
+
 ```bash
 gh pr list --repo UKGovernmentBEIS/inspect_ai --author deepujain --state open --limit 100 \
   --json number,title,url,headRefName,isDraft,mergeable,reviewDecision,statusCheckRollup,updatedAt
