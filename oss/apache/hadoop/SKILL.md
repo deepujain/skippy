@@ -310,6 +310,7 @@ For each **CI failure** or **reviewer comment** identified in 9.0:
 - **When not to nudge:** Do not post a reminder if checks are still running/red, the branch is stale/conflicting, a reviewer is actively engaged in the last few days, or the PR still needs code/test work from you.
 - **Who to tag:** Tag only 1-2 likely subsystem maintainers or prior active reviewers for that area. Prefer people already active in nearby merged PRs or earlier discussion. Do not spray broad mentions across unrelated maintainers.
 - **What to say:** Keep it short. Mention that CI is green on the current head, ask for a review when convenient, and offer to make follow-up changes. Example: `CI is green on the current head, and this one still has not had a human review. @maintainer1 @maintainer2, when you have a moment, could you please take a look? Happy to make any follow-up changes.`
+- **Move stalled outreach off the PR when asked.** If a maintainer says PR mentions are noisy or directs contributors to an official developer list, stop tagged PR reminders. Post one concise review request to that named project list when access is available, including the PR link, current scope, green CI, and a specific review question; otherwise report the mailing-list post as the external blocker. Do not tag that inactive maintainer again.
 
 ### 9.5 Generate a PR comment (changes + local test results)
 
