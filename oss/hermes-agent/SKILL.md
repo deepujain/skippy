@@ -94,6 +94,14 @@ When review is quiet for more than seven days:
 4. Do not post repeated vague bumps. Update the existing status comment when possible, and only add a new comment when the state materially changed.
 5. After one unanswered seven-day maintainer nudge, stop weekly duplicate pings unless the PR state changes. Switch strategy instead: repair conflicts if they appear, collect maintainer signal from adjacent PRs/issues, or pause new Hermes PRs until review/CI starts.
 
+Every Hermes sweep must include a concise learning pass, even when no PR action
+is needed. Compare the current sweep with the previous known state, inspect any
+new maintainer comments, bot findings, merges, closures, CI changes, or repeated
+blockers, and classify each possible lesson as `skill updated`, `already covered`,
+or `no reusable lesson`. Do not let a sweep finish as a status-only report when
+new evidence would change future issue selection, implementation, validation,
+PR prose, CI handling, or review follow-up.
+
 Search for overlap before committing to work. Use `--state all`, not only open PRs, because many Hermes changes are salvaged, superseded, or closed after main changes:
 
 ```bash
@@ -396,6 +404,18 @@ anything merged or closed since the previous sweep.
 
 If reviewer intent, product direction, credentials, destructive history, or private infrastructure blocks progress, report the blocker plainly with the next concrete ask.
 
+Use this table format for Hermes open-PR sweeps unless the user explicitly asks
+for a different format:
+
+| PR | Requested Action Found | CI / Failures | Reviews / Bots | Stale or Conflict State | Action Taken | Final State | Lessons Learned |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| #NNN title | CI failure / review / stale ping / none | green, failing job, or rerunning | `human: <login>` / `coderabbitai[bot]` / `greptile-apps[bot]` / security bot: addressed, stale, informational, blocked, or n/a | clean / stale / conflict / upstream-blocked | rebased, fixed, pushed, posted status, no action needed, or blocked with reason | ready / rerunning / blocked | skill updated / already covered / no reusable lesson |
+
+The `Action Taken` column must describe completed work, not intentions. If no
+action was safe, state the exact blocker. The `Lessons Learned` column must be
+specific enough to audit: name the durable rule added, the existing rule that
+already covered the finding, or why the finding was one-off and not added.
+
 ## Self-improvement loop
 
 After each Hermes PR sweep or maintainer interaction, update this skill when a reusable rule emerges. Keep additions concise and place them where they change future behavior:
@@ -406,6 +426,32 @@ After each Hermes PR sweep or maintainer interaction, update this skill when a r
 - PR prose and comment lessons go under `PR description and comments`.
 
 Do not add loose retrospective notes. Convert each lesson into an action rule with a trigger, a next step, and a stop condition. If a rule would have prevented a failed batch, add it before starting another batch.
+
+For sweeps, perform the learning loop before the final report:
+
+1. Identify new evidence from merged PRs, closed PRs, maintainer comments, bot
+   findings, CI failures, conflicts, stale-review behavior, or repeated blockers.
+2. Decide whether each item is reusable, already covered, or one-off.
+3. Patch the correct skill section for reusable Hermes-specific lessons.
+4. Validate the skill diff with `git diff --check` and commit/push the skill
+   repository when the user has asked for persistent self-improvement.
+5. Report a `Lessons Learned` table row for every swept PR, including `skill
+   updated`, `already covered`, or `no reusable lesson`.
+
+Do not overfit repeated transient GitHub states such as temporary
+`mergeStateStatus: UNKNOWN`. Record only durable handling rules, such as when to
+rerun direct PR views, when to avoid duplicate nudges, or when upstream blockers
+should pause public comments.
+
+## Lessons learned from Hermes sweeps
+
+- **Sweeps must report learning, not only status.** Every open-PR sweep should
+  include a `Lessons Learned` column and, when useful, a short departed-PR
+  reconciliation table before the open-PR table.
+- **Repeated unchanged blockers are not new lessons.** When a PR remains blocked
+  by the same documented upstream issue, CI flake, or already-posted status
+  comment, mark the lesson as `already covered` or `no reusable lesson` and do
+  not add duplicate skill text or public comments.
 
 ## Trigger phrases
 
