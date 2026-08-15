@@ -243,12 +243,9 @@ state and merge/close timestamps, then inspect final comments, reviews, timeline
 linked issue, overlapping PRs, and any replacement commit. Record merged PRs as
 merged. For a PR closed without merge, establish whether it was duplicate,
 superseded, out of scope, policy-blocked, abandoned, or unresolved, and say
-whether the contribution survived in another PR. If the closure yields a
-reusable testing, design, review, or workflow lesson, add the smallest durable
-rule at the correct place in this skill, validate it, and commit/push the skill
-repository. Do not overfit unexplained closures; report `no skill change needed`
-when there is no reusable lesson. Include a departed-PR table before the open-PR
-table whenever anything merged or closed since the previous sweep.
+whether the contribution survived in another PR. Include a departed-PR table
+before the open-PR table whenever anything merged or closed since the previous
+sweep.
 
 Use this table format for Airflow open-PR sweeps unless the user explicitly asks for a different format:
 
@@ -257,6 +254,40 @@ Use this table format for Airflow open-PR sweeps unless the user explicitly asks
 | #NNNN title | stale ping / CI failure / bot comment / conflict / none | green or failing check names | `github-actions[bot]` / CI bot: addressed / not addressed / n/a; `pre-commit-ci[bot]`: addressed / not addressed / n/a; `greptile-apps[bot]` / CodeRabbit / AI review bot if present: addressed / not addressed / n/a; `human: <name>`: addressed / not addressed / blocked / n/a | clean / mergeable / conflicting / stale ping timestamp | N/5 or n/a | pushed fix / posted status / added rocket / no action needed | green / rerunning / blocked |
 
 For the `Review Comments` column, always categorize by reviewer identity rather than giving only a total count. Include each bot type separately when present, and include human reviewers by GitHub login or display name. Use short statuses such as `addressed`, `already addressed`, `stale`, `informational`, `not addressed`, or `blocked: needs maintainer decision`.
+
+### Sweep lessons learned and automatic skill updates
+
+End every repeated sweep with a Lessons Learned table after the departed/open
+PR tables:
+
+| Evidence Observed | Reusable Lesson | Skill Update | Validation / Publication |
+| --- | --- | --- | --- |
+| concrete CI, review, merge, closure, or workflow evidence | concise rule that would change future Airflow work, or `none` | exact section/rule updated, or `no skill change needed` | validation result and skill-repository commit, or reason no commit was made |
+
+Apply this learning loop on every sweep, not only when a PR disappears:
+
+1. Inspect new CI failure shapes, maintainer feedback, accepted fixes, merged or
+   rejected outcomes, bot behavior, validation gaps, and tool fallbacks.
+2. Treat an observation as reusable only when it is evidence-backed,
+   Airflow-specific, and likely to change a future contribution or sweep.
+   Routine rebases, ordinary green CI, pending checks, transient infrastructure
+   failures, and unexplained one-offs are not lessons.
+3. When a reusable lesson exists, add the smallest imperative rule at the
+   correct place in this skill. Do not append a transcript or duplicate an
+   existing rule. Put a cross-project rule in the shared contribution-quality
+   protocol instead and reference it here only when Airflow needs a specific
+   command or exception.
+4. Validate the edited skill with `git diff --check` and the skill creator's
+   `quick_validate.py`. Review the final diff for scope and instruction
+   conflicts.
+5. Commit and push the validated update to the skill repository automatically.
+   Preserve unrelated worktree changes, stage only the intended skill file,
+   verify the staged file list before committing, and report the resulting
+   commit SHA in the Lessons Learned table. If push or validation is blocked,
+   keep the change local and report the exact blocker.
+6. When no reusable lesson exists, include one table row that says
+   `no skill change needed` and gives the concrete reason. Never manufacture a
+   lesson merely to produce a commit.
 
 - **Be open to reversing the approach.** Reviewers may suggest the opposite fix (e.g. "don't add X here; remove X from places that don't need it"). Treat that as valid design feedback and rework the PR accordingly; don't defend the original approach unless there's a strong reason.
 - **Check statuses even if comments are empty.** A PR can have no review feedback but still have actionable CI failures. Do not say "nothing to do" until both comments and statuses are clean or still running.
