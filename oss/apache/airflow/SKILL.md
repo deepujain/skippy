@@ -289,20 +289,26 @@ Apply this learning loop on every sweep, not only when a PR disappears:
    `no skill change needed` and gives the concrete reason. Never manufacture a
    lesson merely to produce a commit.
 
-### Sweep replenishment after merge
+### Sweep queue replenishment
 
 Treat `sweep` as both maintenance and queue replenishment, whether it is
 invoked manually or by a scheduled task.
 
-- If one or more authored Airflow PRs **merged since the previous sweep**, and
-  there is no higher-priority open-PR maintenance still pending, check whether
-  the current open PR queue is healthy enough to start another issue.
+- On **every sweep**, after completing higher-priority maintenance on existing
+  PRs, evaluate whether the current authored-PR queue permits one new PR. A
+  merge since the previous sweep is not required.
+- If an explicit numeric open-PR cap applies, count the current authored open
+  Airflow PRs and do not start another issue when opening it would exceed the
+  cap.
 - When Airflow has **no explicit numeric open-PR cap**, use queue health as the
-  gate: do **not** open a new PR if several authored PRs are still stale,
-  conflicting, red, or waiting on follow-up you could handle in the same sweep.
-- If the queue is healthy, pick **one** new well-scoped issue using the normal
-  Airflow issue-selection rules in this skill and run the full new-PR recipe in
-  the same sweep.
+  gate: do **not** open a new PR if several authored PRs are stale, conflicting,
+  red, or waiting on follow-up you could handle in the same sweep. Green PRs
+  that are only awaiting review or merge do not by themselves make the queue
+  unhealthy.
+- If the applicable count and queue-health gates pass, pick **one** new
+  well-scoped issue using the normal Airflow issue-selection rules in this skill
+  and run the full new-PR recipe in the same sweep. Never start more than one
+  new Airflow PR per sweep.
 - Report the outcome explicitly in the sweep output: `opened new PR`,
   `issue selected, PR in progress`, or `replenishment skipped` with the exact
   blocker such as duplicate risk, queue not healthy, no accepted issue, or no
