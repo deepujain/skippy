@@ -233,10 +233,12 @@ Use the recent merged PR scan (§2.0) to choose extra validation for the touched
 
 - **Sign-off:** NemoClaw requires [DCO](https://github.com/NVIDIA/NemoClaw/blob/main/CONTRIBUTING.md) sign-off. Every commit must use `-s` or `--signoff`.
 - **Author and Signed-off-by:** GitHub username is **deepujain**. Use real name and email so both **Author** and **Signed-off-by** show **Deepak Jain &lt;deepujain@gmail.com&gt;** (not "dejain" or the GitHub username). Always use `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author="Deepak Jain <deepujain@gmail.com>"`.
+- **Treat repository Git identity as test-contaminated state.** Tests and fixtures can write `Test User <test@example.com>` into the shared worktree config. After the final test run and immediately before every commit or amend, inspect `git config --show-origin --get user.name` and `user.email`, restore them if needed, and still pass the explicit `-c user.*` plus `--author` arguments below. Never rely on a previously correct config.
 - **Message:** Clear summary; reference the issue (e.g. `Fixes #NNNNN`). Use **single quotes** in shell to avoid zsh history expansion.
 - **`--no-verify` is mandatory.** This prevents `Made-with: Cursor` trailers and skips pre-commit hooks (hadolint etc. may not be installed).
 - **Commit only the fix files.** Do not add or commit any `PR_NNNNN_body.md` (that file is for copy-paste only).
 - **Verify after commit:** Run `git log -1 --format='%B'` and check for `Made-with: Cursor`. If present, immediately amend to strip it.
+- **Stop on GitHub `no_user`.** Immediately after each push, query every PR commit through GitHub's commit API. Local `%G? = G` is insufficient: if GitHub reports `verification.verified: false` or `reason: no_user`, do not post a completion/review comment or wait for CI. Correct the author and committer identity, re-sign the affected commit stack, push with lease, and recheck GitHub verification first.
 
 **Commit command (agent runs this directly):**
 
