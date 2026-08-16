@@ -438,21 +438,30 @@ For sweeps, perform the learning loop before the final report:
 5. Report a `Lessons Learned` table row for every swept PR, including `skill
    updated`, `already covered`, or `no reusable lesson`.
 
-### Sweep replenishment after merge
+### Sweep replenishment and PR-count gateway
 
 Treat `sweep` as both PR maintenance and controlled replenishment, whether it
 is triggered manually or by a scheduled task.
 
-- If one or more authored Hermes PRs **merged since the previous sweep**, and
-  there is no higher-priority open-PR maintenance still pending, evaluate
-  whether the review queue is healthy enough to start another issue.
+- For a manual user-triggered `sweep`, evaluate replenishment every time after
+  completing open-PR maintenance, even if no PR merged since the previous sweep.
+- For scheduled CI/review heartbeats, do not start new issue work unless the
+  heartbeat instructions explicitly ask for replenishment. Keep routine
+  heartbeats focused on CI, review, blockers, and skill learning.
+- If one or more authored Hermes PRs **merged since the previous sweep**, treat
+  that as a strong replenishment signal, but still apply the same queue gate and
+  maintenance-first checks below.
 - Respect the Hermes queue gate in this skill: if there are **5 or more** open
   PRs with no maintainer activity, no CI, or no review, pause new
   implementation work and improve the review path first instead of refilling the
   queue.
-- If the queue is below that pause threshold and otherwise healthy enough, pick
+- If the authored open-PR count is below the allowed gateway, the queue is below
+  the pause threshold, and no existing PR has a safe pending action, pick
   **one** new well-scoped issue using the normal Hermes issue-selection rules
-  in this skill and run the full new-PR recipe in the same sweep.
+  in this skill and run the full new-PR recipe in the same manual sweep.
+- Do not replenish when an existing PR needs immediate action, such as a
+  conflict, actionable review, fixable CI failure, missing workflow approval
+  nudge, or stale branch that can be safely refreshed.
 - Report the outcome explicitly in the sweep output: `opened new PR`,
   `issue selected, PR in progress`, or `replenishment skipped` with the exact
   blocker such as review queue still stalled, no maintainer signal, overlap
