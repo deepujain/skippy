@@ -295,6 +295,10 @@ When calibrating contribution style, also scan recent merged PRs from other cont
 
 8. **Shepherd the PR.**
    - Inspect CI, review comments, and requested changes after pushing.
+   - If a sweep finds an otherwise healthy PR has become `CONFLICTING`/`DIRTY`,
+     rebase it promptly on upstream `main`, preserve existing top-of-file
+     changelog entries plus the PR's `## Unreleased` entry, rerun focused tests
+     and `uv run make check`, force-push with lease, then re-check CI.
    - Do not keep closed, unaccepted, over-limit, or draft PRs alive with routine rebase churn. If a PR is not eligible for review, stop CI-triggering pushes and move the discussion back to the issue with concrete evidence.
    - If a maintainer says draft PRs are not reviewed, convert only genuinely review-ready, policy-compliant PRs to ready-for-review. Otherwise leave them closed/local and prepare the accepted-issue path first.
    - If an accepted issue came from a maintainer-closed draft PR and GitHub refuses to reopen it, recreate a ready-for-review PR from a fresh rebased branch rather than fighting the closed PR.
