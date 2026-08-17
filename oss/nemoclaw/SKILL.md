@@ -348,10 +348,14 @@ is triggered by the user or by a scheduled task.
   Do not return only `No open PRs` without running issue discovery, overlap and
   linked-development checks, and the recent-merged-PR calibration required by
   this skill.
-- NemoClaw has **no explicit numeric open-PR cap** in this skill, so use queue
-  health as the gate: do **not** open a new PR while authored branches are
-  still stale, conflicting, red, blocked on runner approval you have not
-  surfaced, or waiting on follow-up you can still handle in the same sweep.
+- NemoClaw enforces a maximum of **10 open PRs per non-exempt contributor** via
+  `.github/workflows/pr-limit.yaml`; the newly opened PR counts toward that
+  total, so do not attempt an eleventh PR. Read the current workflow before
+  relying on an exemption because the core-maintainer list can change.
+- Treat queue health as a stricter gate below the numeric limit: do **not** open
+  a new PR while authored branches are stale, conflicting, red, blocked on
+  runner approval you have not surfaced, or waiting on follow-up you can still
+  handle in the same sweep.
 - If the queue is healthy, pick **one** new well-scoped issue using the normal
   NemoClaw issue-selection rules in this skill and run the full new-PR recipe
   end to end in the same sweep: branch, implementation, focused and broad
