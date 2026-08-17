@@ -352,14 +352,24 @@ is triggered by the user or by a scheduled task.
   `.github/workflows/pr-limit.yaml`; the newly opened PR counts toward that
   total, so do not attempt an eleventh PR. Read the current workflow before
   relying on an exemption because the core-maintainer list can change.
+- Maintain a working target of **3 open, healthy, non-overlapping PRs** for this
+  contributor. When the queue is below three, discover and complete enough
+  independent issue recipes to restore it to three in the same sweep when
+  collision-free candidates and the available execution window permit.
 - Treat queue health as a stricter gate below the numeric limit: do **not** open
   a new PR while authored branches are stale, conflicting, red, blocked on
   runner approval you have not surfaced, or waiting on follow-up you can still
   handle in the same sweep.
-- If the queue is healthy, pick **one** new well-scoped issue using the normal
-  NemoClaw issue-selection rules in this skill and run the full new-PR recipe
-  end to end in the same sweep: branch, implementation, focused and broad
-  validation, signed commit, push, PR creation, and initial CI/review check.
+- A failed optional or advisory infrastructure lane does not make the queue
+  unhealthy when the aggregate/primary review explicitly reports no blocker,
+  the failure is not caused by PR code, the contributor cannot rerun it, and
+  the condition has already been surfaced. Record it accurately and continue
+  replenishment; never describe the PR as fully green.
+- If the queue is healthy, pick well-scoped issues using the normal NemoClaw
+  issue-selection rules and run each full new-PR recipe independently end to
+  end: branch, implementation, focused and broad validation, signed commit,
+  push, PR creation, and initial CI/review check. Never lower evidence or scope
+  standards merely to reach the target count.
 - A sweep may finish without a new PR only when discovery found no collision-
   free, evidence-backed candidate or a concrete queue/policy/environment
   blocker prevents safe execution. Record the candidates checked and the exact
