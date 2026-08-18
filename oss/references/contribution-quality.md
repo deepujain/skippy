@@ -155,6 +155,18 @@ When sweeping open PRs, report every PR so skipped work is visible:
 Categorize review comments by reviewer identity when practical. Separate human
 review, project bots, and AI review bots because the right response differs.
 
+## Cross-Project Contribution Matrix Handoff
+
+When a project sweep discovers that a previously open PR or patch was merged or
+closed, notify the Codex task titled `OSS Contribs` by sending it the exact
+follow-up prompt `sweep`. Resolve the destination from the live task list rather
+than hard-coding a task ID, and send at most one prompt per project sweep even
+when several contributions departed. Do not trigger this handoff for unchanged
+open contributions, historical transitions already reported by an earlier
+sweep, or while running inside the `OSS Contribs` task itself. If the destination
+task cannot be found or delivery fails, report that explicitly in the project
+sweep instead of silently dropping the matrix refresh.
+
 ## Lessons Loop
 
 After a contribution, update memory or the project skill only when the lesson is
