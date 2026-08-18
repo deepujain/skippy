@@ -174,6 +174,11 @@ git switch -c fix/NNNN-short-description
 
 If the checkout uses `origin` as the canonical upstream, use `git fetch origin` and `git pull --ff-only origin main` instead.
 
+When repairing an existing PR in a temporary worktree, check `git status`
+before rebasing. If checkout filters dirty only a `contributors/emails/*`
+marker, restore it or mark it assume-unchanged inside the temporary worktree;
+never include that marker in the PR repair commit.
+
 Before opening a PR, confirm the branch is non-empty and scoped:
 
 ```bash
