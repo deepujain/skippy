@@ -387,6 +387,7 @@ Extracted from real contribution experience. Update this section as new patterns
 
 ### CI triage
 - **Check statuses, then logs.** Start with PR/commit statuses to identify the failing jobs before looking for review comments.
+- **Verify the semantic result of automatic backports.** Airflow's `Automatic Backport` workflow can conclude `success` after handling a cherry-pick conflict and posting a `Backport failed to create` comment. Confirm that a backport PR was actually created, and inspect the PR comment plus the `Run backport script` output before reporting success.
 - **GitHub Actions log access depends on `gh` auth.** If `gh auth status` is invalid, say that right away and ask for `gh auth login` or pasted failing job details/logs as the fallback.
 - **If local CI wrappers are blocked by Docker, still run the closest direct check you can.** For example, if `mypy-providers` via Breeze cannot run because Docker is unavailable, run direct `mypy` on the changed files plus the relevant targeted tests and note the limitation.
 - **Start with the narrowest relevant local validation.** Run the smallest targeted test/check that covers the changed behavior first, then widen only if needed. If a broader suite fails for an unrelated local reason, record the scoped passing checks and call out the residual risk explicitly.
