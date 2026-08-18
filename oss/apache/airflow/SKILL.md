@@ -383,6 +383,7 @@ Extracted from real contribution experience. Update this section as new patterns
 - Treat a reviewer screenshot request as a mini end-to-end repro, not just a picture task. Drive the same route a user would use, inspect the API responses behind that route, and verify the UI state the reviewer cares about.
 - If the first screenshot contradicts the expected fix, keep digging. For example, PR #69158 fixed mapped task list responses, but the mapped task Details tab used the try-details response and still displayed `executor_config` as `None`. The correct action was to extend the serializer/test coverage to `TaskInstanceHistoryResponse` before posting screenshots.
 - When an older bug report no longer reproduces as the original hard failure on current main, say so plainly in the PR comment and show the current-main failure shape that the PR actually fixes.
+- Treat a Grid or Graph task summary without `dag_version_number` as a structural placeholder, not a guaranteed TaskInstance. Route that node to the generic task overview instead of constructing a run-level TaskInstance URL, and cover both Grid and Graph navigation.
 
 ### CI triage
 - **Check statuses, then logs.** Start with PR/commit statuses to identify the failing jobs before looking for review comments.
