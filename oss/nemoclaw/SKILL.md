@@ -380,6 +380,12 @@ is triggered by the user or by a scheduled task.
   the failure is not caused by PR code, the contributor cannot rerun it, and
   the condition has already been surfaced. Record it accurately and continue
   replenishment; never describe the PR as fully green.
+- A surfaced maintainer-only review or workflow gate on one PR does not freeze
+  unrelated replenishment when all source CI is green, the published review
+  contains no code finding, and no contributor action can produce the missing
+  evidence. Keep that PR marked `blocked: maintainer gate`, count it in the open
+  total, and continue selecting independent work. Do not rerun broad workflows
+  or claim the blocked PR is merge-ready.
 - If the queue is healthy, pick well-scoped issues using the normal NemoClaw
   issue-selection rules and run each full new-PR recipe independently end to
   end: branch, implementation, focused and broad validation, signed commit,
