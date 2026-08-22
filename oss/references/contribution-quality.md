@@ -89,6 +89,10 @@ not run, and why. Do not replace missing evidence with confidence language.
   package-contract tests, integration tests, generated-artifact checks, or
   docs-preview checks, put new coverage in the matching lane instead of
   bypassing guardrails.
+- When a test executes generated scripts or configuration, redirect every
+  absolute runtime path into an isolated fixture. Audit secondary state,
+  config, cache, lock, and permission paths as well as the primary output, and
+  retain separate assertions for the production path literals.
 - For bot comments, distinguish stale/informational feedback from current,
   actionable feedback on the latest head.
 - After creating or updating a PR, expect CI and review bots to finish later
