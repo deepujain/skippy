@@ -292,6 +292,13 @@ When calibrating contribution style, also scan recent merged PRs from other cont
    - For provider changes, validate request construction/parsing without secrets where possible, and mention any live or optional-provider tests separately.
    - For viewer changes, mention schema/type regeneration and `pnpm --filter inspect build`/dist validation when applicable.
    - For sandbox-tool changes, mention the version bump gate and slow tool tests when applicable.
+   - For sandbox self-check changes (`src/inspect_ai/util/_sandbox/self_check.py`
+     or `tests/tools/test_sandbox_docker_and_local.py`), expect
+     `slow-tool-tests-dev` when CI selects `tests/tools/`. Poll it to terminal
+     state; if a stricter self-check exposes an environment-specific limitation
+     such as BusyBox behavior, either fix the provider or record a narrowly
+     commented known failure in the affected slow-test harness and explain it in
+     the PR body.
 
 8. **Shepherd the PR.**
    - Inspect CI, review comments, and requested changes after pushing.
