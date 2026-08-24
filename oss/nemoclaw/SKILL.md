@@ -276,7 +276,13 @@ cd /Users/dejain/nvidia/oss/NemoClaw
 git push --no-verify --set-upstream origin <branch>
 ```
 
-Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After rebase: `git push --no-verify --force-with-lease origin <branch>`. If `--force-with-lease` fails because a reviewer added merge commits to the branch (stale remote ref), use `--force` instead.
+Use the actual branch name (e.g. `fix/66-nim-image-nemotron-3-nano`). After a
+rebase, follow the remote-head preservation procedure in §8.4. Push only with
+`--force-with-lease`. If the lease fails, fetch and inspect the remote-only
+commits before doing anything else. Never use plain `--force`, and never erase
+reviewer, maintainer, or automation changes. If the remote already contains an
+equivalent or stronger fix, adopt that remote head, validate it, and avoid
+pushing duplicate local commits.
 
 - **Open the PR:** Prefer `gh` when authenticated. Run `gh auth status` first.
 - **PR create command (preferred):**
