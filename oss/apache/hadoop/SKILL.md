@@ -261,6 +261,12 @@ Hadoop uses **Maven**. Run from the **repository root** (`/Users/dejain/nvidia/o
   `./mvnw test -pl <module> -am -Dtest=<TestClass> -DskipTests=false`  
   Example: `./mvnw test -pl hadoop-hdfs-project/hadoop-hdfs -am -Dtest=TestNameNodeReconfigure -DskipTests=false`
 
+- **Map the test to its owning module first.** Before reusing an older Maven
+  command, locate the test source (for example,
+  `rg -n 'class <TestClass>' hadoop-*-project`) and select the module from its
+  path. A reactor command can otherwise pass without exercising the intended
+  regression test.
+
 - **Run tests for the touched module (slower):**  
   `./mvnw test -pl <module> -am -DskipTests=false`
 
