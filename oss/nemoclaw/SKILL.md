@@ -352,9 +352,16 @@ never disappear from the report silently:
 Treat `sweep` as both PR maintenance and controlled replenishment, whether it
 is triggered by the user or by a scheduled task.
 
+- **An explicit user pause overrides replenishment.** When the user says no new
+  PRs, pause issue selection, branch creation, pushes for unpublished work, and
+  PR creation until the user explicitly resumes them. Continue reconciling
+  departed PRs and maintaining every existing open PR through conflicts, CI,
+  reviews, and base updates. Do not interpret a later `sweep` or scheduled
+  heartbeat by itself as permission to resume new-PR creation.
 - After open-PR maintenance and departed-PR reconciliation, always run the
-  replenishment gateway. This applies to manual and scheduled sweeps even when
-  no PR merged since the previous sweep.
+  replenishment gateway unless an explicit user pause is active. This applies
+  to manual and scheduled sweeps even when no PR merged since the previous
+  sweep.
 - An empty authored-PR queue is not a no-op condition. It is a healthy queue
   that must proceed to candidate discovery and attempt enough independent new
   contributions to restore the queue target.
