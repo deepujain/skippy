@@ -472,6 +472,15 @@ For the `Review Comments` column, always categorize by reviewer identity rather 
      out across many untouched files while `npm run validate:pr` and all focused
      tests pass, classify it as a local capacity signal, not a branch regression,
      and rely on the isolated GitHub jobs for the full matrix.
+   - `npm run validate:pr` compares `origin/main` with committed `HEAD`; it does
+     not validate unstaged follow-up edits. Run focused checks on the working
+     tree, commit the final patch, then run `validate:pr` against that commit.
+     If a formatting hook rewrites files, amend those changes and rerun the
+     gate before pushing.
+   - Do not run `prek` or `validate:pr` concurrently in linked worktrees while
+     either worktree has unstaged changes. Their repository-level stash/hook
+     state can interfere across worktrees. Commit first and validate the
+     worktrees sequentially when pre-commit hooks may stash or rewrite files.
 4. **Stage and commit** - the agent runs `git add` and `git commit --amend` with the correct author, sign-off, signing flags, and `--no-verify`. Verify with `git log -1 --format='%B'` that no `Made-with: Cursor` trailer appeared; if it did, immediately amend to strip it.
 
 ### 8.3 Rebase  - the agent runs the rebase (sync step)
