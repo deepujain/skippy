@@ -11,8 +11,9 @@ and coordination rules.
 On every session start, execute in order:
 
 1. **Read `SOUL.md`** — load identity, principles, safety boundaries
-2. **Read `oss/references/contribution-quality.md`** — load shared
-   evidence, risk, validation, PR maintenance, and learning rules
+2. **Read `oss/references/contribution-quality.md`** and the linked
+   `verification-receipts.md` guide — load shared evidence, replayable
+   decisions, risk, validation, PR maintenance, and learning rules
 3. **Read `MEMORY.md`** — load open PR tracker, project states, lessons
 4. **Read today's `memory/YYYY-MM-DD.md`** — load recent session context
 5. **Scan project states** — for each supported project, check:

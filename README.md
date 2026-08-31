@@ -28,6 +28,10 @@ The repository is organized as a layered architecture:
 - **TOOLS.md** — Tool capabilities, integration patterns, gotchas
 - **oss/references/contribution-quality.md** — Shared evidence, validation,
   risk, PR maintenance, and learning protocol
+- **oss/references/verification-receipts.md** — Compact, replayable records of
+  contribution decisions, evidence, limits, and next actions
+- **Open Source Contributions** — Public, cross-project contribution tracker at
+  [deepujain/oss-contribs](https://github.com/deepujain/oss-contribs)
 - **USER.md** — Contributor identity and local config (gitignored, personal)
 - **MEMORY.md** — Cross-session state: open PRs, contribution history, lessons (gitignored, personal)
 - **SKILL.md** (per project) — Project-specific workflows, conventions, recipes
@@ -64,23 +68,16 @@ More projects can be added the same way: one `SKILL.md` per project.
 
 ## Open Source Contributions
 
-`deepujain`'s open-source contributions across GitHub pull requests and
-tracker-based patch submissions.
+The live public portfolio and contribution matrix live in
+[Open Source Contributions](https://github.com/deepujain/oss-contribs).
+Use that repository for current PR and tracker-patch status; do not use a
+static table here as an operational queue.
 
-| Project | PRs Created | Open PRs | Merged PRs |
-|--------------|-------------|----------|------------|
-| <a href="https://github.com/apache/airflow"><img src="https://apache.org/logos/res/airflow/default.png" alt="Apache Airflow logo" height="18"></a> <a href="https://github.com/apache/airflow">Apache Airflow</a> | [17](https://github.com/apache/airflow/pulls/deepujain) | 0 | 3 |
-| <a href="https://github.com/apache/hadoop"><img src="https://apache.org/logos/res/hadoop/hadoop.png" alt="Apache Hadoop logo" height="18"></a> <a href="https://github.com/apache/hadoop">Apache Hadoop</a> | [13](https://github.com/apache/hadoop/pulls/deepujain) | 10 | 3 |
-| <a href="https://github.com/apache/spark"><img src="https://apache.org/logos/res/spark/spark.png" alt="Apache Spark logo" height="18"></a> <a href="https://github.com/apache/spark">Apache Spark</a> | [3](https://github.com/apache/spark/pulls/deepujain) | 3 | 0 |
-| <a href="https://github.com/openclaw/clawhub"><img src="https://raw.githubusercontent.com/openclaw/clawhub/main/public/og-logo.png" alt="ClawHub logo" height="18"></a> <a href="https://github.com/openclaw/clawhub">ClawHub</a> | [20](https://github.com/openclaw/clawhub/pulls/deepujain) | 0 | 8 |
-| <a href="https://github.com/NousResearch/hermes-agent"><img src="https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/static/img/logo.png" alt="Hermes Agent logo" height="18"></a> <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> | [10](https://github.com/NousResearch/hermes-agent/pulls/deepujain) | 10 | 0 |
-| <a href="https://github.com/UKGovernmentBEIS/inspect_ai"><img src="https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_ai/main/docs/images/aisi-logo.svg" alt="AISI logo" height="18"></a> <a href="https://github.com/UKGovernmentBEIS/inspect_ai">Inspect AI</a> | [18](https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain) | 10 | 6 |
-| <a href="https://github.com/meridianlabs-ai/inspect_petri"><img src="https://raw.githubusercontent.com/meridianlabs-ai/inspect_petri/main/docs/images/petri.svg" alt="Inspect Petri logo" height="18"></a> <a href="https://github.com/meridianlabs-ai/inspect_petri">Inspect Petri</a> | [3](https://github.com/meridianlabs-ai/inspect_petri/pulls/deepujain) | 0 | 1 |
-| <a href="https://github.com/NVIDIA/NemoClaw"><img src="https://raw.githubusercontent.com/NVIDIA/NemoClaw/main/fern/assets/NVIDIA_symbol.svg" alt="NemoClaw logo" height="18"></a> <a href="https://github.com/NVIDIA/NemoClaw">NemoClaw</a> | [50](https://github.com/NVIDIA/NemoClaw/pulls/deepujain) | 9 | 23 |
-| <a href="https://github.com/openclaw/openclaw"><img src="https://raw.githubusercontent.com/openclaw/openclaw/main/docs/assets/openclaw-logo-text-dark.svg" alt="OpenClaw logo" height="18"></a> <a href="https://github.com/openclaw/openclaw">OpenClaw</a> | [18](https://github.com/openclaw/openclaw/pulls/deepujain) | 4 | 2 |
-| <a href="https://github.com/pytorch/pytorch"><img src="https://raw.githubusercontent.com/pytorch/pytorch/main/docs/source/_static/img/pytorch-logo-flame.svg" alt="PyTorch logo" height="18"></a> <a href="https://github.com/pytorch/pytorch">PyTorch</a> | [10](https://github.com/pytorch/pytorch/pulls/deepujain) | 10 | 0 |
-| <a href="https://www.schedmd.com/"><img src="https://raw.githubusercontent.com/SchedMD/slurm/master/doc/html/slurm_logo.png" alt="Slurm logo" height="18"></a> <a href="https://www.schedmd.com/">Slurm</a> | [3](https://support.schedmd.com/buglist.cgi?email3=deepujain%40gmail.com&emaillongdesc3=1&emailtype3=substring&list_id=418332&product=Slurm&query_format=advanced&resolution=---) | 3 | 0 |
-| **Total PRs** | **165** | **59** | **46** |
+OSS Claw supplies the reusable contribution protocol. The public tracker
+records the current cross-project state, while local `MEMORY.md` holds
+private, machine-specific notes. Each current tracker update should link to a
+[verification receipt](oss/references/verification-receipts.md) that records
+the decision, evidence, known limits, and next state.
 
 ---
 
@@ -111,6 +108,8 @@ PRs at once.
 | **Operations** | `AGENTS.md` | Yes | Every session | Boot sequence, task lifecycle, scheduling |
 | **Tools** | `TOOLS.md` | Yes | Every session | Git, build systems, CI, trackers — with gotchas |
 | **Shared Quality** | `oss/references/contribution-quality.md` | Yes | Every project task | Evidence gates, risk, PR structure, open-PR sweeps |
+| **Verification Receipts** | `oss/references/verification-receipts.md` | Yes | Sweeps and PR lifecycle changes | Replayable decision, evidence, limit, and next-state records |
+| **Public Tracker** | [`deepujain/oss-contribs`](https://github.com/deepujain/oss-contribs) | Yes | Portfolio or queue reconciliation | Current public cross-project contribution state |
 | **Memory** | `MEMORY.md` | No (gitignored) | Every session | Open PR state, contribution history, lessons |
 | **Daily** | `memory/YYYY-MM-DD.md` | No (gitignored) | Today + yesterday | Session-specific notes, decisions, blockers |
 | **Skills** | `oss/*/SKILL.md` | Yes | When working on project | Project-specific workflow, conventions, recipes |
@@ -128,6 +127,7 @@ oss-claw/
   oss/
     references/
       contribution-quality.md
+      verification-receipts.md
     apache/
       airflow/SKILL.md
       hadoop/SKILL.md

@@ -7,6 +7,23 @@ publishing PRs or patches, and maintaining open contributions.
 
 Project-specific instructions override this protocol when they conflict.
 
+## Durable Decision and Verification Memory
+
+Contribution work must leave a concise, replayable receipt that another agent
+or contributor can use without relying on chat history. Read
+[verification-receipts.md](verification-receipts.md) when selecting work,
+updating a PR, or running a queue/sweep. Record the issue/PR snapshot, overlap
+screen, material decision, exact evidence, limits, and next lifecycle state in
+the repository's accepted surface: a PR body/comment, issue, or shared memory
+ledger. Do not add a new tracked artifact to a target project unless its local
+conventions allow it.
+
+Treat a contribution as a state transition, not an assistant response:
+`candidate → reproduced → implemented → validated → PR opened → monitored →
+merged/superseded`. Resume the earliest incomplete transition. A queue target
+counts only independently validated open PRs, never candidate lists, branches,
+or status-only reports.
+
 ## Inputs, Outputs, and Preconditions
 
 | Type | Content |

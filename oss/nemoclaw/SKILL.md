@@ -17,6 +17,10 @@ Also apply the shared OSS contribution quality protocol in
 Project-specific instructions below override the shared protocol when they
 conflict.
 
+For every sweep and replenishment slot, create or refresh the shared durable
+decision and verification receipt. A queue slot counts only once its
+independently validated PR is open.
+
 When the user asks to contribute a PR to NemoClaw, pick the next issue, or "follow the recipe", do the following in order. **Before making any code changes:** set upstream if needed, switch to main, pull from upstream, create the new branch; **then** implement the fix.
 
 **Repo:** [NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw) - open source stack for running OpenClaw always-on assistants safely with OpenShell. Apache-2.0. Contributions require **signed-off commits** (`git commit -s`) and **verified (SSH-signed) commits** (`-S`).
