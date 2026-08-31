@@ -1,4 +1,4 @@
-# OSS Claw
+# Skippy
 
 ```
                   ╔═══════════════════════════════════════╗
@@ -10,7 +10,7 @@
                   ╚═══════════════════════════════════════╝
   ```
 
-OSS Claw is a portable collection of project-specific contribution skills for
+Skippy is a portable collection of project-specific contribution skills for
 coding agents. Each `oss/*/SKILL.md` captures current repository conventions,
 validation, review handling, and submission practices for one upstream project.
 
@@ -52,7 +52,7 @@ The live public portfolio and contribution matrix live in
 Use that repository for current PR and tracker-patch status; do not use a
 static table here as an operational queue.
 
-OSS Claw supplies the reusable contribution protocol. The public tracker and
+Skippy supplies the reusable contribution protocol. The public tracker and
 live upstreams record current cross-project state. Each current tracker update
 should link to a [verification receipt](oss/references/verification-receipts.md)
 that records the decision, evidence, known limits, and next state.
@@ -61,7 +61,7 @@ that records the decision, evidence, known limits, and next state.
 
 ## Architecture
 
-OSS Claw has two layers:
+Skippy has two layers:
 
 1. **Project skills** in `oss/`: repository-specific contribution recipes.
 2. **Shared references** in `oss/references/`: evidence gates, execution
@@ -80,7 +80,7 @@ OSS Claw has two layers:
 ### Repository Layout
 
 ```
-oss-claw/
+skippy/
   oss/
     references/
       contribution-quality.md
@@ -108,8 +108,8 @@ oss-claw/
 ### 1. Clone the skills
 
 ```bash
-git clone https://github.com/deepujain/oss-claw.git ~/oss-claw
-cd ~/oss-claw
+git clone https://github.com/deepujain/skippy.git ~/skippy
+cd ~/skippy
 ```
 
 ### 2. Use with any coding agent
@@ -134,7 +134,7 @@ For cross-project work:
 Clients that load skills from a directory can symlink the project folders:
 
 ```bash
-cd ~/oss-claw
+cd ~/skippy
 
 export AGENT_SKILLS_DIR="$HOME/.your-agent/skills"
 mkdir -p "$AGENT_SKILLS_DIR"
@@ -168,7 +168,7 @@ Contributions are welcome. To add or improve:
 3. **New use case:** Propose a new top-level folder for a different
    use case (e.g., `review/` for code review, `docs/` for documentation).
 
-Open an [issue](https://github.com/deepujain/oss-claw/issues) to discuss;
+Open an [issue](https://github.com/deepujain/skippy/issues) to discuss;
 PRs against `main` are preferred.
 
 ## License
