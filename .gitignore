@@ -3,3 +3,6 @@ USER.md
 MEMORY.md
 memory/*.md
 !memory/.gitkeep
+
+# macOS Finder metadata
+.DS_Store
