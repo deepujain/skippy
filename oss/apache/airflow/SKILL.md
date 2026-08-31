@@ -195,7 +195,7 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 - **Where:** GitHub. Create the PR from your fork's branch to **apache/airflow** (base branch **main**).
 - **Deep link:** Always provide a clickable URL that opens the "New PR" page with source and destination branches pre-selected:
   `https://github.com/apache/airflow/compare/main...<github-username>:airflow:<branch>?expand=1`
-  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
+  Replace `<github-username>` with the configured GitHub username and `<branch>` with the actual branch name.
 - **Title:** Short summary and issue, e.g. `Fix S3DagBundle to delete stale dags recursively (#62622)`.
 - **PR body file:** Always create a local `PR_NNNNN_body.md` (do not commit it) with this format:
   ```

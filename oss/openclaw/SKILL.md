@@ -192,7 +192,7 @@ Replace `<branch>` and `#NNNNN` with the actual branch and issue number. The age
 - **Fallback if `gh` auth is broken or unavailable:** provide the deep link and PR body path so the user can open it manually.
 - **Deep link:** Always provide a clickable URL that opens the "New PR" page with branches pre-selected:
   `https://github.com/openclaw/openclaw/compare/main...<github-username>:openclaw:<branch>?expand=1`
-  Replace `<github-username>` with the GitHub username from `USER.md` and `<branch>` with the actual branch name.
+  Replace `<github-username>` with the configured GitHub username and `<branch>` with the actual branch name.
 - Link "Closes #NNNNN" in the description.
 - Use the contents of `PR_NNNNN_body.md` as the PR description.
 - After opening the PR, immediately inspect live CI and review/bot comments. If checks or bot reviews appear quickly and are actionable, fix them before handing off. Do not treat "PR created" as finished when the platform has already produced feedback.

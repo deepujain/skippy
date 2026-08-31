@@ -10,37 +10,14 @@
                   ╚═══════════════════════════════════════╝
   ```
 
-OSS Claw is a portable contribution knowledge base for coding agents. It
-contains project-specific skills, repo conventions, CI recipes, review
-handling playbooks, and optional autonomous-agent operating files for
-contributing to open-source projects.
+OSS Claw is a portable collection of project-specific contribution skills for
+coding agents. Each `oss/*/SKILL.md` captures current repository conventions,
+validation, review handling, and submission practices for one upstream project.
 
-It is not tied to one client. The `oss/*/SKILL.md` files can be used from
-IDE assistants, CLI coding agents, or autonomous runtimes. The top-level
-agent files (`SOUL.md`, `AGENTS.md`, `TOOLS.md`, `MEMORY.md.template`, and
-`USER.md.template`) provide a fuller operating model for systems that want
-cross-project planning, memory, and autonomous review follow-up.
-
-The repository is organized as a layered architecture:
-
-- **SOUL.md**  -  Principles, judgment criteria, safety boundaries
-- **AGENTS.md**  -  Multi-project orchestration, task lifecycle, delegation
-- **TOOLS.md**  -  Tool capabilities, integration patterns, gotchas
-- **oss/references/contribution-quality.md**  -  Shared evidence, validation,
-  risk, PR maintenance, and learning protocol
-- **oss/references/verification-receipts.md**  -  Compact, replayable records of
-  contribution decisions, evidence, limits, and next actions
-- **oss/references/execution-contracts.md**  -  Checkable outcomes, preserved
-  behavior, work modes, continuation, and isolated parallel work
-- **Open Source Contributions**  -  Public, cross-project contribution tracker at
-  [deepujain/oss-contribs](https://github.com/deepujain/oss-contribs)
-- **USER.md**  -  Contributor identity and local config (gitignored, personal)
-- **MEMORY.md**  -  Cross-session state: open PRs, contribution history, lessons (gitignored, personal)
-- **SKILL.md** (per project)  -  Project-specific workflows, conventions, recipes
-
-The skills give a coding agent *how* to contribute to each project. The
-agent files give a runtime *how to behave across projects*, including
-identity, safety boundaries, memory, and review-response discipline.
+The skills are client-neutral. Install or attach the relevant skill folder in
+Codex, Claude Code, Cursor, or another SKILL.md-compatible agent. Shared
+references provide the evidence, execution-contract, and receipt practices that
+all project skills use.
 
 ---
 
@@ -76,57 +53,34 @@ Use that repository for current PR and tracker-patch status; do not use a
 static table here as an operational queue.
 
 OSS Claw supplies the reusable contribution protocol. The public tracker and
-live upstreams record current cross-project state, while optional local
-`MEMORY.md` holds private, machine-specific notes. Each current tracker update should link to a
-[verification receipt](oss/references/verification-receipts.md) that records
-the decision, evidence, known limits, and next state.
+live upstreams record current cross-project state. Each current tracker update
+should link to a [verification receipt](oss/references/verification-receipts.md)
+that records the decision, evidence, known limits, and next state.
 
 ---
 
 ## Architecture
 
-OSS Claw has three layers:
+OSS Claw has two layers:
 
-1. **Project skills** in `oss/`: the reusable contribution recipes. Each
-   skill captures issue selection, repo setup, implementation rules,
-   validation commands, PR body standards, review handling, and CI gotchas
-   for one upstream project.
-2. **Operating manuals** at the repo root: shared behavior for agents that
-   need identity, safety rules, multi-project scheduling, tool policy, and
-   review-response discipline.
-3. **Local state** in gitignored files: contributor identity, memory,
-   daily notes, open PR state, and lessons learned.
-
-The skills can stand alone. The operating manuals make them work together
-when a coding agent is managing several projects or maintaining many open
-PRs at once.
+1. **Project skills** in `oss/`: repository-specific contribution recipes.
+2. **Shared references** in `oss/references/`: evidence gates, execution
+   contracts, and durable verification receipts used by every project skill.
 
 ### Layer Map
 
 | Layer | File | Committed? | Loaded | Purpose |
 |-------|------|------------|--------|---------|
-| **Principles** | `SOUL.md` | Yes | Every session | What the agent values, safety rules |
-| **Identity** | `USER.md` | No (gitignored) | Every session | Contributor name, email, local paths |
-| **Operations** | `AGENTS.md` | Yes | Every session | Boot sequence, task lifecycle, scheduling |
-| **Tools** | `TOOLS.md` | Yes | Every session | Git, build systems, CI, trackers  -  with gotchas |
 | **Shared Quality** | `oss/references/contribution-quality.md` | Yes | Every project task | Evidence gates, risk, PR structure, open-PR sweeps |
 | **Verification Receipts** | `oss/references/verification-receipts.md` | Yes | Sweeps and PR lifecycle changes | Replayable decision, evidence, limit, and next-state records |
 | **Execution Contracts** | `oss/references/execution-contracts.md` | Yes | Behavior changes and long-running work | Done conditions, preserved behavior, modes, continuation, and parallel isolation |
 | **Public Tracker** | [`deepujain/oss-contribs`](https://github.com/deepujain/oss-contribs) | Yes | Portfolio or queue reconciliation | Current public cross-project contribution state |
-| **Memory** | `MEMORY.md` | No (gitignored) | When present | Private context and lessons; refresh open-PR state from live sources |
-| **Daily** | `memory/YYYY-MM-DD.md` | No (gitignored) | Today + yesterday | Session-specific notes, decisions, blockers |
 | **Skills** | `oss/*/SKILL.md` | Yes | When working on project | Project-specific workflow, conventions, recipes |
 
 ### Repository Layout
 
 ```
 oss-claw/
-  SOUL.md
-  AGENTS.md
-  TOOLS.md
-  USER.md.template
-  MEMORY.md.template
-  memory/
   oss/
     references/
       contribution-quality.md
@@ -149,52 +103,14 @@ oss-claw/
 
 ---
 
-## Modes of Operation
-
-### Human-Guided Coding Agents
-
-The human triggers actions. The agent implements and the human authenticates.
-
-```
-Human: "pick next nemoclaw issue"
-Agent: reads SKILL.md → scans issues → implements fix → runs tests
-Agent: "Here are the commit, push, and PR commands."
-Human: runs git commit, git push, opens PR
-```
-
-This mode fits IDE and CLI coding assistants. Attach or symlink the relevant
-project skill, then ask the assistant to follow that workflow.
-
-### Autonomous Runtime
-
-An autonomous runtime can load the top-level operating files plus project
-skills. It scans, selects, implements, tests, submits, monitors reviews, and
-updates memory across any supported project. Human approval gates are
-configurable per project and change size.
-
-```
-Agent: boot → read SOUL.md + local MEMORY.md when present → scan live project state
-Agent: select highest-priority task → implement → verify → submit
-Agent: monitor for reviews → respond to feedback → learn
-Agent: update MEMORY.md → loop
-```
-
----
-
 ## Quick Start
 
-### 1. Clone and set up your identity
+### 1. Clone the skills
 
 ```bash
 git clone https://github.com/deepujain/oss-claw.git ~/oss-claw
 cd ~/oss-claw
-
-cp USER.md.template USER.md      # edit with your name, email, GitHub username, local paths
-cp MEMORY.md.template MEMORY.md  # starts empty  -  populated as you contribute
 ```
-
-Both `USER.md` and `MEMORY.md` are gitignored so your personal data
-stays local.
 
 ### 2. Use with any coding agent
 
@@ -206,15 +122,10 @@ For a one-project task:
 - Attach the relevant `oss/<project>/SKILL.md`.
 - Attach `oss/references/contribution-quality.md` when the task involves PR
   descriptions, validation, CI, reviews, or open-PR maintenance.
-- Add `SOUL.md` if you want the broader contribution principles.
-- Add `TOOLS.md` if the task involves publishing, CI, review comments, or
-  tracker-specific tooling.
 
 For cross-project work:
 
-- Attach `SOUL.md`, `AGENTS.md`, `TOOLS.md`, and the project skills that
-  are in scope.
-- Keep `USER.md` and `MEMORY.md` local and gitignored.
+- Attach the project skills that are in scope plus the shared quality reference.
 - Let the coding agent read the relevant skill before selecting or editing
   any issue.
 
@@ -254,8 +165,7 @@ Contributions are welcome. To add or improve:
 1. **New project skill:** Add `oss/<project>/SKILL.md` following the
    pattern of existing skills.
 2. **Improve existing skill:** Edit the relevant `SKILL.md` and open a PR.
-3. **Agent behavior:** Improve `SOUL.md`, `AGENTS.md`, or `TOOLS.md`.
-4. **New use case:** Propose a new top-level folder for a different
+3. **New use case:** Propose a new top-level folder for a different
    use case (e.g., `review/` for code review, `docs/` for documentation).
 
 Open an [issue](https://github.com/deepujain/oss-claw/issues) to discuss;
