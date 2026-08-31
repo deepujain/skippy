@@ -75,9 +75,9 @@ The live public portfolio and contribution matrix live in
 Use that repository for current PR and tracker-patch status; do not use a
 static table here as an operational queue.
 
-OSS Claw supplies the reusable contribution protocol. The public tracker
-records the current cross-project state, while local `MEMORY.md` holds
-private, machine-specific notes. Each current tracker update should link to a
+OSS Claw supplies the reusable contribution protocol. The public tracker and
+live upstreams record current cross-project state, while optional local
+`MEMORY.md` holds private, machine-specific notes. Each current tracker update should link to a
 [verification receipt](oss/references/verification-receipts.md) that records
 the decision, evidence, known limits, and next state.
 
@@ -113,7 +113,7 @@ PRs at once.
 | **Verification Receipts** | `oss/references/verification-receipts.md` | Yes | Sweeps and PR lifecycle changes | Replayable decision, evidence, limit, and next-state records |
 | **Execution Contracts** | `oss/references/execution-contracts.md` | Yes | Behavior changes and long-running work | Done conditions, preserved behavior, modes, continuation, and parallel isolation |
 | **Public Tracker** | [`deepujain/oss-contribs`](https://github.com/deepujain/oss-contribs) | Yes | Portfolio or queue reconciliation | Current public cross-project contribution state |
-| **Memory** | `MEMORY.md` | No (gitignored) | Every session | Open PR state, contribution history, lessons |
+| **Memory** | `MEMORY.md` | No (gitignored) | When present | Private context and lessons; refresh open-PR state from live sources |
 | **Daily** | `memory/YYYY-MM-DD.md` | No (gitignored) | Today + yesterday | Session-specific notes, decisions, blockers |
 | **Skills** | `oss/*/SKILL.md` | Yes | When working on project | Project-specific workflow, conventions, recipes |
 
@@ -173,7 +173,7 @@ updates memory across any supported project. Human approval gates are
 configurable per project and change size.
 
 ```
-Agent: boot → read SOUL.md + MEMORY.md → scan all projects
+Agent: boot → read SOUL.md + local MEMORY.md when present → scan live project state
 Agent: select highest-priority task → implement → verify → submit
 Agent: monitor for reviews → respond to feedback → learn
 Agent: update MEMORY.md → loop

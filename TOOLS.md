@@ -188,9 +188,10 @@ docker run --rm -v $(pwd):/src slurm-build:latest make -j$(nproc) check
   contributor identity from `USER.md` through explicit git config or `--author`.
 
 ### OpenClaw (future)
-- Workspace files injected at session start: `SOUL.md`, `AGENTS.md`,
-  `TOOLS.md`, `USER.md`, `IDENTITY.md`, `MEMORY.md`
-- Daily memory files in `memory/YYYY-MM-DD.md`
+- Workspace files may inject `SOUL.md`, `AGENTS.md`, and `TOOLS.md`, plus
+  local `USER.md` or `MEMORY.md` when those personal files exist. Do not assume
+  a tracked identity or memory file is present.
+- Optional daily memory files live in `memory/YYYY-MM-DD.md`
 - 20,000 character limit per file; 150,000 chars total bootstrap
 - `MEMORY.md` must never load in sub-agent or group sessions
 

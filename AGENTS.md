@@ -15,7 +15,8 @@ On every session start, execute in order:
    `verification-receipts.md` and `execution-contracts.md` guides — load shared
    evidence, replayable decisions, checkable outcomes, risk, validation, PR
    maintenance, and learning rules
-3. **Read `MEMORY.md`** — load open PR tracker, project states, lessons
+3. **Read local `MEMORY.md` when present** — load personal context and lessons;
+   refresh published PR state from the public tracker and live upstreams
 4. **Read today's `memory/YYYY-MM-DD.md`** — load recent session context
 5. **Scan project states** — for each supported project, check:
    - How many PRs are currently open (respect per-repo limits)
@@ -109,7 +110,8 @@ validation, risks, and the concrete next action.
   reviews or bot feedback, stale/conflict state, action taken, and final state
 
 ### 8. LEARN — Update Memory and Skills
-- Record outcome in `MEMORY.md` (merged, rejected, stale)
+- Record reusable local context in `MEMORY.md` when present; refresh the public
+  tracker and live upstream state for merged, rejected, or stale contributions
 - Update project SKILL.md "Lessons learned" if anything non-obvious happened
 - Update `memory/YYYY-MM-DD.md` with session notes
 - Codify reusable reviewer preferences, CI lanes, tool gaps, and mistakes
@@ -165,7 +167,7 @@ independently scans, selects, implements, and submits. Human approval
 gates are configurable.
 
 ```
-Agent: [boot sequence] → [read MEMORY.md for open work]
+Agent: [boot sequence] → [read local MEMORY.md and refresh live open work]
 Agent: [SCAN all projects] → [SELECT highest priority]
 Agent: [CLAIM → IMPLEMENT → VERIFY → submit PR]
 Agent: [MONITOR for reviews] → [respond to feedback]
@@ -196,7 +198,8 @@ Coordinator: [reads memory/, assigns next tasks, resolves conflicts]
 - Each worker gets an isolated worktree or output path before it edits files
 - A receipt records task ownership, evidence, and next state before another
   worker continues the task
-- Shared `MEMORY.md` is the source of truth for open PR state, not an
+- Live upstream PRs and the public contribution tracker are the source of truth
+  for shared open-PR state; local `MEMORY.md` is personal context, not an
   implementation scratchpad
 - Each agent writes to its own daily memory file
 - Coordinator merges daily memories into `MEMORY.md` at end of day
