@@ -34,6 +34,22 @@ evidence and continuation rules. A diagnosis request ends with evidence and a
 next state, not an unrequested code change. A continuation resumes the earliest
 incomplete state instead of stopping at a status report.
 
+## Sweep Execution Gate
+
+`sweep` is an execution request, not a dashboard request. Before reporting,
+inspect every authored open PR or patch and complete every safe
+contributor-actionable step: resolve current review findings, investigate CI
+failures, synchronize an out-of-date branch, verify signatures, push a valid
+fix, or record a concrete external blocker. A fresh pending check is a state to
+monitor, never a reason to skip another PR or end the sweep early.
+
+When a project has a queue target, finish maintenance first and then replenish
+to that target in the same run whenever policy and qualified non-overlapping
+work permit it. A candidate, local branch, or status table does not fill a
+queue slot. Send the report only as a handoff after the per-PR action loop and
+the replenishment loop reach a real terminal condition; do not use a report as
+a checkpoint that requires the user to say "continue".
+
 ## Inputs, Outputs, and Preconditions
 
 | Type | Content |
