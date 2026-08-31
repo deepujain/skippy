@@ -12,15 +12,17 @@ On every session start, execute in order:
 
 1. **Read `SOUL.md`** — load identity, principles, safety boundaries
 2. **Read `oss/references/contribution-quality.md`** and the linked
-   `verification-receipts.md` guide — load shared evidence, replayable
-   decisions, risk, validation, PR maintenance, and learning rules
+   `verification-receipts.md` and `execution-contracts.md` guides — load shared
+   evidence, replayable decisions, checkable outcomes, risk, validation, PR
+   maintenance, and learning rules
 3. **Read `MEMORY.md`** — load open PR tracker, project states, lessons
 4. **Read today's `memory/YYYY-MM-DD.md`** — load recent session context
 5. **Scan project states** — for each supported project, check:
    - How many PRs are currently open (respect per-repo limits)
    - Which branches have uncommitted work
    - Which PRs have new review comments needing response
-6. **Decide action** — pick the highest-priority task from the task queue
+6. **Decide action** — pick the highest-priority task from the task queue and
+   record its outcome, `Done means` condition, preserved behavior, and mode
 
 ---
 
@@ -88,13 +90,11 @@ SCAN → SELECT → CLAIM → IMPLEMENT → VERIFY → HANDOFF → MONITOR → L
   not tested
 - Verify commit metadata (author, sign-off) will be correct
 
-### 6. HANDOFF — Deliver to Human
-In a single response, provide:
-- Full `git add` + `git commit` command block (with correct author/sign-off)
-- Full `git push` command (with correct remote and branch)
-- PR/patch submission instructions (title, body file, target branch)
-- Validation and risk notes ready to paste into the PR or tracker
-- Any PR comment text needed (for rebases or review responses)
+### 6. HANDOFF — Publish or Deliver
+When the user and project policy authorize direct publication, commit, push,
+and create the PR or patch after validation. Otherwise provide the exact
+publication commands and reviewer-facing text. In either case, record the
+validation, risks, and the concrete next action.
 
 ### 7. MONITOR — Track Post-Submission
 - Watch for CI results and reviewer feedback
@@ -137,9 +137,12 @@ Do not over-index on one project. When choosing new work:
 ### Parallel Work Rules
 - Maximum 3 PRs in active development simultaneously
 - Each PR MUST be on its own branch with no file overlap
-- Never context-switch mid-implementation — finish VERIFY before
-  starting a new SCAN
-- Use `git stash` when switching between branches with uncommitted work
+- Never context-switch mid-implementation — finish VERIFY before starting a
+  new SCAN, unless the active task has been paused at an atomic boundary with a
+  receipt and a concrete next action
+- Never run parallel writers in the same checkout. Use one isolated worktree
+  per active implementation task; do not use repo-global `git stash` as a
+  multi-worktree scratchpad
 
 ---
 
@@ -178,8 +181,9 @@ These actions ALWAYS require human approval, even in fully autonomous mode:
 - Any action that requires credentials or authentication
 
 ### Multi-Agent Mode (future)
-Multiple agents work on different projects simultaneously, coordinated
-through shared `MEMORY.md` and project-level lock files.
+Multiple agents work on different projects simultaneously, coordinated through
+receipts and isolated worktrees. Shared memory records decisions and state; it
+is not a shared mutable implementation workspace.
 
 ```
 Agent-A: [working on Airflow PR]     → writes to memory/
@@ -189,8 +193,11 @@ Coordinator: [reads memory/, assigns next tasks, resolves conflicts]
 ```
 
 #### Coordination Rules for Multi-Agent
-- Lock file per project prevents two agents from picking the same issue
-- Shared `MEMORY.md` is the source of truth for open PR state
+- Each worker gets an isolated worktree or output path before it edits files
+- A receipt records task ownership, evidence, and next state before another
+  worker continues the task
+- Shared `MEMORY.md` is the source of truth for open PR state, not an
+  implementation scratchpad
 - Each agent writes to its own daily memory file
 - Coordinator merges daily memories into `MEMORY.md` at end of day
 

@@ -30,6 +30,8 @@ The repository is organized as a layered architecture:
   risk, PR maintenance, and learning protocol
 - **oss/references/verification-receipts.md** — Compact, replayable records of
   contribution decisions, evidence, limits, and next actions
+- **oss/references/execution-contracts.md** — Checkable outcomes, preserved
+  behavior, work modes, continuation, and isolated parallel work
 - **Open Source Contributions** — Public, cross-project contribution tracker at
   [deepujain/oss-contribs](https://github.com/deepujain/oss-contribs)
 - **USER.md** — Contributor identity and local config (gitignored, personal)
@@ -109,6 +111,7 @@ PRs at once.
 | **Tools** | `TOOLS.md` | Yes | Every session | Git, build systems, CI, trackers — with gotchas |
 | **Shared Quality** | `oss/references/contribution-quality.md` | Yes | Every project task | Evidence gates, risk, PR structure, open-PR sweeps |
 | **Verification Receipts** | `oss/references/verification-receipts.md` | Yes | Sweeps and PR lifecycle changes | Replayable decision, evidence, limit, and next-state records |
+| **Execution Contracts** | `oss/references/execution-contracts.md` | Yes | Behavior changes and long-running work | Done conditions, preserved behavior, modes, continuation, and parallel isolation |
 | **Public Tracker** | [`deepujain/oss-contribs`](https://github.com/deepujain/oss-contribs) | Yes | Portfolio or queue reconciliation | Current public cross-project contribution state |
 | **Memory** | `MEMORY.md` | No (gitignored) | Every session | Open PR state, contribution history, lessons |
 | **Daily** | `memory/YYYY-MM-DD.md` | No (gitignored) | Today + yesterday | Session-specific notes, decisions, blockers |
@@ -128,6 +131,7 @@ oss-claw/
     references/
       contribution-quality.md
       verification-receipts.md
+      execution-contracts.md
     apache/
       airflow/SKILL.md
       hadoop/SKILL.md

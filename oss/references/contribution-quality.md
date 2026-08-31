@@ -24,6 +24,16 @@ merged/superseded`. Resume the earliest incomplete transition. A queue target
 counts only independently validated open PRs, never candidate lists, branches,
 or status-only reports.
 
+## Execution Contracts
+
+For any behavior change, multi-session task, open-PR maintenance, or queue
+replenishment, define an outcome, a checkable `Done means` condition, preserved
+behavior, and a work mode before acting. Read
+[execution-contracts.md](execution-contracts.md) for the mode-specific
+evidence and continuation rules. A diagnosis request ends with evidence and a
+next state, not an unrequested code change. A continuation resumes the earliest
+incomplete state instead of stopping at a status report.
+
 ## Inputs, Outputs, and Preconditions
 
 | Type | Content |
