@@ -1,4 +1,4 @@
-# Agents — OSS Claw Multi-Project Orchestration
+# Agents  -  OSS Claw Multi-Project Orchestration
 
 Operating manual for autonomous contribution across multiple OSS projects.
 This file defines the boot sequence, task lifecycle, delegation patterns,
@@ -10,19 +10,19 @@ and coordination rules.
 
 On every session start, execute in order:
 
-1. **Read `SOUL.md`** — load identity, principles, safety boundaries
+1. **Read `SOUL.md`**  -  load identity, principles, safety boundaries
 2. **Read `oss/references/contribution-quality.md`** and the linked
-   `verification-receipts.md` and `execution-contracts.md` guides — load shared
+   `verification-receipts.md` and `execution-contracts.md` guides  -  load shared
    evidence, replayable decisions, checkable outcomes, risk, validation, PR
    maintenance, and learning rules
-3. **Read local `MEMORY.md` when present** — load personal context and lessons;
+3. **Read local `MEMORY.md` when present**  -  load personal context and lessons;
    refresh published PR state from the public tracker and live upstreams
-4. **Read today's `memory/YYYY-MM-DD.md`** — load recent session context
-5. **Scan project states** — for each supported project, check:
+4. **Read today's `memory/YYYY-MM-DD.md`**  -  load recent session context
+5. **Scan project states**  -  for each supported project, check:
    - How many PRs are currently open (respect per-repo limits)
    - Which branches have uncommitted work
    - Which PRs have new review comments needing response
-6. **Decide action** — pick the highest-priority task from the task queue and
+6. **Decide action**  -  pick the highest-priority task from the task queue and
    record its outcome, `Done means` condition, preserved behavior, and mode
 
 ---
@@ -58,31 +58,31 @@ Every contribution follows this lifecycle. No shortcuts.
 SCAN → SELECT → CLAIM → IMPLEMENT → VERIFY → HANDOFF → MONITOR → LEARN
 ```
 
-### 1. SCAN — Find Candidate Issues
+### 1. SCAN  -  Find Candidate Issues
 - Fetch open issues from the project's tracker
 - Apply issue selection criteria from `SOUL.md`
 - Filter out issues with existing PRs from other contributors
 - Filter out issues in areas overlapping your open PRs
 - Rank by: severity > maintainer engagement > age > label priority
 
-### 2. SELECT — Choose One Issue
+### 2. SELECT  -  Choose One Issue
 - Pick the highest-ranked candidate that passes all filters
 - Verify scope is achievable in a single PR/patch
 - Confirm you understand the problem before proceeding
 - If uncertain, read related code and issues before committing
 
-### 3. CLAIM — Prepare the Workspace
+### 3. CLAIM  -  Prepare the Workspace
 - Sync the local repo from upstream (fetch + pull default branch)
 - Create a topic branch from the updated default branch
 - No code changes until the branch exists
 
-### 4. IMPLEMENT — Write the Fix
+### 4. IMPLEMENT  -  Write the Fix
 - Follow the project's SKILL.md exactly
 - Make only the changes needed for the issue
 - Follow existing code style and conventions
 - Add or update tests when behavior changes
 
-### 5. VERIFY — Build and Test
+### 5. VERIFY  -  Build and Test
 - Run the project's full test suite (or targeted tests per SKILL.md)
 - Match the evidence gate to the change type: docs render, bug repro,
   unit regression, integration command, generated-artifact check, or CI log
@@ -91,13 +91,13 @@ SCAN → SELECT → CLAIM → IMPLEMENT → VERIFY → HANDOFF → MONITOR → L
   not tested
 - Verify commit metadata (author, sign-off) will be correct
 
-### 6. HANDOFF — Publish or Deliver
+### 6. HANDOFF  -  Publish or Deliver
 When the user and project policy authorize direct publication, commit, push,
 and create the PR or patch after validation. Otherwise provide the exact
 publication commands and reviewer-facing text. In either case, record the
 validation, risks, and the concrete next action.
 
-### 7. MONITOR — Track Post-Submission
+### 7. MONITOR  -  Track Post-Submission
 - Watch for CI results and reviewer feedback
 - Treat live PR, issue, tracker, and CI state as the source of truth
 - When review comments arrive, enter the review response cycle:
@@ -109,7 +109,7 @@ validation, risks, and the concrete next action.
 - When sweeping multiple PRs, report every PR with action found, CI state,
   reviews or bot feedback, stale/conflict state, action taken, and final state
 
-### 8. LEARN — Update Memory and Skills
+### 8. LEARN  -  Update Memory and Skills
 - Record reusable local context in `MEMORY.md` when present; refresh the public
   tracker and live upstream state for merged, rejected, or stale contributions
 - Update project SKILL.md "Lessons learned" if anything non-obvious happened
@@ -122,12 +122,12 @@ validation, risks, and the concrete next action.
 ## Scheduling and Prioritization
 
 ### Priority Order (highest first)
-1. **Review responses** — unaddressed maintainer feedback on open PRs
+1. **Review responses**  -  unaddressed maintainer feedback on open PRs
    (these block merges and signal disengagement if ignored)
-2. **Conflict resolution** — open PRs with merge conflicts
+2. **Conflict resolution**  -  open PRs with merge conflicts
    (stale PRs get closed; keep them mergeable)
-3. **New contributions** — fresh issue → implementation → PR
-4. **Housekeeping** — update skills, memory, documentation
+3. **New contributions**  -  fresh issue → implementation → PR
+4. **Housekeeping**  -  update skills, memory, documentation
 
 ### Project Rotation
 Do not over-index on one project. When choosing new work:
@@ -139,7 +139,7 @@ Do not over-index on one project. When choosing new work:
 ### Parallel Work Rules
 - Maximum 3 PRs in active development simultaneously
 - Each PR MUST be on its own branch with no file overlap
-- Never context-switch mid-implementation — finish VERIFY before starting a
+- Never context-switch mid-implementation  -  finish VERIFY before starting a
   new SCAN, unless the active task has been paused at an atomic boundary with a
   receipt and a concrete next action
 - Never run parallel writers in the same checkout. Use one isolated worktree
@@ -212,10 +212,10 @@ When a maintainer or automated reviewer (CodeRabbit, etc.) comments on
 a PR, follow this protocol:
 
 ### Triage Comments
-1. **Actionable** — code change requested → implement it
-2. **Nitpick** — style preference → implement it (costs nothing, builds goodwill)
-3. **Question** — clarification needed → answer concisely with evidence
-4. **Incorrect** — reviewer misunderstood → explain once, then defer if they insist
+1. **Actionable**  -  code change requested → implement it
+2. **Nitpick**  -  style preference → implement it (costs nothing, builds goodwill)
+3. **Question**  -  clarification needed → answer concisely with evidence
+4. **Incorrect**  -  reviewer misunderstood → explain once, then defer if they insist
 
 ### Response Cycle
 1. Read ALL comments before making any changes

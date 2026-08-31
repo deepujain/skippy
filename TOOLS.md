@@ -1,4 +1,4 @@
-# Tools — OSS Claw
+# Tools  -  OSS Claw
 
 Capabilities, integration patterns, and hard-won gotchas for every tool
 in the autonomous contributor's stack. When a tool bites you once, write
@@ -19,15 +19,15 @@ it here so it never bites again.
 | `git rebase --continue` | Yes | Replays existing commit |
 | `git stash push / pop` | Yes | Context switching |
 | `git log`, `git diff`, `git status` | Yes | Read-only |
-| `git commit` | **No** | Human runs — author/sign-off |
-| `git push` | **No** | Human runs — authentication |
+| `git commit` | **No** | Human runs  -  author/sign-off |
+| `git push` | **No** | Human runs  -  authentication |
 | `git reset --hard` | **Never** | Destructive |
 | `git push --force` | **Never** | Use `--force-with-lease` only |
 
 ### Gotchas
 - **zsh history expansion**: Use single quotes for `-m` messages. `!` in
   double quotes triggers zsh history substitution and corrupts the message.
-- **`-c` placement**: `git -c user.name="..." commit` — the `-c` goes on
+- **`-c` placement**: `git -c user.name="..." commit`  -  the `-c` goes on
   `git`, not on `commit`. Putting `-c` on `commit` conflicts with `-m`.
 - **Rebase author**: After rebase, the committer identity changes to the
   local git config. Always set `GIT_COMMITTER_NAME` and `GIT_COMMITTER_EMAIL`
@@ -43,8 +43,8 @@ it here so it never bites again.
 ## GitHub CLI (`gh`)
 
 ### Agent Rules
-- **Never run `gh pr create`** — human authenticates and creates PRs
-- **Never run `gh pr comment`** — provide comment text in chat for
+- **Never run `gh pr create`**  -  human authenticates and creates PRs
+- **Never run `gh pr comment`**  -  provide comment text in chat for
   human to paste
 - **May run `gh api`** read-only queries to check PR state, CI status
 - **May run `gh pr list`** to check open PR counts
@@ -150,7 +150,7 @@ docker run --rm -v $(pwd):/src slurm-build:latest make -j$(nproc) check
 - Close syntax: `Fixes HADOOP-NNNNN` in commit message
 
 ### SchedMD Tracker (Slurm)
-- No GitHub PRs — attach `git format-patch` output to tracker ticket
+- No GitHub PRs  -  attach `git format-patch` output to tracker ticket
 - Severity: `C - Contributions`
 - Include `Changelog:` trailer in commit message
 - Use `Obsoletes` field when replacing a previous patch

@@ -23,20 +23,20 @@ cross-project planning, memory, and autonomous review follow-up.
 
 The repository is organized as a layered architecture:
 
-- **SOUL.md** — Principles, judgment criteria, safety boundaries
-- **AGENTS.md** — Multi-project orchestration, task lifecycle, delegation
-- **TOOLS.md** — Tool capabilities, integration patterns, gotchas
-- **oss/references/contribution-quality.md** — Shared evidence, validation,
+- **SOUL.md**  -  Principles, judgment criteria, safety boundaries
+- **AGENTS.md**  -  Multi-project orchestration, task lifecycle, delegation
+- **TOOLS.md**  -  Tool capabilities, integration patterns, gotchas
+- **oss/references/contribution-quality.md**  -  Shared evidence, validation,
   risk, PR maintenance, and learning protocol
-- **oss/references/verification-receipts.md** — Compact, replayable records of
+- **oss/references/verification-receipts.md**  -  Compact, replayable records of
   contribution decisions, evidence, limits, and next actions
-- **oss/references/execution-contracts.md** — Checkable outcomes, preserved
+- **oss/references/execution-contracts.md**  -  Checkable outcomes, preserved
   behavior, work modes, continuation, and isolated parallel work
-- **Open Source Contributions** — Public, cross-project contribution tracker at
+- **Open Source Contributions**  -  Public, cross-project contribution tracker at
   [deepujain/oss-contribs](https://github.com/deepujain/oss-contribs)
-- **USER.md** — Contributor identity and local config (gitignored, personal)
-- **MEMORY.md** — Cross-session state: open PRs, contribution history, lessons (gitignored, personal)
-- **SKILL.md** (per project) — Project-specific workflows, conventions, recipes
+- **USER.md**  -  Contributor identity and local config (gitignored, personal)
+- **MEMORY.md**  -  Cross-session state: open PRs, contribution history, lessons (gitignored, personal)
+- **SKILL.md** (per project)  -  Project-specific workflows, conventions, recipes
 
 The skills give a coding agent *how* to contribute to each project. The
 agent files give a runtime *how to behave across projects*, including
@@ -108,7 +108,7 @@ PRs at once.
 | **Principles** | `SOUL.md` | Yes | Every session | What the agent values, safety rules |
 | **Identity** | `USER.md` | No (gitignored) | Every session | Contributor name, email, local paths |
 | **Operations** | `AGENTS.md` | Yes | Every session | Boot sequence, task lifecycle, scheduling |
-| **Tools** | `TOOLS.md` | Yes | Every session | Git, build systems, CI, trackers — with gotchas |
+| **Tools** | `TOOLS.md` | Yes | Every session | Git, build systems, CI, trackers  -  with gotchas |
 | **Shared Quality** | `oss/references/contribution-quality.md` | Yes | Every project task | Evidence gates, risk, PR structure, open-PR sweeps |
 | **Verification Receipts** | `oss/references/verification-receipts.md` | Yes | Sweeps and PR lifecycle changes | Replayable decision, evidence, limit, and next-state records |
 | **Execution Contracts** | `oss/references/execution-contracts.md` | Yes | Behavior changes and long-running work | Done conditions, preserved behavior, modes, continuation, and parallel isolation |
@@ -190,7 +190,7 @@ git clone https://github.com/deepujain/oss-claw.git ~/oss-claw
 cd ~/oss-claw
 
 cp USER.md.template USER.md      # edit with your name, email, GitHub username, local paths
-cp MEMORY.md.template MEMORY.md  # starts empty — populated as you contribute
+cp MEMORY.md.template MEMORY.md  # starts empty  -  populated as you contribute
 ```
 
 Both `USER.md` and `MEMORY.md` are gitignored so your personal data
