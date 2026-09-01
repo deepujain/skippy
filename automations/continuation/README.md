@@ -1,10 +1,54 @@
 # Optional Continuation Pack
 
-This pack provides portable prompts for a scheduler or heartbeat-capable agent.
-It does not register jobs automatically. Enable it only after choosing the
-project, repository, authority boundaries, and a checkable completion condition.
+Portable prompts for scheduled Skippy sweeps. Each tick is **one full e2e pass**
+(maintain every PR, fix CI/reviews, learn, replenish) — not a status snapshot and
+not a separate bash rebase step.
 
-Use [continuation-prompt.md](continuation-prompt.md) as the user-visible prompt
-for a thread heartbeat. Keep automation scheduling and notification policy in
-the host application, not inside the prompt.
+## How scheduling works (local IDE)
 
+The loop script sleeps 30 minutes and prints `AGENT_LOOP_TICK_<project>-sweep`
+with a JSON payload to **stdout**. A monitored background shell wakes the IDE
+agent on each tick; the agent executes the full prompt (see the Loop skill).
+
+```bash
+# Start all four project loops (stdout must stay on the terminal)
+./scripts/start-sweep-loops.sh
+```
+
+Or one project:
+
+```bash
+./scripts/sweep-continuation-loop.sh skillspector
+```
+
+**Do not redirect loop stdout** to a log file — that hides the sentinel from the
+monitor. Scheduler internals go to `.skippy/sweep-scheduler.log` automatically.
+
+Run the first sweep immediately when arming loops (loop skill: avoid cold start).
+The startup tick fires right away; execute that prompt before waiting 30 minutes.
+
+## Watch output
+
+```bash
+tail -f ~/nvidia/oss/skippy/.skippy/sweep-output.log
+```
+
+Agent-completed sweeps append `SWEEP (...)` lines. Scheduler ticks:
+`tail -f .skippy/sweep-scheduler.log`
+
+## Permissions
+
+Use unrestricted IDE permissions (`.cursor/permissions.json`). Headless
+`cursor agent --force` is **not** used — NVIDIA org policy blocks Run Everything.
+The IDE agent in this session runs each tick with normal approvals.
+
+## Per-project continuation docs
+
+| Project | Doc |
+| --- | --- |
+| SkillSpector | [skillspector-sweep-and-replenish.md](skillspector-sweep-and-replenish.md) |
+| NemoClaw | [nemoclaw-sweep-and-replenish.md](nemoclaw-sweep-and-replenish.md) |
+| Inspect AI | [inspect-ai-sweep-and-replenish.md](inspect-ai-sweep-and-replenish.md) |
+| Apache Hadoop | [hadoop-sweep-and-replenish.md](hadoop-sweep-and-replenish.md) |
+
+Generic template: [sweep-and-replenish-prompt.md](sweep-and-replenish-prompt.md)

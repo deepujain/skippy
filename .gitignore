@@ -1,2 +1,9 @@
 # macOS Finder metadata
 .DS_Store
+
+# Scheduled sweep runtime (local only)
+.skippy/sweep-output.log
+.skippy/sweep-scheduler.log
+.skippy/sweep-scheduler.log.lock
+.skippy/sweep-agent-*.log
+.skippy/sweep-agent-*.lock

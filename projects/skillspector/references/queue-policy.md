@@ -63,3 +63,45 @@ or acting on a target.
   changes-requested review remains pending re-review.
 - #468's rerun is fully green and its merge state is clean. It awaits normal
   maintainer review.
+
+## 2026-09-01 replenishment
+
+- Issue [#448](https://github.com/NVIDIA/SkillSpector/issues/448) had no open
+  overlap after direct searches by issue number and behavior. Its requested
+  automation use case is fulfilled narrowly by `--fail-on-findings`: exit one
+  only for active (not baseline-suppressed) findings, after preserving the
+  single or recursive report. [#469](https://github.com/NVIDIA/SkillSpector/pull/469)
+  is open with DCO-signed code and focused Ruff, diff, and syntax checks; CI is
+  fully green. The queue now has five open PRs.
+
+## 2026-09-01 sweep (continuation)
+
+- Contributor identity: `deepujain`, authenticated `gh` (keyring, `repo` scope).
+- Open PRs: [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468),
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469) — five slots filled.
+- Maintenance: #428 and #434 were 36 commits behind `main`; rebased via
+  `gh pr update-branch --rebase`. CI is queued on both. #436 is current on
+  `main` with fully green CI; prior changes-requested review remains pending
+  re-review after the lazy-graph fix in `dce9af0`.
+- Healthy count: 2/5 (#468 and #469 are merge-clean with green CI, awaiting
+  review). #428 lost stale-base status but CI is pending and prior approval
+  needs reconfirmation. #434 and #436 have addressed review feedback but
+  pending re-review.
+- Replenishment: not attempted. Target of five open PRs is met; overlap screen
+  still blocks #464/#465, #450/#451, #459/#463, #449/#467, and #456/#457.
+  Issues #460 and #448 are covered by #468 and #469.
+
+## 2026-09-01 sweep (second pass)
+
+- No departed PRs since the continuation sweep.
+- All five branches are current on `main` (`behind_by: 0`). #428, #436, #468,
+  and #469 have fully green CI. #434's post-rebase unit test completed green.
+- Healthy count: 3/5 (#428, #468, #469 are merge-clean with green CI; #428
+  retains prior approval but needs reconfirmation after rebase). #434 and #436
+  have addressed review feedback awaiting maintainer re-review.
+- Replenishment: not attempted; queue remains 5/5.
+- Scheduled continuation: every 30 minutes via local loop; prompt at
+  `automations/continuation/skillspector-sweep-and-replenish.md`.

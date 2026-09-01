@@ -47,3 +47,21 @@ fallback when `gh` is stale, but verify each write capability and provide any
 blocked PR comment text separately.
 
 Next action: Refresh PR heads and checks through the integration after each update; do not block maintenance solely on local `gh` authentication.
+
+## 2026-09-01: rebase stale branches with gh update-branch
+
+Source: 2026-09-01 sweep of https://github.com/NVIDIA/SkillSpector/pull/428 and https://github.com/NVIDIA/SkillSpector/pull/434
+
+Classification: verified repair
+
+Observation: Approved or review-pending PRs can fall 30+ commits behind `main`
+while remaining mergeable. Local rebase plus `--force-with-lease` can fail on
+stale lease refs; `gh pr update-branch --rebase` updates the fork branch
+directly and queues fresh CI.
+
+Adopted rule: During sweep maintenance, compare each authored PR against
+current `main` first. When behind, prefer `gh pr update-branch --rebase` before
+local worktree rebases.
+
+Next action: After any rebase, wait for CI before counting the PR as healthy;
+prior approvals may need reconfirmation.

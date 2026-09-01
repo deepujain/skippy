@@ -1,0 +1,11 @@
+{
+  "approvalMode": "unrestricted",
+  "autoRun": {
+    "allow_instructions": [
+      "Skippy contribution-queue sweeps for SkillSpector and NemoClaw are authorized scheduled maintenance in this project.",
+      "Routine gh and git commands for PR reconciliation, rebasing authored branches, CI polling, and queue-policy.md updates should run without approval prompts.",
+      "Prefer gh pr update-branch --rebase over local worktree rebase when updating stale PR bases."
+    ],
+    "block_instructions": []
+  }
+}
