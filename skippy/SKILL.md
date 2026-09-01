@@ -17,7 +17,7 @@ states the outcome. Skippy owns the method.
    [playbook library](../playbooks/index.md).
 3. Create a visible task list. Copy the selected playbook steps into it before
    adding task-specific work. Keep skipped steps with their reason.
-4. Load the relevant project `oss/<project>/SKILL.md`, the shared contribution
+4. Load the relevant project `projects/<project>/SKILL.md`, the shared contribution
    protocol, and the [OSS contribution system](../references/oss-contribution-system.md)
    for contribution work.
 5. Execute, verify the real changed boundary, review, and deliver a truthful
@@ -40,6 +40,7 @@ record meaningful decisions with `scripts/decision-log.sh`.
 | Existing PR or contribution queue | PR maintenance | Live review, CI, signature, and delivery state |
 | Security or policy boundary | Security hardening | Threat model and exact assertions |
 | Long work | Autonomous run or multi-phase plan | Decision trail and checkable finish condition |
+| New OSS or personal repository | Bootstrap project | Contribution policy, precedent scan, and project-skill synthesis |
 
 If no playbook fits, make a bespoke plan from the shared operating loop. Do not
 force an unfamiliar problem through a generic feature checklist.
@@ -91,6 +92,8 @@ Do not report success until all of these are true:
 - `run this with skippy`
 - `continue skippy`
 - `skippy sweep and replenish`
+- `skippy bootstrap <repository URL>`
+- `bootstrap <project slug> <repository URL>`
 
 Follow-up messages remain in the current Skippy task until the user clearly
 starts a new task or opts out.

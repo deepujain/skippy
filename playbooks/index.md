@@ -59,6 +59,7 @@ All playbooks share this operating loop:
 | Pause safely | Work must stop before completion | Finish or revert the atomic edit; record branch, diff, commands, evidence, and earliest safe resume action. |
 | Skill evolution | A recurring failure exposes a durable workflow gap | Identify the recurring mechanism; add the smallest instruction or helper; exercise it against a realistic task; preserve scope. |
 | Contribution queue | A project has multiple open contributions or a target queue | Maintain every existing PR first; screen candidates for overlap; independently validate each new contribution; monitor all current heads. |
+| [Bootstrap project](bootstrap-project.md) | A repository has no Skippy project adapter yet | Analyze contribution policy and repository shape; compare merged and closed-unmerged PR patterns; scaffold only evidence-backed project rules. |
 
 ## Selection rules
 

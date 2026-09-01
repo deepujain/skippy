@@ -11,14 +11,14 @@ while IFS= read -r skill; do
   fi
 done < <(find "$root/projects" "$root/skippy" -name SKILL.md -type f | sort)
 
-for reference in contribution-quality.md execution-contracts.md verification-receipts.md engineering-principles.md engineering-foundations.md delegation.md oss-contribution-system.md; do
+for reference in contribution-quality.md execution-contracts.md verification-receipts.md engineering-principles.md engineering-foundations.md project-bootstrap.md delegation.md oss-contribution-system.md; do
   if [[ ! -f "$root/references/$reference" ]]; then
     echo "missing shared reference: $reference" >&2
     errors=1
   fi
 done
 
-for file in playbooks/index.md skippy/agents/investigator.md skippy/agents/verifier.md; do
+for file in playbooks/index.md playbooks/bootstrap-project.md skippy/agents/investigator.md skippy/agents/verifier.md scripts/bootstrap-project.sh; do
   if [[ ! -f "$root/$file" ]]; then
     echo "missing orchestration artifact: $file" >&2
     errors=1

@@ -187,6 +187,34 @@ instead of mysterious.
 
 ## Project skills
 
+### Bootstrap a new project
+
+Give Skippy a canonical repository URL:
+
+```text
+skippy bootstrap https://github.com/owner/repository
+```
+
+It applies the [Bootstrap Project playbook](playbooks/bootstrap-project.md):
+read the contribution policy and repository shape, inspect recent merged PRs,
+inspect closed-unmerged PRs for evidence-backed failure or supersession
+patterns, screen current overlap, and produce a project adapter with a source
+linked bootstrap report.
+
+The scaffold helper creates the expected place for that work:
+
+```bash
+./scripts/bootstrap-project.sh repository https://github.com/owner/repository
+```
+
+It deliberately creates a **provisional** profile. The agent must complete the
+analysis before claiming contribution readiness, and the first real contribution
+must still verify the actual local commands and live reviewer workflow.
+
+This works for an upstream OSS repository or your own repository. A project
+skill captures local policy and recurring precedent; Skippy's principles and
+playbooks remain shared across every project.
+
 | Project | Skill |
 | --- | --- |
 | NVIDIA AIQ | [projects/aiq/SKILL.md](projects/aiq/SKILL.md) |
