@@ -688,6 +688,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 Say one of these so the agent applies this skill:
 
 - **"sweep"** (when the active repo/thread context identifies NemoClaw.)
+- **"sweep and replenish"** (explicit alias for the same complete maintenance-and-five-PR replenishment workflow.)
 - **"deep batch"** - pick 10 substantial NemoClaw issues by default and run the full PR recipe end-to-end for each.
 - **"Pick the next NemoClaw issue and do the full PR recipe."**
 - **"Next NemoClaw PR: find an issue, implement, and prepare branch, commit (with sign-off), and PR."**
