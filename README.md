@@ -125,18 +125,12 @@ the authority the project requires.
 
 ### 3. Maintain and replenish your contribution queue
 
-Choose the number of healthy open contributions you want. If the project has no
-explicit target, Skippy defaults to **5**, unless current repository policy sets
-a lower maximum. A project policy always wins over the default.
-
-```bash
-./scripts/configure-project-queue.sh nemoclaw 5 10
-```
-
-Then tell the agent:
+For a bootstrapped project, Skippy already knows the project queue policy. When
+no target was recorded, it uses **5** healthy open PRs unless live repository
+policy sets a lower maximum. Just tell the agent:
 
 ```text
-skippy sweep and replenish nemoclaw to 5 open PRs
+skippy sweep and replenish
 ```
 
 It examines every one of your open PRs first. As PRs merge or close, it learns
