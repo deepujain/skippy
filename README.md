@@ -145,7 +145,7 @@ Ask your coding agent to create a recurring task in plain language. Replace
 ```text
 Schedule a recurring task every X minutes that runs:
 
-skippy sweep and replenish <project>
+skippy sweep and replenish
 ```
 
 For example, to maintain the NemoClaw queue every 30 minutes:
@@ -165,7 +165,7 @@ skippy sweep and replenish nemoclaw
 ```
 
 On an agent without native recurring tasks, send the same `skippy sweep and
-replenish <project>` prompt manually. The optional
+replenish` prompt manually. The optional
 [sweep-and-replenish prompt](automations/continuation/sweep-and-replenish-prompt.md)
 explains the full task contract when you need to inspect or customize it.
 
