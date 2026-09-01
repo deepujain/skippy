@@ -53,11 +53,11 @@ then loads the target repository's conventions before it edits.
 
 | Layer | Purpose |
 | --- | --- |
-| [Skippy Mode](oss/skippy/SKILL.md) | Routes the request, keeps the plan visible, selects supporting capabilities, and enforces the completion gate |
-| [Engineering decision system](oss/references/engineering-principles.md) | Guides ownership, complexity, reliability, security, evidence, and delivery decisions without reducing engineering to a count of slogans |
-| [Playbook library](oss/playbooks/index.md) | Supplies the ordered work moves for investigation, change, assurance, autonomous work, and contribution queues |
+| [Skippy Mode](skippy/SKILL.md) | Routes the request, keeps the plan visible, selects supporting capabilities, and enforces the completion gate |
+| [Engineering decision system](references/engineering-principles.md) | Guides ownership, complexity, reliability, security, evidence, and delivery decisions without reducing engineering to a count of slogans |
+| [Playbook library](playbooks/index.md) | Supplies the ordered work moves for investigation, change, assurance, autonomous work, and contribution queues |
 | [Project skills](#project-skills) | Supply each repository's live contribution policy, commands, layout, CI, review, and maintainer conventions |
-| [Parallel-work protocol](oss/references/delegation.md) | Defines accountable integration, isolated writers, independent review, and evidence handoffs |
+| [Parallel-work protocol](references/delegation.md) | Defines accountable integration, isolated writers, independent review, and evidence handoffs |
 | [Task artifacts and helpers](#durable-work) | Make decisions, completion criteria, and verification replayable across agents and sessions |
 | [Contribution tracker](https://github.com/deepujain/oss-contribs) | Shows the cross-project queue without replacing the source repository's authoritative PR state |
 
@@ -66,8 +66,40 @@ general engineering judgment, and Skippy does not claim to know local facts it
 has not read from the project.
 
 The decision system is grounded in a short, explicit
-[engineering foundations reading map](oss/references/engineering-foundations.md),
+[engineering foundations reading map](references/engineering-foundations.md),
 then translated into work moves rather than copied as book summaries.
+
+## Repository map
+
+```text
+skippy/
+├── skippy/       Router and specialist role definitions
+├── references/   Shared contribution protocol, principles, and evidence rules
+├── playbooks/    Work sequences selected by uncertainty and risk
+├── projects/     One project-specific contribution skill per OSS project
+├── scripts/      Task-plan, decision-log, and structural-validation helpers
+├── automations/  Optional continuation prompts for supported clients
+└── README.md      Start here
+```
+
+The top-level folders are intentional: shared engineering guidance is separate
+from project adapters, and reusable playbooks are separate from both.
+
+## The five engineering areas
+
+These are the decision areas every non-trivial task can draw from. Skippy names
+only the principles that change a real choice in the task plan.
+
+| Area | Principles used when needed |
+| --- | --- |
+| **Frame the problem** | explicit contracts; evidence ladder; caller and user context; facts versus inference; uncertainty; observable finish lines |
+| **Design the right change** | owning boundary; singular authority; complexity reduction; understandable interfaces; compatibility; idempotence; failure design; reversible units |
+| **Build for operation** | lifecycle ownership; testable security properties; real integration contracts; built-in quality; useful observability; performance budgets |
+| **Verify and learn** | reproduction; changed-boundary proof; valid and rejection paths; diff review; replayable receipts; durable lessons |
+| **Collaborate without losing ownership** | one integrator; stable partitions; isolated writers; bounded cognitive load; skeptical independence; complete delivery state |
+
+Read the complete, actionable wording in the
+[engineering decision system](references/engineering-principles.md).
 
 ## How an OSS contribution comes together
 
@@ -106,7 +138,7 @@ In practice:
 5. The contribution is delivered with an evidence receipt. The source PR is
    authoritative; the cross-project tracker records portfolio and queue state.
 
-Read the full [OSS contribution system](oss/references/oss-contribution-system.md).
+Read the full [OSS contribution system](references/oss-contribution-system.md).
 
 ## Start multiple agents without making a mess
 
@@ -157,19 +189,19 @@ instead of mysterious.
 
 | Project | Skill |
 | --- | --- |
-| NVIDIA AIQ | [oss/aiq/SKILL.md](oss/aiq/SKILL.md) |
-| Apache Airflow | [oss/apache/airflow/SKILL.md](oss/apache/airflow/SKILL.md) |
-| Apache Hadoop | [oss/apache/hadoop/SKILL.md](oss/apache/hadoop/SKILL.md) |
-| Apache Spark | [oss/apache/spark/SKILL.md](oss/apache/spark/SKILL.md) |
-| ClawHub | [oss/clawhub/SKILL.md](oss/clawhub/SKILL.md) |
-| Hermes Agent | [oss/hermes-agent/SKILL.md](oss/hermes-agent/SKILL.md) |
-| Inspect AI | [oss/inspect-ai/SKILL.md](oss/inspect-ai/SKILL.md) |
-| Inspect Petri | [oss/inspect-petri/SKILL.md](oss/inspect-petri/SKILL.md) |
-| NemoClaw | [oss/nemoclaw/SKILL.md](oss/nemoclaw/SKILL.md) |
-| OpenClaw | [oss/openclaw/SKILL.md](oss/openclaw/SKILL.md) |
-| PyTorch | [oss/pytorch/SKILL.md](oss/pytorch/SKILL.md) |
-| Slurm | [oss/slurm/SKILL.md](oss/slurm/SKILL.md) |
-| OSS contribution README | [oss/oss-contribution-readme/SKILL.md](oss/oss-contribution-readme/SKILL.md) |
+| NVIDIA AIQ | [projects/aiq/SKILL.md](projects/aiq/SKILL.md) |
+| Apache Airflow | [projects/apache/airflow/SKILL.md](projects/apache/airflow/SKILL.md) |
+| Apache Hadoop | [projects/apache/hadoop/SKILL.md](projects/apache/hadoop/SKILL.md) |
+| Apache Spark | [projects/apache/spark/SKILL.md](projects/apache/spark/SKILL.md) |
+| ClawHub | [projects/clawhub/SKILL.md](projects/clawhub/SKILL.md) |
+| Hermes Agent | [projects/hermes-agent/SKILL.md](projects/hermes-agent/SKILL.md) |
+| Inspect AI | [projects/inspect-ai/SKILL.md](projects/inspect-ai/SKILL.md) |
+| Inspect Petri | [projects/inspect-petri/SKILL.md](projects/inspect-petri/SKILL.md) |
+| NemoClaw | [projects/nemoclaw/SKILL.md](projects/nemoclaw/SKILL.md) |
+| OpenClaw | [projects/openclaw/SKILL.md](projects/openclaw/SKILL.md) |
+| PyTorch | [projects/pytorch/SKILL.md](projects/pytorch/SKILL.md) |
+| Slurm | [projects/slurm/SKILL.md](projects/slurm/SKILL.md) |
+| OSS contribution README | [projects/oss-contribution-readme/SKILL.md](projects/oss-contribution-readme/SKILL.md) |
 
 ## Works across coding agents
 
@@ -196,8 +228,8 @@ cd skippy
 ./scripts/verify-skill-layout.sh
 ```
 
-Attach [Skippy Mode](oss/skippy/SKILL.md) and the target project skill. For
+Attach [Skippy Mode](skippy/SKILL.md) and the target project skill. For
 contribution work, also attach
-[contribution quality](oss/references/contribution-quality.md).
+[contribution quality](references/contribution-quality.md).
 
 MIT License. See [LICENSE](LICENSE).

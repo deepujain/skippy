@@ -12,7 +12,7 @@ description: >-
 # Hermes Agent PR Contribution Recipe
 
 Also apply the shared OSS contribution quality protocol in
-[../references/contribution-quality.md](../references/contribution-quality.md).
+[../../references/contribution-quality.md](../../references/contribution-quality.md).
 Project-specific instructions below override the shared protocol when they
 conflict.
 

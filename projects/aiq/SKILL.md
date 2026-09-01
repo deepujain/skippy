@@ -6,7 +6,7 @@ description: Contribute focused, merge-ready pull requests to NVIDIA-AI-Blueprin
 # AIQ PR Contribution Recipe
 
 Apply the shared OSS quality protocol in
-[../references/contribution-quality.md](../references/contribution-quality.md).
+[../../references/contribution-quality.md](../../references/contribution-quality.md).
 Project-specific instructions below override it when they conflict.
 
 Use this recipe for [NVIDIA-AI-Blueprints/aiq](https://github.com/NVIDIA-AI-Blueprints/aiq),
