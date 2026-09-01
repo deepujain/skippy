@@ -27,6 +27,11 @@ case "$PROJECT" in
     AUTHOR="deepujain"
     TARGET=5
     ;;
+  airflow)
+    REPO="apache/airflow"
+    AUTHOR="deepujain"
+    TARGET=5
+    ;;
   *)
     echo "unknown project: $PROJECT" >&2
     exit 1

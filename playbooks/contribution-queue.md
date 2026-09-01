@@ -4,17 +4,30 @@ Use this playbook when a project has a configured healthy-open-contribution
 target or the user requests `sweep and replenish`. If no target is configured,
 use 5 unless current project policy sets a lower maximum.
 
-1. Read the project queue policy, current contributor limit, project skill, and
-   the latest learning log. Refresh limits from live repository policy before
-   creating work. Use the GitHub access ladder: integration first, authenticated
-   `gh` after an integration `403`, then public web pages for read-only evidence
-   if neither authenticated path works. When device login is authorized, start
-   and complete it yourself; after the device connects, re-check `gh auth
-   status` in the execution environment and retry the exact operation. Verify
-   Git transport independently: configure HTTPS with `gh auth setup-git` when
-   appropriate, and if an OAuth token rejects a workflow-bearing push, probe
-   the configured fork SSH remote before requesting broader token scope.
-2. Reconcile departed contributions and maintain every authored open PR or
+## Every tick (all three steps — mandatory)
+
+Each scheduled or manual sweep runs **Maintain → Learn → Replenish** in order.
+Do not stop after Maintain. Do not emit a status-only report while any step
+remains incomplete.
+
+| Step | Every tick |
+| --- | --- |
+| **Maintain** | All open authored PRs — rebase if stale, fix CI, address actionable review comments (human and bot), push signed commits, produce project-skill sweep action table (one row per PR) |
+| **Learn** | Bounded scan: review threads, CI failure shapes, CodeRabbit/Greptile/pre-commit-ci and other bot feedback; departed and peer PRs (merged and closed-without-merge). Adopt durable lessons → project learning log and/or project skill when evidence-backed |
+| **Replenish** | Fill each missing slot via full issue screen + contribution recipe, or record a **source-backed blocker per unfilled slot** |
+
+Then read the project queue policy, current contributor limit, project skill, and
+the latest learning log. Refresh limits from live repository policy before
+creating work. Use the GitHub access ladder: integration first, authenticated
+`gh` after an integration `403`, then public web pages for read-only evidence
+if neither authenticated path works. When device login is authorized, start
+and complete it yourself; after the device connects, re-check `gh auth
+status` in the execution environment and retry the exact operation. Verify
+Git transport independently: configure HTTPS with `gh auth setup-git` when
+appropriate, and if an OAuth token rejects a workflow-bearing push, probe
+the configured fork SSH remote before requesting broader token scope.
+
+1. **Maintain:** Reconcile departed contributions and maintain every authored open PR or
    patch. Resolve every contributor-actionable review, CI, conflict, signature,
    and stale-state item for that contribution. If a safe rebase is needed,
    perform it in an isolated worktree, preserve both the current upstream
@@ -23,17 +36,19 @@ use 5 unless current project policy sets a lower maximum.
    an unresolved design decision. An active CI run or external
    review on one PR affects only that PR's health; it must not serially block
    independent work in other available slots.
-3. Run the bounded continuous-learning scan for recent own and peer outcomes
-   that change candidate selection, validation, or delivery.
-4. Count only healthy open contributions. Compare the count to the configured
-   target, or default target of 5, and the hard maximum.
-5. For every missing slot, independently screen issues and linked development:
+2. **Learn:** Run the bounded continuous-learning scan (see
+   [continuous-learning.md](continuous-learning.md)): inspect review comments,
+   CI failures, and automated review bots on your open PRs; inspect departed
+   PRs (merged and closed-without-merge) and a bounded peer sample. Update the
+   project skill or learning log only when the evidence is durable and
+   project-specific.
+3. **Replenish:** Count only healthy open contributions. Compare the count to the configured
+   target, or default target of 5, and the hard maximum. For every missing slot, independently screen issues and linked development:
    read each issue body and comments for explicit PR links; search open PRs by
    issue number, distinctive title phrases, error text, and affected paths; and
    inspect any likely match's state, files, and reviews. Then implement the
    narrow qualified candidate, validate it, sign and publish it, and inspect
-   the new head's review and CI state.
-6. Continue until the target is met, a verified maximum is reached, or no
+   the new head's review and CI state. Continue until the target is met, a verified maximum is reached, or no
    qualified non-overlapping candidate exists. Report exact evidence for any
    unfilled slot; do not stop at a status table while safe work remains.
 

@@ -2,7 +2,7 @@
 # Full queue maintenance: rebase every authored open PR, log results.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECT="${1:?usage: sweep-maintain.sh <skillspector|nemoclaw|inspect-ai|hadoop>}"
+PROJECT="${1:?usage: sweep-maintain.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow>}"
 REASON="${2:-maintain}"
 MAINTAIN="$ROOT/scripts/sweep-maintain-pr.sh"
 LOG="$ROOT/scripts/sweep-log.sh"
@@ -63,6 +63,20 @@ case "$PROJECT" in
     FORK_REMOTE=origin
     UPSTREAM_REMOTE=apache
     MAIN_BRANCH=trunk
+    ;;
+  airflow)
+    REPO="apache/airflow"
+    CLONE="/Users/dejain/nvidia/oss/airflow"
+    export PROJECT=airflow
+    if [[ -d "$CLONE/.git" ]]; then
+      git -C "$CLONE" remote get-url apache &>/dev/null || \
+        git -C "$CLONE" remote add apache https://github.com/apache/airflow.git
+      git -C "$CLONE" remote get-url origin &>/dev/null || \
+        git -C "$CLONE" remote add origin git@github.com:deepujain/airflow.git
+    fi
+    FORK_REMOTE=origin
+    UPSTREAM_REMOTE=apache
+    MAIN_BRANCH=main
     ;;
   *)
     echo "unknown project: $PROJECT" >&2

@@ -8,13 +8,16 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
-## 2026-09-01 sweep state
+## 2026-09-01 sweep state (manual-run)
 
-- **Departed:** #4998 closed without merge (2026-09-01); #4971 remains unaccepted —
-  do not reopen or replace until policy settles.
-- **#4950** rebased onto current `main` (`2586623c0`); briefly closed by a bad
-  push, **reopened**; CI rerunning.
-- **Queue:** 1/4 open; replenishment may proceed for qualified accepted issues.
+- **Departed:** #4998 closed without merge; #4971 unaccepted — do not reopen or
+  replace per policy.
+- **#4950** rebased onto `main` @ `199c5d445`; `CHANGELOG.md` conflict resolved;
+  CI green, mergeable; `BLOCKED` = awaiting review only.
+- **Queue:** 1/4 open.
+- **Replenishment (2026-09-01):** skipped — full overlap screen; every viable
+  accepted issue has an active upstream PR or fix already on `main` (#4763,
+  #4960/#4997, #4845/#4899, #4755/#4937, etc.). #5166 claimed by another
+  contributor. Three slots remain blocked until backlog opens.
 - **Scheduled continuation:** every 30 minutes via
-  `scripts/sweep-continuation-loop.sh inspect-ai`; output at
-  `.skippy/sweep-output.log`.
+  `scripts/sweep-continuation-loop.sh inspect-ai`.

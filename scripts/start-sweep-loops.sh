@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Start all four Skippy sweep loops (stdout stays on the terminal for AGENT_LOOP_TICK).
+# Start all Skippy sweep loops (stdout stays on the terminal for AGENT_LOOP_TICK).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -12,7 +12,7 @@ if [[ "$running" -gt 0 ]]; then
   sleep 2
 fi
 
-for p in skillspector nemoclaw inspect-ai hadoop; do
+for p in skillspector nemoclaw inspect-ai hadoop airflow; do
   echo "Starting loop: $p" >&2
   "$LOOP" "$p" &
 done

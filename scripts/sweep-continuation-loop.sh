@@ -5,7 +5,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECT="${1:?usage: sweep-continuation-loop.sh <skillspector|nemoclaw|inspect-ai|hadoop>}"
+PROJECT="${1:?usage: sweep-continuation-loop.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow>}"
 INTERVAL="${2:-1800}"
 SCHED_LOG="${SKIPPY_SWEEP_LOG:-$ROOT/.skippy/sweep-scheduler.log}"
 SENTINEL="AGENT_LOOP_TICK_${PROJECT}-sweep"

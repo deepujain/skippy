@@ -6,8 +6,14 @@ the user asks Skippy to improve a project adapter.
 1. Read the last project learning record and current project skill before
    scanning. State the decision the scan should improve.
 2. Inspect your open and departed PRs, then a bounded relevant sample of peer
-   open, merged, and closed-unmerged PRs. Read review threads, linked issues,
-   workflows, and current project policy as primary evidence.
+   open, merged, and closed-unmerged PRs. Primary evidence sources:
+   - **Review threads** — human maintainers and automated tools (CodeRabbit,
+     Greptile, copy-pr-bot, pre-commit-ci, GitHub Actions bots, etc.)
+   - **CI failures and reruns** — failing job names, logs, and fix patterns on
+     your current heads
+   - **Departed PRs** — merged outcomes and closed-without-merge reasons
+     (duplicate, rejected approach, policy, out of scope)
+   Read linked issues, workflows, and current project policy alongside PR pages.
 3. Classify every candidate lesson as authoritative policy, recurring pattern,
    verified repair, one-off, or unknown.
 4. Adopt only durable lessons. Record source, observation, adopted rule, and
