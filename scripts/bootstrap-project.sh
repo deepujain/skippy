@@ -124,7 +124,7 @@ EOF
 cat >"$project_dir/references/queue-policy.md" <<EOF
 # $slug contribution queue policy
 
-Target healthy open contributions: not configured
+Target healthy open contributions: default 5, pending live-policy confirmation
 Repository or contributor maximum: unknown
 Configured by: pending user decision and live-policy confirmation
 Refresh trigger: before every replenishment run and whenever repository policy changes

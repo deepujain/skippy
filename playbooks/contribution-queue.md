@@ -1,7 +1,8 @@
 # Contribution Queue Playbook
 
 Use this playbook when a project has a configured healthy-open-contribution
-target or the user requests `sweep and replenish`.
+target or the user requests `sweep and replenish`. If no target is configured,
+use 5 unless current project policy sets a lower maximum.
 
 1. Read the project queue policy, current contributor limit, project skill, and
    the latest learning log. Refresh limits from live repository policy before
@@ -11,8 +12,8 @@ target or the user requests `sweep and replenish`.
    and stale-state item before treating the queue as healthy.
 3. Run the bounded continuous-learning scan for recent own and peer outcomes
    that change candidate selection, validation, or delivery.
-4. Count only healthy open contributions. Compare the count to target and hard
-   maximum.
+4. Count only healthy open contributions. Compare the count to the configured
+   target, or default target of 5, and the hard maximum.
 5. For every missing slot, independently screen issues and linked development,
    implement the narrow qualified candidate, validate it, sign and publish it,
    then inspect the new head's review and CI state.

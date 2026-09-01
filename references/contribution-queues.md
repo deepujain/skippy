@@ -19,8 +19,8 @@ Refresh trigger: <when target/limit must be rechecked>
 
 The target is a desired number of healthy, non-overlapping contributions. The
 maximum is a hard limit verified from current project policy. If no target is
-configured, a sweep maintains existing PRs but does not invent a replenishment
-number. If target or maximum conflict with live policy, live policy wins.
+configured, use a default target of **5**, unless current project policy sets a
+lower maximum. If target or maximum conflict with live policy, live policy wins.
 
 ## Healthy means
 
@@ -38,7 +38,8 @@ independent replenishment, but it is never described as green.
    conflicts, signatures, current-head state, and source policy changes.
 3. Run the bounded continuous-learning scan for new outcomes that affect the
    next decision.
-4. Count healthy open contributions against the configured target and maximum.
+4. Count healthy open contributions against the configured target, or the
+   default target of 5, and the verified maximum.
 5. For each missing slot, screen candidates for issue/PR/file overlap and linked
    development, then complete the full project-specific contribution recipe.
 6. Stop only when the target is met, the maximum is reached, or evidence shows

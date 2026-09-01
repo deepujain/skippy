@@ -29,15 +29,47 @@ flowchart LR
 Its standard is simple: write less code, own the right boundary, and prove the
 behavior that changed.
 
-## Start with one command
+## Getting started
 
-```text
-skippy <the outcome you want>
-Done means <what can be observed, run, or inspected>.
-Keep <behavior or boundary that must not change>.
+Skippy is a set of agent instructions, not a shell command. Add or attach
+[Skippy Mode](skippy/SKILL.md) to your coding agent, then attach the relevant
+project skill under `projects/`. The examples below are prompts you send to the
+agent, not commands to paste into Terminal.
+
+For a new contributor, follow this path:
+
+```mermaid
+flowchart LR
+  A["1. Bootstrap the project"] --> B["2. Make the first contribution"]
+  B --> C["3. Maintain your open PRs"]
+  C --> D["4. Learn and replenish"]
+  D --> C
 ```
 
-Example:
+### 1. Bootstrap a project
+
+If the repository does not already have a Skippy project skill, start here:
+
+```text
+skippy bootstrap https://github.com/owner/repository
+```
+
+Skippy investigates the repository's architecture, design and coding guidance,
+languages and tooling, contribution policy, CI, merged PRs, closed-unmerged
+PRs, and current overlap. It creates a provisional project profile under
+`projects/<project>/`, then verifies the profile during the first real
+contribution. Bootstrap does not modify the upstream project.
+
+For an already-supported project, skip bootstrap and load its existing skill.
+
+### 2. Start contributing
+
+```text
+skippy contribute to <project>. Pick a well-scoped issue, screen for overlap,
+implement the smallest owning fix, run the project validation, and open the PR.
+```
+
+For a specific bug, be explicit about the outcome and preserved behavior:
 
 ```text
 skippy The OAuth callback occasionally creates duplicate sessions.
@@ -45,9 +77,37 @@ Reproduce both deliveries, trace the owning race, fix it, and prove one session
 is created. Keep valid login and logout behavior unchanged.
 ```
 
-Skippy routes this to the Bug fix playbook, makes reproduction, root-cause
-analysis, regression coverage, and real-boundary verification visible tasks,
-then loads the target repository's conventions before it edits.
+### 3. Maintain and replenish your contribution queue
+
+Choose the number of healthy open contributions you want. If the project has no
+explicit target, Skippy defaults to **5**, unless current repository policy sets
+a lower maximum. A project policy always wins over the default.
+
+```bash
+./scripts/configure-project-queue.sh nemoclaw 5 10
+```
+
+Then tell the agent:
+
+```text
+skippy sweep and replenish nemoclaw to 5 open PRs
+```
+
+It examines every one of your open PRs first. As PRs merge or close, it learns
+from the outcome, screens new issues for overlap, and replenishes only with
+fully validated, independently healthy contributions.
+
+### 4. Schedule it
+
+On an agent host with recurring tasks, schedule the
+[sweep-and-replenish prompt](automations/continuation/sweep-and-replenish-prompt.md)
+at the interval you want, for example every hour. Fill in the project path,
+checkout path, queue target, and verified maximum. On agents without a native
+scheduler, send the same prompt manually when you want a sweep.
+
+The scheduler continues the same maintenance and replenishment method. It does
+not bypass project limits, quality gates, or the authority required to publish a
+PR.
 
 ## What makes it an engineering system
 
@@ -189,79 +249,9 @@ instead of mysterious.
 
 ## Project skills
 
-### Bootstrap a new project
-
-Give Skippy a canonical repository URL:
-
-```text
-skippy bootstrap https://github.com/owner/repository
-```
-
-It applies the [Bootstrap Project playbook](playbooks/bootstrap-project.md):
-map architecture and ownership, design and coding guidance, language and
-toolchain choices, contribution policy, current repository shape, merged-PR
-patterns, closed-unmerged PR lessons, and current overlap. It then produces a
-project adapter with a source-linked bootstrap report.
-
-The scaffold helper creates the expected place for that work:
-
-```bash
-./scripts/bootstrap-project.sh repository https://github.com/owner/repository
-```
-
-It deliberately creates a **provisional** profile. The agent must complete the
-analysis before claiming contribution readiness, and the first real contribution
-must still verify the actual local commands and live reviewer workflow.
-
-This works for an upstream OSS repository or your own repository. A project
-skill captures local policy and recurring precedent; Skippy's principles and
-playbooks remain shared across every project.
-
-### Continuous learning across every project
-
-Bootstrap creates the initial map. Skippy then keeps it current. After PR
-reviews, CI failures, merges, closures, policy changes, or a periodic project
-sweep, run:
-
-```text
-skippy learn <project>
-```
-
-The [Continuous Learning playbook](playbooks/continuous-learning.md) compares
-your own and peer open, merged, and closed-unmerged PRs with live project
-policy. It adopts only authoritative, recurring, or verified-repair lessons,
-records their source and next action, and updates the narrowest correct layer.
-That makes every contribution feed the next one without turning the project
-skill into an unverified scrapbook.
-
-### Maintain a healthy contribution queue
-
-Each project can configure its own target number of healthy open PRs or patches
-and its verified repository or contributor maximum. A healthy contribution is
-open and has no unresolved contributor-actionable defect. A local branch,
-candidate issue, or status table does not fill a slot.
-
-```bash
-./scripts/configure-project-queue.sh nemoclaw 5 10
-```
-
-Then run:
-
-```text
-skippy sweep and replenish nemoclaw to 5 open PRs
-```
-
-The [Contribution Queue playbook](playbooks/contribution-queue.md) first
-maintains every existing contribution, runs the learning scan, verifies the
-live limit, then fills eligible missing slots through the complete project
-recipe. It will not create overlapping or unvalidated PRs merely to hit a
-number.
-
-For a scheduler-capable coding agent, use the reusable
-[sweep-and-replenish prompt](automations/continuation/sweep-and-replenish-prompt.md)
-with the project path, local checkout, target, and verified maximum filled in.
-The scheduler repeats the same quality gates and does not expand publication
-authority on its own.
+These are existing project adapters. New repositories begin with the Bootstrap
+step in [Getting started](#getting-started); your own repositories are welcome
+alongside upstream OSS projects.
 
 | Project | Skill |
 | --- | --- |
