@@ -18,6 +18,7 @@ Record the following in `projects/<slug>/references/bootstrap-report.md`:
 | Successful precedent | Recent merged PRs with files, review comments, body structure, tests, and merge dates | Shows the maintainer-accepted scope and proof style |
 | Rejected precedent | Recent closed-unmerged PRs with direct closure evidence and replacement links where present | Reveals duplicate patterns, scope traps, and missing evidence |
 | Current overlap | Open PRs, active issues, hot files, and in-flight redesigns | Prevents duplicate or immediately conflicting contributions |
+| Contribution queue | User-selected healthy-open-contribution target and current repository or contributor maximum | Enables replenishment without exceeding project policy or treating a candidate as a filled slot |
 | Environment proof | A focused local command or an explicit inability to run it | Prevents a profile from pretending a theoretical command is validated |
 
 Use source links, commit SHAs, workflow URLs, and direct maintainer comments.

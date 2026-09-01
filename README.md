@@ -85,10 +85,12 @@ skippy/
 The top-level folders are intentional: shared engineering guidance is separate
 from project adapters, and reusable playbooks are separate from both.
 
-## The five engineering areas
+## The five engineering areas and 32 principles
 
 These are the decision areas every non-trivial task can draw from. Skippy names
-only the principles that change a real choice in the task plan.
+only the principles that change a real choice in the task plan. There are **32
+actionable principles** across the five areas below. The five areas organize the
+principles; they do not replace them.
 
 | Area | Principles used when needed |
 | --- | --- |
@@ -231,6 +233,35 @@ policy. It adopts only authoritative, recurring, or verified-repair lessons,
 records their source and next action, and updates the narrowest correct layer.
 That makes every contribution feed the next one without turning the project
 skill into an unverified scrapbook.
+
+### Maintain a healthy contribution queue
+
+Each project can configure its own target number of healthy open PRs or patches
+and its verified repository or contributor maximum. A healthy contribution is
+open and has no unresolved contributor-actionable defect. A local branch,
+candidate issue, or status table does not fill a slot.
+
+```bash
+./scripts/configure-project-queue.sh nemoclaw 5 10
+```
+
+Then run:
+
+```text
+skippy sweep and replenish nemoclaw to 5 open PRs
+```
+
+The [Contribution Queue playbook](playbooks/contribution-queue.md) first
+maintains every existing contribution, runs the learning scan, verifies the
+live limit, then fills eligible missing slots through the complete project
+recipe. It will not create overlapping or unvalidated PRs merely to hit a
+number.
+
+For a scheduler-capable coding agent, use the reusable
+[sweep-and-replenish prompt](automations/continuation/sweep-and-replenish-prompt.md)
+with the project path, local checkout, target, and verified maximum filled in.
+The scheduler repeats the same quality gates and does not expand publication
+authority on its own.
 
 | Project | Skill |
 | --- | --- |

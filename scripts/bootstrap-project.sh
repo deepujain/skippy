@@ -42,6 +42,8 @@ selecting an issue, changing code, or opening a contribution.
 Use [the project learning log](references/learning-log.md) with the shared
 [continuous learning loop](../../references/continuous-learning.md) after PR
 outcomes or periodic project scans.
+Use [the queue policy](references/queue-policy.md) before a scheduled or manual
+sweep and replenish run.
 
 ## Bootstrap status
 
@@ -117,6 +119,18 @@ cat >"$project_dir/references/learning-log.md" <<EOF
 
 No lessons adopted yet. Complete a source-linked scan using the Continuous
 Learning playbook after bootstrap or a meaningful contribution outcome.
+EOF
+
+cat >"$project_dir/references/queue-policy.md" <<EOF
+# $slug contribution queue policy
+
+Target healthy open contributions: not configured
+Repository or contributor maximum: unknown
+Configured by: pending user decision and live-policy confirmation
+Refresh trigger: before every replenishment run and whenever repository policy changes
+
+Read the shared references/contribution-queues.md policy before configuring
+or acting on a target.
 EOF
 
 echo "created projects/$slug"

@@ -58,7 +58,7 @@ All playbooks share this operating loop:
 | Parallel contribution | Several agents can improve confidence independently | Partition questions or files; isolate writers; define merge owner and evidence receipts; integrate serially after verification. |
 | Pause safely | Work must stop before completion | Finish or revert the atomic edit; record branch, diff, commands, evidence, and earliest safe resume action. |
 | Skill evolution | A recurring failure exposes a durable workflow gap | Identify the recurring mechanism; add the smallest instruction or helper; exercise it against a realistic task; preserve scope. |
-| Contribution queue | A project has multiple open contributions or a target queue | Maintain every existing PR first; screen candidates for overlap; independently validate each new contribution; monitor all current heads. |
+| [Contribution queue](contribution-queue.md) | A configured target requires autonomous replenishment | Maintain all existing work, learn from outcomes, then fill each missing healthy-open-contribution slot independently. |
 | [Bootstrap project](bootstrap-project.md) | A repository has no Skippy project adapter yet | Analyze contribution policy and repository shape; compare merged and closed-unmerged PR patterns; scaffold only evidence-backed project rules. |
 | [Continuous learning](continuous-learning.md) | PR outcomes, policy, or review patterns should improve future work | Compare own and peer open, merged, and closed-unmerged PRs; adopt only source-linked durable lessons at the correct layer. |
 

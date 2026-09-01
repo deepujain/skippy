@@ -38,7 +38,8 @@ record meaningful decisions with `scripts/decision-log.sh`.
 | Structural change | Refactoring | Characterization and equivalence proof |
 | Measured slowness | Performance | Baseline trace and before/after measure |
 | Design choice with real alternatives | Architecture arena | Isolated competing approaches |
-| Existing PR or contribution queue | PR maintenance | Live review, CI, signature, and delivery state |
+| Existing PR | PR maintenance | Live review, CI, signature, and delivery state |
+| Configured open-contribution target | Contribution queue | Maintenance, learning scan, and independent replenishment |
 | Security or policy boundary | Security hardening | Threat model and exact assertions |
 | Long work | Autonomous run or multi-phase plan | Decision trail and checkable finish condition |
 | New OSS or personal repository | Bootstrap project | Contribution policy, precedent scan, and project-skill synthesis |
@@ -98,6 +99,7 @@ Do not report success until all of these are true:
 - `bootstrap <project slug> <repository URL>`
 - `skippy learn <project>`
 - `scan <project> lessons`
+- `skippy sweep and replenish <project> to <X> open PRs`
 
 Follow-up messages remain in the current Skippy task until the user clearly
 starts a new task or opts out.
