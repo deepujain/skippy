@@ -1,47 +1,92 @@
 ---
 name: skippy
-description: Orchestrate high-confidence open-source engineering work by selecting a project skill, creating an evidence-backed task plan, and driving implementation through verification and review.
+description: Principal-level orchestration for non-trivial open-source work. Selects project skills and playbooks, builds an evidence-backed task list, coordinates bounded delegates, and verifies real outcomes before reporting success.
 ---
 
-# Skippy
+# Skippy Mode
 
-Skippy is the operating layer for coding agents working across open-source
-projects. The user describes the outcome. Skippy selects the applicable project
-skill, turns the outcome into a small executable plan, and does not report
-success without evidence.
+Use Skippy when the user wants a non-trivial change, investigation, review,
+maintenance run, migration, or autonomous contribution workflow. The user
+states the outcome. Skippy owns the method.
 
-## Route the work
+## Non-negotiable loop
 
-1. Identify the repository and task shape: bug fix, feature, security change,
-   PR maintenance, release-critical work, or contribution discovery.
-2. Load the matching `oss/<project>/SKILL.md`. If no project skill exists,
-   use the closest playbook and state the missing repository-specific facts.
-3. Read [engineering principles](../references/engineering-principles.md) and
-   the relevant file in [playbooks](../playbooks/). Read
-   [contribution quality](../references/contribution-quality.md) for PR work.
-4. Create a task list with an outcome, explicit acceptance criteria, risks,
-   validation, and a `Done means` condition before making material changes.
+1. Read the [principles index](../references/engineering-principles.md).
+2. Match the request to one of the [22 playbooks](../playbooks/index.md).
+3. Create a visible task list. Copy the selected playbook steps into it before
+   adding task-specific work. Keep skipped steps with their reason.
+4. Load the relevant project `oss/<project>/SKILL.md` and shared references.
+5. Execute, verify the real changed boundary, review, and deliver a truthful
+   handoff. A green build alone is not behavioral proof.
 
-## Execute like an owner
+For durable work, create a task artifact with
+`scripts/new-task-plan.sh`. For multi-turn, autonomous, or high-stakes work,
+record meaningful decisions with `scripts/decision-log.sh`.
 
-- Prefer the smallest change that restores the intended contract.
-- Inspect current code, issue discussion, recent merged work, and overlapping
-  PRs before implementing.
-- Use project-owned tests and realistic runtime evidence. A mock proves only
-  the boundary it observes.
-- When multiple independent, bounded investigations would improve quality and
-  delegation is available and authorized, delegate by concern: reproduction,
-  implementation review, validation, or overlap review. The primary agent owns
-  integration and the final decision.
-- Keep decisions replayable. Record the evidence, limits, and next state using
-  [verification receipts](../references/verification-receipts.md) when work
-  crosses PR lifecycle boundaries.
+## Routing
+
+| Request shape | First playbook | Supporting capability |
+| --- | --- | --- |
+| Understand or diagnose without editing | Investigation | Current-system and history evidence |
+| Reported defect | Bug fix | Reproduction, root cause, regression |
+| New behavior | Feature | Caller-first design and contract tests |
+| Structural change | Refactoring | Characterization and equivalence proof |
+| Measured slowness | Performance | Baseline trace and before/after measure |
+| Design choice with real alternatives | Architecture arena | Isolated competing approaches |
+| Existing PR or contribution queue | PR maintenance | Live review, CI, signature, and delivery state |
+| Security or policy boundary | Security hardening | Threat model and exact assertions |
+| Long work | Autonomous run or multi-phase plan | Decision trail and checkable finish condition |
+
+If no playbook fits, use the bespoke-plan playbook. Do not force an unfamiliar
+problem through a generic feature checklist.
+
+## Project and specialist skills
+
+Load the project skill before selecting issues or changing code. Use specialist
+skills only when their boundary is relevant:
+
+- **Current behavior**: trace callers, runtime flow, configuration, and state.
+- **Historical intent**: inspect commits, issues, PRs, and available records.
+- **Architecture**: sketch caller-facing alternatives before crossing module or
+  ownership boundaries.
+- **Adversarial review**: test a ready diff against the stated contract.
+- **Verification**: exercise the actual CLI, UI, protocol, storage, or process
+  lifecycle that changed.
+
+The primary agent integrates every result. A delegate summary is evidence to
+inspect, not an answer to forward.
+
+## Delegation
+
+Read [delegation roles](../references/delegation.md) before fan-out. Delegate
+only independent, bounded work that materially improves confidence. Use
+isolated worktrees or output paths for writers. Prefer a single owner when one
+agent can finish safely.
+
+When client support allows model selection, use the strongest reasoning model
+for cross-cutting design and adversarial judgment, a precise implementation
+model for scoped code changes, and independent reviewers for skeptical checks.
+Never substitute a model roster for validation.
 
 ## Completion gate
 
-Before reporting success, verify that the acceptance criteria hold, relevant
-tests and build checks passed, changed behavior has an observable proof, and
-known limitations are explicit. If an external gate remains, report the exact
-gate and continue with other safe work instead of treating a status report as
-completion.
+Do not report success until all of these are true:
 
+- The selected playbook's acceptance criteria and `Done means` condition hold.
+- The real changed boundary was exercised or the environment limitation is
+  explicit.
+- Focused and proportional broad validation have completed.
+- The diff was reviewed for behavior, security, compatibility, and cleanup.
+- Delivery state is known: commit, PR, signature, CI, review, and external
+  blockers are reported exactly.
+
+## Trigger phrases
+
+- `skippy <outcome>`
+- `skippy mode <outcome>`
+- `run this with skippy`
+- `continue skippy`
+- `skippy sweep and replenish`
+
+Follow-up messages remain in the current Skippy task until the user clearly
+starts a new task or opts out.
