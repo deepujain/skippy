@@ -145,11 +145,35 @@ fully validated, independently healthy contributions.
 
 ### 4. Schedule it
 
-On an agent host with recurring tasks, schedule the
+Ask your coding agent to create a recurring task in plain language. Replace
+`X` with the cadence you want:
+
+```text
+Schedule a recurring task every X minutes that runs:
+
+skippy sweep and replenish <project>
+```
+
+For example, to maintain the NemoClaw queue every 30 minutes:
+
+```text
+Schedule a recurring task every 30 minutes that runs:
+
+skippy sweep and replenish nemoclaw
+```
+
+Or, for an hourly run:
+
+```text
+Schedule a recurring task every hour that runs:
+
+skippy sweep and replenish nemoclaw
+```
+
+On an agent without native recurring tasks, send the same `skippy sweep and
+replenish <project>` prompt manually. The optional
 [sweep-and-replenish prompt](automations/continuation/sweep-and-replenish-prompt.md)
-at the interval you want, for example every hour. Fill in the project path,
-checkout path, queue target, and verified maximum. On agents without a native
-scheduler, send the same prompt manually when you want a sweep.
+explains the full task contract when you need to inspect or customize it.
 
 The scheduler continues the same maintenance and replenishment method. It does
 not bypass project limits, quality gates, or the authority required to publish a
