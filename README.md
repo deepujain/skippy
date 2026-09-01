@@ -36,13 +36,12 @@ Skippy is a set of agent instructions, not a shell command. Add or attach
 project skill under `projects/`. The examples below are prompts you send to the
 agent, not commands to paste into Terminal.
 
-For a new contributor, these are the four things to say:
+For a new contributor, these are the three things to say:
 
 ```mermaid
 flowchart LR
-  A["1. Bootstrap"] --> B["2. Contribute"]
-  B --> C["3. Sweep and replenish"]
-  C --> D["4. Schedule"]
+  A["1. Bootstrap"] --> B["2. Sweep and replenish"]
+  B --> C["3. Schedule"]
 ```
 
 ### 1. Bootstrap
@@ -66,24 +65,7 @@ skippy bootstrap https://github.com/meridianlabs-ai/ts-mono
 For an already-supported project, skip this step. See the
 [bootstrap playbook](playbooks/bootstrap-project.md) for the detailed output.
 
-### 2. Contribute
-
-When you know the issue or outcome, name it:
-
-```text
-skippy contribute to <project>. Pick a well-scoped issue, screen for overlap,
-implement the smallest owning fix, run the project validation, and open the PR.
-```
-
-For a specific bug:
-
-```text
-skippy The OAuth callback occasionally creates duplicate sessions.
-Reproduce both deliveries, trace the owning race, fix it, and prove one session
-is created. Keep valid login and logout behavior unchanged.
-```
-
-### 3. Sweep and replenish
+### 2. Sweep and replenish
 
 When you do not know which issue to pick, or you want to maintain your queue:
 
@@ -96,7 +78,7 @@ non-overlapping issues. It uses the bootstrapped queue target, or **5** healthy
 open PRs when no target is recorded, unless repository policy sets a lower
 maximum.
 
-### 4. Schedule it
+### 3. Schedule it
 
 Ask your coding agent to schedule it:
 
@@ -123,6 +105,17 @@ explains the full task contract when you need to inspect or customize it.
 The scheduler continues the same maintenance and replenishment method. It does
 not bypass project limits, quality gates, or the authority required to publish a
 PR.
+
+## Use Skippy for a focused task
+
+When you already know the issue, task, or outcome, give Skippy the concrete
+request and preserved behavior:
+
+```text
+skippy The OAuth callback occasionally creates duplicate sessions.
+Reproduce both deliveries, trace the owning race, fix it, and prove one session
+is created. Keep valid login and logout behavior unchanged.
+```
 
 ## What makes it an engineering system
 
