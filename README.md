@@ -62,6 +62,35 @@ contribution. Bootstrap does not modify the upstream project.
 
 For an already-supported project, skip bootstrap and load its existing skill.
 
+#### Example: bootstrap `meridianlabs-ai/ts-mono`
+
+```text
+skippy bootstrap https://github.com/meridianlabs-ai/ts-mono
+```
+
+Skippy's first pass would record only observed facts: the public repository
+describes itself as a TypeScript monorepo and exposes `apps/`, `packages/`,
+`tooling/`, `design/`, and `docs/`, alongside `pnpm-workspace.yaml`,
+`turbo.json`, `AGENTS.md`, and `CLAUDE.md`. It would then read those sources,
+not guess from their names, and produce a provisional `projects/ts-mono/`
+profile containing:
+
+- the workspace and package boundaries, runtime/toolchain commands, and test,
+  lint, typecheck, build, and release paths;
+- repository architecture, dependency direction, design and coding rules, and
+  the ownership of shared tooling;
+- contribution policy, branch and commit conventions, PR template, CI gates,
+  and maintainer expectations;
+- a sample of recent merged, open, and closed-unmerged PRs, with lessons about
+  validation, review, scope, and changes that did not land; and
+- the live issue and PR overlap picture, plus a proposed contribution queue
+  target that is confirmed against repository policy before any PR is opened.
+
+That profile is a hypothesis with evidence links, not a claim that Skippy has
+already mastered the repository. The first contribution validates and refines
+it. See the [ts-mono repository](https://github.com/meridianlabs-ai/ts-mono)
+and the [bootstrap playbook](playbooks/bootstrap-project.md).
+
 ### 2. Start contributing
 
 ```text
@@ -154,11 +183,11 @@ principles; they do not replace them.
 
 | Area | Principles used when needed |
 | --- | --- |
-| **Frame the problem** | explicit contracts; evidence ladder; caller and user context; facts versus inference; uncertainty; observable finish lines |
-| **Design the right change** | owning boundary; singular authority; complexity reduction; understandable interfaces; compatibility; idempotence; failure design; reversible units |
-| **Build for operation** | lifecycle ownership; testable security properties; real integration contracts; built-in quality; useful observability; performance budgets |
-| **Verify and learn** | reproduction; changed-boundary proof; valid and rejection paths; diff review; replayable receipts; durable lessons |
-| **Collaborate without losing ownership** | one integrator; stable partitions; isolated writers; bounded cognitive load; skeptical independence; complete delivery state |
+| **Frame the problem** | [explicit contracts](references/engineering-principles.md#make-the-contract-explicit); [evidence ladder](references/engineering-principles.md#treat-evidence-as-a-ladder); [caller and user context](references/engineering-principles.md#start-from-the-user-and-caller); [facts versus inference](references/engineering-principles.md#distinguish-facts-inferences-and-decisions); [uncertainty](references/engineering-principles.md#name-uncertainty); [observable finish lines](references/engineering-principles.md#set-an-observable-finish-line) |
+| **Design the right change** | [owning boundary](references/engineering-principles.md#change-the-smallest-owning-boundary); [singular authority](references/engineering-principles.md#make-authority-singular); [complexity reduction](references/engineering-principles.md#reduce-complexity-before-adding-it); [understandable interfaces](references/engineering-principles.md#prefer-deep-understandable-boundaries); [compatibility](references/engineering-principles.md#preserve-compatibility-deliberately); [idempotence](references/engineering-principles.md#make-retries-converge); [failure design](references/engineering-principles.md#design-failure-as-behavior); [reversible units](references/engineering-principles.md#use-reversible-units) |
+| **Build for operation** | [lifecycle ownership](references/engineering-principles.md#treat-time-and-lifecycle-as-data); [testable security properties](references/engineering-principles.md#make-security-properties-concrete); [real integration contracts](references/engineering-principles.md#validate-real-integration-contracts); [built-in quality](references/engineering-principles.md#build-quality-into-the-path); [useful observability](references/engineering-principles.md#make-observability-useful); [performance budgets](references/engineering-principles.md#budget-performance-and-resource-behavior) |
+| **Verify and learn** | [reproduction](references/engineering-principles.md#reproduce-before-theorizing); [changed-boundary proof](references/engineering-principles.md#prove-the-changed-boundary); [valid and rejection paths](references/engineering-principles.md#verify-both-acceptance-and-rejection); [diff review](references/engineering-principles.md#review-the-diff-as-a-product); [replayable receipts](references/engineering-principles.md#leave-a-replayable-receipt); [durable lessons](references/engineering-principles.md#turn-lessons-into-leverage) |
+| **Collaborate without losing ownership** | [one integrator](references/engineering-principles.md#keep-one-accountable-integrator); [stable partitions](references/engineering-principles.md#partition-by-stable-boundaries); [isolated writers](references/engineering-principles.md#isolate-writers); [bounded cognitive load](references/engineering-principles.md#minimize-cognitive-load); [skeptical independence](references/engineering-principles.md#use-skeptical-independence); [complete delivery state](references/engineering-principles.md#finish-the-delivery-loop) |
 
 Read the complete, actionable wording in the
 [engineering decision system](references/engineering-principles.md).
