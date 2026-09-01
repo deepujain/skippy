@@ -30,6 +30,20 @@ signature defect, failed in-scope validation, or unaddressed stale state. A
 maintainer-only runner gate may be accurately recorded without freezing
 independent replenishment, but it is never described as green.
 
+## Independence rule
+
+Treat each open contribution as its own workstream. A failed CI run, review
+finding, stale base, merge block, or maintainer-only gate makes that PR
+unhealthy and requires its own repair or classification. It does **not** pause
+candidate discovery, implementation, validation, or publication for another
+independent slot.
+
+Continue replenishing after the affected PR has been handled or accurately
+classified. Stop the whole queue below target only when the same blocker applies
+to every remaining slot: a verified project or contributor maximum, missing
+publication authority, a shared environment failure, or no qualified
+non-overlapping candidate after a complete screen.
+
 ## Sweep and replenish procedure
 
 1. Reconcile departed contributions. Inspect their final state and source
