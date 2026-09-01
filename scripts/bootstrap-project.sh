@@ -39,6 +39,9 @@ Canonical repository: $repository_url
 Read [the shared contribution protocol](../../references/contribution-quality.md)
 and [this project's bootstrap report](references/bootstrap-report.md) before
 selecting an issue, changing code, or opening a contribution.
+Use [the project learning log](references/learning-log.md) with the shared
+[continuous learning loop](../../references/continuous-learning.md) after PR
+outcomes or periodic project scans.
 
 ## Bootstrap status
 
@@ -58,6 +61,8 @@ and refresh triggers.
       lint, formatting, typecheck, documentation, and container tools.
 - [ ] Focused, broad, formatting, and environment-sensitive validation commands.
 - [ ] PR body, review, CI, and maintainer feedback expectations.
+- [ ] Source-linked lessons from own and peer open, merged, and
+      closed-unmerged PRs, recorded only when durable.
 
 ## Trigger phrases
 
@@ -105,6 +110,13 @@ Canonical repository: $repository_url
 ## Unknowns and refresh triggers
 
 - Pending: record changes that require a new bootstrap scan.
+EOF
+
+cat >"$project_dir/references/learning-log.md" <<EOF
+# $slug learning log
+
+No lessons adopted yet. Complete a source-linked scan using the Continuous
+Learning playbook after bootstrap or a meaningful contribution outcome.
 EOF
 
 echo "created projects/$slug"

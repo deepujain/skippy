@@ -215,6 +215,23 @@ This works for an upstream OSS repository or your own repository. A project
 skill captures local policy and recurring precedent; Skippy's principles and
 playbooks remain shared across every project.
 
+### Continuous learning across every project
+
+Bootstrap creates the initial map. Skippy then keeps it current. After PR
+reviews, CI failures, merges, closures, policy changes, or a periodic project
+sweep, run:
+
+```text
+skippy learn <project>
+```
+
+The [Continuous Learning playbook](playbooks/continuous-learning.md) compares
+your own and peer open, merged, and closed-unmerged PRs with live project
+policy. It adopts only authoritative, recurring, or verified-repair lessons,
+records their source and next action, and updates the narrowest correct layer.
+That makes every contribution feed the next one without turning the project
+skill into an unverified scrapbook.
+
 | Project | Skill |
 | --- | --- |
 | NVIDIA AIQ | [projects/aiq/SKILL.md](projects/aiq/SKILL.md) |

@@ -12,7 +12,8 @@ Project-specific instructions override this protocol when they conflict.
 For non-trivial OSS work, use this protocol with the
 [engineering decision system](engineering-principles.md), the
 [playbook library](../playbooks/index.md), and the
-[OSS contribution system](oss-contribution-system.md). The project skill owns
+[OSS contribution system](oss-contribution-system.md), and the
+[continuous learning loop](continuous-learning.md). The project skill owns
 current repository facts. Skippy owns the work mode, task plan, evidence gate,
 and safe delegation boundary. This shared protocol is the bridge: it prevents a
 project-specific recipe from becoming a generic checklist or a shared principle
@@ -60,6 +61,12 @@ work permit it. A candidate, local branch, or status table does not fill a
 queue slot. Send the report only as a handoff after the per-PR action loop and
 the replenishment loop reach a real terminal condition; do not use a report as
 a checkpoint that requires the user to say "continue".
+
+After contributor-actionable maintenance, run a bounded learning scan when new
+PR outcomes, reviewer feedback, policy, or CI behavior could change the next
+contribution. Follow [continuous learning](continuous-learning.md): update only
+source-linked durable rules, distinguish merged/closed/open status from a
+general lesson, and validate any changed skill before relying on it.
 
 ## Inputs, Outputs, and Preconditions
 

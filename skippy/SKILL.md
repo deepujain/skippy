@@ -21,7 +21,8 @@ states the outcome. Skippy owns the method.
    protocol, and the [OSS contribution system](../references/oss-contribution-system.md)
    for contribution work.
 5. Execute, verify the real changed boundary, review, and deliver a truthful
-   handoff. A green build alone is not behavioral proof.
+   handoff. Then run the bounded learning loop when new outcomes can change a
+   future contribution. A green build alone is not behavioral proof.
 
 For durable work, create a task artifact with
 `scripts/new-task-plan.sh`. For multi-turn, autonomous, or high-stakes work,
@@ -41,6 +42,7 @@ record meaningful decisions with `scripts/decision-log.sh`.
 | Security or policy boundary | Security hardening | Threat model and exact assertions |
 | Long work | Autonomous run or multi-phase plan | Decision trail and checkable finish condition |
 | New OSS or personal repository | Bootstrap project | Contribution policy, precedent scan, and project-skill synthesis |
+| PR outcomes or project precedent should improve future work | Continuous learning | Source-linked scan of own and peer PR outcomes |
 
 If no playbook fits, make a bespoke plan from the shared operating loop. Do not
 force an unfamiliar problem through a generic feature checklist.
@@ -94,6 +96,8 @@ Do not report success until all of these are true:
 - `skippy sweep and replenish`
 - `skippy bootstrap <repository URL>`
 - `bootstrap <project slug> <repository URL>`
+- `skippy learn <project>`
+- `scan <project> lessons`
 
 Follow-up messages remain in the current Skippy task until the user clearly
 starts a new task or opts out.

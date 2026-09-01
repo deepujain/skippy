@@ -60,6 +60,7 @@ All playbooks share this operating loop:
 | Skill evolution | A recurring failure exposes a durable workflow gap | Identify the recurring mechanism; add the smallest instruction or helper; exercise it against a realistic task; preserve scope. |
 | Contribution queue | A project has multiple open contributions or a target queue | Maintain every existing PR first; screen candidates for overlap; independently validate each new contribution; monitor all current heads. |
 | [Bootstrap project](bootstrap-project.md) | A repository has no Skippy project adapter yet | Analyze contribution policy and repository shape; compare merged and closed-unmerged PR patterns; scaffold only evidence-backed project rules. |
+| [Continuous learning](continuous-learning.md) | PR outcomes, policy, or review patterns should improve future work | Compare own and peer open, merged, and closed-unmerged PRs; adopt only source-linked durable lessons at the correct layer. |
 
 ## Selection rules
 
