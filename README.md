@@ -93,6 +93,8 @@ and the [bootstrap playbook](playbooks/bootstrap-project.md).
 
 ### 2. Start contributing
 
+If you already know the issue or outcome, name it:
+
 ```text
 skippy contribute to <project>. Pick a well-scoped issue, screen for overlap,
 implement the smallest owning fix, run the project validation, and open the PR.
@@ -105,6 +107,21 @@ skippy The OAuth callback occasionally creates duplicate sessions.
 Reproduce both deliveries, trace the owning race, fix it, and prove one session
 is created. Keep valid login and logout behavior unchanged.
 ```
+
+If you do **not** know which issue to pick, do not stop at a list of options.
+Use the queue workflow instead:
+
+```text
+skippy sweep and replenish <project>
+```
+
+Skippy first maintains every existing open PR. It then scans and screens issues
+for overlap, linked development, maintainable scope, and an executable
+validation path. It selects qualified independent issues, carries each through
+the full project recipe, and keeps running until the configured healthy queue
+target is reached or a concrete policy, environment, or candidate-quality
+blocker is recorded. It does not exceed the project maximum or publish without
+the authority the project requires.
 
 ### 3. Maintain and replenish your contribution queue
 

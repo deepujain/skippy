@@ -48,6 +48,14 @@ record meaningful decisions with `scripts/decision-log.sh`.
 If no playbook fits, make a bespoke plan from the shared operating loop. Do not
 force an unfamiliar problem through a generic feature checklist.
 
+When the user asks to contribute but supplies no issue, route to the
+Contribution queue playbook. Maintain the user's open PRs first, then screen
+and select qualified independent issues instead of returning a status-only
+candidate list. Continue through the complete project contribution recipe until
+the configured target is reached, or record the specific policy, authority,
+environment, overlap, or validation blocker that makes safe replenishment
+impossible.
+
 ## Project and specialist skills
 
 Load the project skill before selecting issues or changing code. Use specialist
