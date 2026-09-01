@@ -196,10 +196,10 @@ skippy bootstrap https://github.com/owner/repository
 ```
 
 It applies the [Bootstrap Project playbook](playbooks/bootstrap-project.md):
-read the contribution policy and repository shape, inspect recent merged PRs,
-inspect closed-unmerged PRs for evidence-backed failure or supersession
-patterns, screen current overlap, and produce a project adapter with a source
-linked bootstrap report.
+map architecture and ownership, design and coding guidance, language and
+toolchain choices, contribution policy, current repository shape, merged-PR
+patterns, closed-unmerged PR lessons, and current overlap. It then produces a
+project adapter with a source-linked bootstrap report.
 
 The scaffold helper creates the expected place for that work:
 

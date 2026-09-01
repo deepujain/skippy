@@ -51,6 +51,11 @@ and refresh triggers.
 - [ ] Default branch, remote names, fork policy, and contributor identity.
 - [ ] Required contributor agreement, sign-off, signing, and commit policy.
 - [ ] Issue, PR, and overlap-screening workflow.
+- [ ] Runtime entrypoints, module boundaries, public interfaces, state,
+      configuration, extension points, and generated artifact ownership.
+- [ ] Stated design and coding guidance, plus accepted current-code conventions.
+- [ ] Languages, runtime versions, dependency manager, build system, test,
+      lint, formatting, typecheck, documentation, and container tools.
 - [ ] Focused, broad, formatting, and environment-sensitive validation commands.
 - [ ] PR body, review, CI, and maintainer feedback expectations.
 
@@ -70,6 +75,20 @@ Canonical repository: $repository_url
 ## Observed contribution contract
 
 - Pending: inspect source contribution documents and current repository state.
+
+## Architecture and ownership map
+
+- Pending: map entrypoints, module boundaries, interfaces, state,
+  configuration, extension points, and generated artifacts from source evidence.
+
+## Design, coding, and testing conventions
+
+- Pending: record stated guidance and recurring accepted current-code patterns.
+
+## Technology and toolchain map
+
+- Pending: record languages, runtimes, dependency, build, test, quality, docs,
+  and container tooling with source links.
 
 ## Merged PR patterns
 

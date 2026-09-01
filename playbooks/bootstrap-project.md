@@ -11,19 +11,34 @@ not a speculative encyclopedia of a codebase.
    conduct, security policy, governance or maintainer guidance, PR and issue
    templates, CI workflows, build manifests, and current open contribution
    state.
-3. Inspect a representative recent sample of merged PRs. Capture file location,
+3. Build an architecture map from code and primary documentation. Identify
+   runtime entrypoints, modules and ownership boundaries, public APIs or CLIs,
+   data and control flow, configuration and persisted state, extension points,
+   generated artifacts, and the test and documentation layout. Record source
+   paths and distinguish observed design from inferred design intent.
+4. Build a technology and developer-toolchain map: languages, runtime and
+   version constraints, package or dependency managers, build system, test
+   lanes, formatter, linter, type checker, documentation generator, containers
+   or dev environments, and CI command sources. Do not promote a command to a
+   project rule until a manifest, workflow, contributor document, or live run
+   supports it.
+5. Extract stated coding and design guidance, then compare it with current code
+   and recent accepted changes. Capture conventions about module boundaries,
+   APIs, naming, error handling, tests, performance, security, and generated
+   files only when evidence shows they are current.
+6. Inspect a representative recent sample of merged PRs. Capture file location,
    scope, validation commands, review cadence, PR-body shape, labels, and
    maintainer preferences that recur across evidence.
-4. Inspect a representative recent sample of closed-unmerged PRs. Classify each
+7. Inspect a representative recent sample of closed-unmerged PRs. Classify each
    closure from evidence: duplicate, stale, wrong scope, missing tests,
    maintainer direction, CI/review failure, superseded work, or unknown. Never
    infer a reason merely from the closed state.
-5. Compare the two samples. Extract only durable rules that would change issue
+8. Compare the two samples. Extract only durable rules that would change issue
    choice, scope, validation, delivery, or review handling for the next PR.
-6. Create `projects/<slug>/SKILL.md` and
+9. Create `projects/<slug>/SKILL.md` and
    `projects/<slug>/references/bootstrap-report.md` with exact source links,
-   observed facts, inferences, unknowns, and a refresh date.
-7. Run the project scaffold and Skippy structural validation. Do not claim the
+   observed facts, inferred design, unknowns, and a refresh date.
+10. Run the project scaffold and Skippy structural validation. Do not claim the
    project is contribution-ready until its commands or environment limitations
    have been verified during the first real contribution.
 
