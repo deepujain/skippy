@@ -3,29 +3,31 @@
 ## Rigorous engineering for coding agents
 
 You describe the outcome. Skippy chooses a playbook, creates a task list, loads
-the right project skills, coordinates bounded specialist work when it helps, and
+the right project skill, coordinates bounded specialist work when it helps, and
 demands evidence before it reports success.
 
-Skippy is a portable operating system for the gap between code generation and
-engineering. It is for work where a plausible diff is not enough: a production
-bug, difficult integration, high-stakes review, contribution queue, or
-multi-phase change another engineer must be able to trust.
-
-Its standard is simple. Write less code. Own the right boundary. Prove the
-behavior that changed.
+Skippy is an engineering system for the gap between code generation and work
+another engineer can trust. It is bigger than a collection of prompts and
+bigger than a collection of skills: it combines decision rules, playbooks,
+project adapters, task artifacts, role boundaries, helper programs, and a
+verification gate.
 
 ```mermaid
 flowchart LR
-  A["Outcome and constraints"] --> B["Skippy Mode"]
-  B --> C["Read principles"]
-  C --> D{"Choose playbook"}
-  D --> E["Load project skill"]
-  E --> F["Visible task list"]
-  F --> G["Bounded specialist work"]
-  G --> H["Implement at owning boundary"]
-  H --> I["Verify real behavior"]
-  I --> J["Review and deliver"]
+  A["Outcome and constraints"] --> B["Skippy router"]
+  B --> C["Project skill"]
+  B --> D["Decision system"]
+  B --> E["Playbook"]
+  C --> F["Task plan"]
+  D --> F
+  E --> F
+  F --> G["Bounded implementation"]
+  G --> H["Real-boundary verification"]
+  H --> I["Review and delivery receipt"]
 ```
+
+Its standard is simple: write less code, own the right boundary, and prove the
+behavior that changed.
 
 ## Start with one command
 
@@ -43,88 +45,97 @@ Reproduce both deliveries, trace the owning race, fix it, and prove one session
 is created. Keep valid login and logout behavior unchanged.
 ```
 
-Skippy matches that request to the Bug fix playbook. It makes reproduction,
-root-cause analysis, regression coverage, and same-surface verification visible
-tasks. It does not substitute a passing build for proof that duplicate sessions
-are gone.
+Skippy routes this to the Bug fix playbook, makes reproduction, root-cause
+analysis, regression coverage, and real-boundary verification visible tasks,
+then loads the target repository's conventions before it edits.
 
-## The operating model
+## What makes it an engineering system
 
-Skippy is an orchestration layer over project skills. It is not a generic prompt
-that pretends every repository is the same.
+| Layer | Purpose |
+| --- | --- |
+| [Skippy Mode](oss/skippy/SKILL.md) | Routes the request, keeps the plan visible, selects supporting capabilities, and enforces the completion gate |
+| [Engineering decision system](oss/references/engineering-principles.md) | Guides ownership, complexity, reliability, security, evidence, and delivery decisions without reducing engineering to a count of slogans |
+| [Playbook library](oss/playbooks/index.md) | Supplies the ordered work moves for investigation, change, assurance, autonomous work, and contribution queues |
+| [Project skills](#project-skills) | Supply each repository's live contribution policy, commands, layout, CI, review, and maintainer conventions |
+| [Parallel-work protocol](oss/references/delegation.md) | Defines accountable integration, isolated writers, independent review, and evidence handoffs |
+| [Task artifacts and helpers](#durable-work) | Make decisions, completion criteria, and verification replayable across agents and sessions |
+| [Contribution tracker](https://github.com/deepujain/oss-contribs) | Shows the cross-project queue without replacing the source repository's authoritative PR state |
+
+The system is intentionally layered. A project skill does not have to recreate
+general engineering judgment, and Skippy does not claim to know local facts it
+has not read from the project.
+
+The decision system is grounded in a short, explicit
+[engineering foundations reading map](oss/references/engineering-foundations.md),
+then translated into work moves rather than copied as book summaries.
+
+## How an OSS contribution comes together
+
+One goal of Skippy is making careful OSS contribution repeatable across very
+different projects. It does this by joining shared engineering practice to
+project-specific skills, not by applying a generic prompt to every repository.
 
 ```mermaid
 flowchart TD
-  R["Skippy router"] --> P["21 engineering principles"]
-  R --> W["22 task playbooks"]
-  R --> S["Project skill"]
-  R --> T["Task plan and decision trail"]
-  S --> X["Repository conventions and validation"]
-  W --> X
-  P --> X
-  X --> V["Real-artifact verification"]
-  V --> Q["Review, PR, and truthful handoff"]
+  A["Issue or requested outcome"] --> B["Skippy: select work mode"]
+  B --> C["Project skill: live policy and commands"]
+  B --> D["Decision system: ownership and risk"]
+  B --> E["Playbook: ordered moves"]
+  C --> F["Task plan: evidence and done means"]
+  D --> F
+  E --> F
+  F --> G["Implement at owning boundary"]
+  G --> H["Focused plus real-boundary proof"]
+  H --> I["PR, review, CI, signature, receipt"]
+  I --> J["OSS contribution tracker"]
 ```
 
-The router applies the smallest process that earns confidence. A minor wording
-correction does not need an architecture arena. A concurrency bug, security
-boundary, or cross-project migration does.
+In practice:
 
-## What ships today
+1. Skippy turns the request into a checkable finish condition, constraints, and
+   a playbook.
+2. The project skill supplies current repo facts: contribution policy, issue
+   overlap checks, file layout, test commands, signing rules, PR template, and
+   live CI or review expectations.
+3. The decision system changes the actual engineering choices: where to fix the
+   behavior, what must remain compatible, which boundary needs realistic proof,
+   and how to make failure and security properties explicit.
+4. The playbook makes the work sequence visible. It prevents an agent from
+   dropping reproduction, overlap screening, validation, or review just because
+   a patch looks plausible.
+5. The contribution is delivered with an evidence receipt. The source PR is
+   authoritative; the cross-project tracker records portfolio and queue state.
 
-| Capability | What it does |
-| --- | --- |
-| [Skippy Mode](oss/skippy/SKILL.md) | Routes non-trivial work, keeps playbook steps visible, calls supporting skills, and enforces an evidence gate |
-| [21 engineering principles](oss/references/engineering-principles.md) | Changes decisions about ownership, types, concurrency, security, verification, and delivery |
-| [22 playbooks](oss/playbooks/index.md) | Covers investigation, bug fixes, features, refactoring, performance, design, reviews, PR maintenance, autonomous runs, and more |
-| [Project skills](#project-skills) | Repository-specific contribution recipes and current validation conventions |
-| [Specialist profiles](oss/skippy/agents) | Portable investigator and verifier roles for bounded independent work |
-| [Helper programs](scripts) | Create and check task plans, record decisions, and validate the collection |
-| [Continuation pack](automations/continuation) | Optional host-agnostic prompts for heartbeat or scheduler-enabled clients |
-| [Contribution tracker](https://github.com/deepujain/oss-contribs) | The live cross-project public portfolio and queue record |
+Read the full [OSS contribution system](oss/references/oss-contribution-system.md).
 
-## Principles and playbooks
+## Start multiple agents without making a mess
 
-Skippy begins multi-step work by reading the principles index. Principles do not
-exist as decoration. The task plan names only the principles that changed a real
-decision.
-
-The 22 playbooks prevent a familiar failure mode: an agent reads a workflow and
-then invents a shorter plan that quietly drops the hard parts. The selected
-playbook is copied into the task list. If Skippy skips a step, it keeps the step
-and records why.
-
-| Group | Playbooks |
-| --- | --- |
-| Understand | Investigation, historical analysis, runtime forensics, trace forensics, session pickup |
-| Build | Bug fix, feature delivery, refactoring, performance, hillclimb, prototype, architecture arena |
-| Assure | Security hardening, verification skill, verification maintenance, code review, PR maintenance, release critical |
-| Sustain | Autonomous run, multi-phase plan, pause safely, skill evolution |
-
-Read [all principles](oss/references/engineering-principles.md) and [all playbooks](oss/playbooks/index.md).
-
-## Delegation without chaos
-
-Delegation is not a substitute for ownership. Skippy delegates only independent
-work that improves confidence, and keeps writers isolated.
+Skippy can use several agents, but only where parallel work is genuinely
+independent. It does not treat “more agents” as a quality guarantee.
 
 ```mermaid
 flowchart LR
-  A["Lead: contract and rubric"] --> B["Investigator: facts"]
-  A --> C["Architect: alternatives"]
-  A --> D["Implementer: bounded diff"]
-  D --> E["Verifier: real boundary"]
-  B --> F["Lead integrates evidence"]
-  C --> F
-  E --> F
-  F --> G["Reviewed decision and delivery"]
+  L["Lead: contract, risk, and merge owner"] --> I["Investigator: facts"]
+  L --> A["Architect: bounded alternatives"]
+  L --> W["Writer: isolated worktree"]
+  W --> V["Verifier: actual boundary"]
+  I --> M["Lead checks evidence"]
+  A --> M
+  V --> M
+  M --> R["Single reviewed integration"]
 ```
 
-When a client supports multiple models, Skippy uses the strongest available
-reasoning model for cross-cutting design and skeptical review, and an
-appropriate code model for precisely scoped implementation. The primary agent
-still reads every result, owns the integrated diff, and decides what evidence is
-sufficient.
+Before fan-out, the lead gives every delegate one bounded question or write
+scope, an isolated worktree or output path, expected deliverable, and stop
+condition. Investigators and reviewers return evidence. Only the integrator
+owns the final diff and delivery claim. This creates enough verification for
+parallel work to improve confidence without turning the repository into a
+shared mutable scratchpad.
+
+When client support allows model selection, use the strongest available
+reasoning model for cross-cutting design and skeptical review, and a precise
+implementation model for a scoped edit. The proof still comes from the contract,
+tests, real-boundary execution, and final review, not from a model label.
 
 ## Durable work
 
@@ -138,9 +149,9 @@ Use the helper programs when a task spans multiple turns, agents, or days.
 ./scripts/verify-skill-layout.sh
 ```
 
-The task plan holds the outcome, constraints, completion condition, playbook
-steps, and evidence. The decision log makes autonomous work reviewable instead
-of mysterious.
+The task plan holds the outcome, constraints, completion condition, selected
+playbook moves, and evidence. The decision log makes autonomous work reviewable
+instead of mysterious.
 
 ## Project skills
 
@@ -162,14 +173,13 @@ of mysterious.
 
 ## Works across coding agents
 
-Skippy uses portable `SKILL.md` and Markdown artifacts. It works with Codex,
-Claude Code, Cursor, Gemini CLI, Aider, Continue, OpenCode, Cline, and other
-agents that can load local instructions.
+Skippy uses portable `SKILL.md` files and Markdown artifacts. It can guide
+Codex, Claude Code, Cursor, Gemini CLI, Aider, Continue, OpenCode, Cline, and
+other agents that load local instructions.
 
-Some clients offer scheduler heartbeats, isolated worktrees, browser control,
-or per-delegate model selection. Skippy uses those capabilities when present,
-but does not pretend they exist everywhere. The portable core remains the same:
-explicit contracts, good routing, bounded work, and evidence.
+Clients differ in their scheduler, worktree, browser, and delegation support.
+Skippy uses those capabilities when present and falls back to a portable core:
+explicit contracts, bounded work, durable artifacts, and evidence.
 
 ## What Skippy does not promise
 

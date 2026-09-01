@@ -1,151 +1,72 @@
-# Skippy Playbooks
+# Skippy Playbook Library
 
-Copy the selected steps into the task list. Preserve any skipped step with an
-explicit reason. Each playbook ends at evidence, not implementation.
+Choose a playbook for the dominant uncertainty in the work, not for the label
+on an issue. Copy its required moves into the task plan. Keep a skipped move in
+the plan with the reason it did not apply. Every playbook closes with evidence,
+delivery state, and an honest limit, not merely an edited file.
 
-| Playbook | Use it for | Required outcome |
+All playbooks share this operating loop:
+
+1. Frame the outcome, `Done means`, constraints, owner, and risk.
+2. Collect the evidence appropriate to the uncertainty.
+3. Make the smallest reversible change or conclusion.
+4. Verify the closest real boundary and proportional broad checks.
+5. Review, deliver, record evidence, and encode a reusable lesson only when it
+   changes future behavior.
+
+## Understand before changing
+
+| Playbook | Choose it when | Required moves |
 | --- | --- | --- |
-| Investigation | Read-only system question | Current behavior with evidence and limits |
-| Historical analysis | Why a decision exists | Facts separated from inference |
-| Bug fix | Reproducible defect | Same-surface reproduction, root-cause fix, regression proof |
-| Feature delivery | New behavior | Caller-facing contract, acceptance proof, compatibility review |
-| Refactoring | Behavior-preserving structure change | Characterization or equivalence proof |
-| Performance | Measured slowdown | Baseline, target, trace, and measured result |
-| Hillclimb | Iterative metric improvement | Decision log and retained measured wins |
-| Prototype | Empirical design fork | Throwaway result that resolves the decision |
-| Architecture arena | Expensive design choice | Isolated alternatives and synthesis rationale |
-| Security hardening | Trust or policy boundary | Threat model, fail-closed proof, recovery behavior |
-| Runtime forensics | Live incident diagnosis | Instrumented cause without unrequested fix |
-| Trace forensics | Existing trace or profile | Artifact-backed bottleneck or retention finding |
-| Verification skill | Missing repeatable runtime proof | Tested project-local verification workflow |
-| Verification maintenance | Drifted verification workflow | One live pass and evidence-backed updates |
-| Code review | Ready diff | Grouped adversarial findings and decisions |
-| PR maintenance | Existing PR or stack | Current-head CI, review, signature, and merge state |
-| Release critical | Urgent release-impacting defect | Reversible fix, rollback, artifact evidence |
-| Autonomous run | One long task | Checkable finish condition and decision trail |
-| Multi-phase plan | Migration or several dependent phases | Ordered verifiable increments and resume state |
-| Session pickup | Existing incomplete work | Reconstructed state and earliest safe next action |
-| Pause safely | Suspending incomplete work | Atomic checkpoint and resume brief |
-| Skill evolution | Improving Skippy or a project skill | Evidence-backed change, not one-off preference |
+| Investigation | A system question needs an evidence-backed answer | Set a read-only boundary; trace current behavior; separate facts, inferences, and unknowns; report sources and limits. |
+| Historical analysis | The decision or regression history matters | Inspect current code, commits, issues, PRs, and primary records; distinguish stated rationale from inference. |
+| Runtime forensics | A live path is failing or unclear | Capture an instrumented signal; bound the failing path; map it to source ownership; diagnose before proposing a fix. |
+| Trace forensics | A trace, profile, or dump already exists | Validate artifact provenance; isolate meaningful frames or retention paths; map evidence to a testable mechanism. |
+| Reproduction design | The report is credible but not yet executable | Build the smallest safe reproducer; define expected/actual signals; preserve it only if it becomes durable regression proof. |
+| Session pickup | Work exists but continuity is uncertain | Reconstruct branch, diff, decisions, validation, remote state, and the earliest unverified step before editing. |
 
-## Core steps
+## Change the product safely
 
-### Investigation
+| Playbook | Choose it when | Required moves |
+| --- | --- | --- |
+| [Bug fix](bug-fix.md) | A defect has a user-visible failure | Reproduce; locate the owning boundary; correct root cause; prove regression and a valid neighbor path. |
+| [Feature delivery](feature-delivery.md) | New behavior is requested | State caller contract and non-goals; design thin ownership; exercise success, error, and compatibility paths. |
+| [Refactoring](refactoring.md) | Structure must improve without behavior change | Define observable equivalence; capture characterization; simplify ownership in verifiable units; prove unchanged behavior. |
+| Performance | A measured cost or latency problem exists | Set workload, baseline, budget, and target; profile first; retain only reproducible measured gains. |
+| Prototype | A cheap experiment can settle a choice | Name the decision; build a disposable observation; record the result; delete or deliberately promote the artifact. |
+| Architecture decision | A boundary has consequential alternatives | Set a caller-first rubric; compare independent designs; write the tradeoff; validate the selected public contract. |
+| Migration | State, API, or configuration must change in phases | Model old/new states; make steps idempotent; validate each phase; plan rollback and resume behavior. |
+| Security hardening | A trust, secret, authorization, or policy boundary changes | State threat and attacker capability; implement fail-closed behavior; prove a valid path, rejection, and recovery behavior. |
 
-1. State the question and read-only boundary.
-2. Trace current behavior and, where relevant, historical evidence.
-3. Separate observed facts, inference, and unknowns.
-4. Return an explanation with source and runtime evidence. Do not edit code.
+## Assure and deliver
 
-### Historical analysis
+| Playbook | Choose it when | Required moves |
+| --- | --- | --- |
+| Verification design | A project lacks repeatable proof for a critical behavior | Identify the public boundary; create a project-local verifier; run it end to end; document environment limits. |
+| Verification maintenance | Existing proof no longer tracks the product | Compare verifier and feature map to current source; run a live pass; update only observed drift. |
+| Code review | A diff needs independent scrutiny | Read intent and changed contract; inspect risk areas; classify findings; validate accepted repairs on the new diff. |
+| [PR maintenance](pr-maintenance.md) | An existing contribution needs action | Inspect live head, reviews, checks, conflicts, and signature state; fix actionable items; recheck after push. |
+| Release critical | A release-impacting issue needs a fast response | Establish blast radius; use a reversible fix; verify artifact and rollback behavior; leave clear operational handoff. |
+| Documentation contract | Guidance is executable or safety-critical | Verify commands and claims against the shipping product; render or build docs where relevant; preserve ownership and limits. |
 
-1. Start with current code and the exact decision to explain.
-2. Inspect commits, issues, PRs, and connected primary records.
-3. Separate explicit rationale from a reasonable inference.
-4. State missing evidence instead of inventing intent.
+## Sustain autonomous and parallel work
 
-### Refactoring
+| Playbook | Choose it when | Required moves |
+| --- | --- | --- |
+| Autonomous run | The task spans time without user checkpoints | Replace time goals with a finish condition; checkpoint each verifiable unit; stop only at completion or a concrete external blocker. |
+| Multi-phase plan | Several dependent stages must remain resumable | Order by dependency and verifiability; give each phase acceptance, evidence, rollback posture, and atomic checkpoint. |
+| Parallel contribution | Several agents can improve confidence independently | Partition questions or files; isolate writers; define merge owner and evidence receipts; integrate serially after verification. |
+| Pause safely | Work must stop before completion | Finish or revert the atomic edit; record branch, diff, commands, evidence, and earliest safe resume action. |
+| Skill evolution | A recurring failure exposes a durable workflow gap | Identify the recurring mechanism; add the smallest instruction or helper; exercise it against a realistic task; preserve scope. |
+| Contribution queue | A project has multiple open contributions or a target queue | Maintain every existing PR first; screen candidates for overlap; independently validate each new contribution; monitor all current heads. |
 
-1. Define behavior that must not change.
-2. Capture characterization or equivalence evidence.
-3. Simplify ownership before moving code.
-4. Apply the structural change in small verifiable units.
-5. Re-run the characterization and integration boundary checks.
+## Selection rules
 
-### Performance
-
-1. Define metric, workload, baseline, and target.
-2. Capture a profile or trace before changing code.
-3. Form a mechanism-based hypothesis.
-4. Make one measured change at a time.
-5. Keep only improvements that reproduce under the same workload.
-
-### Hillclimb
-
-1. Choose one metric and a measurable target.
-2. Record each hypothesis, change, measurement, and decision.
-3. Keep a winning step only after repeatable measurement.
-4. Discard losses and preserve a clean comparison baseline.
-
-### Prototype
-
-1. Name the decision the prototype must settle.
-2. Build the smallest disposable artifact that yields an observation.
-3. Run the observation and record the decision.
-4. Delete the prototype or promote only the proven shape intentionally.
-
-### Architecture arena
-
-1. Define caller usage, invariants, and a private evaluation rubric.
-2. Produce independent designs in isolated paths.
-3. Compare against the rubric, not a vote.
-4. Select a base and integrate only evidence-backed strengths.
-5. Verify the resulting public contract.
-
-### Runtime forensics
-
-1. Capture an instrumented live signal.
-2. Bound the failing path and map evidence to source ownership.
-3. Report the mechanism, confidence, and missing signal.
-4. Stop at diagnosis unless the user also requested a fix.
-
-### Trace forensics
-
-1. Validate the artifact's provenance and scope.
-2. Narrow to the expensive frame, request, allocation, or retention path.
-3. Map the artifact to source and hypothesis.
-4. Return diagnosis and validation plan without changing code.
-
-### Verification skill
-
-1. Discover the user-facing boundary and healthy start condition.
-2. Define non-sensitive driving steps and observable evidence.
-3. Create a project-local verifier plus feature map.
-4. Run it end to end before relying on it.
-
-### Verification maintenance
-
-1. Compare the feature map against the current source and public path.
-2. Run one live verification pass.
-3. Update only proven drift and disclose an unfixed product failure.
-
-### Code review
-
-1. Read intent, acceptance criteria, changed boundary, and diff.
-2. Use independent skeptical review when proportional to risk.
-3. Group findings as act on, consider, or dismissed with reasons.
-4. Validate accepted repairs and inspect the new diff.
-
-### Autonomous run
-
-1. Replace elapsed-time goals with a checkable `Done means` condition.
-2. Record decisions, evidence, and current state after each meaningful unit.
-3. Verify every increment before the next.
-4. Stop only at completion or a concrete external blocker.
-
-### Multi-phase plan
-
-1. Order work by dependency and verifiability.
-2. Give each phase acceptance criteria, evidence, and rollback posture.
-3. Commit or checkpoint at atomic phase boundaries.
-4. Reconstruct and validate state before resuming a later phase.
-
-### Session pickup
-
-1. Inspect transcript, branch, diff, tests, decisions, and remote state.
-2. Separate completed, unverified, and remaining work.
-3. Resume from the earliest unverified boundary, not the newest message.
-4. Publish a compact state brief before changing direction.
-
-### Pause safely
-
-1. Finish or revert the current atomic edit.
-2. Capture branch, diff, commands, evidence, and next action.
-3. Leave no ambiguous background mutation or unstated external dependency.
-
-### Skill evolution
-
-1. Identify a repeated failure or durable missing capability.
-2. Add the smallest instruction, artifact, or helper that changes behavior.
-3. Run a realistic request through the affected workflow.
-4. Preserve a rejected or deferred alternative when it explains scope.
+- Use the narrowest playbook that contains the highest-risk uncertainty.
+- Combine playbooks only when their outputs are separately useful, for example
+  `Investigation → Bug fix → PR maintenance`.
+- For an unfamiliar shape, create a bespoke plan using the shared operating loop
+  rather than pretending a generic feature checklist fits.
+- Project skills supply the repository-specific commands, contribution policy,
+  identity requirements, live-state checks, and validation conventions. The
+  library supplies the decision sequence and evidence standard.

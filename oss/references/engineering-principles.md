@@ -1,49 +1,101 @@
-# Engineering Principles
+# Engineering Decision System
 
-Use these 21 principles to make decisions, not to decorate a plan. The task
-list should name only the principles that altered a concrete choice.
+This is not a scorecard and it is not a fixed number of maxims. Use the
+decision areas that materially change the work at hand. A task plan should name
+the principle, the decision it changed, and the evidence that supports it.
 
-1. **Make the contract explicit.** State inputs, outputs, ownership, failure
-   behavior, and the invariant that must remain true.
-2. **Prefer evidence to confidence.** Code reading and mocks are hypotheses;
-   tests, runtime traces, and reviewed contracts are evidence.
-3. **Change the smallest owning boundary.** Fix behavior where it is owned,
-   rather than layering compensating workarounds on callers.
-4. **Preserve behavior deliberately.** Name the compatible paths and cover one
-   representative success case beside each new rejection path.
-5. **Design failures as product behavior.** A failure must be bounded,
-   diagnosable, safe to retry, and not silently claim success.
-6. **Keep authority singular.** Derive validation data, constants, and policy
-   from the shipping owner instead of copying rules into tests.
-7. **Treat time, concurrency, and cleanup as first-class.** Timeouts do not
-   prove completion; retain ownership until an observed terminal state.
-8. **Make security properties testable.** Assert the exact identity, mode,
-   precedence, or protocol property that protects the boundary.
-9. **Protect reviewability.** Keep a change narrow enough that a reviewer can
-   connect the problem, implementation, and proof without archaeology.
-10. **Use real integration contracts.** Validate an external CLI, HTTP body,
-    persisted format, or process lifecycle against the real contract whenever
-    the bug crosses that boundary.
-11. **Separate facts from decisions.** Record observations, assumptions, and
-    chosen tradeoffs so a later agent can replay the reasoning.
-12. **Finish the loop.** A task is not done at implementation. It ends after
-    validation, review handling, delivery, and a truthful handoff.
-13. **Fix root causes.** Reproduce the symptom, trace the mechanism, and avoid
-    treating a downstream guard as a solution when the owner is upstream.
-14. **Start from the caller.** Design APIs, types, and module boundaries from
-    the consumer's required usage rather than internal implementation taste.
-15. **Subtract before adding.** Remove obsolete paths and duplicate ownership
-    before introducing a new abstraction or compatibility layer.
-16. **Make operations idempotent.** Commands, migrations, retries, and cleanup
-    must converge on a safe outcome after partial failure.
-17. **Sequence verifiable units.** Split multi-step work into increments that
-    each end with a check and leave a coherent recoverable state.
-18. **Guard the context window.** Delegate bulk reading or independent
-    exploration, retain concise evidence and decisions in the coordinating task.
-19. **Separate before serializing.** Give concurrent writers separate
-    worktrees, directories, or keys rather than adding coordination to avoid a
-    shared mutable resource.
-20. **Build the lever.** When work repeats or proof is hard, create the small
-    script, fixture, or harness that performs and verifies it reproducibly.
-21. **Encode lessons in structure.** Turn repeated failures into a test, lint,
-    helper, playbook, or guardrail rather than a reminder that agents forget.
+The system draws on durable engineering practice: explicit interface design and
+complexity management, small feedback-rich delivery loops, built-in quality,
+reliability engineering, and deliberately bounded collaboration. It is adapted
+for agent-assisted OSS work, where a plausible patch is cheap but trustworthy
+evidence and maintainable ownership are not.
+
+## Frame the problem
+
+- **Make the contract explicit.** State the caller-visible input, output,
+  invariant, owner, failure behavior, and preserved behavior before editing.
+- **Treat evidence as a ladder.** Separate source reading, a mock, a focused
+  test, and a real boundary execution. Do not represent a lower rung as a
+  higher one.
+- **Start from the user and caller.** A design earns its shape by making the
+  intended consumer simpler, safer, or more predictable.
+- **Distinguish facts, inferences, and decisions.** Preserve enough source
+  evidence that a reviewer can replay the conclusion without trusting chat.
+- **Name uncertainty.** Unknown ownership, unavailable environments, and
+  conflicting evidence are first-class results, not blanks to fill with
+  confidence.
+- **Set an observable finish line.** Replace elapsed-time goals with a
+  `Done means` condition someone can run, inspect, or reproduce.
+
+## Design the right change
+
+- **Change the smallest owning boundary.** Fix the behavior where it is
+  defined rather than compensating downstream.
+- **Make authority singular.** Derive values, policy, and accepted shapes from
+  the shipping owner, never from a drifting mirror in tests or docs.
+- **Reduce complexity before adding it.** Remove duplicate paths, obsolete
+  flags, and accidental layers before proposing new abstractions.
+- **Prefer deep, understandable boundaries.** Hide incidental mechanism behind
+  a small, coherent contract, while keeping errors and operational behavior
+  legible to callers.
+- **Preserve compatibility deliberately.** Identify the valid legacy path and
+  test it beside newly rejected or corrected behavior.
+- **Make retries converge.** Commands, migrations, cleanup, and recovery must
+  tolerate partial completion without falsely claiming success.
+- **Design failure as behavior.** Bound errors, expose diagnostics safely, and
+  define recovery rather than leaving a caller to infer runtime state.
+- **Use reversible units.** Prefer steps that can be checked, reviewed, or
+  rolled back independently over a large all-or-nothing rewrite.
+
+## Build for operation
+
+- **Treat time and lifecycle as data.** A timeout, signal request, or close
+  call is not terminal evidence. Retain ownership until the terminal condition
+  is observed.
+- **Make security properties concrete.** Assert the exact identity, mode,
+  capability, precedence, protocol, or cleanup property that defends the
+  boundary.
+- **Validate real integration contracts.** For external CLIs, processes,
+  protocols, storage, and configuration, check the real accepted shape whenever
+  the issue crosses that boundary.
+- **Build quality into the path.** Use guardrails, narrow tests, static checks,
+  and safe defaults to prevent a class of mistake rather than relying on a
+  later reminder.
+- **Make observability useful.** Logs, traces, counters, and diagnostics should
+  let an operator identify the owner, state, and recovery route without exposing
+  secrets.
+- **Budget performance and resource behavior.** Establish a comparable
+  workload, baseline, and target before optimizing; measure retained wins.
+
+## Verify and learn
+
+- **Reproduce before theorizing.** Capture the smallest representative failure
+  or a clear reason a live reproduction is unavailable.
+- **Prove the changed boundary.** Pair unit coverage with the closest realistic
+  public, CLI, protocol, storage, or lifecycle check proportional to risk.
+- **Verify both acceptance and rejection.** A fail-closed repair still needs a
+  representative valid path so the new boundary is not overly narrow.
+- **Review the diff as a product.** Inspect behavior, security, compatibility,
+  cleanup, generated artifacts, and scope after tests have passed.
+- **Leave a replayable receipt.** Record key decisions, commands, outputs, and
+  limitations in the task artifact, PR, issue, or accepted project surface.
+- **Turn lessons into leverage.** Convert recurring review surprises into a
+  test, helper, fixture, guardrail, or concise shared instruction.
+
+## Collaborate without losing ownership
+
+- **Keep one accountable integrator.** Delegates contribute bounded evidence;
+  the lead owns the final contract, diff, and delivery claim.
+- **Partition by stable boundaries.** Fan out only independent questions or
+  isolated write scopes. Do not parallelize a linear edit sequence.
+- **Isolate writers.** Use separate worktrees, branches, directories, and
+  artifacts so parallel work cannot silently overwrite another agent's state.
+- **Minimize cognitive load.** Give each delegate one question, relevant
+  context, a deliverable, and a stop condition. Split work when the interface is
+  clearer than the combined context.
+- **Use skeptical independence.** For consequential work, have a fresh context
+  verify assumptions and the observable result rather than echoing the
+  implementer's explanation.
+- **Finish the delivery loop.** A contribution is incomplete until its current
+  commit, signature, CI, review state, and external blockers are known and
+  truthfully handed off.

@@ -11,11 +11,15 @@ states the outcome. Skippy owns the method.
 
 ## Non-negotiable loop
 
-1. Read the [principles index](../references/engineering-principles.md).
-2. Match the request to one of the [22 playbooks](../playbooks/index.md).
+1. Read the [engineering decision system](../references/engineering-principles.md)
+   and select only the decision areas that change the task.
+2. Match the request to the dominant uncertainty in the
+   [playbook library](../playbooks/index.md).
 3. Create a visible task list. Copy the selected playbook steps into it before
    adding task-specific work. Keep skipped steps with their reason.
-4. Load the relevant project `oss/<project>/SKILL.md` and shared references.
+4. Load the relevant project `oss/<project>/SKILL.md`, the shared contribution
+   protocol, and the [OSS contribution system](../references/oss-contribution-system.md)
+   for contribution work.
 5. Execute, verify the real changed boundary, review, and deliver a truthful
    handoff. A green build alone is not behavioral proof.
 
@@ -37,8 +41,8 @@ record meaningful decisions with `scripts/decision-log.sh`.
 | Security or policy boundary | Security hardening | Threat model and exact assertions |
 | Long work | Autonomous run or multi-phase plan | Decision trail and checkable finish condition |
 
-If no playbook fits, use the bespoke-plan playbook. Do not force an unfamiliar
-problem through a generic feature checklist.
+If no playbook fits, make a bespoke plan from the shared operating loop. Do not
+force an unfamiliar problem through a generic feature checklist.
 
 ## Project and specialist skills
 

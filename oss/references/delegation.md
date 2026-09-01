@@ -1,7 +1,9 @@
-# Delegation Roles
+# Parallel Contribution Protocol
 
 Delegation improves confidence only when the work can be partitioned without
-duplicating ownership or hiding context from the lead.
+duplicating ownership, writing to the same mutable state, or hiding context from
+the lead. Parallelism is a verification strategy, not a way to outsource
+responsibility.
 
 | Role | Use when | Deliverable |
 | --- | --- | --- |
@@ -23,3 +25,29 @@ duplicating ownership or hiding context from the lead.
 - If model selection exists, match model strength to the role. Do not make
   unsupported claims about model identity or use it as a quality guarantee.
 
+## Required delegation brief
+
+Before starting a delegate, the lead records:
+
+1. The one question or bounded write scope the delegate owns.
+2. Inputs it may trust, including source revision and relevant task artifact.
+3. Its deliverable: facts, alternatives, diff, test output, or verification
+   receipt.
+4. Its isolated workspace or output path. Writers never share a worktree.
+5. The verification rule and stop condition.
+
+Do not delegate a sequence where a later agent must guess the state left by an
+earlier agent. Keep it serial, or split it at a checked boundary.
+
+## Integration protocol
+
+1. The lead reviews every delivered artifact against the brief and live source.
+2. The lead rejects unsupported conclusions and resolves competing advice using
+   the task contract and evidence, not a vote.
+3. The integrator alone applies or merges the final change into the delivery
+   branch.
+4. A verifier independent of the writer exercises the changed boundary when
+   risk warrants it.
+5. The task receipt records which evidence was accepted, rejected, or blocked.
+
+The outcome is one accountable integration, not a collection of agent summaries.

@@ -7,6 +7,17 @@ publishing PRs or patches, and maintaining open contributions.
 
 Project-specific instructions override this protocol when they conflict.
 
+## Skippy Integration
+
+For non-trivial OSS work, use this protocol with the
+[engineering decision system](engineering-principles.md), the
+[playbook library](../playbooks/index.md), and the
+[OSS contribution system](oss-contribution-system.md). The project skill owns
+current repository facts. Skippy owns the work mode, task plan, evidence gate,
+and safe delegation boundary. This shared protocol is the bridge: it prevents a
+project-specific recipe from becoming a generic checklist or a shared principle
+from becoming a substitute for live repository evidence.
+
 ## Durable Decision and Verification Memory
 
 Contribution work must leave a concise, replayable receipt that another agent

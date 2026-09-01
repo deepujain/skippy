@@ -11,7 +11,7 @@ while IFS= read -r skill; do
   fi
 done < <(find "$root/oss" -name SKILL.md -type f | sort)
 
-for reference in contribution-quality.md execution-contracts.md verification-receipts.md engineering-principles.md delegation.md; do
+for reference in contribution-quality.md execution-contracts.md verification-receipts.md engineering-principles.md engineering-foundations.md delegation.md oss-contribution-system.md; do
   if [[ ! -f "$root/oss/references/$reference" ]]; then
     echo "missing shared reference: $reference" >&2
     errors=1
@@ -25,17 +25,19 @@ for file in oss/playbooks/index.md oss/skippy/agents/investigator.md oss/skippy/
   fi
 done
 
-principle_count="$(rg -c '^[0-9]+\. \*\*' "$root/oss/references/engineering-principles.md")"
-if [[ "$principle_count" != 21 ]]; then
-  echo "expected 21 engineering principles, found $principle_count" >&2
-  errors=1
-fi
+for heading in '## Frame the problem' '## Design the right change' '## Build for operation' '## Verify and learn' '## Collaborate without losing ownership'; do
+  if ! rg -Fqx "$heading" "$root/oss/references/engineering-principles.md"; then
+    echo "missing engineering decision area: $heading" >&2
+    errors=1
+  fi
+done
 
-playbook_count="$(( $(rg -c '^\| [A-Z][^|]* \|' "$root/oss/playbooks/index.md") - 1 ))"
-if [[ "$playbook_count" != 22 ]]; then
-  echo "expected 22 task playbooks, found $playbook_count" >&2
-  errors=1
-fi
+for heading in '## Understand before changing' '## Change the product safely' '## Assure and deliver' '## Sustain autonomous and parallel work' '## Selection rules'; do
+  if ! rg -Fqx "$heading" "$root/oss/playbooks/index.md"; then
+    echo "missing playbook section: $heading" >&2
+    errors=1
+  fi
+done
 
 if ((errors)); then
   exit 1
