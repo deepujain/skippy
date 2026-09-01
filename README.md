@@ -36,71 +36,46 @@ Skippy is a set of agent instructions, not a shell command. Add or attach
 project skill under `projects/`. The examples below are prompts you send to the
 agent, not commands to paste into Terminal.
 
-For a new contributor, follow this path:
+For a new contributor, these are the four things to say:
 
 ```mermaid
 flowchart LR
-  A["1. Bootstrap the project"] --> B["2. Make the first contribution"]
-  B --> C["3. Maintain your open PRs"]
-  C --> D["4. Learn and replenish"]
-  D --> C
+  A["1. Bootstrap"] --> B["2. Contribute"]
+  B --> C["3. Sweep and replenish"]
+  C --> D["4. Schedule"]
 ```
 
-### 1. Bootstrap a project
+### 1. Bootstrap
 
-If the repository does not already have a Skippy project skill, start here:
+Start with a repository Skippy does not yet know:
 
 ```text
 skippy bootstrap https://github.com/owner/repository
 ```
 
-Skippy investigates the repository's architecture, design and coding guidance,
-languages and tooling, contribution policy, CI, merged PRs, closed-unmerged
-PRs, and current overlap. It creates a provisional project profile under
-`projects/<project>/`, then verifies the profile during the first real
-contribution. Bootstrap does not modify the upstream project.
+This creates and evidence-checks the project profile. Bootstrap reads the
+architecture, design and coding rules, tools, contribution policy, CI, and PR
+history. It does not modify the upstream repository.
 
-For an already-supported project, skip bootstrap and load its existing skill.
-
-#### Example: bootstrap `meridianlabs-ai/ts-mono`
+For example:
 
 ```text
 skippy bootstrap https://github.com/meridianlabs-ai/ts-mono
 ```
 
-Skippy's first pass would record only observed facts: the public repository
-describes itself as a TypeScript monorepo and exposes `apps/`, `packages/`,
-`tooling/`, `design/`, and `docs/`, alongside `pnpm-workspace.yaml`,
-`turbo.json`, `AGENTS.md`, and `CLAUDE.md`. It would then read those sources,
-not guess from their names, and produce a provisional `projects/ts-mono/`
-profile containing:
+For an already-supported project, skip this step. See the
+[bootstrap playbook](playbooks/bootstrap-project.md) for the detailed output.
 
-- the workspace and package boundaries, runtime/toolchain commands, and test,
-  lint, typecheck, build, and release paths;
-- repository architecture, dependency direction, design and coding rules, and
-  the ownership of shared tooling;
-- contribution policy, branch and commit conventions, PR template, CI gates,
-  and maintainer expectations;
-- a sample of recent merged, open, and closed-unmerged PRs, with lessons about
-  validation, review, scope, and changes that did not land; and
-- the live issue and PR overlap picture, plus a proposed contribution queue
-  target that is confirmed against repository policy before any PR is opened.
+### 2. Contribute
 
-That profile is a hypothesis with evidence links, not a claim that Skippy has
-already mastered the repository. The first contribution validates and refines
-it. See the [ts-mono repository](https://github.com/meridianlabs-ai/ts-mono)
-and the [bootstrap playbook](playbooks/bootstrap-project.md).
-
-### 2. Start contributing
-
-If you already know the issue or outcome, name it:
+When you know the issue or outcome, name it:
 
 ```text
 skippy contribute to <project>. Pick a well-scoped issue, screen for overlap,
 implement the smallest owning fix, run the project validation, and open the PR.
 ```
 
-For a specific bug, be explicit about the outcome and preserved behavior:
+For a specific bug:
 
 ```text
 skippy The OAuth callback occasionally creates duplicate sessions.
@@ -108,64 +83,40 @@ Reproduce both deliveries, trace the owning race, fix it, and prove one session
 is created. Keep valid login and logout behavior unchanged.
 ```
 
-If you do **not** know which issue to pick, do not stop at a list of options.
-Use the queue workflow instead:
+### 3. Sweep and replenish
+
+When you do not know which issue to pick, or you want to maintain your queue:
 
 ```text
 skippy sweep and replenish
 ```
 
-Skippy first maintains every existing open PR. It then scans and screens issues
-for overlap, linked development, maintainable scope, and an executable
-validation path. It selects qualified independent issues, carries each through
-the full project recipe, and keeps running until the configured healthy queue
-target is reached or a concrete policy, environment, or candidate-quality
-blocker is recorded. It does not exceed the project maximum or publish without
-the authority the project requires.
-
-### 3. Maintain and replenish your contribution queue
-
-For a bootstrapped project, Skippy already knows the project queue policy. When
-no target was recorded, it uses **5** healthy open PRs unless live repository
-policy sets a lower maximum. Just tell the agent:
-
-```text
-skippy sweep and replenish
-```
-
-It examines every one of your open PRs first. As PRs merge or close, it learns
-from the outcome, screens new issues for overlap, and replenishes only with
-fully validated, independently healthy contributions.
+Skippy maintains existing PRs, learns from outcomes, and picks screened,
+non-overlapping issues. It uses the bootstrapped queue target, or **5** healthy
+open PRs when no target is recorded, unless repository policy sets a lower
+maximum.
 
 ### 4. Schedule it
 
-Ask your coding agent to create a recurring task in plain language. Replace
-`X` with the cadence you want:
+Ask your coding agent to schedule it:
 
 ```text
-Schedule a recurring task every X minutes that runs:
+Schedule a recurring task that runs:
 
 skippy sweep and replenish
 ```
 
-For example, to maintain the NemoClaw queue every 30 minutes:
-
-```text
-Schedule a recurring task every 30 minutes that runs:
-
-skippy sweep and replenish nemoclaw
-```
-
-Or, for an hourly run:
+If you do not state an interval, Skippy schedules it every **30 minutes**. To
+choose another cadence, say so explicitly:
 
 ```text
 Schedule a recurring task every hour that runs:
 
-skippy sweep and replenish nemoclaw
+skippy sweep and replenish
 ```
 
-On an agent without native recurring tasks, send the same `skippy sweep and
-replenish` prompt manually. The optional
+On an agent without native recurring tasks, run `skippy sweep and replenish`
+manually. The optional
 [sweep-and-replenish prompt](automations/continuation/sweep-and-replenish-prompt.md)
 explains the full task contract when you need to inspect or customize it.
 

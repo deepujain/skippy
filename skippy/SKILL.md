@@ -98,6 +98,10 @@ Do not report success until all of these are true:
 
 ## Trigger phrases
 
+When the user asks to schedule `skippy sweep and replenish` without naming an
+interval, create the recurring task at a 30-minute cadence. Preserve an
+explicitly requested cadence instead.
+
 - `skippy <outcome>`
 - `skippy mode <outcome>`
 - `run this with skippy`
