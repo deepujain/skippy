@@ -112,7 +112,7 @@ If you do **not** know which issue to pick, do not stop at a list of options.
 Use the queue workflow instead:
 
 ```text
-skippy sweep and replenish <project>
+skippy sweep and replenish
 ```
 
 Skippy first maintains every existing open PR. It then scans and screens issues
