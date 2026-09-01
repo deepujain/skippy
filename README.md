@@ -29,32 +29,67 @@ flowchart LR
 Its standard is simple: write less code, own the right boundary, and prove the
 behavior that changed.
 
-## Getting started
+Skippy follows how a strong engineer joins a codebase: check out the repo, read
+docs and history, understand open and closed merge requests, start
+contributing, learn from your own outcomes and from others' work, and keep
+improving. Knowledge accumulates through evidence-backed bootstrap, real
+changes, and a calibrated
+[continuous learning](references/continuous-learning.md) loop.
 
-Skippy is a set of agent instructions, not a shell command. Add or attach
-[Skippy Mode](skippy/SKILL.md) to your coding agent, then attach the relevant
-project skill under `projects/`. The examples below are prompts you send to the
-agent, not commands to paste into Terminal.
+## Two ways to start
 
-For a new contributor, these are the three things to say:
+Skippy applies to **any non-trivial engineering work** on any repository you can
+read (public Git, private Git, internal monorepos). The playbooks cover
+investigation, bug fixes, features, refactors, performance, security, and long
+autonomous runs—not only external contribution.
+
+| Entry | When to use it |
+| --- | --- |
+| **[Focused task](#use-skippy-for-a-focused-task)** | You know the outcome: fix a bug, add behavior, investigate a system. |
+| **[Onboard to a repository](#onboard-to-a-repository)** | Skippy does not know this codebase yet, or you want to maintain a queue of in-flight changes and keep learning. |
+
+The [project skills](#project-skills) table lists repositories that already have
+adapters. Many are public OSS projects because their code and review history are
+easy to bootstrap against; your own repositories use the same mechanism.
+
+## Use Skippy for a focused task
+
+When you already know the issue, task, or outcome, give Skippy the concrete
+request and preserved behavior:
+
+```text
+skippy The OAuth callback occasionally creates duplicate sessions.
+Reproduce both deliveries, trace the owning race, fix it, and prove one session
+is created. Keep valid login and logout behavior unchanged.
+```
+
+Skippy matches the request to a playbook, loads the project skill when one
+exists, builds a task plan, and holds the work to the completion gate.
+
+## Onboard to a repository
+
+Use this path when a new engineer would: clone, read, learn from merge-request
+history, contribute, and maintain ongoing work.
 
 ```mermaid
 flowchart LR
-  A["1. Bootstrap"] --> B["2. Sweep and replenish"]
-  B --> C["3. Schedule"]
+  A["1. Bootstrap"] --> B["2. Contribute or sweep"]
+  B --> C["3. Learn and schedule"]
 ```
 
 ### 1. Bootstrap
 
-Start with a repository Skippy does not yet know:
+Point Skippy at a canonical repository URL it does not yet know:
 
 ```text
 skippy bootstrap https://github.com/owner/repository
 ```
 
-This creates and evidence-checks the project profile. Bootstrap reads the
-architecture, design and coding rules, tools, contribution policy, CI, and PR
-history. It does not modify the upstream repository.
+Bootstrap builds a project profile through **scaffold plus evidence**: the
+agent reads architecture, design and coding rules, tools, policy, CI, and
+representative open, merged, and closed merge requests, then writes a project
+skill backed by sources. It does not modify the upstream repository. The first
+real task still verifies commands and environment limits.
 
 For example:
 
@@ -67,16 +102,17 @@ For an already-supported project, skip this step. See the
 
 ### 2. Sweep and replenish
 
-When you do not know which issue to pick, or you want to maintain your queue:
+When you want to maintain in-flight changes and fill open slots—one packaging of
+the contribution-queue playbook:
 
 ```text
 skippy sweep and replenish
 ```
 
-Skippy maintains existing PRs, learns from outcomes, and picks screened,
-non-overlapping issues. It uses the bootstrapped queue target, or **5** healthy
-open PRs when no target is recorded, unless repository policy sets a lower
-maximum.
+Skippy maintains existing pull requests or merge requests, runs a bounded
+learning scan, and picks screened, non-overlapping follow-on work when policy
+allows. It uses the configured queue target, or **5** healthy open changes when
+no target is recorded, unless repository policy sets a lower maximum.
 
 ### 3. Schedule it
 
@@ -100,22 +136,20 @@ skippy sweep and replenish
 On an agent without native recurring tasks, run `skippy sweep and replenish`
 manually. The optional
 [sweep-and-replenish prompt](automations/continuation/sweep-and-replenish-prompt.md)
-explains the full task contract when you need to inspect or customize it.
+and [continuation pack](automations/continuation/README.md) explain the full
+task contract when you need to inspect or customize it.
 
 The scheduler continues the same maintenance and replenishment method. It does
 not bypass project limits, quality gates, or the authority required to publish a
-PR.
+change.
 
-## Use Skippy for a focused task
+## Getting started (agent setup)
 
-When you already know the issue, task, or outcome, give Skippy the concrete
-request and preserved behavior:
-
-```text
-skippy The OAuth callback occasionally creates duplicate sessions.
-Reproduce both deliveries, trace the owning race, fix it, and prove one session
-is created. Keep valid login and logout behavior unchanged.
-```
+Skippy is a set of agent instructions, not a shell command. Add or attach
+[Skippy Mode](skippy/SKILL.md) to your coding agent, then attach the relevant
+project skill under `projects/`. The prompts above are messages you send to the
+agent, not commands to paste into Terminal unless a helper script is named
+explicitly.
 
 ## What makes it an engineering system
 
@@ -124,7 +158,7 @@ is created. Keep valid login and logout behavior unchanged.
 | [Skippy Mode](skippy/SKILL.md) | Routes the request, keeps the plan visible, selects supporting capabilities, and enforces the completion gate |
 | [Engineering decision system](references/engineering-principles.md) | Guides ownership, complexity, reliability, security, evidence, and delivery decisions without reducing engineering to a count of slogans |
 | [Playbook library](playbooks/index.md) | Supplies the ordered work moves for investigation, change, assurance, autonomous work, and contribution queues |
-| [Project skills](#project-skills) | Supply each repository's live contribution policy, commands, layout, CI, review, and maintainer conventions |
+| [Project skills](#project-skills) | Supply each repository's policy, commands, layout, CI, review, and local conventions |
 | [Parallel-work protocol](references/delegation.md) | Defines accountable integration, isolated writers, independent review, and evidence handoffs |
 | [Task artifacts and helpers](#durable-work) | Make decisions, completion criteria, and verification replayable across agents and sessions |
 | [Contribution tracker](https://github.com/deepujain/oss-contribs) | Shows the cross-project queue without replacing the source repository's authoritative PR state |
@@ -144,7 +178,7 @@ skippy/
 ├── skippy/       Router and specialist role definitions
 ├── references/   Shared contribution protocol, principles, and evidence rules
 ├── playbooks/    Work sequences selected by uncertainty and risk
-├── projects/     One project-specific contribution skill per OSS project
+├── projects/     One project-specific skill per repository
 ├── scripts/      Task-plan, decision-log, and structural-validation helpers
 ├── automations/  Optional continuation prompts for supported clients
 └── README.md      Start here
@@ -171,11 +205,11 @@ principles; they do not replace them.
 Read the complete, actionable wording in the
 [engineering decision system](references/engineering-principles.md).
 
-## How an OSS contribution comes together
+## How work comes together
 
-One goal of Skippy is making careful OSS contribution repeatable across very
-different projects. It does this by joining shared engineering practice to
-project-specific skills, not by applying a generic prompt to every repository.
+Skippy turns a requested outcome into evidence-backed delivery on any
+repository. Shared engineering practice joins project-specific skills; it does
+not apply one generic prompt everywhere.
 
 ```mermaid
 flowchart TD
@@ -188,27 +222,39 @@ flowchart TD
   E --> F
   F --> G["Implement at owning boundary"]
   G --> H["Focused plus real-boundary proof"]
-  H --> I["PR, review, CI, signature, receipt"]
-  I --> J["OSS contribution tracker"]
+  H --> I["Review, CI, merge request, receipt"]
+  I --> J["Learning log and optional tracker"]
 ```
 
 In practice:
 
 1. Skippy turns the request into a checkable finish condition, constraints, and
    a playbook.
-2. The project skill supplies current repo facts: contribution policy, issue
-   overlap checks, file layout, test commands, signing rules, PR template, and
-   live CI or review expectations.
+2. The project skill supplies current repo facts: policy, overlap checks where
+   relevant, file layout, test commands, signing or review rules, and live CI
+   expectations.
 3. The decision system changes the actual engineering choices: where to fix the
    behavior, what must remain compatible, which boundary needs realistic proof,
    and how to make failure and security properties explicit.
 4. The playbook makes the work sequence visible. It prevents an agent from
-   dropping reproduction, overlap screening, validation, or review just because
-   a patch looks plausible.
-5. The contribution is delivered with an evidence receipt. The source PR is
-   authoritative; the cross-project tracker records portfolio and queue state.
+   dropping reproduction, validation, or review just because a patch looks
+   plausible.
+5. Delivery ends with an evidence receipt. For external contribution portfolios,
+   the [OSS contribution system](references/oss-contribution-system.md) and
+   [contribution tracker](https://github.com/deepujain/oss-contribs) record
+   queue state without replacing the source repository's authoritative merge
+   request.
 
-Read the full [OSS contribution system](references/oss-contribution-system.md).
+## Learning over time
+
+After meaningful outcomes—your reviews, CI results, merged or closed merge
+requests, and peer work on the same codebase—run the
+[continuous learning](playbooks/continuous-learning.md) scan. Skippy adopts
+only **durable**, source-linked rules (policy, recurring patterns, verified
+repairs) into the project skill or learning log. It does not rewrite its
+instructions from noise, single failures, or unexplained closures. That keeps
+the system improving the way a team culture improves: calibrated, reviewable,
+and tied to real evidence.
 
 ## Start multiple agents without making a mess
 
@@ -257,9 +303,11 @@ instead of mysterious.
 
 ## Project skills
 
-These are existing project adapters. New repositories begin with the Bootstrap
-step in [Getting started](#getting-started); your own repositories are welcome
-alongside upstream OSS projects.
+These are existing project adapters—repository-specific facts Skippy has
+already bootstrapped or scaffolded. New repositories begin with bootstrap in
+[Onboard to a repository](#onboard-to-a-repository). Public OSS entries below
+are examples with visible history; private and internal repositories use the
+same layout under `projects/<slug>/`.
 
 | Project | Skill |
 | --- | --- |
@@ -290,8 +338,9 @@ explicit contracts, bounded work, durable artifacts, and evidence.
 ## What Skippy does not promise
 
 Skippy cannot make a model correct by declaration. It cannot bypass repository
-permissions, replace maintainer review, or turn missing test infrastructure
-into a green result. It exposes those limits and creates the smallest durable
+permissions, replace maintainer or reviewer judgment, or turn missing test
+infrastructure into a green result. Bootstrap and learning stay evidence-backed
+and refreshable. It exposes those limits and creates the smallest durable
 verification capability when the project needs one.
 
 ## Install
@@ -302,8 +351,8 @@ cd skippy
 ./scripts/verify-skill-layout.sh
 ```
 
-Attach [Skippy Mode](skippy/SKILL.md) and the target project skill. For
-contribution work, also attach
+Attach [Skippy Mode](skippy/SKILL.md) and the target project skill when one
+exists. For merge-request queue work on external repositories, also attach
 [contribution quality](references/contribution-quality.md).
 
 MIT License. See [LICENSE](LICENSE).
