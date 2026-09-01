@@ -297,10 +297,15 @@ When calibrating contribution style, also scan recent merged PRs from other cont
    - For sandbox self-check changes (`src/inspect_ai/util/_sandbox/self_check.py`
      or `tests/tools/test_sandbox_docker_and_local.py`), expect
      `slow-tool-tests-dev` when CI selects `tests/tools/`. Poll it to terminal
-     state; if a stricter self-check exposes an environment-specific limitation
-     such as BusyBox behavior, either fix the provider or record a narrowly
-     commented known failure in the affected slow-test harness and explain it in
-     the PR body.
+     state. Treat the self-check as a downstream provider conformance contract:
+     do not tighten it until the linked issue is `accepted`, the intended
+     provider-side behavior is settled, and affected provider maintainers can
+     validate it. Do not mask a real product bug with a strict xfail, especially
+     one tied to an unpinned platform image; fix the provider first, then make
+     the conformance check enforce the fixed behavior without an xfail.
+   - When a PR includes agent-review disclosure, include the reviewer model,
+     number of passes, and concrete findings (including zero findings). A bare
+     tool name or generic claim of AI review is not useful review evidence.
 
 8. **Shepherd the PR.**
    - Inspect CI, review comments, and requested changes after pushing.
