@@ -53,6 +53,15 @@ python -m pip install --group dev
 python -m pip install --no-build-isolation -v -e .
 ```
 
+GitHub access is transport-specific: the Codex GitHub connector, `gh` CLI token,
+HTTPS credential helper, and SSH agent can have different authentication state.
+Do not treat a failed `gh auth status` or HTTPS push as proof that publishing is
+unavailable. When a connected GitHub integration is available, use it for live
+PR inspection and metadata. For local branch pushes, prefer the fork's SSH
+remote (`git@github.com:deepujain/pytorch.git`); verify with a dry-run push and
+use `--force-with-lease` for a reviewed rebase. Never replace a remote branch
+without first confirming the current PR head.
+
 If a full local build is too expensive for a pure Python or docs task, use the narrowest viable environment, but say exactly what was and was not built.
 
 ## 2. Pick an issue
