@@ -51,11 +51,29 @@ This profile is scaffolded, not yet analyzed. Complete the Bootstrap Project
 playbook, replace every placeholder with evidence, then record the snapshot date
 and refresh triggers.
 
+## GitHub access path
+
+- [ ] Check local gh auth status and the connected GitHub integration when
+      available. If the CLI token is stale but the integration works, use the
+      integration for live evidence and fork-branch updates. If the integration
+      returns `403 Resource not accessible by integration`, re-check gh and
+      use it for the denied PR or comment operation once authenticated. When
+      device login is authorized, start `gh auth login -h github.com --web`
+      yourself, keep it active until completion, and retry after completion;
+      do not ask the user to run it. Record the exact successful operation.
+- [ ] Record the exact integration write boundary. A connection may permit
+      branch updates while denying PR comments, labels, reviews, or merges.
+- [ ] Verify Git push transport separately. Configure HTTPS with `gh auth
+      setup-git` when needed; if workflow scope rejects a push, probe the
+      configured fork SSH remote before requesting broader token scope.
+
 ## Repository-specific contribution contract
 
 - [ ] Default branch, remote names, fork policy, and contributor identity.
 - [ ] Required contributor agreement, sign-off, signing, and commit policy.
-- [ ] Issue, PR, and overlap-screening workflow.
+- [ ] Issue, PR, and overlap-screening workflow. For each candidate, inspect
+      issue bodies and comments for PR links and search PRs by issue number,
+      title phrase, error text, and affected paths.
 - [ ] Runtime entrypoints, module boundaries, public interfaces, state,
       configuration, extension points, and generated artifact ownership.
 - [ ] Stated design and coding guidance, plus accepted current-code conventions.
@@ -82,6 +100,16 @@ Canonical repository: $repository_url
 ## Observed contribution contract
 
 - Pending: inspect source contribution documents and current repository state.
+
+## GitHub access path
+
+- Pending: record local CLI status, connected integration availability, usable
+  read/write operations, denied mutations, device-login result, Git push
+  transport, and the fallback that succeeded.
+  Do not treat a stale CLI token as a repository-access blocker when the
+  integration can perform the needed operation; if the integration is denied,
+  start the authorized gh device-login flow yourself, then use authenticated gh
+  for that mutation.
 
 ## Architecture and ownership map
 

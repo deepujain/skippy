@@ -56,6 +56,21 @@ the configured target is reached, or record the specific policy, authority,
 environment, overlap, or validation blocker that makes safe replenishment
 impossible.
 
+For a contribution queue, treat every PR and candidate as an independent work
+unit. Never serialize replenishment behind another PR's active CI or review,
+and never terminate a sweep because one candidate is stale or needs direction.
+When below target, keep screening candidates and publish each qualified,
+validated contribution until the target or a verified maximum is reached. A
+below-target handoff must enumerate every screened candidate and its concrete
+disqualifier.
+
+Project skills may add repository-specific eligibility gates, but they must not
+turn a failing, rerunning, conflicted, or review-blocked authored PR into a
+queue-wide replenishment stop. Maintain that PR in its own workstream and keep
+screening independent slots. "Queue unhealthy" is not a sufficient blocker;
+only a verified maximum, shared publication/policy restriction, or exhaustion
+of qualified non-overlapping candidates can stop replenishment below target.
+
 ## Project and specialist skills
 
 Load the project skill before selecting issues or changing code. Use specialist
@@ -115,3 +130,37 @@ explicitly requested cadence instead.
 
 Follow-up messages remain in the current Skippy task until the user clearly
 starts a new task or opts out.
+
+## GitHub access ladder
+
+Use this sequence for every bootstrap, contribution queue, PR-maintenance, or
+live-issue task; do not stop at the first unavailable client.
+
+1. Use the connected GitHub integration for live repository reads and only the
+   mutations its verified scope permits.
+2. If that integration returns `403 Resource not accessible by integration`,
+   treat it as an operation-specific permission denial. Check `gh auth status`
+   in the same shell and use authenticated `gh` for the denied read or mutation.
+3. If `gh` is unavailable or unauthenticated and the user has authorized GitHub
+   device login, start the CLI device-login flow yourself with
+   `gh auth login -h github.com --web`; retain the device code/URL, wait for
+   the authorization result, then rerun `gh auth status` and the denied
+   operation. Do not tell the user to open a terminal or repeat a login command.
+4. When the user reports that the device is connected, verify that exact shell
+   with `gh auth status` and retry the failed `gh` operation immediately. Do
+   not ask for another login merely because a prior shell snapshot was stale.
+5. If no authenticated path is available after the device flow completes, use
+   public GitHub web pages for read-only repository, issue, PR, and CI evidence
+   where available. Never report cached web data as current authenticated state.
+6. Only writes that require unavailable authority are blocked. Continue all
+   safe local work and public read-only reconnaissance, record the exact denied
+   operation and fallback result, and do not claim the whole repository is
+   inaccessible.
+
+The presence or absence of one client is not evidence about another client's
+authorization. GitHub API access is also distinct from Git push transport: use
+`gh auth setup-git` to configure HTTPS credentials when needed. If an HTTPS
+push is rejected for missing workflow scope, first verify the configured fork
+SSH remote with `git ls-remote` and use it when available; do not request a
+broader token merely to bypass a transport-specific limitation. Recheck the
+access ladder at the start of each scheduled run.

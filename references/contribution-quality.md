@@ -68,6 +68,17 @@ contribution. Follow [continuous learning](continuous-learning.md): update only
 source-linked durable rules, distinguish merged/closed/open status from a
 general lesson, and validate any changed skill before relying on it.
 
+An integration permission failure is not a queue-wide blocker. Fall back to
+authenticated `gh` for that exact operation; when device login is authorized,
+complete it yourself and re-check that same environment after connection. Git
+API access and push transport are separate: configure HTTPS with `gh auth
+setup-git` when appropriate, and if workflow scope rejects an HTTPS push, probe
+the configured fork SSH remote before requesting broader authorization. If both
+authenticated paths are unavailable, keep completing local and public read-only
+steps and record the specific PR claim, comment, push, or check query that
+needs authority. Do not turn an unavailable mutation into an invented "no data"
+sweep result.
+
 ## Inputs, Outputs, and Preconditions
 
 | Type | Content |
@@ -79,18 +90,24 @@ general lesson, and validate any changed skill before relying on it.
 Before starting real work:
 
 - Confirm the correct project skill is loaded.
+- Execute the GitHub access ladder: connected integration first; on
+  `403 Resource not accessible by integration`, retry the denied operation with
+  authenticated `gh`; if neither is usable, continue public web read-only
+  reconnaissance and block only the write that lacks authority.
 - Confirm the local checkout is clean enough for the requested work.
 - Confirm upstream/default branch and fork remotes.
 - Confirm contributor identity and public text contain no private tool attribution.
-- Confirm no open PR or patch from another contributor already covers the issue.
+- Confirm no open PR or patch from another contributor already covers the issue:
+  inspect issue bodies/comments for explicit PR links and search by issue
+  number, distinctive title phrases, error text, and affected files.
 
 ## Fast Path
 
 For routine new contributions:
 
 1. **Scope:** read the issue, comments, linked PRs, and affected code.
-2. **Overlap:** search open PRs by issue number, title keywords, error text, and
-   affected files.
+2. **Overlap:** first inspect issue bodies/comments for linked PRs, then search
+   open PRs by issue number, title keywords, error text, and affected files.
 3. **Branch:** sync default branch, create a topic branch, then edit.
 4. **Implement:** make the smallest project-conforming change.
 5. **Evidence:** run the narrow proof first, then adjacent tests or broader checks.
@@ -105,7 +122,11 @@ For existing PR or patch work:
 
 1. Fetch live PR state: branch, base, CI, reviews, inline comments, bot comments,
    stale/conflict state.
-2. Rebase or sync only after understanding what action is needed.
+2. Rebase or sync only after understanding what action is needed. For a safe
+   stale-base repair, use an isolated worktree, preserve upstream's current
+   structure and the PR's intended behavior, validate the resolution, and push
+   with `--force-with-lease`. Do not rewrite history while a reviewer needs a
+   design decision resolved.
 3. Fix all actionable comments on the current head.
 4. Rerun focused validation and update the PR with a concise status comment.
 5. Re-check CI/reviews before reporting final state.

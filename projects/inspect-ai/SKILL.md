@@ -90,17 +90,19 @@ is invoked by the user or by a scheduled task.
 - Respect the live gate in this skill: accounts without write access keep **at
   most 4 open PRs**, and non-qualified/non-established contributors still need
   an `accepted` issue before coding except for trivial docs-only fixes.
-- If the queue is below the cap, contributor policy allows it, and the current
-  open set is healthy enough, pick **one** new well-scoped accepted issue using
-  the normal Inspect AI issue-selection rules in this skill and run the full
-  new-PR recipe in the same sweep.
-- Do not replenish while any authored open PR has failing/rerunning required CI,
-  unresolved human or current actionable bot feedback, merge conflicts,
-  stale-base risk that needs a sync, or unclear maintainer acceptance.
+- If the queue is below the cap and contributor policy allows it, pick **one**
+  new well-scoped accepted issue using the normal Inspect AI issue-selection
+  rules in this skill and run the full new-PR recipe in the same sweep.
+- A failing/rerunning CI job, unresolved review, merge conflict, stale base, or
+  unclear maintainer acceptance on one authored PR is a maintenance workstream
+  for that PR, not a replenishment stop. Maintain it, then keep screening and
+  publishing independent qualified slots. Stop below the cap only for the
+  verified cap, a shared policy/publication restriction, or no qualified
+  non-overlapping accepted issue after the complete screen.
 - Report the outcome explicitly in the sweep output: `opened new PR`,
   `issue selected, PR in progress`, or `replenishment skipped` with the exact
-  blocker such as 4-open-PR cap reached, issue not accepted, queue still
-  unhealthy, duplicate risk, or no strong candidate.
+  blocker such as 4-open-PR cap reached, issue not accepted, a shared
+  publication restriction, duplicate risk, or no strong candidate.
 
 ```bash
 gh pr list --repo UKGovernmentBEIS/inspect_ai --author deepujain --state open --limit 100 \
