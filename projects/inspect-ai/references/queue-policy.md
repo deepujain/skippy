@@ -8,6 +8,48 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-02 sweep state (scheduled, tick 11)
+
+- **Time:** ~11:52 AM PT.
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all four **0
+  behind `main`** (heads `d36e7d4`, `4401f76`, `5c25544`, `ecd3c94`); no pushes.
+- **CI:** **4/4 green** (0 failures, 0 pending).
+- **#4950:** REVIEW_REQUIRED; ransomr `[needs discussion]` on regex vs #4758
+  (4 unresolved threads); await maintainer design direction.
+- **#5174, #5181, #5195:** REVIEW_REQUIRED; no actionable CR; await maintainer review.
+- **Learn:** no skill change — unchanged from tick 10.
+- **Replenish:** **verified maximum 4/4** — no slot. When a slot opens:
+  [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) →
+  [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454) (open);
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) → peer
+  claim (yinli-systems, no open PR).
+
+## 2026-09-02 sweep state (scheduled, tick 10)
+
+- **Time:** ~11:48 AM PT.
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all four **0
+  behind `main`** (heads `d36e7d4`, `4401f76`, `5c25544`, `ecd3c94`); no pushes.
+- **CI:** **4/4 green** (0 failures, 0 pending).
+- **#4950:** REVIEW_REQUIRED; ransomr `[needs discussion]` on regex vs #4758
+  structural approach (4 unresolved threads); await maintainer design direction.
+- **#5174, #5181, #5195:** REVIEW_REQUIRED; no actionable CR; await maintainer review.
+- **Learn:** no skill change — state unchanged from tick 9; peer #5176 lesson already captured.
+- **Replenish:** **verified maximum 4/4** — no slot. When a slot opens:
+  [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) →
+  [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454) (open);
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) → peer
+  claim (yinli-systems, no open PR).
+
 ## 2026-09-02 sweep state (scheduled, tick 9)
 
 - **Time:** ~11:28 AM PT.

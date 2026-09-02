@@ -11,6 +11,22 @@ target as actionable.
 Base branch: `master`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/superset`). Local clone: `/Users/dejain/nvidia/oss/superset`.
 
+## 2026-09-02 sweep state (scheduled, tick 1)
+
+- **Time:** ~11:50 AM PT (30-minute loop).
+- **Departed:** none.
+- **Open PRs (1/5):** [#43803](https://github.com/apache/superset/pull/43803).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): **0 behind `master`**
+  (head `59370467`); no pushes.
+- **CI:** docs checks green (labeler, Netlify preview SUCCESS); no failures.
+- **Review:** REVIEW_REQUIRED; await maintainer review.
+- **Learn:** no skill change — unchanged from startup tick.
+- **Replenishment slots 2–5 (unfilled, blockers unchanged):**
+  - Slot 2: overlap [#43722](https://github.com/apache/superset/pull/43722).
+  - Slot 3: overlap [#43756](https://github.com/apache/superset/pull/43756).
+  - Slot 4: overlap [#43585](https://github.com/apache/superset/pull/43585), [#43710](https://github.com/apache/superset/pull/43710).
+  - Slot 5: #43717 / #43801 / #43352 — needs repro, env, or design.
+
 ## 2026-09-02 sweep state (startup tick, loop)
 
 - **Time:** ~11:20 AM PT (continuation loop startup).

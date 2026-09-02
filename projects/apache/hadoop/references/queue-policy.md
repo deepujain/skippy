@@ -11,6 +11,44 @@ target as actionable.
 Base branch: `trunk`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/hadoop`).
 
+## 2026-09-02 sweep state (scheduled, tick 11)
+
+- **Time:** ~11:52 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches **0
+  behind `apache/trunk`**; no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED**; GHA Build **green**; Jenkins pr-merge **pending**
+  (build 11).
+- **#8334** (`ef049ad3`), **#8310** (`2fecd89c`): GHA Build **green**; Jenkins **pending**
+  (builds 11/19).
+- **#8306** (`710f3b0e`): Yetus + GHA **green**; CHANGES_REQUESTED stale; await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (steveloughran scope); Yetus + GHA **green**.
+- **#8670** (`75bc9263`): Yetus + Jenkins **green**; GHA Build **fail** (fork infra, #8702).
+- **#8389** (`29ca07c6`), **#8388** (`da3325d5`): Yetus + GHA + Jenkins **green**.
+- **Learn:** no skill change — unchanged from tick 10.
+- **Replenishment:** **skipped** — 8 open > target 5.
+
+## 2026-09-02 sweep state (scheduled, tick 10)
+
+- **Time:** ~11:48 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches **0
+  behind `apache/trunk`**; no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED**; GHA Build **green**; Jenkins pr-merge **pending**
+  (build 11, in flight).
+- **#8334** (`ef049ad3`), **#8310** (`2fecd89c`): GHA Build **green**; Jenkins pr-merge
+  **pending** (builds 11/19).
+- **#8306** (`710f3b0e`): Yetus + GHA **green**; CHANGES_REQUESTED stale (EnricoMi,
+  steveloughran); await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (steveloughran scope; ctubbsii APPROVED);
+  Yetus + GHA **green**; await maintainer direction.
+- **#8670** (`75bc9263`): Yetus + Jenkins **green**; GHA Build **fail** (fork infra, #8702).
+- **#8389** (`29ca07c6`), **#8388** (`da3325d5`): Yetus + GHA **green**.
+- **Learn:** no skill change — state unchanged from tick 9; no new merges since #8708/#8702.
+- **Replenishment:** **skipped** — 8 open > target 5 (verified over-cap; maintain-only).
+
 ## 2026-09-02 sweep state (scheduled, tick 9)
 
 - **Time:** ~11:29 AM PT.

@@ -12,6 +12,22 @@ target as actionable.
 Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/airflow`).
 
+## 2026-09-02 sweep state (scheduled, tick 10)
+
+- **Time:** ~11:49 AM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** #72402, #72394, #71430, #69157, #69150.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `apache/main`**; no rebases or pushes.
+- **CI:** **0 failures** on all five; matrix jobs **pending** (constraints, CI
+  image checks, provider/DB test shards post-rebase heads: `c9cda81c`, `6c64ed63`,
+  `cc422e78`, `38687c6d`, `da9295ca`).
+- **#72394, #69157, #69150:** **APPROVED**; UNSTABLE = pending CI only.
+- **#72402, #71430:** REVIEW_REQUIRED; no actionable human/bot CR.
+- **Learn:** no skill change — peer #72443 merged (docs link fix, unrelated);
+  Serialization plain-DAG lesson unchanged.
+- **Replenishment:** **skipped** — queue at cap 5/5.
+
 ## 2026-09-02 sweep state (scheduled, tick 9)
 
 - **Time:** ~11:30 AM PT.
