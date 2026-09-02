@@ -14,8 +14,9 @@ PROMPT_SCRIPT="$ROOT/scripts/sweep-tick-prompt.sh"
 mkdir -p "$(dirname "$SCHED_LOG")" "$(dirname "$PENDING")"
 
 sched_log() {
-  local line
-  line="$(printf '%s [%s] %s' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$PROJECT" "$*")"
+  local line ts
+  ts="$("$ROOT/scripts/sweep-timestamp.sh")"
+  line="$(printf '%s [%s] %s' "$ts" "$PROJECT" "$*")"
   python3 - "$SCHED_LOG" "$line" <<'PY'
 import fcntl, sys
 path, line = sys.argv[1], sys.argv[2]
@@ -30,7 +31,7 @@ fire_tick() {
   : "${PROJECT:?PROJECT must be set before fire_tick}"
   SENTINEL="AGENT_LOOP_TICK_${PROJECT}-sweep"
   local TICK_AT PROMPT PAYLOAD LINE
-  TICK_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  TICK_AT="$("$ROOT/scripts/sweep-timestamp.sh")"
   sched_log "TICK ($REASON) firing at $TICK_AT"
   PROMPT="$("$PROMPT_SCRIPT" "$PROJECT" "$REASON")"
   PAYLOAD=$(python3 -c '

@@ -110,6 +110,8 @@ Do not report success until all of these are true:
 - The diff was reviewed for behavior, security, compatibility, and cleanup.
 - Delivery state is known: commit, PR, signature, CI, review, and external
   blockers are reported exactly.
+- GitHub-facing PR titles, descriptions, and comments contain no em dash
+  character (`—`).
 
 ## Trigger phrases
 

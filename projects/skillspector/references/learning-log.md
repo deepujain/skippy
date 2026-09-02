@@ -81,3 +81,40 @@ Adopted rule: Every sweep push must be DCO-signed. Graph-proxy tests must stub
 before exercising the lazy export.
 
 Next action: Verify DCO green before counting CI healthy on #436 follow-ups.
+
+## 2026-09-02: graph-proxy test must not invoke real workflow mid-suite
+
+Source: 2026-09-02 scheduled sweep CI on https://github.com/NVIDIA/SkillSpector/pull/436 (`f9e2fc7`)
+
+Classification: verified repair
+
+Observation: `test_package_graph_export_survives_submodule_load` failed with
+`ValueError: skill_path is required` from the real `build_context` node because
+`patch.dict(sys.modules, ...)` did not prevent `_get_compiled()` from loading the
+already-cached compiled graph after ~2800 prior unit tests in the same session.
+
+Adopted rule: Graph-proxy regression tests should simulate the submodule clobber
+and `graph_proxy._get_compiled` package restore directly (stub `_compiled`,
+assign submodule on the parent package, restore lazy export) instead of relying
+on import isolation mid-suite.
+
+Next action: Keep #436 green with DCO-signed pushes; await maintainer re-review.
+
+## 2026-09-02: CLI monkeypatch undo caches invoke on LazyGraph
+
+Source: 2026-09-02 scheduled sweep CI bisect on https://github.com/NVIDIA/SkillSpector/pull/436 (`0dc55d6`)
+
+Classification: verified repair
+
+Observation: `test_cli_writes_report_then_exits_two_for_execution_failure` uses
+`monkeypatch.setattr("skillspector.cli.graph.invoke", ...)`. Undo restores the
+real `CompiledStateGraph.invoke` as an instance attribute on the shared
+`LazyGraph` singleton, bypassing `__getattr__` and causing
+`test_package_graph_export_survives_submodule_load` to invoke the real workflow
+after ~160 prior unit tests.
+
+Adopted rule: Graph-proxy unit tests must `lazy_graph.__dict__.pop("invoke", None)`
+before stubbing `_compiled` when asserting lazy export invokability after CLI
+tests in the same session.
+
+Next action: Verify full `test-ci` lane green on #436 after push.

@@ -96,6 +96,7 @@ Use the **actual issue number** in the branch name (e.g. `fix-62622-s3-dag-bundl
 - **Code quality:** Pay attention to **ruff**, **mypy**, and **type annotations**. Use [prek-hooks](https://github.com/apache/airflow/blob/main/contributing-docs/08_static_code_checks.rst#prerequisites-for-prek-hooks) to catch issues before push.
 - **Style:** Follow [Airflow coding style](https://github.com/apache/airflow/blob/main/contributing-docs/05_pull_requests.rst#coding-style-and-best-practices). Match existing code in the touched module (e.g. `airflow-core/`, `providers/amazon/`, `providers/google/`).
 - **Tests:** Prefer adding or extending a test so CI and reviewers see coverage. For new operators/features, consider an example DAG (see [custom operator guide](https://github.com/apache/airflow/blob/main/airflow-core/docs/howto/custom-operator.rst)).
+- **`sync_dag_to_db` in core model tests:** when a test calls `sync_dag_to_db`, prefer a plain `DAG` plus explicit `DagModel` setup (see `test_next_dagruns_to_examine_only_unpaused` in `test_dagrun.py`). Do **not** combine `dag_maker(serialized=True, ...)` with `sync_dag_to_db` — Serialization CI fails in `SerializedDAG.bulk_write_to_db` with `TypeError: string indices must be integers` at `collection.py:631` (#72402).
 - **Docs:** For new features add docstrings or docs under `docs/` as appropriate.
 
 ## 4. Pre-checks and tests (HARD GATE -- before commit)

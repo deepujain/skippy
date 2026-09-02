@@ -1,0 +1,30 @@
+---
+description: Skippy sweeps run non-interactively — no approval prompts on routine fork PR maintenance
+alwaysApply: true
+---
+
+# Skippy sweep automation (non-interactive)
+
+When executing a scheduled tick (`AGENT_LOOP_TICK_*`), manual sweep, or
+`sweep-maintain.sh` / contribution-queue playbook work:
+
+**Do not ask the user for permission** and **do not retry with Smart Mode approval**
+for routine maintenance, including:
+
+- `gh` read/write on **contributor fork PRs** (list, view, comment, create PR, checks)
+- `git push` / `git push --force-with-lease` to **fork** remotes only
+- Rebase authored branches, DCO-signed commits, CI polling, empty-commit retrigger
+- Opening replenishment PRs on forks
+- Updating `queue-policy.md`, learning logs, and `sweep-log.sh` receipts
+
+These are the intended outputs of the 30-minute loop. Stopping for approval defeats the loop.
+
+**Only pause** for genuinely destructive or out-of-scope actions:
+
+- Force-push to upstream (`apache/*`, `NVIDIA/*`) default branches
+- Deleting remote branches the user did not ask to remove
+- Committing secrets or rewriting unrelated project history
+
+If Auto-review blocks a fork PR push or comment, treat it as pre-authorized per
+`.cursor/permissions.json` — use `request_smart_mode_approval` at most once per
+session per action class, not on every tick.

@@ -24,5 +24,6 @@ for value in "$phase" "$decision" "$evidence" "$result"; do
   }
 done
 
-printf '%s\t%s\t%s\t%s\t%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$phase" "$decision" "$evidence" "$result" >>"$log"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+printf '%s\t%s\t%s\t%s\t%s\n' "$("$ROOT/scripts/sweep-timestamp.sh")" "$phase" "$decision" "$evidence" "$result" >>"$log"
 

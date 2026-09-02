@@ -54,9 +54,17 @@ Agent-completed sweeps append `SWEEP (...)` lines. Scheduler ticks:
 
 ## Permissions
 
-Use unrestricted IDE permissions (`.cursor/permissions.json`). Headless
-`cursor agent --force` is **not** used — NVIDIA org policy blocks Run Everything.
-The IDE agent in this session runs each tick with normal approvals.
+**Non-interactive by design.** Scheduled ticks must complete Maintain → Learn →
+Replenish without stopping for approval on routine fork-PR work (push, rebase,
+`gh pr comment`, open replenishment PR, CI polling). See `.cursor/permissions.json`
+and `.cursor/rules/skippy-sweep-noninteractive.mdc` in this repo and the parent
+`oss/` workspace.
+
+Use **unrestricted** approval mode. Only pause for destructive upstream writes
+(force-push to `apache/*` or `NVIDIA/*` default branches) or secrets in commits.
+
+Headless `cursor agent --force` is **not** used — NVIDIA org policy blocks it.
+The IDE agent runs each tick with the permissions above.
 
 ## Per-project continuation docs
 

@@ -2,7 +2,7 @@
 # Live queue snapshot → sweep-output.log (verify scheduler + gh access).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECT="${1:?usage: sweep-status.sh <skillspector|nemoclaw> [reason]}"
+PROJECT="${1:?usage: sweep-status.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow|superset> [reason]}"
 REASON="${2:-status-check}"
 LOG="$ROOT/scripts/sweep-log.sh"
 
@@ -29,6 +29,11 @@ case "$PROJECT" in
     ;;
   airflow)
     REPO="apache/airflow"
+    AUTHOR="deepujain"
+    TARGET=5
+    ;;
+  superset)
+    REPO="apache/superset"
     AUTHOR="deepujain"
     TARGET=5
     ;;

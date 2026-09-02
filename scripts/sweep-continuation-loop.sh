@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECT="${1:?usage: sweep-continuation-loop.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow> [interval_seconds]}"
+PROJECT="${1:?usage: sweep-continuation-loop.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow|superset> [interval_seconds]}"
 INTERVAL="${2:-1800}"
 
 # shellcheck source=sweep-loop-lib.sh

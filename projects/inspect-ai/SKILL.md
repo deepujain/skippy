@@ -201,6 +201,10 @@ When calibrating contribution style, also scan recent merged PRs from other cont
    make test
    ```
 
+   Run `uv run ruff format --check` (or `ruff format` then commit) on touched Python
+   files before pushing. CI's `pre-commit` and `ruff` jobs fail on formatting-only
+   drift such as missing blank lines before new test functions (#5181, 2026-09-02).
+
    `make check` runs ruff and mypy. `make test` runs pytest. If the full suite is blocked by environment or unrelated failures, report the exact blocker and preserve focused feature evidence.
 
    CI uses `uv` even though the contributor guide also documents `pip install -e ".[dev]"`. To mirror CI more closely in a fresh checkout, use:

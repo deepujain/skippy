@@ -4,7 +4,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECT="${1:?usage: sweep-tick-prompt.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow>}"
+PROJECT="${1:?usage: sweep-tick-prompt.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow|superset>}"
 REASON="${2:-scheduled}"
 
 case "$PROJECT" in
@@ -37,6 +37,12 @@ case "$PROJECT" in
     PROJECT_SKILL="$ROOT/projects/apache/airflow/SKILL.md"
     QUEUE_POLICY="$ROOT/projects/apache/airflow/references/queue-policy.md"
     LEARNING="$ROOT/projects/apache/airflow/references/learning-log.md"
+    ;;
+  superset)
+    CONT="$ROOT/automations/continuation/superset-sweep-and-replenish.md"
+    PROJECT_SKILL="$ROOT/projects/apache/superset/SKILL.md"
+    QUEUE_POLICY="$ROOT/projects/apache/superset/references/queue-policy.md"
+    LEARNING=""
     ;;
   *)
     echo "unknown project: $PROJECT" >&2

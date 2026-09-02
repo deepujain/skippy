@@ -2,15 +2,20 @@
 
 ## Rigorous engineering for coding agents
 
-You describe the outcome. Skippy chooses a playbook, creates a task list, loads
-the right project skill, coordinates bounded specialist work when it helps, and
-demands evidence before it reports success.
+Coding agents generate plausible patches quickly. They are much weaker at the
+engineering around them: reproducing the failure, choosing the smallest owning
+boundary, knowing when a green build is not proof, learning from review, and
+handing off work another engineer can trust without redoing it.
 
-Skippy is an engineering system for the gap between code generation and work
-another engineer can trust. It is bigger than a collection of prompts and
-bigger than a collection of skills: it combines decision rules, playbooks,
-project adapters, task artifacts, role boundaries, helper programs, and a
-verification gate.
+Skippy closes that gap. You describe the outcome; Skippy routes the request to
+a playbook, loads the project skill for that repository, builds a visible task
+plan, coordinates bounded specialist work when it helps, and refuses to report
+success until the changed behavior is verified at a real boundary.
+
+It is not a prompt pack or a skill library on its own. It is a layered
+engineering system—decision rules, playbooks, project adapters, task artifacts,
+role boundaries, helper programs, and a verification gate—that turns agent work
+into accountable delivery.
 
 ```mermaid
 flowchart LR
@@ -26,15 +31,22 @@ flowchart LR
   H --> I["Review and delivery receipt"]
 ```
 
-Its standard is simple: write less code, own the right boundary, and prove the
-behavior that changed.
+The standard is simple: write less code, own the right boundary, and prove what
+changed.
 
-Skippy follows how a strong engineer joins a codebase: check out the repo, read
-docs and history, understand open and closed merge requests, start
-contributing, learn from your own outcomes and from others' work, and keep
-improving. Knowledge accumulates through evidence-backed bootstrap, real
-changes, and a calibrated
-[continuous learning](references/continuous-learning.md) loop.
+Skippy follows how a strong engineer joins a codebase—read docs and history,
+understand open and closed merge requests, contribute, learn from outcomes, and
+keep improving. That learning is evidence-backed: bootstrap a new repository
+from its sources, ship real changes, then run a calibrated
+[continuous learning](references/continuous-learning.md) loop instead of
+rewriting instructions from noise.
+
+The method is in production across major open-source projects. The
+[contribution tracker](https://github.com/deepujain/oss-contribs) shows
+300+ Skippy-assisted contributions across Apache Airflow, PyTorch, Inspect AI,
+NemoClaw, and others. The same mechanism applies to private repos and internal
+monorepos; public OSS is where the review history is easiest to bootstrap
+against.
 
 ## Two ways to start
 
@@ -315,6 +327,7 @@ same layout under `projects/<slug>/`.
 | <a href="https://github.com/apache/airflow"><img src="https://apache.org/logos/res/airflow/default.png" alt="Apache Airflow logo" height="18"></a> <a href="https://github.com/apache/airflow">Apache Airflow</a> | [projects/apache/airflow/SKILL.md](projects/apache/airflow/SKILL.md) |
 | <a href="https://github.com/apache/hadoop"><img src="https://apache.org/logos/res/hadoop/hadoop.png" alt="Apache Hadoop logo" height="18"></a> <a href="https://github.com/apache/hadoop">Apache Hadoop</a> | [projects/apache/hadoop/SKILL.md](projects/apache/hadoop/SKILL.md) |
 | <a href="https://github.com/apache/spark"><img src="https://apache.org/logos/res/spark/spark.png" alt="Apache Spark logo" height="18"></a> <a href="https://github.com/apache/spark">Apache Spark</a> | [projects/apache/spark/SKILL.md](projects/apache/spark/SKILL.md) |
+| <a href="https://github.com/apache/superset"><img src="https://superset.apache.org/img/superset-logo-horiz-apache.svg" alt="Apache Superset logo" height="18"></a> <a href="https://github.com/apache/superset">Apache Superset</a> | [projects/apache/superset/SKILL.md](projects/apache/superset/SKILL.md) |
 | <a href="https://github.com/openclaw/clawhub"><img src="https://raw.githubusercontent.com/openclaw/clawhub/main/public/og-logo.png" alt="ClawHub logo" height="18"></a> <a href="https://github.com/openclaw/clawhub">ClawHub</a> | [projects/clawhub/SKILL.md](projects/clawhub/SKILL.md) |
 | <a href="https://github.com/NousResearch/hermes-agent"><img src="https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/static/img/logo.png" alt="Hermes Agent logo" height="18"></a> <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> | [projects/hermes-agent/SKILL.md](projects/hermes-agent/SKILL.md) |
 | <a href="https://github.com/UKGovernmentBEIS/inspect_ai"><img src="https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_ai/main/docs/images/aisi-logo.svg" alt="AISI logo" height="18"></a> <a href="https://github.com/UKGovernmentBEIS/inspect_ai">Inspect AI</a> | [projects/inspect-ai/SKILL.md](projects/inspect-ai/SKILL.md) |

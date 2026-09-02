@@ -13,4 +13,5 @@ fi
 PROJECT="${1:?usage: sweep-log.sh [--push] <project> <message>}"
 shift
 mkdir -p "$(dirname "$OUT")"
-printf '%s [%s] %s%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$PROJECT" "$PREFIX" "$*" >>"$OUT"
+TS="$("$ROOT/scripts/sweep-timestamp.sh")"
+printf '%s [%s] %s%s\n' "$TS" "$PROJECT" "$PREFIX" "$*" >>"$OUT"

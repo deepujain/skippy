@@ -2,7 +2,7 @@
 # Full queue maintenance: rebase every authored open PR, log results.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECT="${1:?usage: sweep-maintain.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow>}"
+PROJECT="${1:?usage: sweep-maintain.sh <skillspector|nemoclaw|inspect-ai|hadoop|airflow|superset>}"
 REASON="${2:-maintain}"
 MAINTAIN="$ROOT/scripts/sweep-maintain-pr.sh"
 LOG="$ROOT/scripts/sweep-log.sh"
@@ -77,6 +77,20 @@ case "$PROJECT" in
     FORK_REMOTE=origin
     UPSTREAM_REMOTE=apache
     MAIN_BRANCH=main
+    ;;
+  superset)
+    REPO="apache/superset"
+    CLONE="/Users/dejain/nvidia/oss/superset"
+    export PROJECT=superset
+    if [[ -d "$CLONE/.git" ]]; then
+      git -C "$CLONE" remote get-url apache &>/dev/null || \
+        git -C "$CLONE" remote add apache https://github.com/apache/superset.git
+      git -C "$CLONE" remote get-url origin &>/dev/null || \
+        git -C "$CLONE" remote add origin git@github.com:deepujain/superset.git
+    fi
+    FORK_REMOTE=origin
+    UPSTREAM_REMOTE=apache
+    MAIN_BRANCH=master
     ;;
   *)
     echo "unknown project: $PROJECT" >&2

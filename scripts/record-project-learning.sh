@@ -24,7 +24,8 @@ if [[ ! -e "$log" ]]; then
   printf '# Project learning log\n\n' >"$log"
 fi
 
-timestamp="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+timestamp="$("$ROOT/scripts/sweep-timestamp.sh")"
 printf '## %s: %s\n\n' "$timestamp" "$classification" >>"$log"
 printf 'Source: %s\n' "$source_url" >>"$log"
 printf 'Classification: %s\n' "$classification" >>"$log"

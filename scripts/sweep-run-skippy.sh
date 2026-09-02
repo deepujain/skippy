@@ -80,9 +80,9 @@ run_agent() {
   "$LOG" "$PROJECT" "SWEEP AGENT START ($REASON) cursor agent (maintain pushed=${PUSHED})"
   local exit_code=0
   {
-    echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) SWEEP AGENT $PROJECT ($REASON) pushed=$PUSHED ==="
+    echo "=== $("$ROOT/scripts/sweep-timestamp.sh") SWEEP AGENT $PROJECT ($REASON) pushed=$PUSHED ==="
     "$CURSOR" agent --print --trust --output-format text "$prompt" || exit_code=$?
-    echo "=== END $(date -u +%Y-%m-%dT%H:%M:%SZ) exit=$exit_code ==="
+    echo "=== END $("$ROOT/scripts/sweep-timestamp.sh") exit=$exit_code ==="
   } >>"$AGENT_LOG" 2>&1
   if [[ "$exit_code" -ne 0 ]]; then
     "$LOG" "$PROJECT" "SWEEP AGENT FAILED ($REASON) exit=$exit_code log=$AGENT_LOG"

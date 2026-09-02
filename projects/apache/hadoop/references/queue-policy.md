@@ -11,43 +11,195 @@ target as actionable.
 Base branch: `trunk`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/hadoop`).
 
-## 2026-09-01 bootstrap + sweep
+## 2026-09-02 sweep state (scheduled, tick 9)
 
-- Contributor: `deepujain`; authenticated `gh`.
-- Open PRs: #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306 (8/5).
-- Replenishment: paused while open count exceeds target; maintain all branches.
-- Scheduled continuation: every 30 minutes via
-  `scripts/sweep-continuation-loop.sh hadoop`.
+- **Time:** ~11:29 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches **0
+  behind `apache/trunk`**; no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED**; GHA Build **green**; Jenkins pr-merge **pending**
+  (build 11).
+- **#8334** (`ef049ad3`), **#8310** (`2fecd89c`): GHA Build **green**; Jenkins pr-merge
+  **pending** (builds 11/19).
+- **#8306** (`710f3b0e`): Yetus + Jenkins + GHA **green**; CHANGES_REQUESTED stale
+  (EnricoMi); await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (steveloughran scope beyond docs; ctubbsii
+  APPROVED); Yetus + GHA **green**; needs maintainer direction.
+- **#8670** (`75bc9263`): Yetus + Jenkins **green**; GHA Build **fail** (fork infra — #8702).
+- **#8389** (`29ca07c6`), **#8388** (`da3325d5`): Yetus + Jenkins + GHA **green**.
+- **Learn:** no skill change — no new merges since #8708/#8702.
+- **Replenishment:** **skipped** — 8 open > target 5 (verified over-cap; maintain-only).
 
-## 2026-09-01 PR #8307 outreach (steveloughran)
+## 2026-09-02 sweep state (scheduled, tick 8)
 
-- Maintainer feedback: use **common-dev@hadoop.apache.org**, not PR @-mentions
-  (Yetus noise drowns tagged reminders; steveloughran inactive on PR tags).
-- Action taken: posted review request to common-dev; PR comment without tags.
-- Branch head `5ab85957`: AssertJ follow-up in, rebased on trunk, Yetus green.
-- **Do not** tag steveloughran or post @-mention nudges on #8307; use list only.
+- **Time:** ~11:26–11:27 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches **0
+  behind `apache/trunk`**; no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED**; GHA Build **green**; Jenkins pr-merge **pending**
+  (build 11, in flight since tick 3 retrigger).
+- **#8334** (`ef049ad3`): GHA Build **green**; Jenkins pr-merge **pending** (build 11).
+- **#8310** (`2fecd89c`): GHA Build **green**; Jenkins pr-merge **pending** (build 19).
+- **#8306** (`710f3b0e`): Yetus + Jenkins + GHA **green**; CHANGES_REQUESTED stale
+  (EnricoMi/steveloughran); await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (ctubbsii/steveloughran scope beyond docs);
+  Yetus + GHA **green**; needs maintainer direction before code change.
+- **#8670** (`75bc9263`): Yetus + Jenkins **green**; GHA Build **fail** (fork infra — #8702).
+- **#8389** (`29ca07c6`), **#8388** (`da3325d5`): Yetus + Jenkins + GHA **green**.
+- **Learn:** no skill change — no new merges since #8708/#8702; Yetus pending + GHA fork
+  infra patterns already in project skill §9.
+- **Replenishment:** **skipped** — 8 open > target 5 (verified over-cap; maintain-only).
+
+## 2026-09-02 sweep state (scheduled, tick 7)
+
+- **Time:** ~11:23 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches **0
+  behind `apache/trunk`** (`abbc78d4`); no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED**; GHA Build **green**; Jenkins pr-merge **pending**
+  (build 11, ~3h in flight).
+- **#8334** (`ef049ad3`): GHA Build **green**; Jenkins pr-merge **pending** (build 11).
+- **#8310** (`2fecd89c`): GHA Build **green**; Jenkins pr-merge **pending** (build 19).
+- **#8306** (`710f3b0e`): Yetus + Jenkins + GHA **green**; CHANGES_REQUESTED stale
+  (EnricoMi); await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (steveloughran/ctubbsii scope); all CI green.
+- **#8670** (`75bc9263`): Yetus + Jenkins **green**; GHA Build **fail** (fork infra — #8702).
+- **#8389** (`29ca07c6`), **#8388** (`da3325d5`): Yetus + Jenkins + GHA **green**.
+- **Learn:** no skill change — no new merges since #8708/#8702; Yetus pending + GHA fork
+  infra patterns already in project skill §9.
+- **Replenishment:** **skipped** — 8 open > target 5 (maintain-only).
+
+## 2026-09-02 sweep state (scheduled, tick 6)
+
+- **Time:** ~11:17–11:19 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches **0
+  behind `apache/trunk`**; no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED**; GHA **Build green**; Jenkins pr-merge **pending**
+  (build 11) — multi-hour Yetus run in flight from tick 3 retrigger.
+- **#8334** (`ef049ad3`): GHA **Build green**; Jenkins pr-merge **pending** (build 11).
+- **#8310** (`2fecd89c`): GHA Build green; Jenkins pr-merge **pending** (build 19).
+- **#8306** (`710f3b0e`): Yetus + Jenkins + GHA **green**; CHANGES_REQUESTED stale
+  (EnricoMi); await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (steveloughran/ctubbsii scope); all CI green.
+- **#8670** (`75bc9263`): Yetus + Jenkins green; GHA **Build fail** (fork infra — #8702).
+- **#8389, #8388:** all checks green.
+- **Learn:** no skill change — merged #8708/#8702; Yetus flake retrigger + GHA fork-build
+  infra patterns already in project skill §9.
+- **Replenishment:** **skipped** — 8 open > target 5 (maintain-only).
+
+## 2026-09-02 sweep state (scheduled, tick 5)
+
+- **Time:** ~11:08 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches 0
+  behind `apache/trunk`; no rebases or pushes.
+- **#8335** (`35cad907`): APPROVED; GHA **Build green**; Jenkins pr-merge **pending**
+  (build 11) — multi-hour Yetus run in flight from tick 3 retrigger.
+- **#8334** (`ef049ad3`): GHA **Build green**; Jenkins pr-merge **pending** (build 11).
+- **#8310** (`2fecd89c`): GHA Build green; Jenkins pr-merge **pending** (build 19).
+- **#8306** (`710f3b0e`): Yetus + Jenkins **green**; CHANGES_REQUESTED stale; await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (ctubbsii scope); CI green; no code change.
+- **#8670** (`75bc9263`): Yetus + Jenkins green; GHA **Build** fail (fork infra).
+- **#8389, #8388:** all checks green.
+- **Learn:** no skill change — merged #8708/#8686; Yetus flake retrigger pattern in skill §9.
+- **Replenishment:** **skipped** — 8 open > target 5 (maintain-only).
+
+## 2026-09-02 sweep state (scheduled, tick 4)
+
+- **Time:** ~8:23–8:45 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches 0
+  behind `apache/trunk`; no rebases or pushes this tick.
+- **#8335** (`35cad907`): APPROVED; Jenkins pr-merge **pending** (build 11) + GHA Build
+  pending — empty retrigger from tick 3 still in flight.
+- **#8334** (`ef049ad3`): Jenkins pr-merge **pending** (build 11) + GHA Build pending.
+- **#8310** (`2fecd89c`): GHA Build green; Jenkins pr-merge **pending** (build 19).
+- **#8306** (`710f3b0e`): Yetus + Jenkins **green**; CHANGES_REQUESTED stale (EnricoMi
+  addressed on head); await re-review.
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (ctubbsii scope); CI green; no code change.
+- **#8670** (`75bc9263`): Yetus + Jenkins green; GHA **Build** fail (fork infra).
+- **#8389, #8388:** all checks green.
+- **Learn:** no skill change — bounded scan merged #8708/#8702; Yetus timeout/flake
+  retrigger and GHA fork-build infra patterns already in project skill §9.
+- **Replenishment:** **skipped** — 8 open > target 5 (maintain-only).
+
+## 2026-09-02 sweep state (scheduled)
+
+- **Departed:** none since startup sweep.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain:** all 8 branches current on `apache/trunk` (0 behind); no rebases
+  required.
+- **#8306:** pushed checkstyle fix `710f3b0e` (javadoc @param + debug log line
+  wrap per steveloughran); Yetus green on prior head; CI rerunning; EnricoMi
+  CR on stale AbstractContractDeleteTest base (already fixed: AbstractS3ATestBase).
+- **#8307:** CHANGES_REQUESTED — ctubbsii wants FileSystem method fixes beyond
+  docs scope; steveloughran AssertJ done; Yetus green; common-dev@ only for outreach.
+- **#8335:** APPROVED; Yetus unit flake (TestBlockRecoveryCauseStandbyNameNodeCrash);
+  empty CI refresh pushed `042760e0`.
+- **#8334:** empty CI refresh pushed `3e5c7956` (prior Yetus FAILURE).
+- **#8310:** empty CI refresh pushed `2fecd89c` (Jenkins pr-merge was PENDING).
+- **#8670, #8389, #8388:** current on trunk; #8389/#8388 Yetus+Build green;
+  #8670 Yetus green, GHA Build FAILURE (infra token/expiry pattern).
+- **Healthy (green Yetus on head):** #8389, #8388, #8307, #8306 (prior), #8670 Yetus.
+- **Replenishment:** **skipped** — 8 open exceeds target 5 (maintain-only until
+  count ≤ 5).
+- **No** scheduled @-mention outreach (one-time 2026-09-01 only).
+- Scheduled continuation: unified loop via `sweep-continuation-loop-all.sh`.
+
+## 2026-09-02 sweep state (scheduled, tick 3)
+
+- **Time:** ~7:51–8:00 AM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches 0
+  behind `apache/trunk`; no rebases required.
+- **#8335** (`35cad907`): APPROVED; Yetus unit failed on unrelated
+  `TestDataNodeLifeline` timeout/reconfig flake — empty CI retrigger pushed.
+- **#8334** (`ef049ad3`): Yetus unit failed on unrelated hdfs timeouts/flakes —
+  empty CI retrigger pushed.
+- **#8310** (`2fecd89c`): Jenkins pr-merge **pending** (building); GHA Build green.
+- **#8306** (`710f3b0e`): Yetus + Jenkins **green**; CHANGES_REQUESTED stale
+  (EnricoMi addressed on head).
+- **#8307** (`5ab85957`): CHANGES_REQUESTED (ctubbsii scope); CI green; no code change.
+- **#8670** (`75bc9263`): Yetus + Jenkins green; GHA **Build** fail (fork infra).
+- **#8389, #8388:** all checks green.
+- **Learn:** no skill change — merged #8708/#8702; Yetus timeout/flake retrigger
+  pattern already in project skill §9.
+- **Replenishment:** **skipped** — 8 open > target 5 (maintain-only).
+
+## 2026-09-02 sweep (scheduled, tick 2)
+
+- **Departed:** none.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 branches
+  0 behind `apache/trunk`; no rebases or pushes this tick.
+- **#8670** `75bc9263`: Yetus + Jenkins pr-merge green; GHA **Build** FAILURE
+  (infra/fork pattern per prior ticks); no contributor fix.
+- **#8389** `29ca07c6`, **#8388** `da3325d5`: Yetus + Build + Jenkins green.
+- **#8335** `042760e0`: APPROVED; Jenkins pr-merge **pending** (Yetus rerun from
+  prior empty commit).
+- **#8334** `3e5c7956`, **#8310** `2fecd89c`, **#8306** `710f3b0e`: Jenkins
+  pr-merge **pending** (multi-hour Yetus builds in flight).
+- **#8307** `5ab85957`: CHANGES_REQUESTED (ctubbsii: FileSystem behavior beyond
+  docs scope); Yetus + Build green; no code change — scope needs maintainer direction.
+- **#8306:** CHANGES_REQUESTED stale; EnricoMi April comments addressed on head
+  (AbstractS3ATestBase, Configuration from getFileSystem().getConf()); awaiting
+  Yetus on `710f3b0e`.
+- **Healthy (contributor-actionable green):** #8389, #8388, #8307, #8670 Yetus.
+- **Learn:** no skill change — bounded scan merged #8708/#8702 (GHA fork-build
+  infra); Yetus resource-limit and EnricoMi stale-thread patterns already in skill.
+- **Replenishment:** **skipped** — 8 open > target 5 (maintain-only).
 
 ## 2026-09-01 one-time review @-mentions (user-directed)
 
 - **Scope:** Hadoop only, **one-time** manual outreach. **Do not** repeat on
   scheduled 30-minute sweeps or on any other project.
-- **Action taken:** Posted human review-request comments on all 8 open PRs
-  (#8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306), each tagging 3
-  committers from the last 20 merged PRs. #8307 comment noted common-dev@ and
-  did not tag steveloughran.
 - **Ongoing maintain policy:** Rebase, CI, respond to review threads, common-dev@
   for #8307 per steveloughran feedback. No further bulk @-mention campaigns unless
   the user explicitly requests another one-off.
-
-## 2026-09-02 startup sweep
-
-- Contributor: `deepujain`; authenticated `gh`.
-- Open PRs (8/5): #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
-- Maintain: all 8 current on `apache/trunk` (0 pushes); #8670 worktree lock cleared.
-- Healthy: 3/5 (#8389, #8388 green; others unstable or CR).
-- #8306: CHANGES_REQUESTED (steveloughran checkstyle) — actionable next tick.
-- #8307: CHANGES_REQUESTED (AssertJ done; ctubbsii FileSystem scope) + common-dev@.
-- #8670, #8335, #8334: CI infra flakes (Yetus token expiry, Jenkins/GHA).
-- Replenishment: **skipped** (8/5 over target).
-- **No** scheduled @-mention outreach (one-time 2026-09-01 only).
-- Scheduled continuation: unified loop via `sweep-continuation-loop-all.sh`.

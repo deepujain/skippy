@@ -41,6 +41,11 @@ source-linked [bootstrap report](references/bootstrap-report.md),
   equivalent; integration/provider tests need credentials or internal CI.
 - New Python source needs SPDX headers. New analyzers need unit tests and,
   where applicable, fixtures. Preserve public CLI/JSON/SARIF contracts.
+- Graph-proxy / lazy-export tests: simulate submodule clobber and package restore
+  directly; do not rely on `patch.dict(sys.modules)` mid-suite when the compiled
+  graph may already be loaded (#436, 2026-09-02). Clear `lazy_graph.__dict__["invoke"]`
+  before assertions — CLI monkeypatch undo can cache the real bound method on the
+  shared singleton.
 - Public PR CI runs lint, format, unit coverage, DCO, and conditional Docker
   smoke tests. Address current maintainer review feedback before replenishing.
 - If the local `gh` token is expired, use the connected GitHub integration for
