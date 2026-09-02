@@ -12,26 +12,36 @@ separate bash rebase step.
 
 ## How scheduling works (local IDE)
 
-The loop script sleeps 30 minutes and prints `AGENT_LOOP_TICK_<project>-sweep`
-with a JSON payload to **stdout**. A monitored background shell wakes the IDE
-agent on each tick; the agent executes the full prompt (see the Loop skill).
+One **foreground** loop process fires every project on the same interval. Each tick
+is written to `.skippy/pending-ticks.jsonl` and printed as
+`AGENT_LOOP_TICK_<project>-sweep` on **stdout**.
 
 ```bash
-# Start all project loops (stdout must stay on the terminal)
+# From an IDE agent session (monitored shell — do NOT nohup or redirect stdout):
 ./scripts/start-sweep-loops.sh
 ```
 
-Or one project:
+Or one project only:
 
 ```bash
 ./scripts/sweep-continuation-loop.sh skillspector
 ```
 
-**Do not redirect loop stdout** to a log file — that hides the sentinel from the
-monitor. Scheduler internals go to `.skippy/sweep-scheduler.log` automatically.
+**Do not** background the loop with `&`, `nohup`, or stdout redirection. That
+orphans the sentinel stream and ticks never reach the agent.
 
-Run the first sweep immediately when arming loops (loop skill: avoid cold start).
-The startup tick fires right away; execute that prompt before waiting 30 minutes.
+If the monitored shell dies, ticks accumulate in `pending-ticks.jsonl`. The
+`.cursor/hooks.json` **stop** hook drains one tick per agent turn (up to 8
+chained follow-ups). Open a Skippy chat to drain the backlog.
+
+Stop loops:
+
+```bash
+./scripts/stop-sweep-loops.sh
+```
+
+Run the first sweep immediately when arming (startup ticks fire at once). Execute
+those prompts before waiting 30 minutes.
 
 ## Watch output
 

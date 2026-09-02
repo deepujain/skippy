@@ -7,3 +7,5 @@
 .skippy/sweep-scheduler.log.lock
 .skippy/sweep-agent-*.log
 .skippy/sweep-agent-*.lock
+.skippy/pending-ticks.jsonl
+.skippy/sweep-loop.pid

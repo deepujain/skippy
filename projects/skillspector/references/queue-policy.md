@@ -105,3 +105,26 @@ or acting on a target.
 - Replenishment: not attempted; queue remains 5/5.
 - Scheduled continuation: every 30 minutes via local loop; prompt at
   `automations/continuation/skillspector-sweep-and-replenish.md`.
+
+## 2026-09-02 sweep (startup)
+
+- Contributor identity: `deepujain`, authenticated `gh` (keyring, `repo` scope).
+- No departed PRs since the second-pass sweep.
+- Open PRs: [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468),
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469) — five slots filled;
+  all branches current on `main`.
+- Maintenance: #436 head `8277737` failed DCO (unsigned commit) and
+  `test_graph_proxy.py::test_package_graph_export_survives_submodule_load`
+  (real graph import when `skillspector.graph` was already cached). Replaced
+  with signed `42eff21` using `patch.dict` plus `importlib.invalidate_caches()`
+  for import isolation; DCO is green and CI is rerunning. #428, #434, #468, and
+  #469 required no branch updates.
+- Healthy count: 3/5 pending #436 CI (#428, #468, #469 merge-clean with green
+  CI; #434 and #436 have addressed review feedback awaiting re-review).
+- Learn: unsigned follow-up commits fail the DCO job even when lint is green;
+  graph-proxy unit tests must stub `skillspector.graph` before invoking the lazy
+  export when the compiled workflow module is already imported in-session.
+- Replenishment: not attempted; queue remains 5/5.

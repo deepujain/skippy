@@ -31,8 +31,9 @@ skill gaps block safe contribution.
 
 ## Author PR precedent (deepujain)
 
-- Total PRs (GitHub): 29; open: 3; merged: 9 (verified via `gh` 2026-09-01).
-- Open heads: #71430 (review required), #69157 (approved), #69150 (approved).
+- Total PRs (GitHub): 31; open: 5; merged: 9 (verified via `gh` 2026-09-02).
+- Open heads: #72402 (new, #72337), #72394, #71430 (review required),
+  #69157 (approved, CI rerunning), #69150 (approved, merge-clean).
 - Duplicate-PR risk is high — mandatory issue/PR overlap screen before new work.
 
 ## Bootstrap status

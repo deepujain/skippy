@@ -1,22 +1,16 @@
 #!/usr/bin/env bash
-# Start all Skippy sweep loops (stdout stays on the terminal for AGENT_LOOP_TICK).
+# Stop orphaned per-project loops and start ONE all-project loop (foreground).
+# Run from an IDE agent monitored shell — do not nohup or redirect stdout.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LOOP="$ROOT/scripts/sweep-continuation-loop.sh"
+ALL_LOOP="$ROOT/scripts/sweep-continuation-loop-all.sh"
+INTERVAL="${1:-1800}"
 
-running=$(pgrep -fl 'sweep-continuation-loop.sh' 2>/dev/null | grep -v zsh | wc -l | tr -d ' ') || running=0
-if [[ "$running" -gt 0 ]]; then
-  echo "Stopping $running existing sweep loop(s)..." >&2
-  pkill -f 'sweep-continuation-loop.sh' 2>/dev/null || true
-  sleep 2
-fi
+"$ROOT/scripts/stop-sweep-loops.sh" 2>/dev/null || true
 
-for p in skillspector nemoclaw inspect-ai hadoop airflow; do
-  echo "Starting loop: $p" >&2
-  "$LOOP" "$p" &
-done
-
-sleep 2
-echo "Running loops:" >&2
-pgrep -fl 'sweep-continuation-loop.sh' 2>/dev/null | grep -v zsh || echo "(none)" >&2
+echo "Starting unified sweep loop (interval=${INTERVAL}s). Keep this shell monitored." >&2
+echo "Scheduler log: $ROOT/.skippy/sweep-scheduler.log" >&2
+echo "Sweep outcomes: $ROOT/.skippy/sweep-output.log" >&2
+echo "Pending tick queue: $ROOT/.skippy/pending-ticks.jsonl" >&2
+exec "$ALL_LOOP" "$INTERVAL"

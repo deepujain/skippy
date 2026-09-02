@@ -22,6 +22,10 @@ Rebase every stale branch onto `apache/trunk`, push to `origin`, address CI/revi
 action items per project skill §9. Trigger Yetus with empty commit when checks are
 stale and branch is current.
 
+**Do not** post bulk @-mention review-request comments on scheduled ticks. That
+was a one-time user-directed outreach on 2026-09-01 (Hadoop only); see
+`queue-policy.md`.
+
 **Non-interactive maintenance (required):**
 - Use local worktree rebase + `git push origin --force-with-lease` (no GPG signing).
 - Run focused `./mvnw` tests when fixing failures.

@@ -25,10 +25,11 @@ Contribution queue → continuous learning
 - [x] **Scheduled continuation (every 30 minutes):** run full sweep and replenish
       per `automations/continuation/skillspector-sweep-and-replenish.md`
       (loop PID 27116; sentinel `AGENT_LOOP_TICK_skillspector-sweep`).
-- [x] Latest sweep (2026-09-01): 5/5 open; ~3/5 healthy; all branches current.
+- [x] Latest sweep (2026-09-02 startup): 5/5 open, 3/5 healthy; #436 fixed DCO+test (`42eff21`).
 
 ## Evidence and decisions
 
 | Time | Phase | Decision | Evidence | Result |
 | --- | --- | --- | --- | --- |
 | 2026-09-01 | Scheduling | 30-minute local continuation loop | User request; loop PID 27116 | Armed; first tick ~30m after start |
+| 2026-09-02 | Startup | #436 DCO+import fix | [SkillSpector startup sweep](fa862ae3-b5f4-4afe-a5e1-0ab6b5ee95e8) | 3/5 healthy; CI pending on #436 |

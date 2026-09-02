@@ -65,3 +65,19 @@ local worktree rebases.
 
 Next action: After any rebase, wait for CI before counting the PR as healthy;
 prior approvals may need reconfirmation.
+
+## 2026-09-02: DCO and graph-proxy import isolation
+
+Source: 2026-09-02 startup sweep of https://github.com/NVIDIA/SkillSpector/pull/436
+
+Classification: verified repair
+
+Observation: Unsigned follow-up commits fail the DCO job even when Ruff passes.
+`test_graph_proxy.py` failed when `skillspector.graph` was already imported in
+the session because the lazy export loaded the real compiled graph.
+
+Adopted rule: Every sweep push must be DCO-signed. Graph-proxy tests must stub
+`skillspector.graph` with `patch.dict` and call `importlib.invalidate_caches()`
+before exercising the lazy export.
+
+Next action: Verify DCO green before counting CI healthy on #436 follow-ups.
