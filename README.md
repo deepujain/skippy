@@ -21,25 +21,19 @@ engineering system—decision rules, playbooks, project adapters, task artifacts
 role boundaries, helper programs, and a verification gate—that turns agent work
 into accountable delivery.
 
-```text
-Outcome and constraints
-        │
-        ▼
-  Skippy router ──┬── Project skill
-                  ├── Decision system
-                  └── Playbook
-        │
-        ▼
-    Task plan
-        │
-        ▼
-Bounded implementation
-        │
-        ▼
-Real-boundary verification
-        │
-        ▼
-Review and delivery receipt
+```mermaid
+%%{init: {'theme':'neutral'}}%%
+flowchart LR
+  A["Outcome and constraints"] --> B["Skippy router"]
+  B --> C["Project skill"]
+  B --> D["Decision system"]
+  B --> E["Playbook"]
+  C --> F["Task plan"]
+  D --> F
+  E --> F
+  F --> G["Bounded implementation"]
+  G --> H["Real-boundary verification"]
+  H --> I["Review and delivery receipt"]
 ```
 
 The standard is simple: write less code, own the right boundary, and prove what
@@ -94,8 +88,11 @@ exists, builds a task plan, and holds the work to the completion gate.
 Use this path when a new engineer would: clone, read, learn from merge-request
 history, contribute, and maintain ongoing work.
 
-```text
-Bootstrap  →  Contribute or sweep  →  Learn and schedule
+```mermaid
+%%{init: {'theme':'neutral'}}%%
+flowchart LR
+  A["1. Bootstrap"] --> B["2. Contribute or sweep"]
+  B --> C["3. Learn and schedule"]
 ```
 
 ### 1. Bootstrap
@@ -232,28 +229,20 @@ Skippy turns a requested outcome into evidence-backed delivery on any
 repository. Shared engineering practice joins project-specific skills; it does
 not apply one generic prompt everywhere.
 
-```text
-Issue or requested outcome
-        │
-        ▼
-Skippy: select work mode ──┬── Project skill (live policy and commands)
-                           ├── Decision system (ownership and risk)
-                           └── Playbook (ordered moves)
-        │
-        ▼
-Task plan (evidence and done-means)
-        │
-        ▼
-Implement at owning boundary
-        │
-        ▼
-Focused plus real-boundary proof
-        │
-        ▼
-Review, CI, merge request, receipt
-        │
-        ▼
-Learning log and optional tracker
+```mermaid
+%%{init: {'theme':'neutral'}}%%
+flowchart TD
+  A["Issue or requested outcome"] --> B["Skippy: select work mode"]
+  B --> C["Project skill: live policy and commands"]
+  B --> D["Decision system: ownership and risk"]
+  B --> E["Playbook: ordered moves"]
+  C --> F["Task plan: evidence and done means"]
+  D --> F
+  E --> F
+  F --> G["Implement at owning boundary"]
+  G --> H["Focused plus real-boundary proof"]
+  H --> I["Review, CI, merge request, receipt"]
+  I --> J["Learning log and optional tracker"]
 ```
 
 In practice:
@@ -291,15 +280,17 @@ and tied to real evidence.
 Skippy can use several agents, but only where parallel work is genuinely
 independent. It does not treat “more agents” as a quality guarantee.
 
-```text
-Lead (contract, risk, merge owner)
-  ├── Investigator (facts) ──────┐
-  ├── Architect (bounded options) ─┼──► Lead checks evidence
-  └── Writer (isolated worktree)   │
-           └── Verifier (boundary)─┘
-                    │
-                    ▼
-         Single reviewed integration
+```mermaid
+%%{init: {'theme':'neutral'}}%%
+flowchart LR
+  L["Lead: contract, risk, and merge owner"] --> I["Investigator: facts"]
+  L --> A["Architect: bounded alternatives"]
+  L --> W["Writer: isolated worktree"]
+  W --> V["Verifier: actual boundary"]
+  I --> M["Lead checks evidence"]
+  A --> M
+  V --> M
+  M --> R["Single reviewed integration"]
 ```
 
 Before fan-out, the lead gives every delegate one bounded question or write

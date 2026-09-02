@@ -12,6 +12,24 @@ target as actionable.
 Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/airflow`).
 
+## 2026-09-02 sweep state (scheduled, tick 15)
+
+- **Time:** ~1:39 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** #72402, #72394, #71430, #69157, #69150.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `apache/main`** (`d41f5895`); fork heads unchanged:
+  `c9cda81c`, `6c64ed63`, `cc422e78`, `38687c6d`, `da9295ca`; no rebases or pushes.
+- **CI:** **5/5 fully green** (0 failures, 0 pending on all heads): #72402 78 pass,
+  #72394 79 pass, #71430 107 pass, #69157 107 pass, #69150 70 pass.
+- **#72394, #69157, #69150:** **APPROVED** + CI green; await maintainer merge.
+- **#72402, #71430:** REVIEW_REQUIRED; CI green; no actionable human/bot CR
+  (contributor status comments only).
+- **Healthy count:** 5/5 CI green; 3/5 APPROVED merge-ready (#72394, #69157, #69150).
+- **Learn:** no skill change — peer #72418 (INTHEWILD entry) and #72390 (pnpm pin)
+  merges add no new failure or review patterns since tick 14.
+- **Replenishment:** **skipped** — queue at cap 5/5; maintainer bandwidth policy.
+
 ## 2026-09-02 sweep state (scheduled, tick 14)
 
 - **Time:** ~12:56 PM PT.

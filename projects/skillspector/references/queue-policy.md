@@ -11,6 +11,26 @@ whenever `CONTRIBUTING.md` or GitHub policy changes
 Read the shared references/contribution-queues.md policy before configuring
 or acting on a target.
 
+## 2026-09-02 sweep state (scheduled, tick 16)
+
+- **Time:** ~1:40 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468),
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`**; no rebases or pushes.
+- **CI:** **5/5 green** (0 failures, 0 pending) on `46090473`, `c0537009`,
+  `e3ca50a9`, `0b1d8631`, `e975cf9e`.
+- **#434, #436:** CHANGES_REQUESTED stale (rng1995); fixes on head; await re-review.
+- **#428:** merge-clean; stale prior approval; await maintainer action.
+- **#468, #469:** merge-clean; merge-ready.
+- **Healthy count:** 5/5 CI green; 2/5 merge-ready (#468, #469).
+- **Learn:** no skill change — unchanged from tick 15.
+- **Replenishment:** **blocked at cap** 5/5.
+
 ## 2026-09-02 sweep state (scheduled, tick 15)
 
 - **Time:** ~12:57 PM PT.

@@ -11,6 +11,23 @@ target as actionable.
 Base branch: `trunk`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/hadoop`).
 
+## 2026-09-02 sweep state (scheduled, tick 15)
+
+- **Time:** ~1:36 PM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 **0 behind
+  `apache/trunk`**; no pushes this tick (tick 14 pushed #8670 empty `e2ac56d3`).
+- **#8335** (`35cad907`): **APPROVED** + **all green** + merge **CLEAN** — Jenkins
+  build 11 **passed** (first full green since tick 3 retrigger).
+- **#8389, #8388, #8306, #8307:** all checks **green**; #8306/#8307 CR stale.
+- **#8334, #8310:** GHA Build **green**; Jenkins **pending** (builds 11/19).
+- **#8670** (`e2ac56d3`): GHA Build **pending** + Jenkins **pending** (build 3)
+  post tick-14 empty retrigger; prior GHA fail cleared.
+- **Learn:** no skill change — #8335 Jenkins completion validates long-run Yetus
+  pattern; #8702 fork workflow fix may help #8670 GHA on new head.
+- **Replenishment:** **skipped** — 8 open > target 5.
+
 ## 2026-09-02 sweep state (scheduled, tick 14)
 
 - **Time:** ~12:55 PM PT.

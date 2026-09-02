@@ -52,6 +52,30 @@ target as actionable.
 - Learn: no skill change (advisor infra pattern unchanged; #10820/#10825).
 - Replenishment: **blocked at cap** 5/5; next candidate #10773 when slot opens.
 
+## 2026-09-02 sweep state (scheduled, tick 14)
+
+- **Time:** ~1:34–1:35 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311),
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`; **1 push** #10818):
+  four PRs **0 behind** on tick-13 heads; #10818 had **Specialist / Test design**
+  advisor lifecycle fail (8/9 pass, infra not PR code) — empty signed commit
+  `f23c6f4d8` to retrigger; CI rerunning.
+- **#10705** (`aa9ed878`), **#10704** (`7854fd13`), **#10309** (`0f27ff7f`): **9/9**
+  Specialist + CodeRabbit **green**; REVIEW_REQUIRED.
+- **#10311** (`a1cb11da`): **9/9 green**; **CHANGES_REQUESTED** stale (cjagwani); await
+  exact-head re-review.
+- **Healthy count:** 3/5 contributor-actionable (#10705/#10704/#10309); #10818 rerunning;
+  #10311 blocked on human CR.
+- **Learn:** no skill change — test-design advisor lifecycle failure matches existing
+  model-protocol infra guidance; empty retrigger appropriate.
+- **Replenishment:** **blocked at cap** 5/5; [#10852](https://github.com/NVIDIA/NemoClaw/pull/10852)
+  overlap when slot opens.
+
 ## 2026-09-02 sweep state (scheduled, tick 13)
 
 - **Time:** ~12:27 PM PT (advisor CI in progress ~12:30 PM PT).
