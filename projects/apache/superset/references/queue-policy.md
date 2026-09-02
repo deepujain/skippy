@@ -11,6 +11,42 @@ target as actionable.
 Base branch: `master`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/superset`). Local clone: `/Users/dejain/nvidia/oss/superset`.
 
+## 2026-09-02 sweep state (scheduled, tick 3)
+
+- **Time:** ~12:51 PM PT.
+- **Departed:** none.
+- **Open PRs (2/5):** [#43803](https://github.com/apache/superset/pull/43803),
+  [#43806](https://github.com/apache/superset/pull/43806) **new** — partial
+  `resizableConfig` merge fix for #43320.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): #43803 **0
+  behind `master`** (head `59370467`); no push.
+- **CI:** #43803 docs green; #43806 CI pending on open.
+- **Learn:** no skill change — prior sweeps under-screened overlap (#43383 covered
+  by #43472, not recorded); replenishment must re-verify live PR search each tick.
+- **Replenishment:**
+  - Slot 2: **filled** — [#43806](https://github.com/apache/superset/pull/43806) for [#43320](https://github.com/apache/superset/issues/43320).
+  - Slot 3: **blocked** — overlap [#43756](https://github.com/apache/superset/pull/43756) for #43714.
+  - Slot 4: **blocked** — overlap [#43585](https://github.com/apache/superset/pull/43585), [#43710](https://github.com/apache/superset/pull/43710) for #43356.
+  - Slot 5: **blocked** — #43717 peer claim (rounakkm, maintainer approved); #43801 Windows TZ repro; #37644 author has unreleased fix.
+
+- **Scheduled continuation:** `scripts/sweep-continuation-loop.sh superset` every 30 minutes (PID background shell).
+- **Loop note (2026-09-02 ~12:58 PM PT):** prior loop (PID 37435) **aborted** after tick 2
+  scheduled (~12:36 PM); **restarted** same session.
+
+## 2026-09-02 sweep state (scheduled, tick 2)
+
+- **Time:** ~12:36 PM PT (30-minute loop).
+- **Departed:** none.
+- **Open PRs (1/5):** [#43803](https://github.com/apache/superset/pull/43803).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): **0 behind `master`**
+  (head `59370467`); no pushes.
+- **CI:** docs checks green; no failures or pending.
+- **Review:** REVIEW_REQUIRED; await maintainer review.
+- **Learn:** no skill change — peer [#43804](https://github.com/apache/superset/pull/43804)
+  merged (GTF docs, unrelated).
+- **Replenishment slots 2–5:** unfilled; blockers unchanged (overlap #43722, #43756,
+  #43585/#43710; slot 5 needs repro/design).
+
 ## 2026-09-02 sweep state (scheduled, tick 1)
 
 - **Time:** ~11:50 AM PT (30-minute loop).

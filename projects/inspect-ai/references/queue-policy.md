@@ -8,6 +8,32 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-02 sweep state (scheduled, tick 12)
+
+- **Time:** ~11:57 AM PT (CI green ~12:02 PM PT post-rebase poll).
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=4`): all four rebased
+  onto current `main` via force-with-lease to `fork` (heads `a59d8996`, `09591bb1`,
+  `089b6ecc`, `d3db5927`); 0 behind after push.
+- **CI:** **4/4 green** post-rebase (0 failures, 0 pending after poll).
+- **#4950:** REVIEW_REQUIRED; ransomr `[needs discussion]` on regex vs #4758
+  structural approach (4 threads, all outdated post-rebase); no contributor action;
+  await maintainer design direction.
+- **#5174, #5181, #5195:** REVIEW_REQUIRED; no actionable CR or bot feedback;
+  await maintainer review.
+- **Learn:** no skill change — peer [#5165](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5165)
+  merged (recovery/incomplete-action, unrelated); rebase-on-stale-base lesson already
+  in project skill.
+- **Replenish:** **verified maximum 4/4** — no slot. When a slot opens:
+  [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) →
+  [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454) (open);
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) → peer
+  claim (yinli-systems, no open PR).
+
 ## 2026-09-02 sweep state (scheduled, tick 11)
 
 - **Time:** ~11:52 AM PT.
