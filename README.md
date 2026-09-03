@@ -43,8 +43,8 @@ from its sources, ship real changes, then run a calibrated
 rewriting instructions from noise.
 
 The method is in production across major open-source projects. The
-[contribution tracker](https://github.com/deepujain/oss-contribs) shows
-300+ Skippy-assisted contributions across Apache Airflow, PyTorch, Inspect AI,
+[contribution tracker](CONTRIBUTIONS.md) shows 300+ Skippy-assisted
+contributions across Apache Airflow, PyTorch, Inspect AI,
 NemoClaw, and others. The same mechanism applies to private repos and internal
 monorepos; public OSS is where the review history is easiest to bootstrap
 against.
@@ -175,7 +175,7 @@ explicitly.
 | [Project skills](#project-skills) | Supply each repository's policy, commands, layout, CI, review, and local conventions |
 | [Parallel-work protocol](references/delegation.md) | Defines accountable integration, isolated writers, independent review, and evidence handoffs |
 | [Task artifacts and helpers](#durable-work) | Make decisions, completion criteria, and verification replayable across agents and sessions |
-| [Contribution tracker](https://github.com/deepujain/oss-contribs) | Shows the cross-project queue without replacing the source repository's authoritative PR state |
+| [Contribution tracker](CONTRIBUTIONS.md) | Verified cross-project PR counts and merge rates |
 
 The system is intentionally layered. A project skill does not have to recreate
 general engineering judgment, and Skippy does not claim to know local facts it
@@ -195,6 +195,7 @@ skippy/
 ├── projects/     One project-specific skill per repository
 ├── scripts/      Task-plan, decision-log, and structural-validation helpers
 ├── automations/  Optional continuation prompts for supported clients
+├── CONTRIBUTIONS.md  Verified OSS contribution matrix
 └── README.md      Start here
 ```
 
@@ -256,9 +257,8 @@ In practice:
    plausible.
 5. Delivery ends with an evidence receipt. For external contribution portfolios,
    the [OSS contribution system](references/oss-contribution-system.md) and
-   [contribution tracker](https://github.com/deepujain/oss-contribs) record
-   queue state without replacing the source repository's authoritative merge
-   request.
+   [contribution tracker](CONTRIBUTIONS.md) record portfolio state without
+   replacing the source repository's authoritative merge request.
 
 ## Learning over time
 
@@ -340,7 +340,7 @@ same layout under `projects/<slug>/`.
 | <a href="https://github.com/openclaw/openclaw"><img src="https://raw.githubusercontent.com/openclaw/openclaw/main/ui/public/favicon.svg" alt="OpenClaw logo" height="18"></a> <a href="https://github.com/openclaw/openclaw">OpenClaw</a> | [projects/openclaw/SKILL.md](projects/openclaw/SKILL.md) |
 | <a href="https://github.com/pytorch/pytorch"><img src="https://raw.githubusercontent.com/pytorch/pytorch/main/docs/source/_static/img/pytorch-logo-flame.svg" alt="PyTorch logo" height="18"></a> <a href="https://github.com/pytorch/pytorch">PyTorch</a> | [projects/pytorch/SKILL.md](projects/pytorch/SKILL.md) |
 | <a href="https://www.schedmd.com/"><img src="https://raw.githubusercontent.com/SchedMD/slurm/master/doc/html/slurm_logo.png" alt="Slurm logo" height="18"></a> <a href="https://www.schedmd.com/">Slurm</a> | [projects/slurm/SKILL.md](projects/slurm/SKILL.md) |
-| <a href="https://github.com/deepujain/oss-contribs"><img src="https://avatars.githubusercontent.com/u/406777?v=4" alt="OSS contributions logo" height="18"></a> <a href="https://github.com/deepujain/oss-contribs">OSS contribution README</a> | [projects/oss-contribution-readme/SKILL.md](projects/oss-contribution-readme/SKILL.md) |
+| Contribution matrix | [CONTRIBUTIONS.md](CONTRIBUTIONS.md) · [projects/oss-contribution-readme/SKILL.md](projects/oss-contribution-readme/SKILL.md) |
 
 ## Works across coding agents
 
