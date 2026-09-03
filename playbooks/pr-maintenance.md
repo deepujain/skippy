@@ -13,6 +13,8 @@
    the exact thread stating what changed (file, behavior, or test). Do not post
    a single top-level summary instead of thread replies. After replying, react
    to the review comment (GitHub 👍 / like) when the platform allows it.
+   Check the final reply before publishing. No outbound GitHub prose may contain
+   an em dash, including titles, bodies, comments, reviews, or replies.
 5. Skip or defer only with a concrete reason tied to the current head (outdated
    diff, maintainer-only gate, duplicate of a fix already on head). Never leave
    valid feedback silent.

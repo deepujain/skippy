@@ -1,7 +1,7 @@
 # Skippy
 
 <p align="center">
-  <img src="images/skippy.png" alt="Skippy — project mascot" width="280">
+  <img src="images/skippy.png" alt="Skippy project mascot" width="280">
 </p>
 
 Skippy is a layered engineering system for coding agents: playbooks, decision
@@ -9,16 +9,16 @@ rules, verification gates, and portable project skills. Each
 `projects/<slug>/SKILL.md` captures live repository conventions, validation,
 review handling, and submission practices for one upstream project.
 
-You describe the outcome; Skippy runs the method—reproduce the problem, pick the
+You describe the outcome; Skippy runs the method: reproduce the problem, pick the
 owning boundary, verify at a real edge, and keep open PRs merge-ready without
 re-explaining the repo every session.
 You get accountable delivery you can trust or hand off: visible plans, signed
-commits, addressed review threads, and proof the change works—not a patch that
+commits, addressed review threads, and proof the change works, not a patch that
 only looked right in chat.
 
 It is not patching alone. Skippy covers investigation, bug fixes, features,
 refactors, performance work, security hardening, PR maintenance, repository
-bootstrap, and long autonomous runs—on public OSS, private repos, or internal
+bootstrap, and long autonomous runs on public OSS, private repos, or internal
 monorepos.
 
 ## Rigorous engineering for coding agents
@@ -34,8 +34,8 @@ plan, coordinates bounded specialist work when it helps, and refuses to report
 success until the changed behavior is verified at a real boundary.
 
 It is not a prompt pack or a skill library on its own. It is a layered
-engineering system—decision rules, playbooks, project adapters, task artifacts,
-role boundaries, helper programs, and a verification gate—that turns agent work
+engineering system of decision rules, playbooks, project adapters, task artifacts,
+role boundaries, helper programs, and a verification gate that turns agent work
 into accountable delivery.
 
 ```mermaid
@@ -56,7 +56,7 @@ flowchart LR
 The standard is simple: write less code, own the right boundary, and prove what
 changed.
 
-Skippy follows how a strong engineer joins a codebase—read docs and history,
+Skippy follows how a strong engineer joins a codebase: read docs and history,
 understand open and closed merge requests, contribute, learn from outcomes, and
 keep improving. That learning is evidence-backed: bootstrap a new repository
 from its sources, ship real changes, then run a calibrated
@@ -82,16 +82,15 @@ These contributions were assisted by Skippy.
 | <a href="https://github.com/UKGovernmentBEIS/inspect_ai"><img src="https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_ai/main/docs/images/aisi-logo.svg" alt="AISI logo" height="18"></a> <a href="https://github.com/UKGovernmentBEIS/inspect_ai">Inspect AI</a> | [32](https://github.com/UKGovernmentBEIS/inspect_ai/pulls/deepujain) | 4 | 14 | 43.8% |
 | <a href="https://github.com/meridianlabs-ai/inspect_petri"><img src="https://raw.githubusercontent.com/meridianlabs-ai/inspect_petri/main/docs/images/petri.svg" alt="Inspect Petri logo" height="18"></a> <a href="https://github.com/meridianlabs-ai/inspect_petri">Inspect Petri</a> | [3](https://github.com/meridianlabs-ai/inspect_petri/pulls/deepujain) | 0 | 1 | 33.3% |
 | <a href="https://github.com/NVIDIA/Megatron-LM"><img src="https://avatars.githubusercontent.com/u/1728152?v=4" alt="NVIDIA logo" height="18"></a> <a href="https://github.com/NVIDIA/Megatron-LM">Megatron-LM</a> | [5](https://github.com/NVIDIA/Megatron-LM/pulls/deepujain) | 5 | 0 | 0.0% |
-| <a href="https://github.com/NVIDIA/NemoClaw"><img src="https://raw.githubusercontent.com/NVIDIA/NemoClaw/main/fern/assets/NVIDIA_symbol.svg" alt="NemoClaw logo" height="18"></a> <a href="https://github.com/NVIDIA/NemoClaw">NemoClaw</a> | [106](https://github.com/NVIDIA/NemoClaw/pulls/deepujain) | 5 | 64 | 60.4% |
 | <a href="https://github.com/openclaw/openclaw"><img src="https://raw.githubusercontent.com/openclaw/openclaw/main/ui/public/favicon.svg" alt="OpenClaw logo" height="18"></a> <a href="https://github.com/openclaw/openclaw">OpenClaw</a> | [30](https://github.com/openclaw/openclaw/pulls/deepujain) | 1 | 4 | 13.3% |
 | <a href="https://github.com/NVIDIA/OpenShell"><img src="https://raw.githubusercontent.com/NVIDIA/OpenShell/main/docs/brand/assets/favicon.svg" alt="OpenShell logo" height="18"></a> <a href="https://github.com/NVIDIA/OpenShell">OpenShell</a> | [1](https://github.com/NVIDIA/OpenShell/pulls/deepujain) | 0 | 0 | 0.0% |
 | <a href="https://github.com/pytorch/pytorch"><img src="https://raw.githubusercontent.com/pytorch/pytorch/main/docs/source/_static/img/pytorch-logo-flame.svg" alt="PyTorch logo" height="18"></a> <a href="https://github.com/pytorch/pytorch">PyTorch</a> | [23](https://github.com/pytorch/pytorch/pulls/deepujain) | 12 | 0 | 0.0% |
 | <a href="https://github.com/NVIDIA/SkillSpector"><img src="https://avatars.githubusercontent.com/u/1728152?v=4" alt="NVIDIA logo" height="18"></a> <a href="https://github.com/NVIDIA/SkillSpector">SkillSpector</a> | [9](https://github.com/NVIDIA/SkillSpector/pulls/deepujain) | 5 | 4 | 44.4% |
 | <a href="https://www.schedmd.com/"><img src="https://raw.githubusercontent.com/SchedMD/slurm/master/doc/html/slurm_logo.png" alt="Slurm logo" height="18"></a> <a href="https://www.schedmd.com/">Slurm</a> | [3](https://support.schedmd.com/buglist.cgi?email3=deepujain%40gmail.com&emaillongdesc3=1&emailtype3=substring&list_id=418332&product=Slurm&query_format=advanced&resolution=---) | 3 | 0 | 0.0% |
 | <a href="https://github.com/meridianlabs-ai/ts-mono"><img src="https://avatars.githubusercontent.com/u/196480008?v=4" alt="Meridian Labs logo" height="18"></a> <a href="https://github.com/meridianlabs-ai/ts-mono">ts-mono</a> | [8](https://github.com/meridianlabs-ai/ts-mono/pulls/deepujain) | 2 | 6 | 75.0% |
-| **Total Contributions** | **304** | **63** | **115** | **37.8%** |
+| **Total Contributions** | **198** | **58** | **51** | **25.8%** |
 
-**Total Contributions:** 304 · **Success Rate:** 37.8% merged (115 of 304)
+**Total Contributions:** 198 · **Success Rate:** 25.8% merged (51 of 198)
 
 ## Non-Skippy Contributions
 
@@ -101,7 +100,7 @@ These contributions were not assisted by Skippy.
 |--------------|---------------|------|--------|----------|
 | <a href="https://github.com/apache/avro"><img src="https://apache.org/logos/res/avro/default.png" alt="Apache Avro logo" height="18"></a> <a href="https://github.com/apache/avro">Apache Avro</a> | [1](https://issues.apache.org/jira/browse/AVRO-1419) | 1 | 0 | 0.0% |
 | <a href="https://github.com/apache/druid"><img src="https://apache.org/logos/res/druid/default.png" alt="Apache Druid logo" height="18"></a> <a href="https://github.com/apache/druid">Apache Druid</a> | [1](https://github.com/apache/druid/pulls/deepujain) | 0 | 1 | 100.0% |
-| <a href="https://github.com/eBay/nvidiagpubeat"><img src="https://avatars.githubusercontent.com/u/3639281?v=4" alt="eBay Open Source logo" height="18"></a> <a href="https://github.com/eBay/nvidiagpubeat">nvidiagpubeat</a> | Creator and maintainer | — | — | — |
+| <a href="https://github.com/eBay/nvidiagpubeat"><img src="https://avatars.githubusercontent.com/u/3639281?v=4" alt="eBay Open Source logo" height="18"></a> <a href="https://github.com/eBay/nvidiagpubeat">nvidiagpubeat</a> | Creator and maintainer | N/A | N/A | N/A |
 | <a href="https://github.com/apache/pig"><img src="https://apache.org/logos/res/pig/default.png" alt="Apache Pig logo" height="18"></a> <a href="https://github.com/apache/pig">Apache Pig</a> | [2](https://issues.apache.org/jira/issues/?jql=key%20in%20(PIG-1885%2C%20PIG-671)) | 0 | 2 | 100.0% |
 | <a href="https://github.com/apache/zeppelin"><img src="https://zeppelin.apache.org/assets/themes/zeppelin/img/zepLogo.png" alt="Apache Zeppelin logo" height="18"></a> <a href="https://github.com/apache/zeppelin">Apache Zeppelin</a> | [6](https://github.com/apache/zeppelin/pulls/deepujain) | 0 | 0 | 0.0% |
 | <a href="https://github.com/NICTA/scoobi"><img src="https://avatars.githubusercontent.com/u/1151968?v=4" alt="Scoobi logo" height="18"></a> <a href="https://github.com/NICTA/scoobi">Scoobi</a> | [2](https://github.com/NICTA/scoobi/pulls/deepujain) | 0 | 0 | 0.0% |
@@ -114,7 +113,7 @@ Refresh counts with [projects/oss-contribution-readme/SKILL.md](projects/oss-con
 Skippy applies to **any non-trivial engineering work** on any repository you can
 read (public Git, private Git, internal monorepos). The playbooks cover
 investigation, bug fixes, features, refactors, performance, security, and long
-autonomous runs—not only external contribution.
+autonomous runs, not only external contribution.
 
 | Entry | When to use it |
 | --- | --- |
@@ -176,7 +175,7 @@ For an already-supported project, skip this step. See the
 
 ### 2. Sweep and replenish
 
-When you want to maintain in-flight changes and fill open slots—one packaging of
+When you want to maintain in-flight changes and fill open slots, use this packaging of
 the contribution-queue playbook:
 
 ```text
@@ -321,8 +320,8 @@ In practice:
 
 ## Learning over time
 
-After meaningful outcomes—your reviews, CI results, merged or closed merge
-requests, and peer work on the same codebase—run the
+After meaningful outcomes such as your reviews, CI results, merged or closed merge
+requests, and peer work on the same codebase, run the
 [continuous learning](playbooks/continuous-learning.md) scan. Skippy adopts
 only **durable**, source-linked rules (policy, recurring patterns, verified
 repairs) into the project skill or learning log. It does not rewrite its
@@ -378,7 +377,7 @@ instead of mysterious.
 
 ## Project skills
 
-These are existing project adapters—repository-specific facts Skippy has
+These are existing project adapters containing repository-specific facts Skippy has
 already bootstrapped or scaffolded. New repositories begin with bootstrap in
 [Onboard to a repository](#onboard-to-a-repository). Public OSS entries below
 are examples with visible history; private and internal repositories use the
@@ -395,7 +394,6 @@ same layout under `projects/<slug>/`.
 | <a href="https://github.com/NousResearch/hermes-agent"><img src="https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/static/img/logo.png" alt="Hermes Agent logo" height="18"></a> <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> | [projects/hermes-agent/SKILL.md](projects/hermes-agent/SKILL.md) |
 | <a href="https://github.com/UKGovernmentBEIS/inspect_ai"><img src="https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_ai/main/docs/images/aisi-logo.svg" alt="AISI logo" height="18"></a> <a href="https://github.com/UKGovernmentBEIS/inspect_ai">Inspect AI</a> | [projects/inspect-ai/SKILL.md](projects/inspect-ai/SKILL.md) |
 | <a href="https://github.com/meridianlabs-ai/inspect_petri"><img src="https://raw.githubusercontent.com/meridianlabs-ai/inspect_petri/main/docs/images/petri.svg" alt="Inspect Petri logo" height="18"></a> <a href="https://github.com/meridianlabs-ai/inspect_petri">Inspect Petri</a> | [projects/inspect-petri/SKILL.md](projects/inspect-petri/SKILL.md) |
-| <a href="https://github.com/NVIDIA/NemoClaw"><img src="https://raw.githubusercontent.com/NVIDIA/NemoClaw/main/fern/assets/NVIDIA_symbol.svg" alt="NemoClaw logo" height="18"></a> <a href="https://github.com/NVIDIA/NemoClaw">NemoClaw</a> | [projects/nemoclaw/SKILL.md](projects/nemoclaw/SKILL.md) |
 | <a href="https://github.com/openclaw/openclaw"><img src="https://raw.githubusercontent.com/openclaw/openclaw/main/ui/public/favicon.svg" alt="OpenClaw logo" height="18"></a> <a href="https://github.com/openclaw/openclaw">OpenClaw</a> | [projects/openclaw/SKILL.md](projects/openclaw/SKILL.md) |
 | <a href="https://github.com/pytorch/pytorch"><img src="https://raw.githubusercontent.com/pytorch/pytorch/main/docs/source/_static/img/pytorch-logo-flame.svg" alt="PyTorch logo" height="18"></a> <a href="https://github.com/pytorch/pytorch">PyTorch</a> | [projects/pytorch/SKILL.md](projects/pytorch/SKILL.md) |
 | <a href="https://www.schedmd.com/"><img src="https://raw.githubusercontent.com/SchedMD/slurm/master/doc/html/slurm_logo.png" alt="Slurm logo" height="18"></a> <a href="https://www.schedmd.com/">Slurm</a> | [projects/slurm/SKILL.md](projects/slurm/SKILL.md) |

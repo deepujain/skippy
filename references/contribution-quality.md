@@ -97,8 +97,10 @@ Before starting real work:
 - Confirm the local checkout is clean enough for the requested work.
 - Confirm upstream/default branch and fork remotes.
 - Confirm contributor identity and public text contain no private tool attribution.
-- Confirm GitHub-facing PR titles, descriptions, and comments use no em dash
-  character (`—`); use hyphen, comma, colon, or separate sentences instead.
+- Confirm all outbound GitHub prose uses no em dash character (`U+2014`), including
+  issue and PR titles and bodies, descriptions, comments, reviews, inline
+  threads, replies, commit messages, and release text. Use a hyphen, comma,
+  colon, or separate sentence instead.
 - Confirm no open PR or patch from another contributor already covers the issue:
   inspect issue bodies/comments for explicit PR links and search by issue
   number, distinctive title phrases, error text, and affected files.
@@ -232,10 +234,11 @@ For patch trackers, adapt the same content to the ticket comment or cover
 letter. Keep descriptions factual and command-driven. Avoid private tool
 attribution, hype, and vague "tests pass" claims.
 
-**Typography for GitHub-facing text:** Never use the em dash character (`—`) in
-PR titles, PR descriptions, issue comments, or review replies published on
-GitHub. Use a hyphen (`-`), a comma, a colon, or separate sentences instead.
-This applies to every outbound GitHub comment and PR body Skippy drafts or posts.
+**Typography for GitHub-facing text:** Never use the em dash character (`U+2014`) in
+anything Skippy drafts or publishes to GitHub. This includes issue and PR titles
+and bodies, descriptions, comments, reviews, inline threads, replies, commit
+messages, and release text. Use a hyphen (`-`), comma, colon, or separate
+sentence instead. Check the final rendered text immediately before publishing.
 
 ## Open PR Sweep Report
 
@@ -297,5 +300,5 @@ to public skills.
 | First proof | Narrow command that exercises the reported behavior |
 | Broader proof | Adjacent test file, package check, build, or CI lane relevant to touched area |
 | PR confidence | Current branch, truthful body, exact validation, no actionable comments, CI green or explained after delayed/polled follow-up |
-| GitHub prose | No em dashes (`—`) in PR bodies, titles, or comments; use hyphen, comma, colon, or new sentence |
+| GitHub prose | No em dashes (`U+2014`) anywhere; check titles, bodies, descriptions, comments, reviews, replies, commits, and release text before publishing |
 | If blocked | State blocker, evidence gathered, next owner or approval needed |

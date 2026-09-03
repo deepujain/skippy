@@ -60,13 +60,13 @@ impossible.
 GitHub shows a conflict banner, or `sweep-maintain-pr.sh` logs `REBASE CONFLICT`,
 checkout the branch, rebase onto upstream default, resolve hunks, validate,
 force-push with lease, and re-check CI. Do not treat bash `FAILED` or
-`gh rebase failed: conflicts` as an external blocker — finish the rebase in
+`gh rebase failed: conflicts` as an external blocker. Finish the rebase in
 the agent pass (see [contribution-queue.md](../playbooks/contribution-queue.md)).
 
 **Push stale and other maintain failures:** When logs show `PUSH FAILED`,
 `stale info`, or generic `MAINTAIN #NNNN FAILED`, read the preceding log lines,
 apply the [maintain failure recovery table](../playbooks/contribution-queue.md#maintain-failure-recovery-mandatory--fix-then-continue),
-verify `behind_by=0` / `mergeable≠CONFLICTING`, then **continue the sweep** —
+verify `behind_by=0` / `mergeable≠CONFLICTING`, then **continue the sweep**;
 never hand off at the failure line.
 
 **Review comments are maintain work.** When human or bot threads are valid on the
@@ -129,8 +129,10 @@ Do not report success until all of these are true:
 - The diff was reviewed for behavior, security, compatibility, and cleanup.
 - Delivery state is known: commit, PR, signature, CI, review, and external
   blockers are reported exactly.
-- GitHub-facing PR titles, descriptions, and comments contain no em dash
-  character (`—`).
+- All outbound GitHub prose contains no em dash character (`U+2014`). This includes
+  issue and PR titles and bodies, descriptions, comments, reviews, inline
+  threads, replies, commit messages, and release text. Check the final text
+  immediately before publishing.
 
 ## Trigger phrases
 
