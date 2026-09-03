@@ -16,6 +16,11 @@ You get accountable delivery you can trust or hand off: visible plans, signed
 commits, addressed review threads, and proof the change works—not a patch that
 only looked right in chat.
 
+It is not patching alone. Skippy covers investigation, bug fixes, features,
+refactors, performance work, security hardening, PR maintenance, repository
+bootstrap, and long autonomous runs—on public OSS, private repos, or internal
+monorepos.
+
 ## Rigorous engineering for coding agents
 
 Coding agents generate plausible patches quickly. They are much weaker at the
