@@ -88,8 +88,9 @@ proceed to the next PR and to Learn → Replenish.
 
 **Sweep log summary table:** At the end of each project tick (and after
 multi-project batch sweeps), append a summary table to `.skippy/sweep-output.log`
-via `scripts/sweep-log-summary.sh` with columns: Project, Open, Healthy,
-Maintain, Action, Lesson learned (include skill/log updates from the Learn step).
+via `scripts/sweep-log-summary.sh` (fixed-width box table in the log) with columns:
+Project, Open, Healthy, Maintain, Action, Lesson learned (include skill/log
+updates from the Learn step).
 
 2. **Learn:** Run the bounded continuous-learning scan (see
    [continuous-learning.md](continuous-learning.md)): inspect review comments,

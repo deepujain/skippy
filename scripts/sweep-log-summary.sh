@@ -83,32 +83,49 @@ last_maintain_summary() {
     || echo "—"
 }
 
-append_table() {
-  local reason="$1"
-  shift
+render_summary_block() {
+  local scope="$1" reason="$2"
+  shift 2
+  local rows_json="["
+  local first=1
+  while [[ $# -gt 0 ]]; do
+    IFS='|' read -r proj open tgt healthy maintain action lesson <<<"$1"
+    [[ $first -eq 1 ]] || rows_json+=","
+    first=0
+    rows_json+=$(python3 -c '
+import json, sys
+proj, open_, tgt, healthy, maintain, action, lesson = sys.argv[1:8]
+print(json.dumps([
+    proj,
+    f"{open_}/{tgt}",
+    f"{healthy}/{tgt}",
+    maintain,
+    action,
+    lesson,
+]))
+' "$proj" "$open" "$tgt" "$healthy" "$maintain" "$action" "$lesson")
+    shift
+  done
+  rows_json+="]"
+
   {
-    printf '%s [all] SWEEP SUMMARY (%s)\n' "$TS" "$reason"
-    printf '| Project | Open | Healthy | Maintain | Action | Lesson learned |\n'
-    printf '| --- | --- | --- | --- | --- | --- |\n'
-    while [[ $# -gt 0 ]]; do
-      IFS='|' read -r proj open tgt healthy maintain action lesson <<<"$1"
-      printf '| %s | %s/%s | %s/%s | %s | %s | %s |\n' \
-        "$proj" "$open" "$tgt" "$healthy" "$tgt" "$maintain" "$action" "$lesson"
-      shift
-    done
+    printf '%s [%s] SWEEP SUMMARY (%s)\n' "$TS" "$scope" "$reason"
+    printf '%s\n' "$(python3 "$ROOT/scripts/format-sweep-summary-table.py" <<EOF
+{"headers":["Project","Open","Healthy","Maintain","Action","Lesson learned"],"rows":$rows_json}
+EOF
+)"
   } >>"$OUT"
+}
+
+append_table() {
+  render_summary_block "all" "$@"
 }
 
 append_single_row_table() {
   local reason="$1" project="$2" open="$3" tgt="$4" healthy="$5"
   local maintain="$6" action="$7" lesson="$8"
-  {
-    printf '%s [%s] SWEEP SUMMARY (%s)\n' "$TS" "$project" "$reason"
-    printf '| Project | Open | Healthy | Maintain | Action | Lesson learned |\n'
-    printf '| --- | --- | --- | --- | --- | --- |\n'
-    printf '| %s | %s/%s | %s/%s | %s | %s | %s |\n' \
-      "$project" "$open" "$tgt" "$healthy" "$tgt" "$maintain" "$action" "$lesson"
-  } >>"$OUT"
+  render_summary_block "$project" "$reason" \
+    "$project|$open|$tgt|$healthy|$maintain|$action|$lesson"
 }
 
 [[ $# -ge 1 ]] || usage
