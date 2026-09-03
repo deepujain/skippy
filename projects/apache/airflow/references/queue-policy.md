@@ -12,6 +12,12 @@ target as actionable.
 Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/airflow`).
 
+## 2026-09-03 sweep state (manual-sweep-all)
+
+- **Maintain:** 5/5 current, 0 pushes; 5/5 healthy mergeable; #72394 APPROVED CI pending.
+- **Learn:** no skill change (push-stale recovery in maintain script + playbook).
+- **Replenish:** blocked at cap 5/5.
+
 ## 2026-09-02 sweep state (scheduled, tick 20)
 
 - **Time:** ~2:24 PM PT.

@@ -63,6 +63,12 @@ force-push with lease, and re-check CI. Do not treat bash `FAILED` or
 `gh rebase failed: conflicts` as an external blocker — finish the rebase in
 the agent pass (see [contribution-queue.md](../playbooks/contribution-queue.md)).
 
+**Push stale and other maintain failures:** When logs show `PUSH FAILED`,
+`stale info`, or generic `MAINTAIN #NNNN FAILED`, read the preceding log lines,
+apply the [maintain failure recovery table](../playbooks/contribution-queue.md#maintain-failure-recovery-mandatory--fix-then-continue),
+verify `behind_by=0` / `mergeable≠CONFLICTING`, then **continue the sweep** —
+never hand off at the failure line.
+
 For a contribution queue, treat every PR and candidate as an independent work
 unit. Never serialize replenishment behind another PR's active CI or review,
 and never terminate a sweep because one candidate is stale or needs direction.

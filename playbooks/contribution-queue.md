@@ -61,8 +61,30 @@ on the same hunk.
 
 **Push stale info** after a successful local rebase is also maintain work. Retry
 with the fork ref captured before rebase (`--force-with-lease`), refetch and
-retry once, then `gh pr update-branch --rebase`. Do not log final failure while
+retry once, then `gh pr update-branch --rebase`. Verify with
+`gh api repos/OWNER/REPO/compare/<base>...<fork>:<repo>:<branch> --jq .behind_by`
+equals `0` before treating a PR as done. Do not report final failure while
 GitHub already shows `behind_by=0`.
+
+### Maintain failure recovery (mandatory — fix then continue)
+
+`sweep-maintain.sh` runs a bash pre-step per PR. **Any line below is a work order,
+not a sweep stop signal.** Finish the fix, verify on GitHub, then continue the
+same tick (other PRs, Learn, Replenish).
+
+| Log signal | Meaning | Skippy must |
+| --- | --- | --- |
+| `REBASE CONFLICT` / `CONFLICT` | Upstream moved; hunks need manual merge | Worktree → rebase → resolve → validate → push → confirm `mergeable≠CONFLICTING` |
+| `PUSH FAILED` / `stale info` | Local rebase OK; lease/push race | Refetch fork OID, retry lease push, then `gh pr update-branch --rebase`; confirm `behind_by=0` |
+| `push stale — trying gh pr update-branch` | Script is recovering | Wait for outcome; if still stuck, push manually with fresh lease |
+| `gh rebase failed: conflicts` | GitHub agrees there are conflicts | Same as REBASE CONFLICT — manual resolution required |
+| `FAILED` (generic) | Pre-step exited non-zero | Read the lines **above** it in `sweep-output.log` for the real cause; fix; re-run maintain for that PR if needed |
+| `SKIP` / `clone lock busy` | Parallel maintain on same clone | Serialize: clear stale lock under `.skippy/maintain-locks/` if pid dead, retry |
+| `merge=UNKNOWN` in status | GitHub merge state inconclusive | Use `mergeable` + `behind_by` + CI — do not treat as unhealthy by itself |
+
+**Continue rule:** One PR's maintain failure must not end the project sweep.
+Fix it (or record a maintainer-design blocker on that PR only), verify, then
+proceed to the next PR and to Learn → Replenish.
 
 2. **Learn:** Run the bounded continuous-learning scan (see
    [continuous-learning.md](continuous-learning.md)): inspect review comments,

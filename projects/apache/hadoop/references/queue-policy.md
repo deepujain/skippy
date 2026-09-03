@@ -11,6 +11,11 @@ target as actionable.
 Base branch: `trunk`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/hadoop`).
 
+## 2026-09-03 sweep state (manual-sweep-all)
+
+- **Maintain:** 8/5 over-cap, all current, 0 pushes; 5/5 healthy mergeable; #8335 APPROVED.
+- **Replenish:** skipped over-cap 8/5.
+
 ## 2026-09-02 sweep state (scheduled, tick 20)
 
 - **Time:** ~2:22 PM PT.

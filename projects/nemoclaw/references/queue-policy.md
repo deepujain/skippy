@@ -8,6 +8,12 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-03 sweep state (manual-sweep-all)
+
+- **Maintain:** 5/5 current, 0 pushes; #10309 conflict resolved prior (rebased/pushed).
+- **Healthy:** 0/5 — advisor lifecycle infra failures on all PRs (external gate).
+- **Replenish:** blocked at cap 5/5.
+
 ## 2026-09-02 startup sweep
 
 - Contributor: `deepujain`; authenticated `gh`.

@@ -11,6 +11,12 @@ whenever `CONTRIBUTING.md` or GitHub policy changes
 Read the shared references/contribution-queues.md policy before configuring
 or acting on a target.
 
+## 2026-09-03 sweep state (manual-sweep-all)
+
+- **Maintain:** 5/5 current, 0 pushes; 3/5 healthy (#428/#468/#469 green; #434/#436 CR stale).
+- **Learn:** no skill change (maintain failure recovery in Skippy playbook).
+- **Replenish:** blocked at cap 5/5.
+
 ## 2026-09-02 sweep state (scheduled, tick 20)
 
 - **Time:** ~2:17 PM PT.

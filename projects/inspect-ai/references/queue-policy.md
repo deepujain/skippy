@@ -8,6 +8,24 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-03 sweep state (manual-sweep-all)
+
+- **Time:** ~12:51 AM PT.
+- **Departed:** #5174, #5181 (merged/closed since tick 16).
+- **Open PRs (2/4):** [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195),
+  [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950).
+- **Maintain** (`manual-sweep-all`, `MAINTAIN_PUSHED=0`): both **0 behind `main`**;
+  prior tick resolved rebase conflicts on #5195/#4950; this tick fixed #4950
+  `entries-under-unreleased` CI (moved bridge note under `## Unreleased`, pushed
+  `8bc35ec54`).
+- **CI:** #5195 green; #4950 rerunning after changelog fix.
+- **Healthy count:** 0/4 (#5195 CHANGES_REQUESTED stale; #4950 REVIEW_REQUIRED).
+- **Learn:** no skill change — maintain failure recovery codified in Skippy router
+  + contribution-queue playbook (conflicts, push stale, continue rule).
+- **Replenish:** **2 slots open** — screen [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763),
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) next tick;
+  ts-mono#454 still open for #4763.
+
 ## 2026-09-02 sweep state (scheduled, tick 16)
 
 - **Time:** ~2:21 PM PT.

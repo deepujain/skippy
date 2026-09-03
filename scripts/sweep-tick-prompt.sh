@@ -72,8 +72,12 @@ This is ONE end-to-end pass. NOT a status-only report. NOT a rebase-only pass.
   stop at \`REBASE CONFLICT\` / \`mergeable=CONFLICTING\`), fix CI and
   actionable reviews (human and bot: CodeRabbit, Greptile, pre-commit-ci, etc.),
   push signed commits, re-read checks after push
-- If \`sweep-maintain-pr.sh\` logged \`REBASE CONFLICT\` for a PR, that PR still
-  needs agent conflict resolution even when the bash tick summary shows \`failed\`
+- If \`sweep-maintain-pr.sh\` logged \`REBASE CONFLICT\`, \`PUSH FAILED\`, or \`FAILED\`
+  for a PR, read \`playbooks/contribution-queue.md\` maintain failure recovery,
+  fix and verify on GitHub (\`behind_by=0\`, not CONFLICTING), then continue —
+  never stop the tick at the failure line
+- Recover push-stale: refetch fork OID → retry \`--force-with-lease\` →
+  \`gh pr update-branch --rebase\` → confirm \`behind_by=0\`
 - Produce the project skill sweep action table (one row per PR with Action Taken)
 
 ### 2. Learn

@@ -9,7 +9,11 @@ contributor maximum.
 Each tick runs **Maintain → Learn → Replenish** (all three mandatory):
 
 1. **Maintain** — reconcile departed PRs; maintain every authored open PR (rebase,
-   CI, actionable human/bot reviews); sweep action table per project skill.
+   **resolve conflicts**, recover from push-stale, fix CI, actionable human/bot
+   reviews); sweep action table per project skill. If `sweep-maintain.sh` logs
+   `CONFLICT`, `PUSH FAILED`, or `FAILED`, fix per
+   `playbooks/contribution-queue.md` maintain failure recovery — verify on GitHub,
+   then continue (do not stop the tick).
 2. **Learn** — bounded scan of review comments, CI failures, bot tools, and
    departed/peer PRs (merged and not merged); update project skill or learning log
    when evidence-backed.
