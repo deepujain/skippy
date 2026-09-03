@@ -47,7 +47,7 @@ def main() -> int:
     rows = payload["rows"]
     caps = payload.get(
         "caps",
-        [12, 6, 9, 22, 26, 44],
+        [12, 6, 9, 22, 34, 44],
     )
     print(format_table(headers, rows, caps))
     return 0
