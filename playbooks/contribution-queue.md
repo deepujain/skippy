@@ -59,6 +59,11 @@ must finish the rebase manually** before reporting the maintain step complete.
 Only stop on conflicts when a maintainer has an open unresolved design decision
 on the same hunk.
 
+**Push stale info** after a successful local rebase is also maintain work. Retry
+with the fork ref captured before rebase (`--force-with-lease`), refetch and
+retry once, then `gh pr update-branch --rebase`. Do not log final failure while
+GitHub already shows `behind_by=0`.
+
 2. **Learn:** Run the bounded continuous-learning scan (see
    [continuous-learning.md](continuous-learning.md)): inspect review comments,
    CI failures, and automated review bots on your open PRs; inspect departed

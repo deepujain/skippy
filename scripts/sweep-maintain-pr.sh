@@ -78,8 +78,12 @@ branch_is_current() {
 }
 
 try_gh_rebase() {
-  local before after out
+  local before after out reason
+  reason="${1:-}"
   before=$(gh pr view "$PR" --repo "$REPO" --json headRefOid --jq .headRefOid 2>/dev/null) || return 1
+  if [[ -n "$reason" ]]; then
+    log "MAINTAIN #$PR $reason — trying gh pr update-branch --rebase on $BRANCH"
+  fi
   out=$(gh pr update-branch --rebase --repo "$REPO" "$PR" 2>&1) || {
     log "MAINTAIN #$PR gh rebase failed on $BRANCH: $(echo "$out" | tr '\n' ' ' | sed 's/  */ /g')"
     return 1
@@ -96,25 +100,43 @@ try_gh_rebase() {
   return 0
 }
 
+github_pr_is_current() {
+  local behind
+  behind=$(github_behind_by) || return 1
+  [[ "$behind" == "0" ]]
+}
+
 force_push_with_lease() {
-  local remote_head push_out
-  git -C "$CLONE" fetch "$FORK_REMOTE" "$BRANCH" --quiet
-  remote_head=$(git -C "$CLONE" rev-parse "$FORK_REMOTE/$BRANCH")
+  local remote_head push_out lease_oid
+  FORCE_PUSH_RESULT=""
+  lease_oid="${FORK_LEASE_OID:-}"
+  if [[ -z "$lease_oid" ]]; then
+    git -C "$CLONE" fetch "$FORK_REMOTE" "$BRANCH" --quiet
+    lease_oid=$(git -C "$CLONE" rev-parse "$FORK_REMOTE/$BRANCH")
+  fi
   push_out=$(git -C "$WT" push "$FORK_REMOTE" "HEAD:$BRANCH" \
-    --force-with-lease="refs/heads/$BRANCH:$remote_head" 2>&1) && {
-    echo "$push_out"
+    --force-with-lease="refs/heads/$BRANCH:$lease_oid" 2>&1) && {
+    FORCE_PUSH_RESULT="$push_out"
     return 0
   }
   if echo "$push_out" | grep -qi 'stale info'; then
     git -C "$CLONE" fetch "$FORK_REMOTE" "$BRANCH" --quiet
     remote_head=$(git -C "$CLONE" rev-parse "$FORK_REMOTE/$BRANCH")
-    push_out=$(git -C "$WT" push "$FORK_REMOTE" "HEAD:$BRANCH" \
-      --force-with-lease="refs/heads/$BRANCH:$remote_head" 2>&1) && {
-      echo "$push_out"
+    if git -C "$WT" merge-base --is-ancestor "$remote_head" HEAD 2>/dev/null; then
+      push_out=$(git -C "$WT" push "$FORK_REMOTE" "HEAD:$BRANCH" \
+        --force-with-lease="refs/heads/$BRANCH:$remote_head" 2>&1) && {
+        FORCE_PUSH_RESULT="$push_out"
+        return 0
+      }
+    fi
+    if github_pr_is_current; then
+      log "MAINTAIN #$PR remote fork stale but PR already current on $MAIN (head=$(git -C "$WT" rev-parse --short HEAD)) — no push"
+      track "current"
+      FORCE_PUSH_RESULT=current
       return 0
-    }
+    fi
   fi
-  log "MAINTAIN #$PR PUSH FAILED on $BRANCH: $(echo "$push_out" | tr '\n' ' ' | sed 's/  */ /g')"
+  FORCE_PUSH_RESULT="$push_out"
   return 1
 }
 
@@ -153,6 +175,7 @@ trap 'rm -rf "$LOCK_FILE"' EXIT
 
 git -C "$CLONE" fetch "$UPSTREAM" "$MAIN" --quiet || fail "fetch $UPSTREAM/$MAIN failed"
 git -C "$CLONE" fetch "$FORK_REMOTE" "$BRANCH" --quiet || fail "fetch $FORK_REMOTE/$BRANCH failed"
+FORK_LEASE_OID=$(git -C "$CLONE" rev-parse "$FORK_REMOTE/$BRANCH")
 
 maintain_cleanup
 if ! git -C "$CLONE" worktree add --detach "$WT" "$FORK_REMOTE/$BRANCH" 2>/dev/null; then
@@ -211,14 +234,20 @@ if [[ "$REBASE_FAIL" == "1" ]]; then
 fi
 
 NEW=$(git -C "$WT" rev-parse --short HEAD)
-PUSH_OUT=$(force_push_with_lease) || {
-  if try_gh_rebase; then
+if force_push_with_lease; then
+  if [[ "${FORCE_PUSH_RESULT:-}" == "current" ]]; then
+    maintain_cleanup
     exit 0
   fi
+  PUSH_LINE=$(echo "$FORCE_PUSH_RESULT" | tr '\n' ' ' | sed 's/  */ /g')
+  log_push "#$PR $FORK_REMOTE/$BRANCH ${OLD}..${NEW} | git push --force-with-lease | ${PUSH_LINE}"
+  track "push"
   maintain_cleanup
-  exit 1
-}
-PUSH_LINE=$(echo "$PUSH_OUT" | tr '\n' ' ' | sed 's/  */ /g')
-log_push "#$PR $FORK_REMOTE/$BRANCH ${OLD}..${NEW} | git push --force-with-lease | ${PUSH_LINE}"
-track "push"
+  exit 0
+fi
+if try_gh_rebase "push stale"; then
+  exit 0
+fi
+log "MAINTAIN #$PR PUSH FAILED on $BRANCH: $(echo "$FORCE_PUSH_RESULT" | tr '\n' ' ' | sed 's/  */ /g')"
 maintain_cleanup
+exit 1
