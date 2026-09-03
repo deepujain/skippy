@@ -54,7 +54,7 @@ if ! gh auth status >/dev/null 2>&1; then
 fi
 
 JSON=$(gh pr list --repo "$REPO" --author "$AUTHOR" --state open --limit 20 \
-  --json number,title,isDraft,mergeable,mergeStateStatus,statusCheckRollup,reviewDecision 2>&1) || {
+  --json number,title,isDraft,mergeable,mergeStateStatus,statusCheckRollup,reviewDecision,headRefOid 2>&1) || {
   "$LOG" "$PROJECT" "ERROR ($REASON): gh pr list failed: $JSON"
   exit 1
 }
@@ -66,14 +66,17 @@ healthy = 0
 lines = []
 for p in prs:
     n = p['number']
-    ms = p.get('mergeStateStatus') or '?'
+    ms = p.get('mergeStateStatus') or 'UNKNOWN'
+    mb = p.get('mergeable') or 'UNKNOWN'
     rd = p.get('reviewDecision') or 'NONE'
     checks = p.get('statusCheckRollup') or []
     fail = sum(1 for c in checks if (c.get('conclusion') or c.get('state')) in ('FAILURE','FAILED','ERROR'))
     pend = sum(1 for c in checks if (c.get('conclusion') or c.get('state')) in ('PENDING','IN_PROGRESS','QUEUED', None) and c.get('conclusion') not in ('SUCCESS','SKIPPED','NEUTRAL'))
-    ok = fail == 0 and ms not in ('DIRTY','BEHIND','BLOCKED','UNKNOWN') and rd != 'CHANGES_REQUESTED'
+    conflict = mb == 'CONFLICTING' or ms == 'DIRTY'
+    behind = ms == 'BEHIND'
+    ok = fail == 0 and not conflict and not behind and rd != 'CHANGES_REQUESTED'
     if ok: healthy += 1
-    lines.append(f\"#{n} merge={ms} review={rd} ci_fail={fail} ci_pending={pend}\")
+    lines.append(f\"#{n} merge={ms} mergeable={mb} review={rd} ci_fail={fail} ci_pending={pend}\")
 print(len(prs), healthy)
 print('; '.join(lines))
 " 2>&1) || {
