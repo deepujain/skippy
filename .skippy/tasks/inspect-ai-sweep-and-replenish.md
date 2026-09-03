@@ -6,7 +6,7 @@ Bootstrap project → Contribution queue
 
 ## Done means
 
-- [x] Local clone at `/Users/dejain/nvidia/oss/inspect_ai` tracks upstream `main`.
+- [x] Local clone at `/Users/dejain/nvidia/oss/inspect-ai/inspect_ai` tracks upstream `main`.
 - [x] Project skill, bootstrap report, and queue policy at target **4** (repo cap).
 - [x] Scheduled continuation replays sweep + maintain every 30 minutes.
 

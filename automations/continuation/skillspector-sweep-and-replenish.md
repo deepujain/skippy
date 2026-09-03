@@ -11,7 +11,7 @@ Read:
 - `projects/skillspector/references/queue-policy.md`
 - `projects/skillspector/references/learning-log.md`
 
-Local checkout: `/Users/dejain/nvidia/oss/skillspector` (clone or refresh if missing).
+Local checkout: `/Users/dejain/nvidia/oss/nvidia/skillspector` (clone or refresh if missing).
 
 Maintain **5 healthy open contributions** for contributor `deepujain` on
 `NVIDIA/SkillSpector`. Use the GitHub access ladder; prefer `gh` when authenticated.

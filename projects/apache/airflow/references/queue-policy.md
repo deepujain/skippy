@@ -364,7 +364,7 @@ Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
 - #72402: new replenish PR for cancelled-backfill queued-run scheduling; local
   uv/ruff unavailable; CI pending.
 - Replenishment: **1 slot filled** (#72337 → #72402). **Queue at target 5/5**.
-- Local clone: `/Users/dejain/nvidia/oss/airflow` (remotes `apache` + `origin`).
+- Local clone: `/Users/dejain/nvidia/oss/apache/airflow` (remotes `apache` + `origin`).
 
 ## 2026-09-01 manual-run sweep
 
@@ -381,4 +381,4 @@ Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
   targeted pytest passed locally; CI pending.
 - Replenishment: **1 slot filled** (#72338 → #72394). **1 slot remains** when
   queue health allows (prefer code+test over docs-only).
-- Local clone: `/Users/dejain/nvidia/oss/airflow` (remotes `apache` + `origin`).
+- Local clone: `/Users/dejain/nvidia/oss/apache/airflow` (remotes `apache` + `origin`).

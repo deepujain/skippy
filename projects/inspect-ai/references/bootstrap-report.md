@@ -7,7 +7,7 @@ Canonical repository: https://github.com/UKGovernmentBEIS/inspect_ai
 ## Observed contribution contract
 
 - The local clone uses `origin` at the canonical public repository and tracks
-  `main` (observed with `git -C /Users/dejain/nvidia/oss/inspect_ai remote -v`
+  `main` (observed with `git -C /Users/dejain/nvidia/oss/inspect-ai/inspect_ai remote -v`
   and `git branch --show-current`).
 - The current local policy requires a maintainer-`accepted` issue for every
   non-trivial external PR unless the contributor is on

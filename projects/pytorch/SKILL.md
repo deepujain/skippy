@@ -40,12 +40,12 @@ Do these before editing code:
 
 ## 1. Local setup
 
-Use `/Users/dejain/nvidia/oss/pytorch` as the default local clone unless the user has a different path.
+Use `/Users/dejain/nvidia/oss/pytorch/pytorch` as the default local clone unless the user has a different path.
 
 ```bash
 cd /Users/dejain/nvidia/oss
 git clone git@github.com:deepujain/pytorch.git pytorch
-cd /Users/dejain/nvidia/oss/pytorch
+cd /Users/dejain/nvidia/oss/pytorch/pytorch
 git remote add upstream https://github.com/pytorch/pytorch.git
 git fetch upstream
 git submodule update --init --recursive
@@ -111,7 +111,7 @@ For broad cleanup issues, use the maintainer's requested wording and scope. If t
 Always start from a fresh upstream `main` unless continuing an existing PR branch.
 
 ```bash
-cd /Users/dejain/nvidia/oss/pytorch
+cd /Users/dejain/nvidia/oss/pytorch/pytorch
 git status --short
 git branch --show-current
 git fetch upstream
@@ -153,7 +153,7 @@ Run the narrowest relevant test first, then broaden based on risk.
 Common commands:
 
 ```bash
-cd /Users/dejain/nvidia/oss/pytorch
+cd /Users/dejain/nvidia/oss/pytorch/pytorch
 git diff --check
 spin quicklint
 spin quickfix
@@ -204,7 +204,7 @@ Validation rules:
 PyTorch uses EasyCLA. Use the user's GitHub-linked identity and avoid unknown coauthor trailers.
 
 ```bash
-cd /Users/dejain/nvidia/oss/pytorch
+cd /Users/dejain/nvidia/oss/pytorch/pytorch
 git add <files>
 git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -m '[module] Short imperative summary'
 git push --set-upstream origin fix/<issue>-short-description
@@ -335,7 +335,7 @@ When the user shares a PR, inspect before editing:
 Then:
 
 ```bash
-cd /Users/dejain/nvidia/oss/pytorch
+cd /Users/dejain/nvidia/oss/pytorch/pytorch
 gh pr checkout <pr> --repo pytorch/pytorch
 git fetch upstream
 ```
@@ -450,7 +450,7 @@ Say one of these so the agent applies this skill:
 | Where | What |
 | --- | --- |
 | Issues | Use `actionable` PyTorch issues with public repros and testable scope; read linked work before choosing. |
-| Local | Default clone `/Users/dejain/nvidia/oss/pytorch`; sync from `upstream/main`; branch before edits. |
+| Local | Default clone `/Users/dejain/nvidia/oss/pytorch/pytorch`; sync from `upstream/main`; branch before edits. |
 | Quality | Small patch, co-located regression test, local lint, no unrelated churn, verified paths/symbols, honest evidence. |
 | PR | Clear `[module]` title, `Fixes #NN`, root-cause `Summary`, exact `Test Plan`, release-note or not-user-facing label. |
 | CI | Use Dr. CI + HUD first; resolve label bots; distinguish new failures, unrelated/trunk failures, pending approval, active SEVs, and merge landcheck failures. |

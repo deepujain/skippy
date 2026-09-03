@@ -12,7 +12,7 @@ Read:
 - `projects/inspect-ai/references/queue-policy.md`
 - `projects/inspect-ai/references/bootstrap-report.md`
 
-Local checkout: `/Users/dejain/nvidia/oss/inspect_ai` (fork remote `fork`, upstream `upstream`).
+Local checkout: `/Users/dejain/nvidia/oss/inspect-ai/inspect_ai` (fork remote `fork`, upstream `upstream`).
 
 Maintain **4 healthy open contributions** for contributor `deepujain` on
 [UKGovernmentBEIS/inspect_ai](https://github.com/UKGovernmentBEIS/inspect_ai).

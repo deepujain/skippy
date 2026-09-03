@@ -79,7 +79,7 @@ Use this loop for both new Airflow PRs and existing PR sweeps:
 **Do this before making any fixes.** The default branch is `main`. Prefer running these commands in the agent environment where possible.
 
 ```bash
-cd /Users/dejain/nvidia/oss/airflow
+cd /Users/dejain/nvidia/oss/apache/airflow
 git fetch apache
 git checkout main
 git pull apache main
@@ -171,7 +171,7 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 
 - **When giving push commands to the user**, always prefix with the amend step so they can fix a commit message or author that got "Made with Cursor" or "dejain" from the IDE. Include `--author` so the author stays "Deepak Jain". Give the full block:
   ```bash
-  cd /Users/dejain/nvidia/oss/airflow
+  cd /Users/dejain/nvidia/oss/apache/airflow
   git commit --amend --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'Fix ... (#NNNNN).'
   git push --no-verify --set-upstream origin fix-NNNNN-short-description
   ```

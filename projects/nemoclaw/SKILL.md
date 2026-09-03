@@ -54,7 +54,7 @@ Apply these rules throughout the recipe:
 If the user cloned from their fork, add NVIDIA as upstream:
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 git remote add upstream https://github.com/NVIDIA/NemoClaw.git
 # or: git remote add upstream git@github.com:NVIDIA/NemoClaw.git
 git fetch upstream
@@ -157,7 +157,7 @@ Recent merged PR scan output should influence the work plan and PR body. Mention
 **Do this before making any fixes.** Switch to main, update from upstream, then create the feature branch.
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 git fetch upstream
 git checkout main
 git pull upstream main
@@ -181,14 +181,14 @@ If there are uncommitted changes: `git stash push -m "description"` then run the
 **Build** (if you touched TypeScript in `nemoclaw/`):
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 cd nemoclaw && npm install --ignore-scripts && npm run build && cd ..
 ```
 
 **Test** (always run before push/PR):
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 npm test
 ```
 
@@ -255,7 +255,7 @@ Use the recent merged PR scan (§2.0) to choose extra validation for the touched
 **Commit command (agent runs this directly):**
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 git add <list of changed files>
 git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'fix(scope): short summary
 
@@ -265,7 +265,7 @@ Fixes #NNNNN'
 **Amend command (if author, Signed-off-by, or Made-with needs fixing):**
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit --amend --no-verify -S -s --author="Deepak Jain <deepujain@gmail.com>" -m 'fix(scope): short summary
 
 Fixes #NNNNN'
@@ -276,7 +276,7 @@ Fixes #NNNNN'
 - **Push command (agent runs this):**
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 git push --no-verify --set-upstream origin <branch>
 ```
 
@@ -292,7 +292,7 @@ pushing duplicate local commits.
 - **PR create command (preferred):**
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 gh pr create --repo NVIDIA/NemoClaw --base main --head deepujain:<branch> --title 'fix: short summary (Fixes #NNNNN)' --body-file PR_NNNNN_body.md
 ```
 
@@ -492,7 +492,7 @@ For the `Review Comments` column, always categorize by reviewer identity rather 
 The agent **may** run `git add` and `git rebase --continue`  - rebase is a sync step that replays an existing commit, not a fresh commit. Use the correct author/committer env vars:
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 git add <list of resolved/changed files>
 GIT_EDITOR=true GIT_AUTHOR_NAME="Deepak Jain" GIT_AUTHOR_EMAIL="deepujain@gmail.com" GIT_COMMITTER_NAME="Deepak Jain" GIT_COMMITTER_EMAIL="deepujain@gmail.com" git rebase --continue
 ```
@@ -525,7 +525,7 @@ authoritative.
 If the remote head is unchanged, the agent pushes directly:
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 git push --no-verify --force-with-lease origin <branch>
 ```
 
@@ -549,7 +549,7 @@ server-created merge commits should report `verification.verified: true`.
 After pushing, prefer posting a short PR comment with `gh` when auth is healthy:
 
 ```bash
-cd /Users/dejain/nvidia/oss/NemoClaw
+cd /Users/dejain/nvidia/oss/nvidia/nemoclaw
 gh pr comment <url-or-number> --repo NVIDIA/NemoClaw --body 'Rebased on main. Addressed the CodeRabbit nitpicks and reran the relevant tests locally. Should be good to go!'
 ```
 
@@ -704,7 +704,7 @@ Say one of these so the agent applies this skill:
 | Where | What |
 |-------|------|
 | **Issues** | [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues). Pick an open, well-scoped issue (#NNNNN). |
-| **Local** | Repo at `/Users/dejain/nvidia/oss/NemoClaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then commit and push directly (§5–§6). |
+| **Local** | Repo at `/Users/dejain/nvidia/oss/nvidia/nemoclaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then commit and push directly (§5–§6). |
 | **Commit / Push** | Agent runs directly: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. Verify no `Made-with: Cursor` after commit. |
 | **PR** | Prefer `gh pr create` from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Use `PR_NNNNN_body.md` as `--body-file`, and include Testing plus **Evidence it works**. If `gh` auth is unavailable, provide the deep link and PR body path. |
 | **Open PR fix (§8)** | When the user shares an open PR link: inspect it with `gh` when available, use that existing PR branch, resolve files, run tests, rebase, commit, push directly, then prefer `gh pr comment` for the follow-up note including evidence. |

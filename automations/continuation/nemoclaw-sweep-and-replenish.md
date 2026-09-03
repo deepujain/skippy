@@ -10,7 +10,7 @@ Read:
 - `projects/nemoclaw/SKILL.md`
 - `projects/nemoclaw/references/queue-policy.md`
 
-Local checkout: `/Users/dejain/nvidia/oss/NemoClaw-repo` (clone or refresh if missing).
+Local checkout: `/Users/dejain/nvidia/oss/nvidia/nemoclaw` (clone or refresh if missing).
 
 Maintain **5 healthy open contributions** for contributor `deepujain` on
 `NVIDIA/NemoClaw`. Follow the full NemoClaw PR recipe for maintenance and

@@ -21,7 +21,7 @@ Use this recipe for [UKGovernmentBEIS/inspect_ai](https://github.com/UKGovernmen
 
 ## Project facts
 
-- Local checkout: `/Users/dejain/nvidia/oss/inspect_ai`
+- Local checkout: `/Users/dejain/nvidia/oss/inspect-ai/inspect_ai`
 - Upstream repo: `UKGovernmentBEIS/inspect_ai`
 - Default branch: `main`
 - Fork/head owner: `deepujain`
@@ -155,7 +155,7 @@ When calibrating contribution style, also scan recent merged PRs from other cont
 2. **Sync before changing files.**
 
    ```bash
-   cd /Users/dejain/nvidia/oss/inspect_ai
+   cd /Users/dejain/nvidia/oss/inspect-ai/inspect_ai
    git fetch origin main
    git switch main
    git pull --ff-only origin main

@@ -11,7 +11,7 @@ Read:
 - `projects/apache/airflow/references/queue-policy.md`
 - `projects/apache/airflow/references/learning-log.md`
 
-Local checkout: `/Users/dejain/nvidia/oss/airflow` (remotes: `apache`=upstream,
+Local checkout: `/Users/dejain/nvidia/oss/apache/airflow` (remotes: `apache`=upstream,
 `origin`=fork). Clone or refresh if missing.
 
 Maintain **5 healthy open contributions** for contributor `deepujain` on

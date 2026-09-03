@@ -28,7 +28,7 @@ target as actionable.
 - Healthy count: 0/5 (vetter + advisor + review gates).
 - Replenishment: **blocked at cap** (5/5). Next candidate when slot opens: #10773
   (#10823 auto-closed by 5-PR limit).
-- Local clone: `/Users/dejain/nvidia/oss/NemoClaw-repo`.
+- Local clone: `/Users/dejain/nvidia/oss/nvidia/nemoclaw`.
 - Scheduled continuation: unified loop via
   `scripts/sweep-continuation-loop-all.sh`.
 

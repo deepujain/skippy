@@ -11,7 +11,7 @@ Read:
 - `projects/apache/hadoop/SKILL.md`
 - `projects/apache/hadoop/references/queue-policy.md`
 
-Local checkout: `/Users/dejain/nvidia/oss/hadoop` (remotes: `apache`=upstream,
+Local checkout: `/Users/dejain/nvidia/oss/apache/hadoop` (remotes: `apache`=upstream,
 `origin`=fork).
 
 Maintain authored open PRs for `deepujain` on [apache/hadoop](https://github.com/apache/hadoop).

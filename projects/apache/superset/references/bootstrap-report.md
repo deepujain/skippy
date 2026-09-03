@@ -8,7 +8,7 @@ Canonical repository: https://github.com/apache/superset
 
 - Default branch: `master`. Upstream remote: `apache`. Fork remote: `origin`
   (`deepujain/superset`). Local checkout:
-  `/Users/dejain/nvidia/oss/superset`.
+  `/Users/dejain/nvidia/oss/apache/superset`.
 - Issues and PRs live on GitHub (not JIRA). PR titles follow
   [Conventional Commits](https://www.conventionalcommits.org/) prefixes
   (`fix:`, `docs:`, `feat:`, etc.). Source:

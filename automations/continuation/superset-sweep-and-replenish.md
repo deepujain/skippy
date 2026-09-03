@@ -10,7 +10,7 @@ Read:
 - `projects/apache/superset/SKILL.md`
 - `projects/apache/superset/references/queue-policy.md`
 
-Local checkout: `/Users/dejain/nvidia/oss/superset` (remotes: `apache`=upstream,
+Local checkout: `/Users/dejain/nvidia/oss/apache/superset` (remotes: `apache`=upstream,
 `origin`=fork). Clone or refresh if missing.
 
 Maintain **5 healthy open contributions** for contributor `deepujain` on

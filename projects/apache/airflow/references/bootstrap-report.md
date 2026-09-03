@@ -8,7 +8,7 @@ skill gaps block safe contribution.
 ## Access and remotes
 
 - Contributor: `deepujain`; `gh` authenticated (keyring).
-- Local clone path: `/Users/dejain/nvidia/oss/airflow`
+- Local clone path: `/Users/dejain/nvidia/oss/apache/airflow`
 - Remotes: `apache` → upstream, `origin` → `git@github.com:deepujain/airflow.git`
 - Default branch: `main`
 
