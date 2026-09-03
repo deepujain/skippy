@@ -32,7 +32,8 @@ personal portfolio.
   avoid crowded prose inside a single cell, and switch to HTML tables when
   Markdown wrapping makes logo/name pairs look bad.
 - **Do not inflate status.** Count merged PRs only when GitHub or the upstream
-  tracker shows acceptance. Closed is not merged.
+  tracker shows acceptance. Closed alone is not merged, but repository-specific
+  landing bots may close an accepted PR without populating GitHub's `mergedAt`.
 - **Respect mixed contribution types.** If GitHub PRs and tracker patches are
   combined, use neutral wording such as "Contributions" in prose and explain
   the mix only when needed.
@@ -88,14 +89,22 @@ For a GitHub repo:
 
 ```bash
 gh pr list --repo OWNER/REPO --author USERNAME --state all --limit 1000 \
-  --json number,state,mergedAt,url,title,createdAt
+  --json number,state,mergedAt,labels,url,title,createdAt
 ```
 
 Count:
 
 - `PRs Created`: all returned PRs for that author in that repo.
 - `Open PRs`: PRs with `state == "OPEN"`.
-- `Merged PRs`: PRs with non-null `mergedAt`.
+- `Merged PRs`: PRs with non-null `mergedAt`, plus PRs accepted through a
+  verified repository-specific landing workflow.
+
+PyTorch is a known exception to the classic GitHub merge signal. PyTorchBot
+lands approved changes and closes the source PR, so `mergedAt` can remain null.
+For `pytorch/pytorch`, count a closed PR as merged when it carries the `Merged`
+label and the timeline contains PyTorch merge-bot landing evidence. Verify the
+label and bot comments or landed commit before counting it; do not treat every
+closed PyTorch PR as merged.
 
 For a contributor-wide earliest public PR:
 
@@ -283,7 +292,7 @@ in `README.md` after validation.
 
 | Task | Command or Rule |
 | --- | --- |
-| List author PRs in one repo | `gh pr list --repo OWNER/REPO --author USER --state all --limit 1000 --json number,state,mergedAt,url` |
+| List author PRs in one repo | `gh pr list --repo OWNER/REPO --author USER --state all --limit 1000 --json number,state,mergedAt,labels,url` |
 | Find earliest public PR | `gh search prs --author USER --sort created --order asc --limit 20 --json repository,number,title,createdAt,state,url` |
 | GitHub contributor link | `https://github.com/OWNER/REPO/pulls/USER` |
 | Logo size | `height="18"` |

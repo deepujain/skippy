@@ -51,7 +51,9 @@ tail -f ~/nvidia/oss/skippy/.skippy/sweep-output.log
 
 Agent-completed sweeps append `SWEEP (...)` lines and a **summary table** via
 `scripts/sweep-log-summary.sh` (columns: Project, Open, Healthy, Maintain,
-Action, Lesson learned — include skill/log updates from Learn).
+Action, Self Learning). Action summarizes concrete code, CI, review, rebase,
+and replenishment work. Self Learning states the lesson and exact skill/log
+update instead of pointing to another log entry.
 
 Scheduler ticks:
 `tail -f .skippy/sweep-scheduler.log`

@@ -89,8 +89,21 @@ proceed to the next PR and to Learn → Replenish.
 **Sweep log summary table:** At the end of each project tick (and after
 multi-project batch sweeps), append a summary table to `.skippy/sweep-output.log`
 via `scripts/sweep-log-summary.sh` (fixed-width box table in the log) with columns:
-Project, Open, Healthy, Maintain, Action, Lesson learned (include skill/log
-updates from the Learn step).
+Project, Open, Healthy, Maintain, Action, Self Learning.
+
+- **Maintain:** state the number of rebases, pushes, conflicts resolved, or that
+  no branch update was required. Never append `see tick` or another pointer.
+- **Action:** use one or two concrete lines covering work actually completed:
+  code/test changes, CI diagnosis or retrigger, human/bot review fixes plus
+  replies/reactions, rebases, and replenishment outcomes. Never write
+  `see SWEEP line` or make the reader inspect another log entry.
+- **Self Learning:** use one or two lines stating the durable lesson and the
+  exact skill or learning log updated. If no update was warranted, say
+  `No skill update:` followed by the evidence-based reason. Do not point to a
+  queue policy in place of the lesson.
+
+Do not append this final table after Maintain alone. Complete Learn and
+Replenish first so Action and Self Learning describe the whole sweep.
 
 2. **Learn:** Run the bounded continuous-learning scan (see
    [continuous-learning.md](continuous-learning.md)): inspect review comments,

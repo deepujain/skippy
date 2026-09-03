@@ -4,17 +4,32 @@ from __future__ import annotations
 
 import json
 import sys
+import textwrap
 
 
-def _clip(text: str, width: int) -> str:
+def _clip(text: str, width: int, marker: str = "...") -> str:
     text = str(text)
     if width <= 0:
         return ""
     if len(text) <= width:
         return text
-    if width == 1:
-        return "…"
-    return text[: width - 1] + "…"
+    if width <= len(marker):
+        return marker[:width]
+    return text[: width - len(marker)] + marker
+
+
+def _wrap_cell(text: str, width: int, max_lines: int = 2) -> list[str]:
+    lines = textwrap.wrap(
+        str(text),
+        width=width,
+        break_long_words=True,
+        break_on_hyphens=False,
+        replace_whitespace=True,
+    ) or [""]
+    if len(lines) > max_lines:
+        lines = lines[:max_lines]
+        lines[-1] = _clip(lines[-1] + "...", width)
+    return lines
 
 
 def format_table(headers: list[str], rows: list[list[str]], caps: list[int]) -> str:
@@ -27,16 +42,22 @@ def format_table(headers: list[str], rows: list[list[str]], caps: list[int]) -> 
     def sep() -> str:
         return "+-" + "-+-".join("-" * w for w in widths) + "-+"
 
-    def row(cells: list[str]) -> str:
-        return (
+    def row(cells: list[str]) -> list[str]:
+        wrapped = [_wrap_cell(cell, width) for cell, width in zip(cells, widths)]
+        height = max(len(lines) for lines in wrapped)
+        return [
             "| "
-            + " | ".join(_clip(cell, w).ljust(w) for cell, w in zip(cells, widths))
+            + " | ".join(
+                (lines[line_index] if line_index < len(lines) else "").ljust(width)
+                for lines, width in zip(wrapped, widths)
+            )
             + " |"
-        )
+            for line_index in range(height)
+        ]
 
-    lines = [sep(), row(headers), sep()]
+    lines = [sep(), *row(headers), sep()]
     for entry in rows:
-        lines.append(row(entry))
+        lines.extend(row(entry))
     lines.append(sep())
     return "\n".join(lines)
 
@@ -47,7 +68,7 @@ def main() -> int:
     rows = payload["rows"]
     caps = payload.get(
         "caps",
-        [12, 6, 9, 22, 34, 44],
+        [12, 6, 9, 24, 48, 52],
     )
     print(format_table(headers, rows, caps))
     return 0

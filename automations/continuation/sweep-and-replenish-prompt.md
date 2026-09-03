@@ -27,8 +27,12 @@ scripts/sweep-log-summary.sh <reason> <project> \
   --maintain "..." --action "..." --lesson "..."
 ```
 
-`Lesson learned` must state skill/log updates from Learn, or `no skill change`
-with reason.
+The final table uses `Self Learning`. Give Action and Self Learning one or two
+concrete lines each. Action must summarize code, CI, review, rebase, and
+replenishment work actually completed. Self Learning must state the durable
+lesson and exact skill/log update, or `No skill update:` with an evidence-based
+reason. Never use `see tick`, `see SWEEP line`, `see queue-policy`, or another
+pointer in place of the summary.
 
 Do not create overlapping or unvalidated work simply to reach the target. Continue
 until the target is reached, the verified maximum is reached, or each unfilled slot

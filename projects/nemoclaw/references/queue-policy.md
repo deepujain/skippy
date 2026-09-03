@@ -10,8 +10,14 @@ target as actionable.
 
 ## 2026-09-03 sweep state (manual-sweep-all)
 
-- **Maintain:** 5/5 current, 0 pushes; #10309 conflict resolved prior (rebased/pushed).
-- **Healthy:** 0/5 — advisor lifecycle infra failures on all PRs (external gate).
+- **Time:** ~11:25 AM PT.
+- **Maintain:** rebased and pushed all five PRs. Resolved #10818's
+  `preflight.ts` conflict and validated build, typecheck, and 15 focused tests.
+- **Review:** #10311 fixed both current-head ownership/docs findings in
+  `67b6c78e3`; #10309 fixed the CodeQL unused-helper finding in `04fd7fced`.
+  Replied on, liked, and resolved each addressed thread. Advisor CI is rerunning.
+- **Learn:** updated the project skill: fan-out budgets must not be reduced with
+  one-use policy forwarding layers, and probe budget changes require docs parity.
 - **Replenish:** blocked at cap 5/5.
 
 ## 2026-09-02 startup sweep

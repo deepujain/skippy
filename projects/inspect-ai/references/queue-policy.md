@@ -8,23 +8,63 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-03 sweep state (manual-sweep-all, Learn and Replenish completion)
+
+- **Time:** ~12:35 PM PT.
+- **Departed:** none since the 11:25 AM PT full sweep.
+- **Open PRs (2/4):** [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195)
+  at `6b6fbff9e` and [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950)
+  at `0f271a9a7`.
+- **Maintain completeness:** both heads remain 0 behind `main`, MERGEABLE, and
+  green across all selected Build, Changelog Lint, Suppressions, and Embedded
+  Viewer checks. No branch update was required after the 12:27 PM PT pass.
+  #5195 still has a stale CHANGES_REQUESTED review on `d3db5927`; its checklist
+  is complete on the current head and awaits re-review. #4950's four maintainer
+  threads are outdated after the rebase, have current author replies, and await
+  maintainer design review. All four commits contain SSH signatures, but GitHub
+  reports `unknown_key`; upstream exposes no signature check in the selected
+  green check set.
+- **Healthy count:** 1/4. #4950 has no remaining contributor-actionable finding;
+  #5195 does not count while its stale CHANGES_REQUESTED decision remains.
+- **Learn:** bounded own-review and recent peer-outcome scan found no new durable
+  rule. Peer PRs #5230 and #5232 were automatically closed because their linked
+  issues lacked `accepted`, directly repeating the existing issue-first gate.
+  No project skill change needed.
+- **Replenish:** **2 slots remain open** after screening all 22 open accepted
+  issues, their comments, linked development, and number/title/error/path PR
+  overlap. No ready PR was opened:
+  - [#5222](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5222) has no
+    peer PR, but is authored and assigned to maintainer `dragonstyle`; it is a
+    broad provider deliverable that explicitly requires live Meta API refusal
+    verification, so it is maintainer-owned rather than available to claim.
+  - [#5211](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5211) and
+    [#5210](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5210) are
+    covered by open peer PRs #5219 and #5221.
+  - [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177),
+    #5159, #5150, #5145, #5089, #5080, #5046, #5037, #4968, #4808, #4781,
+    #4770, #4759, #4756, #4197, and #4193 are covered by open peer PRs #5199,
+    #5160, #5153, #5170, #5090, #5081, #5047, #5038, #4969, #4809, #4782,
+    #4773, #4766, #4801, #4234, and #5019 respectively.
+  - [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) remains
+    blocked on open [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454);
+    an Inspect AI submodule/dist bump cannot precede that merge.
+  - #5091 and #4758 are the two current authored PRs, #5195 and #4950, rather
+    than replenishment candidates.
+
 ## 2026-09-03 sweep state (manual-sweep-all)
 
-- **Time:** ~12:51 AM PT.
+- **Time:** ~11:25 AM PT.
 - **Departed:** #5174, #5181 (merged/closed since tick 16).
 - **Open PRs (2/4):** [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195),
   [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950).
-- **Maintain** (`manual-sweep-all`, `MAINTAIN_PUSHED=0`): both **0 behind `main`**;
-  prior tick resolved rebase conflicts on #5195/#4950; this tick fixed #4950
-  `entries-under-unreleased` CI (moved bridge note under `## Unreleased`, pushed
-  `8bc35ec54`).
-- **CI:** #5195 green; #4950 rerunning after changelog fix.
+- **Maintain:** resolved fresh `CHANGELOG.md` conflicts by retaining upstream and
+  PR entries; rebased and pushed #5195 `6b6fbff9e` and #4950 `0f271a9a7`.
+- **CI:** both green; #5195 awaits re-review and #4950 awaits design review.
 - **Healthy count:** 0/4 (#5195 CHANGES_REQUESTED stale; #4950 REVIEW_REQUIRED).
-- **Learn:** no skill change — maintain failure recovery codified in Skippy router
-  + contribution-queue playbook (conflicts, push stale, continue rule).
-- **Replenish:** **2 slots open** — screen [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763),
-  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) next tick;
-  ts-mono#454 still open for #4763.
+- **Learn:** existing changelog conflict guidance covered the resolution; no skill change.
+- **Replenish:** **2 slots remain open** after a live accepted-issue screen.
+  New #5211/#5210 already have peer PRs #5219/#5221; #5177 has #5199; #4763
+  remains blocked on ts-mono#454. Other accepted issues retain recorded peer PRs.
 
 ## 2026-09-02 sweep state (scheduled, tick 16)
 

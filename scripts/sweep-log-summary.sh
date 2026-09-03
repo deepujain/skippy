@@ -9,7 +9,7 @@
 #
 # All queue projects (batch / end of manual-sweep-all):
 #   sweep-log-summary.sh <reason> --all --tsv-file rows.tsv
-#   # TSV columns: project,maintain,action,lesson  (open/healthy from live gh)
+#   # TSV columns: project,maintain,action,self-learning  (open/healthy from live gh)
 #
 #   sweep-log-summary.sh <reason> --all \
 #     --row "project|maintain|action|lesson" \
@@ -83,6 +83,18 @@ last_maintain_summary() {
     || echo "—"
 }
 
+validate_summary_text() {
+  local field="$1" value="$2"
+  local normalized
+  normalized=$(printf '%s' "$value" | tr '[:upper:]' '[:lower:]')
+  case "$normalized" in
+    *"see tick"*|*"see sweep"*|*"see queue-policy"*|*"see log"*)
+      echo "sweep-log-summary: $field must summarize the result, not point elsewhere: $value" >&2
+      exit 1
+      ;;
+  esac
+}
+
 render_summary_block() {
   local scope="$1" reason="$2"
   shift 2
@@ -111,7 +123,7 @@ print(json.dumps([
   {
     printf '%s [%s] SWEEP SUMMARY (%s)\n' "$TS" "$scope" "$reason"
     printf '%s\n' "$(python3 "$ROOT/scripts/format-sweep-summary-table.py" <<EOF
-{"headers":["Project","Open","Healthy","Maintain","Action","Lesson learned"],"rows":$rows_json}
+{"headers":["Project","Open","Healthy","Maintain","Action","Self Learning"],"rows":$rows_json}
 EOF
 )"
   } >>"$OUT"
@@ -174,6 +186,9 @@ if [[ "${1:-}" == "--all" ]]; then
     if [[ "$maintain" == "auto" || -z "$maintain" ]]; then
       maintain="$(last_maintain_summary "$project" "$REASON")"
     fi
+    validate_summary_text "Maintain" "$maintain"
+    validate_summary_text "Action" "$action"
+    validate_summary_text "Self Learning" "$lesson"
     TABLE_ROWS+=("$project|$open|$tgt|$healthy|$maintain|$action|$lesson")
   done
 
@@ -196,6 +211,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ -n "$MAINTAIN" && -n "$ACTION" && -n "$LESSON" ]] || usage
+validate_summary_text "Maintain" "$MAINTAIN"
+validate_summary_text "Action" "$ACTION"
+validate_summary_text "Self Learning" "$LESSON"
 
 read -r open healthy <<<"$(gh_stats "$PROJECT")"
 tgt=$(project_target "$PROJECT")

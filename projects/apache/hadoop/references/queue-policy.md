@@ -11,9 +11,40 @@ target as actionable.
 Base branch: `trunk`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/hadoop`).
 
+## 2026-09-03 sweep state (manual-sweep-all, 12:30 PM PT)
+
+- **Departed since 11:25 AM PT:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh hadoop manual-full-sweep`,
+  `MAINTAIN_PUSHED=0`): all 8 branches are current on `apache/trunk`, mergeable,
+  and required no rebase or push.
+- **CI:** no current-head red checks. #8388 and #8306 are fully green.
+  #8670, #8389, #8335, #8334, #8310, and #8307 have GHA green and Jenkins
+  pending.
+- **Review:** #8335 is approved and its only inline thread is resolved. #8307
+  and #8306 retain stale `CHANGES_REQUESTED` decisions from old heads; all
+  inline latest replies document current-head fixes, but maintainer re-review
+  remains outstanding. #8306 also has a maintainer-only Cloud-AWS manual gate.
+- **Commit identity:** all PR commits are authored by Deepak Jain
+  <deepujain@gmail.com>. GitHub reports them unsigned; Hadoop does not require
+  signed commits in the project recipe.
+- **Healthy count:** 6/5. Only #8307 and #8306 are excluded because their stale
+  changes-requested decisions still need maintainer re-review.
+- **Learn:** no skill change. The bounded scan of newly merged peer #8677
+  reinforced the already-documented practice of classifying unrelated Yetus
+  failures from raw evidence and retriggering CI rather than changing code.
+- **Replenish:** skipped. The queue is over target at 8/5, so no issue screen,
+  branch, push, or new PR was created.
+
 ## 2026-09-03 sweep state (manual-sweep-all)
 
-- **Maintain:** 8/5 over-cap, all current, 0 pushes; 5/5 healthy mergeable; #8335 APPROVED.
+- **Time:** ~11:25 AM PT.
+- **Maintain:** rebased and pushed all 8 PRs onto current `trunk`; all are
+  mergeable and the new GHA/Jenkins runs are queued or in progress.
+- **Review:** resolved #8335's already-addressed `tolerancePercent > 0` thread;
+  #8306/#8307 still carry stale changes-requested states with no current thread.
+- **Learn:** no new durable pattern; long-running Yetus/Jenkins behavior is
+  already documented.
 - **Replenish:** skipped over-cap 8/5.
 
 ## 2026-09-02 sweep state (scheduled, tick 20)

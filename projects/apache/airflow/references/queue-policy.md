@@ -12,10 +12,39 @@ target as actionable.
 Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/airflow`).
 
+## 2026-09-03 sweep state (manual Learn and Replenish)
+
+- **Time:** ~12:30 PM PT.
+- **Departed since 11:25 AM PT:** none; the authored open set remains #72402,
+  #72394, #71430, #69157, and #69150.
+- **Maintain verification:** all five are mergeable and 0 behind `apache/main`;
+  0 unresolved review threads and 0 failed checks. No branch push was needed.
+- **CI:** #72402 and #72394 are fully green; #71430 has one provider
+  compatibility job running after the external IBM MQ retrigger; #69157 and
+  #69150 each have only the external Mergeable check pending.
+- **Review:** #72394, #69157, and #69150 are approved. #72402 and #71430 await
+  review. All historical inline findings have current replies and are resolved.
+- **Metadata:** corrected stale validation or file-list claims in the PR bodies
+  for #72402, #72394, and #69157; all five retain the current required
+  generative-AI disclosure.
+- **Signatures:** GitHub reports the contributor commits as cryptographically
+  unsigned, but current Airflow policy and required checks do not require
+  signed commits or DCO trailers; all authors are Deepak Jain
+  `<deepujain@gmail.com>`.
+- **Learn:** no skill change. No authored departure, new review finding, new CI
+  failure shape, policy change, or peer merge/closure occurred after the prior
+  scan.
+- **Replenish:** skipped at queue cap 5/5; no new PR opened.
+
 ## 2026-09-03 sweep state (manual-sweep-all)
 
-- **Maintain:** 5/5 current, 0 pushes; 5/5 healthy mergeable; #72394 APPROVED CI pending.
-- **Learn:** no skill change (push-stale recovery in maintain script + playbook).
+- **Time:** ~11:25 AM PT.
+- **Maintain:** 5/5 current. #71430's only red job was an external IBM MQ
+  download timeout after all fallback IPs failed; direct rerun requires admin,
+  so signed empty commit `594cda492c` retriggered CI.
+- **Review:** no unresolved current-head threads across the five PRs.
+- **Learn:** no skill change; external dependency failure classification and
+  least-invasive empty-commit retrigger are already documented.
 - **Replenish:** blocked at cap 5/5.
 
 ## 2026-09-02 sweep state (scheduled, tick 20)

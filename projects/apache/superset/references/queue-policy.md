@@ -11,10 +11,57 @@ target as actionable.
 Base branch: `master`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/superset`). Local clone: `/Users/dejain/nvidia/oss/worktrees/apache/superset`.
 
+## 2026-09-03 sweep state (manual-sweep-all, follow-up)
+
+- **Time:** 12:35 PM PT.
+- **Departed since 11:25 AM PT:** none.
+- **Open / healthy:** 2/5 open, 2/5 healthy.
+- **Maintain:** #43806 remains at `f820ab1004` and #43803 remains at
+  `eefb6656e9`; both are 0 behind `master`, mergeable, and blocked only on
+  maintainer review. Refreshed labeler and Showtime checks passed for both;
+  #43803's Netlify preview passed, and #43806's non-doc Netlify lanes were
+  neutral/cancelled as expected. No failed workflow logs, current-head review
+  threads, conflicts, or contributor-actionable findings remain. #43806's two
+  prior inline findings have current replies, resolved threads, and 👍 reactions.
+  GitHub reports the commits as unsigned, but current Superset contribution
+  guidance and live checks do not require verified signatures or DCO trailers.
+- **Learn:** no skill update. Recent merged peer PRs #43636 and #43345 confirm
+  existing guidance to validate bot findings against runtime behavior, preserve
+  extension points, and regenerate checked-in contracts. All findings were
+  addressed in-thread; no new project-specific command or policy emerged.
+- **Candidate screen:** issue bodies, comments, timelines, linked development,
+  open/closed PR number matches, distinctive title/error terms, and affected
+  paths were checked. Active exact-path overlaps: #43812 -> #43813
+  (`messages.po`); #43801 -> #43807 (`normalizeTimestamp`); #43764 -> #43808
+  (dataset importer); #43728 -> #43731 and #43727 -> #43732
+  (`Partition.ts`); #43721 -> #43722 (Handlebars renderer); #43714 -> #43756
+  (table global filter); #43576 -> #43577/#43697 (guest payload checks);
+  #43574 -> #43575 (dashboard layout parsing); #43558/#43383 -> #43472
+  (`VirtualTable`); #43550 -> #43655 (CSRF recovery); #43547 ->
+  #43682/#43693/#43694 (pandas postprocessing); #43503 -> #43504 (brand
+  spinner); #43385 -> #43683 (dashboard create loading); #43356 ->
+  #43585/#43710 (Prophet schema); and #43344 -> #43365 (report schedule state).
+  #43717 has no PR yet, but rounakkm publicly claimed it with a concrete plan
+  and the issue author approved. #43352 is an enhancement overlapping
+  discussion #42925 and still needs design proof for dynamic sticky offsets
+  across multiple row dimensions.
+- **Replenish:** no collision-free, fully validated candidate remained, so no
+  PR was opened. Slots 3-5 are unavailable this run: slot 3 is blocked by the
+  active exact-path PRs above; slot 4 is blocked by the remaining active
+  exact-path PRs and the approved #43717 claim; slot 5 is blocked after the same
+  complete screen by #43352's unresolved multi-row sticky-offset design and
+  overlapping discussion.
+
 ## 2026-09-03 sweep state (manual-sweep-all)
 
-- **Maintain:** 2/5 current, 0 pushes; 2/5 healthy; both REVIEW_REQUIRED.
-- **Replenish:** 3 slots — prior overlap/policy blockers still apply; re-screen next tick.
+- **Time:** ~11:25 AM PT.
+- **Maintain:** rebased and pushed #43806 and #43803 onto current `master`; both
+  are mergeable, review-required, and running refreshed checks.
+- **Review:** no unresolved current-head threads.
+- **Learn:** no skill change; live overlap verification remains the key queue lesson.
+- **Replenish:** 3 slots remain open after live screening. #43764, #43728,
+  #43727, #43721, #43576, #43574, #43558, #43550, and #43547 all have active
+  peer PRs; the prior #43714/#43356/#43717 blockers also remain.
 
 ## 2026-09-02 sweep state (scheduled, tick 3)
 

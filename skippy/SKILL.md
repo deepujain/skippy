@@ -129,6 +129,13 @@ Do not report success until all of these are true:
 - The diff was reviewed for behavior, security, compatibility, and cleanup.
 - Delivery state is known: commit, PR, signature, CI, review, and external
   blockers are reported exactly.
+- A completed sweep has one final summary table produced after Maintain, Learn,
+  and Replenish. Its Maintain cell reports branch-update results without log
+  pointers; Action gives one or two concrete lines covering code, CI, review,
+  rebase, and replenishment work actually done; Self Learning gives one or two
+  lines with the durable lesson and exact skill/log update, or an evidence-based
+  `No skill update:` reason. Placeholder text such as `see tick`, `see SWEEP
+  line`, and `see queue-policy` is prohibited.
 - All outbound GitHub prose contains no em dash character (`U+2014`). This includes
   issue and PR titles and bodies, descriptions, comments, reviews, inline
   threads, replies, commit messages, and release text. Check the final text

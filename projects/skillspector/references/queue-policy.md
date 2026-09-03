@@ -11,10 +11,36 @@ whenever `CONTRIBUTING.md` or GitHub policy changes
 Read the shared references/contribution-queues.md policy before configuring
 or acting on a target.
 
+## 2026-09-03 sweep state (full sweep)
+
+- **Time:** 12:31 PM PT.
+- **Departed since 11:25 AM PT:** none; authored open PRs remain
+  [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468), and
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain:** all five heads are 0 behind `main`, mergeable, DCO-green, and
+  linked to open issues; no conflicts, failing or pending checks, rebases,
+  code changes, commits, or pushes. #428 is approved and #468/#469 have no
+  review findings. #434/#436 retain stale CHANGES_REQUESTED states, but
+  rng1995's only inline threads are resolved and have exact-head deepujain
+  replies plus reactions; existing re-review requests remain current.
+- **Healthy:** 3/5 (#428, #468, #469); #434/#436 await maintainer re-review.
+- **Learn:** bounded open/merged/closed scan (#480, #473, #471, #462, #438,
+  #414) found no new durable project rule. DCO failure and overlap/supersession
+  evidence confirm rules already present in the project skill and learning log,
+  so no skill update was made.
+- **Replenish:** live `CONTRIBUTING.md` still publishes no lower contributor
+  maximum; queue is at the configured cap 5/5, so no issue was selected and no
+  PR was opened.
+
 ## 2026-09-03 sweep state (manual-sweep-all)
 
-- **Maintain:** 5/5 current, 0 pushes; 3/5 healthy (#428/#468/#469 green; #434/#436 CR stale).
-- **Learn:** no skill change (maintain failure recovery in Skippy playbook).
+- **Time:** ~11:25 AM PT.
+- **Maintain:** 5/5 current, 0 pushes; all CI green. #428, #468, and #469 are
+  merge-clean; #434 and #436 await re-review after addressed stale requests.
+- **Learn:** no new durable project pattern; no departed PR or new review thread.
 - **Replenish:** blocked at cap 5/5.
 
 ## 2026-09-02 sweep state (scheduled, tick 20)
