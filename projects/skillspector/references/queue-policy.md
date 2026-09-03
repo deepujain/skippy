@@ -11,6 +11,99 @@ whenever `CONTRIBUTING.md` or GitHub policy changes
 Read the shared references/contribution-queues.md policy before configuring
 or acting on a target.
 
+## 2026-09-02 sweep state (scheduled, tick 20)
+
+- **Time:** ~2:17 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468),
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`7805bb94`); no rebases or pushes; heads unchanged:
+  `46090473`, `c0537009`, `e3ca50a9`, `0b1d8631`, `e975cf9e`.
+- **CI:** **5/5 green** (0 failures, 0 pending).
+- **#428:** rng1995 **APPROVED** on current head `46090473`; merge-clean; await
+  maintainer merge.
+- **#434, #436:** CHANGES_REQUESTED stale (rng1995 Aug 28); fixes on head; posted
+  re-review request comments (#434 outdated thread; #436 P1 graph-export addressed
+  in `graph_proxy.py` + `test_graph_proxy.py`).
+- **#468, #469:** merge-clean; no reviews; merge-ready.
+- **Healthy count:** 5/5 CI green; 3/5 contributor-actionable merge-ready
+  (#428 APPROVED, #468, #469); #434/#436 await re-review.
+- **Learn:** no skill change — no merges since #462 (2026-08-31); stale-CR
+  re-review nudge pattern unchanged.
+- **Replenishment:** **blocked at cap** 5/5.
+
+## 2026-09-02 sweep state (scheduled, tick 19)
+
+- **Time:** ~1:59 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468),
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`7805bb94`); heads unchanged; no rebases or pushes.
+- **CI:** **5/5 green** (0 failures, 0 pending) on `46090473`, `c0537009`,
+  `e3ca50a9`, `0b1d8631`, `e975cf9e`.
+- **#428:** rng1995 **APPROVED** (Aug 24, pre-head); empty `reviewDecision`;
+  merge-clean; stale approval on current head.
+- **#434, #436:** CHANGES_REQUESTED stale (rng1995 Aug 28); fixes on head;
+  await exact-head re-review.
+- **#468, #469:** merge-clean; no reviews; merge-ready.
+- **Healthy count:** 5/5 CI green; 2/5 merge-ready (#468, #469).
+- **Learn:** no skill change — unchanged from tick 18.
+- **Replenishment:** **blocked at cap** 5/5.
+
+## 2026-09-02 sweep state (scheduled, tick 18)
+
+- **Time:** ~1:51 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468),
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`7805bb94`); heads unchanged; no rebases or pushes.
+- **CI:** **5/5 green** (0 failures, 0 pending) on `46090473`, `c0537009`,
+  `e3ca50a9`, `0b1d8631`, `e975cf9e`.
+- **#428:** rng1995 **APPROVED** (Aug 24, pre-head); empty `reviewDecision`;
+  merge-clean; CI green; stale approval on refreshed head.
+- **#434, #436:** CHANGES_REQUESTED stale (rng1995 Aug 28); fixes on head
+  (`c0537009` nv_build default; `e3ca50a9` lazy export restore + tests);
+  await exact-head re-review.
+- **#468, #469:** merge-clean; no reviews; merge-ready.
+- **Healthy count:** 5/5 CI green; 2/5 merge-ready (#468, #469); #428 approved
+  label stale on current head.
+- **Learn:** no skill change — no merges, new review patterns, or CI failures
+  since tick 17.
+- **Replenishment:** **blocked at cap** 5/5.
+
+## 2026-09-02 sweep state (scheduled, tick 17)
+
+- **Time:** ~1:46 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468),
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`7805bb94`); heads unchanged; no rebases or pushes.
+- **CI:** **5/5 green** (0 failures, 0 pending) on `46090473`, `c0537009`,
+  `e3ca50a9`, `0b1d8631`, `e975cf9e`.
+- **#428:** rng1995 **APPROVED** on head `46090473`; empty `reviewDecision`; merge-clean.
+- **#434, #436:** CHANGES_REQUESTED stale (rng1995 on older commits); fixes on head;
+  await exact-head re-review.
+- **#468, #469:** merge-clean; no reviews; merge-ready.
+- **Healthy count:** 5/5 CI green; 2/5 merge-ready (#468, #469); #428 approved on head.
+- **Learn:** no skill change — no merges or new review patterns since tick 16.
+- **Replenishment:** **blocked at cap** 5/5.
+
 ## 2026-09-02 sweep state (scheduled, tick 16)
 
 - **Time:** ~1:40 PM PT.

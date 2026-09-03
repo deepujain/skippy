@@ -12,6 +12,94 @@ target as actionable.
 Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/airflow`).
 
+## 2026-09-02 sweep state (scheduled, tick 20)
+
+- **Time:** ~2:24 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** #72402, #72394, #71430, #69157, #69150.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `apache/main`** (`d41f5895`); heads unchanged: `b453e77f`, `c4cb024b`,
+  `9a678d5c`, `242ba592`, `600523e7`; no rebases or pushes.
+- **CI:** **0 failures**; **#69150 fully green** (0 pending); others matrix in
+  progress (#72402 7 pending; #72394 7; #69157 25; #71430 26).
+- **Review threads:** 0 unresolved non-outdated on any PR.
+- **#69150:** **APPROVED** + **all green**; merge-ready.
+- **#72394, #69157:** **APPROVED**; CI matrix pending.
+- **#72402, #71430:** REVIEW_REQUIRED; no actionable CR.
+- **Healthy count:** 5/5 contributor-actionable; 1/5 fully green merge-ready (#69150);
+  2/5 APPROVED pending CI (#72394, #69157).
+- **Learn:** no skill change — #69150 matrix completion since tick 19; no new peer
+  patterns (#72418 docs-only merged).
+- **Replenishment:** **skipped** — queue at cap 5/5.
+
+## 2026-09-02 sweep state (scheduled, tick 19)
+
+- **Time:** ~2:04-2:17 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** #72402, #72394, #71430, #69157, #69150.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `apache/main`** (`d41f5895`); no rebases or pushes; heads unchanged:
+  `b453e77f`, `c4cb024b`, `9a678d5c`, `242ba592`, `600523e7`.
+- **CI:** **0 failures** on all five; large matrix **in progress** (#69150 nearest:
+  2 pending; #72402 10 pending; #72394 16; #69157 26; #71430 31).
+- **Review threads:** 0 unresolved non-outdated threads on any PR; no actionable
+  human or bot CR.
+- **#72394, #69157, #69150:** **APPROVED**; CI matrix pending.
+- **#72402, #71430:** REVIEW_REQUIRED; no actionable CR or bot feedback.
+- **Healthy count:** 5/5 contributor-actionable; 3/5 APPROVED pending CI completion.
+- **Learn:** no skill change — peer #72418/#72390/#72443 merges add no new patterns;
+  cherry-pick merge-base lesson unchanged from tick 17.
+- **Replenishment:** **skipped** — queue at cap 5/5; maintainer bandwidth policy.
+
+## 2026-09-02 sweep state (scheduled, tick 18)
+
+- **Time:** ~1:57 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** #72402, #72394, #71430, #69157, #69150.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `apache/main`** (`d41f5895`); **5/5 current**, **0 failed**; heads
+  `b453e77f`, `c4cb024b`, `9a678d5c`, `242ba592`, `600523e7`.
+- **CI:** **0 failures**; `Build CI images / Build CI linux/amd64 image 3.10`
+  **pending** on all five (post tick-16 rebase matrix).
+- **#72394, #69157, #69150:** **APPROVED**; await CI image build completion.
+- **#72402, #71430:** REVIEW_REQUIRED; no actionable CR or bot feedback.
+- **Healthy count:** 5/5 contributor-actionable; 3/5 APPROVED pending CI.
+- **Learn:** no skill change — unchanged from tick 17; merge-base lesson already
+  recorded.
+- **Replenishment:** **skipped** — queue at cap 5/5.
+
+## 2026-09-02 sweep state (scheduled, tick 17)
+
+- **Time:** ~1:50 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** #72402, #72394, #71430, #69157, #69150.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `apache/main`**; **5/5 current**, **0 failed** (merge-base fix for
+  cherry-pick branches); live heads `b453e77f`, `c4cb024b`, `9a678d5c`,
+  `242ba592`, `600523e7`.
+- **CI:** **0 failures**; small matrix **pending** post tick-16 rebase (2 pending
+  on most PRs).
+- **#72394, #69157, #69150:** **APPROVED**; await CI completion.
+- **#72402, #71430:** REVIEW_REQUIRED; no actionable CR.
+- **Learn:** learning log updated — cherry-pick branches break `git merge-base`;
+  maintain script now uses GitHub compare + `gh pr update-branch` fallback.
+- **Replenishment:** **skipped** — queue at cap 5/5.
+
+## 2026-09-02 sweep state (scheduled, tick 16)
+
+- **Time:** ~1:44 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** #72402, #72394, #71430, #69157, #69150.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`; **5 rebases** via
+  `gh pr update-branch --rebase`): all five were **1 behind `main`**; now **0 behind**
+  (heads `b453e77f`, `c4cb024b`, `9a678d5c`, `242ba592`, `600523e7`); CI rerunning.
+- **CI:** **0 failures**; matrix **pending** post-rebase on all five.
+- **#72394, #69157, #69150:** **APPROVED**; await CI completion.
+- **#72402, #71430:** REVIEW_REQUIRED; no actionable CR; await CI + maintainer review.
+- **Healthy count:** 5/5 contributor-actionable post-rebase; 3/5 APPROVED pending CI.
+- **Learn:** no skill change — main advanced since tick 15; rebase pattern unchanged.
+- **Replenishment:** **skipped** — queue at cap 5/5.
+
 ## 2026-09-02 sweep state (scheduled, tick 15)
 
 - **Time:** ~1:39 PM PT.

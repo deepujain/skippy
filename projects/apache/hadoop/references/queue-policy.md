@@ -11,6 +11,98 @@ target as actionable.
 Base branch: `trunk`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/hadoop`).
 
+## 2026-09-02 sweep state (scheduled, tick 20)
+
+- **Time:** ~2:22 PM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 **0
+  behind `apache/trunk`** (`abbc78d4`); no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED** (Hexiaoqiao on head) + **all green**;
+  open thread (tolerancePercent > 0) addressed on same head via `if (tolerancePercent > 0)`;
+  merge-ready.
+- **#8389, #8388, #8306, #8307:** **all green**; #8306/#8307 **CHANGES_REQUESTED**
+  stale (EnricoMi/steveloughran on old heads; fixes on head).
+- **#8334** (`ef049ad3`), **#8310** (`2fecd89c`): GHA **green**; Jenkins **pending**
+  (builds 11/19).
+- **#8670** (`e2ac56d3`): GHA Build **pending** + Jenkins build 3 **pending**.
+- **Healthy count:** 5/8 fully green; #8335 merge-ready; 3 pending Jenkins/GHA.
+- **Learn:** no skill change — unchanged from tick 19; no departed PRs.
+- **Replenishment:** **skipped** — verified over-cap **8 open > target 5**.
+
+## 2026-09-02 sweep state (scheduled, tick 19)
+
+- **Time:** ~2:03 PM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 **0 behind
+  `apache/trunk`** (`abbc78d4`); no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED** + **all green**; merge-ready.
+- **#8389, #8388, #8306, #8307:** **all green**; #8306/#8307 **CHANGES_REQUESTED**
+  stale on old heads.
+- **#8334** (`ef049ad3`), **#8310** (`2fecd89c`): GHA **green**; Jenkins **pending**
+  (builds 11/19).
+- **#8670** (`e2ac56d3`): GHA Build **pending** + Jenkins build 3 **pending**.
+- **Healthy count:** 5/8 fully green; #8335 merge-ready; 3 pending Jenkins/GHA.
+- **Learn:** no skill change — unchanged from tick 18.
+- **Replenishment:** **skipped** — verified over-cap **8 open > target 5**.
+
+## 2026-09-02 sweep state (scheduled, tick 18)
+
+- **Time:** ~1:54 PM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 **0 behind
+  `apache/trunk`** (`abbc78d4`); no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED** + **all green** (GHA + Yetus + Jenkins build 11);
+  `tolerancePercent > 0` guard on head; merge-ready.
+- **#8389, #8388, #8306, #8307:** **all green** (GHA + Yetus + Jenkins); #8306/#8307
+  **CHANGES_REQUESTED** stale on old heads (steveloughran/EnricoMi; fixes on head).
+- **#8334** (`ef049ad3`), **#8310** (`2fecd89c`): GHA **green**; Jenkins **pending**
+  (builds 11/19).
+- **#8670** (`e2ac56d3`): GHA Build **IN_PROGRESS** + Jenkins build 3 **pending**
+  (post tick-14 empty retrigger; #8702 fork fix in effect).
+- **Healthy count:** 5/8 fully green (#8335 merge-ready, #8389/#8388/#8306/#8307);
+  #8334/#8310/#8670 pending Jenkins/GHA.
+- **Learn:** no skill change — no departed PRs, no new failure shapes since tick 17.
+- **Replenishment:** **skipped** — verified over-cap **8 open > target 5**.
+
+## 2026-09-02 sweep state (scheduled, tick 17)
+
+- **Time:** ~1:49 PM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 **0 behind
+  `apache/trunk`** (`abbc78d4`); no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED** + **all green** (GHA + Yetus + Jenkins);
+  merge-ready.
+- **#8389, #8388, #8306, #8307:** **all green**; #8306/#8307 CR stale on old heads.
+- **#8334, #8310:** GHA **green**; Jenkins **pending** (builds 11/19).
+- **#8670** (`e2ac56d3`): GHA Build **pending** + Jenkins build 3 **pending**.
+- **Healthy count:** 5/8 fully green; #8335 merge-ready; 3 pending Jenkins/GHA.
+- **Learn:** no skill change — unchanged from tick 16.
+- **Replenishment:** **skipped** — verified over-cap **8 open > target 5**.
+
+## 2026-09-02 sweep state (scheduled, tick 16)
+
+- **Time:** ~1:43 PM PT.
+- **Departed:** none.
+- **Open PRs (8/5):** #8670, #8389, #8388, #8335, #8334, #8310, #8307, #8306.
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all 8 **0 behind
+  `apache/trunk`** (`abbc78d4`); no rebases or pushes.
+- **#8335** (`35cad907`): **APPROVED** + **all green** (GHA + Yetus + Jenkins build 11);
+  merge-ready; Hexiaoqiao tolerancePercent thread open (non-blocking nit).
+- **#8389, #8388, #8306, #8307:** **all green** (GHA + Yetus + Jenkins); #8306/#8307
+  **CHANGES_REQUESTED** stale on old heads; fixes on current heads.
+- **#8334** (`ef049ad3`), **#8310** (`2fecd89c`): GHA **green**; Jenkins **pending**
+  (builds 11/19).
+- **#8670** (`e2ac56d3`): GHA Build **IN_PROGRESS** + Jenkins build 3 **pending**
+  (post tick-14 empty retrigger); triage/notify green.
+- **Healthy count:** 5/8 fully green (#8335 merge-ready, #8389/#8388/#8306/#8307 CI
+  green); #8334/#8310/#8670 pending Jenkins/GHA.
+- **Learn:** no skill change — no new peer merges or failure shapes since tick 15.
+- **Replenishment:** **skipped** — verified over-cap **8 open > target 5**.
+
 ## 2026-09-02 sweep state (scheduled, tick 15)
 
 - **Time:** ~1:36 PM PT.

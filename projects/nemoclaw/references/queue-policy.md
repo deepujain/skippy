@@ -52,6 +52,126 @@ target as actionable.
 - Learn: no skill change (advisor infra pattern unchanged; #10820/#10825).
 - Replenishment: **blocked at cap** 5/5; next candidate #10773 when slot opens.
 
+## 2026-09-02 sweep state (scheduled, tick 19)
+
+- **Time:** ~2:19 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311),
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`8c974afa`); heads unchanged: `0a7ced0d`, `06ec3e9f`, `c8c862dd`,
+  `d40f3de1`, `bea7aef2`; no rebases or pushes.
+- **CI:** Specialist advisor **lifecycle/upload failures** on all five (7–8/9 lanes
+  fail; logs: `LIFECYCLE_OUTCOME=failure`, missing artifact dir); **not PR code**.
+  CodeRabbit + guardrails pass on all five.
+- **#10311:** **CHANGES_REQUESTED stale** (cjagwani on `a74e2526`/`76bab65a`);
+  timeout-retry fix on `d40f3de1`; posted re-review request; blocked on advisor infra
+  + exact-head human re-review.
+- **#10818–#10704, #10309:** REVIEW_REQUIRED; no actionable human CR; advisor infra
+  red lanes only.
+- **Healthy count:** 0/5 merge-ready (advisor infra gate + #10311 stale human CR).
+- **Learn:** no skill change — advisor lifecycle failures match existing model-protocol
+  infra guidance in project skill; correlates with peer [#10888](https://github.com/NVIDIA/NemoClaw/pull/10888)
+  review refactor merge (unrelated to queue PR code).
+- **Replenishment:** **blocked at cap** 5/5; [#10852](https://github.com/NVIDIA/NemoClaw/pull/10852)
+  when slot opens.
+
+## 2026-09-02 sweep state (scheduled, tick 18)
+
+- **Time:** ~1:59 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311),
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`8c974afa`); heads unchanged from tick 17 (`0a7ced0d`, `06ec3e9f`,
+  `c8c862dd`, `d40f3de1`, `bea7aef2`); no rebases or pushes.
+- **CI:** **0 failures**; Specialist advisor **pending/rerunning** post tick-17
+  rebase (1–2 lanes pass early; remainder in progress on all five).
+- **#10311:** **CHANGES_REQUESTED** stale (cjagwani Sep 1 on pre-`d40f3de1` head);
+  timeout-retry fix in `d40f3de1`; await exact-head re-review after advisor green.
+- **#10818–#10309:** REVIEW_REQUIRED; CodeRabbit commented; no actionable human CR
+  on current heads.
+- **Healthy count:** 0/5 pending advisor rerun (expected post-rebase).
+- **Learn:** no skill change — peer merges (#10896, #10894, #10892) unrelated to
+  queue maintenance patterns.
+- **Replenishment:** **blocked at cap** 5/5; [#10852](https://github.com/NVIDIA/NemoClaw/pull/10852)
+  queued when slot opens.
+
+## 2026-09-02 sweep state (scheduled, tick 17)
+
+- **Time:** ~1:52 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311),
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=5`): all five rebased
+  onto `main` (`8c974afa`, moved from `80e15df4`); new heads:
+  `0a7ced0d`, `06ec3e9f`, `c8c862dd`, `d40f3de1`, `bea7aef2`; advisor rerunning.
+- **CI:** **0 failures**; Specialist advisor **pending** on all five (guardrails/CodeRabbit
+  pass on most).
+- **#10311:** **CHANGES_REQUESTED** stale (cjagwani pre-rebase); timeout-retry fix
+  preserved on rebased head `d40f3de1`; await exact-head re-review post-advisor.
+- **#10818–#10309:** REVIEW_REQUIRED; no actionable human/bot CR on new heads.
+- **Healthy count:** 0/5 pending advisor rerun (expected post-rebase).
+- **Learn:** no skill change — main churn requires per-tick rebase (existing guidance).
+- **Replenishment:** **blocked at cap** 5/5; [#10852](https://github.com/NVIDIA/NemoClaw/pull/10852)
+  open when slot opens.
+
+## 2026-09-02 sweep state (scheduled, tick 16)
+
+- **Time:** ~1:47 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311),
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`80e15df4`); heads unchanged from tick 15; no rebases or pushes.
+- **CI:** **5/5 fully green** — 9/9 Specialist advisor + guardrails on every head
+  (0 failures, 0 pending).
+- **#10705, #10704, #10309, #10818:** 9/9 green; REVIEW_REQUIRED; no actionable CR.
+- **#10311:** 9/9 green; **CHANGES_REQUESTED** stale (cjagwani on `a74e2526`);
+  timeout-retry fix on head `a1cb11da`; await exact-head re-review.
+- **Healthy count:** 4/5 contributor-clear; #10311 blocked on stale human CR.
+- **Learn:** no skill change — state unchanged from tick 15.
+- **Replenishment:** **blocked at cap** 5/5; [#10852](https://github.com/NVIDIA/NemoClaw/pull/10852)
+  open (policy dry-run overlap area when slot opens).
+
+## 2026-09-02 sweep state (scheduled, tick 15)
+
+- **Time:** ~1:41 PM PT.
+- **Departed:** none.
+- **Open PRs (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311),
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all five **0
+  behind `main`** (`80e15df4`); heads unchanged from tick 14:
+  `f23c6f4d`, `aa9ed878`, `7854fd13`, `a1cb11da`, `0f27ff7f`; no rebases or pushes.
+- **CI:** **5/5 fully green** — 9/9 Specialist advisor + guardrails on every head
+  (0 failures, 0 pending); #10818 Test design lane green post tick-14 retrigger.
+- **#10705, #10704, #10309:** 9/9 green; REVIEW_REQUIRED; no actionable human/bot CR.
+- **#10818:** 9/9 green; REVIEW_REQUIRED; CodeRabbit commented only.
+- **#10311:** 9/9 green; **CHANGES_REQUESTED** stale (cjagwani on `a74e2526`);
+  timeout-retry fix on head `a1cb11da`; await exact-head re-review.
+- **Healthy count:** 4/5 contributor-clear (#10818/#10705/#10704/#10309); #10311
+  blocked on stale human CR despite fix on head.
+- **Learn:** no skill change — peer #10896/#10894 merges (docs/lockfile) add no new
+  patterns; #10773 **closed** (replenish candidate removed).
+- **Replenishment:** **blocked at cap** 5/5. When slot opens: re-screen issues;
+  [#10852](https://github.com/NVIDIA/NemoClaw/pull/10852) still open (policy dry-run
+  overlap area).
+
 ## 2026-09-02 sweep state (scheduled, tick 14)
 
 - **Time:** ~1:34–1:35 PM PT.

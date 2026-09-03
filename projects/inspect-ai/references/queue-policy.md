@@ -8,6 +8,139 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-02 sweep state (scheduled, tick 16)
+
+- **Time:** ~2:21 PM PT.
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all four **0
+  behind `main`** (`1de5f74f`); heads unchanged: `9d9cab04`, `3a072437`, `d88168bd`,
+  `7c90f4a5`; no rebases or pushes.
+- **CI:** **4/4 green** (0 failures, 0 pending).
+- **#5174, #5181:** **APPROVED** on current heads + CI green; await maintainer merge.
+- **#5195:** **CHANGES_REQUESTED stale** (@dragonstyle on pre-rebase `d3db5927`);
+  tick-13 CR fix on `7c90f4a5`; CI green; await exact-head re-review.
+- **#4950:** REVIEW_REQUIRED; ransomr design discussion (regex vs #4758); threads
+  outdated post-rebase; no contributor action.
+- **Healthy count:** 2/4 merge-ready (#5174, #5181 APPROVED); #5195 pending re-review.
+- **Learn:** no skill change — no new merges or review patterns since tick 15;
+  ts-mono#454 still open for #4763.
+- **Replenish:** **verified maximum 4/4** — no slot. When a slot opens:
+  [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) →
+  [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454) (open);
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) → peer
+  claim (yinli-systems, no open PR).
+
+## 2026-09-02 sweep state (scheduled, tick 15)
+
+- **Time:** ~2:01 PM PT.
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=0`): all four **0
+  behind `main`** (`1de5f74f`); heads `9d9cab04`, `3a072437`, `d88168bd`,
+  `7c90f4a5`; no pushes this tick.
+- **CI:** **0 failures**; #5174 `test (3.10/3.11)` **pending**; others green.
+- **#5181:** **APPROVED** + **all green**; merge-ready.
+- **#5174:** **APPROVED**; await test matrix completion.
+- **#5195:** **CHANGES_REQUESTED** stale (dragonstyle Sep 2 pre-`7c90f4a5`);
+  checklist addressed (Agent review section, explicit-usage test, Co-authored-by
+  hsusul); await exact-head re-review.
+- **#4950:** REVIEW_REQUIRED; ransomr design thread (regex vs #4758); all CI green.
+- **Learn:** no skill change — peer #5192/#5196/#5197 merges unrelated to queue.
+- **Replenish:** **verified maximum 4/4** — no slot. When slot opens: #4763 →
+  ts-mono#454; #5177 peer claim.
+
+## 2026-09-02 sweep state (scheduled, tick 14)
+
+- **Time:** ~1:53-2:02 PM PT.
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=4`): all four rebased
+  onto current `main` and force-pushed to `fork` (heads `9d9cab04`, `3a072437`,
+  `d88168bd`, `7c90f4a5`); **0 behind** after push.
+- **CI:** **4/4 green** post-rebase poll (0 failures, 0 pending).
+- **#5174:** **APPROVED** (@dragonstyle on head `3a072437`) + CI green; await merge.
+- **#5181:** **APPROVED** + CI green; await merge.
+- **#5195:** **CHANGES_REQUESTED stale** (@dragonstyle on pre-rebase `d3db5927`);
+  tick-13 CR fix preserved on `7c90f4a5` (explicit-usage test, Agent review,
+  #5092 credit); CI green; await exact-head re-review.
+- **#4950:** REVIEW_REQUIRED; ransomr design discussion (regex vs #4758 structural);
+  threads outdated post-rebase; no contributor action.
+- **Healthy count:** 2/4 merge-ready (#5174, #5181 APPROVED); #5195 pending re-review.
+- **Learn:** no skill change — @dragonstyle approved #5174 during tick (format_template
+  CoT fix); peer [#5192](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5192)
+  merged (Gemini Flash aliases, unrelated); ts-mono#454 still open for #4763.
+- **Replenish:** **verified maximum 4/4** — no slot. When a slot opens:
+  [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) →
+  [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454) (open);
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) → peer
+  claim (yinli-systems, no open PR).
+
+## 2026-09-02 sweep state (scheduled, tick 13)
+
+- **Time:** ~1:42 PM PT.
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=4`): all four rebased
+  onto current `main` and force-pushed (heads `5c0d4210`, `61fd91e4`, `1d6ce9dd`,
+  `d9422b0f`); **0 behind** after push.
+- **CI:** **0 failures**; matrix **rerunning** post-rebase (pending on all four).
+- **#5181:** **APPROVED** (await CI completion).
+- **#5195:** **CHANGES_REQUESTED** (dragonstyle, pre-rebase); verification comment
+  positive; await exact-head re-review after CI.
+- **#4950:** REVIEW_REQUIRED; ransomr threads **outdated** post-rebase; await design
+  direction on refreshed head.
+- **#5174:** REVIEW_REQUIRED; no actionable CR; await maintainer review.
+- **Learn:** no skill change — peer [#5196](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5196)/[#5197](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5197)
+  merged (CI perf, unrelated).
+- **Replenish:** **verified maximum 4/4** — no slot. When a slot opens:
+  [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) → ts-mono#454;
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) → peer claim.
+
+## 2026-09-02 sweep state (scheduled, tick 13)
+
+- **Time:** ~1:35-1:50 PM PT.
+- **Departed:** none.
+- **Open PRs (4/4):** [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950),
+  [#5174](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5174),
+  [#5181](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5181),
+  [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195).
+- **Maintain** (`sweep-maintain.sh scheduled`, `MAINTAIN_PUSHED=4` + **#5195 review fix**):
+  all four rebased onto current `main` via force-with-lease to `fork` (heads
+  `5c0d4210`, `61fd91e4`, `1d6ce9dd`, `d9422b0f`); 0 behind after push.
+- **#5195:** pushed `d9422b0f` addressing @dragonstyle CR: explicit-usage regression
+  test (lifted from #5092), `Co-authored-by: Henry Su`, PR body `### Agent review`
+  section and #5092 credit; CI green; **CHANGES_REQUESTED stale** on prior review,
+  await exact-head re-review.
+- **#5181:** **APPROVED** + CI green; await maintainer merge.
+- **#5174, #4950:** REVIEW_REQUIRED; CI green; #4950 maintainer design discussion
+  (ransomr regex vs #4758 structural approach, threads outdated post-rebase); no
+  contributor action.
+- **CI:** **4/4 green** post-rebase (0 failures, 0 pending after poll).
+- **Healthy count:** 1/4 merge-ready (#5181 APPROVED); #5195 contributor-actionable
+  pending re-review after CR fix.
+- **Learn:** no skill change — peer [#5196](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5196)/
+  [#5197](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5197) merged (CI perf,
+  viewer fixture gate, unrelated); co-author/Agent-review checklist already in
+  `AGENTS.md`.
+- **Replenish:** **verified maximum 4/4** — no slot. When a slot opens:
+  [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) →
+  [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454) (open);
+  [#5177](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5177) → peer
+  claim (yinli-systems, no open PR).
+
 ## 2026-09-02 sweep state (scheduled, tick 12)
 
 - **Time:** ~11:57 AM PT (CI green ~12:02 PM PT post-rebase poll).

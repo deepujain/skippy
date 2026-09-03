@@ -1,9 +1,5 @@
 # Skippy
 
-<p align="center">
-  <img src="images/skippy.png" alt="Skippy — project mascot" width="280">
-</p>
-
 ## Rigorous engineering for coding agents
 
 Coding agents generate plausible patches quickly. They are much weaker at the
