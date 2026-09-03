@@ -9,6 +9,13 @@ rules, verification gates, and portable project skills. Each
 `projects/<slug>/SKILL.md` captures live repository conventions, validation,
 review handling, and submission practices for one upstream project.
 
+You describe the outcome; Skippy runs the method—reproduce the problem, pick the
+owning boundary, verify at a real edge, and keep open PRs merge-ready without
+re-explaining the repo every session.
+You get accountable delivery you can trust or hand off: visible plans, signed
+commits, addressed review threads, and proof the change works—not a patch that
+only looked right in chat.
+
 ## Rigorous engineering for coding agents
 
 Coding agents generate plausible patches quickly. They are much weaker at the
