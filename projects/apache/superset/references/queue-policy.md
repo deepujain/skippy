@@ -11,6 +11,11 @@ target as actionable.
 Base branch: `master`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/superset`). Local clone: `/Users/dejain/nvidia/oss/worktrees/apache/superset`.
 
+## 2026-09-03 sweep state (manual-sweep-all)
+
+- **Maintain:** 2/5 current, 0 pushes; 2/5 healthy; both REVIEW_REQUIRED.
+- **Replenish:** 3 slots — prior overlap/policy blockers still apply; re-screen next tick.
+
 ## 2026-09-02 sweep state (scheduled, tick 3)
 
 - **Time:** ~12:51 PM PT.
