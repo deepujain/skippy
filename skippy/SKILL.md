@@ -113,6 +113,20 @@ only independent, bounded work that materially improves confidence. Use
 isolated worktrees or output paths for writers. Prefer a single owner when one
 agent can finish safely.
 
+For `skippy sweep all`, project repositories are the stable ownership
+boundaries. Launch one independent local subagent per configured project in one
+parallel tool call. Each project agent owns the entire
+`Maintain → Learn and improve → Replenish` lifecycle using the decision system,
+relevant playbooks, project skill, task artifact, helper programs, and
+verification gate. Do not run Maintain serially in the main agent first and do
+not split one project's lifecycle across phase agents.
+
+The main agent owns delegation briefs, isolation, receipt review, recovery of
+stopped/incomplete project agents, cross-project integration, and the final
+combined summary. A multi-project sweep is incomplete while any project agent
+is stopped, missing, or has returned only status without completing actionable
+work.
+
 When client support allows model selection, use the strongest reasoning model
 for cross-cutting design and adversarial judgment, a precise implementation
 model for scoped code changes, and independent reviewers for skeptical checks.

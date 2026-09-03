@@ -187,6 +187,20 @@ learning scan, and picks screened, non-overlapping follow-on work when policy
 allows. It uses the configured queue target, or **5** healthy open changes when
 no target is recorded, unless repository policy sets a lower maximum.
 
+For every configured project at once, use:
+
+```text
+skippy sweep all
+```
+
+Skippy launches one independent local subagent per project in parallel. Each
+project agent owns the complete cycle: maintain every open PR through rebases,
+review feedback, validation, and CI; learn from current outcomes and improve the
+project guidance when evidence warrants it; then replenish eligible queue
+slots. The main agent coordinates isolated project boundaries, recovers stopped
+agents, verifies each receipt, and produces one combined summary after every
+project finishes.
+
 ### 3. Schedule it
 
 Ask your coding agent to schedule it:

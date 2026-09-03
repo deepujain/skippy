@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
-# Run the Maintain phase for all queue projects.
-# The agent appends the summary only after Learn and Replenish are complete.
-# Usage: sweep-all-projects.sh [reason]
+# Compatibility helper for an explicitly requested maintenance-only pass.
+# Full sweeps require one parallel local subagent per project.
+# Usage: sweep-all-projects.sh --maintenance-only [reason]
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-REASON="${1:-manual-sweep-all}"
+if [[ "${1:-}" != "--maintenance-only" ]]; then
+  echo "sweep-all-projects.sh is maintenance-only and is not a full sweep." >&2
+  echo "For 'skippy sweep all', launch one parallel local subagent per project." >&2
+  echo "Each subagent must complete Maintain, Learn, and Replenish." >&2
+  exit 2
+fi
+shift
+
+REASON="${1:-manual-maintenance-all}"
 PROJECTS=(skillspector nemoclaw inspect-ai hadoop airflow superset)
 
 rm -rf "$ROOT/.skippy/maintain-locks"/* 2>/dev/null || true

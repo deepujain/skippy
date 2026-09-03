@@ -12,6 +12,7 @@ responsibility.
 | Implementer | The contract is precise and the edit is bounded | A focused diff plus tests and commands run |
 | Adversarial reviewer | A diff is ready and regression risk is meaningful | Findings grouped as act on, consider, or dismissed with evidence |
 | Verifier | A real runtime, UI, CLI, storage, or lifecycle boundary changed | Independent execution evidence and environmental limits |
+| Project sweep owner | A multi-project queue sweep has repository-isolated lifecycles | Complete Maintain, Learn/improve, Replenish, and a structured project receipt |
 
 ## Rules
 
@@ -38,6 +39,12 @@ Before starting a delegate, the lead records:
 
 Do not delegate a sequence where a later agent must guess the state left by an
 earlier agent. Keep it serial, or split it at a checked boundary.
+
+For a multi-project contribution sweep, parallelize by repository, not by
+phase. One local subagent owns each project's full ordered lifecycle and uses
+isolated project worktrees. The lead must launch all project owners together;
+it must not perform serial pre-maintenance that changes their starting heads.
+A stopped owner is resumed or replaced before integration.
 
 ## Integration protocol
 

@@ -10,6 +10,12 @@ separate bash rebase step.
 | **Learn** | Comments, CI failures, bot reviews (CodeRabbit, etc.); merged/closed PRs; update skill if needed |
 | **Replenish** | Fill missing slots or record source-backed blocker per slot |
 
+For a manual `skippy sweep all`, launch one local subagent per project in
+parallel. Each project agent owns all three steps for its repository using the
+project skill and isolated worktrees. The main agent reviews every project
+receipt, recovers stopped agents, and writes only the combined summary. It does
+not perform a serial Maintain pass first.
+
 ## How scheduling works (local IDE)
 
 One **foreground** loop process fires every project on the same interval. Each tick

@@ -27,6 +27,56 @@ Git transport independently: configure HTTPS with `gh auth setup-git` when
 appropriate, and if an OAuth token rejects a workflow-bearing push, probe
 the configured fork SSH remote before requesting broader token scope.
 
+## Multi-project sweep orchestration
+
+For `skippy sweep all` or any sweep spanning more than one project, the main
+agent must launch one independent local subagent per project in a single
+parallel delegation step. Each project subagent owns its complete ordered
+lifecycle:
+
+1. Load the Skippy skill, relevant engineering principles and decision rules,
+   this playbook, PR maintenance and continuous-learning guidance, the project
+   adapter, queue policy, learning log, and current repository instructions.
+2. Create or refresh a project-scoped task artifact with an observable
+   completion gate and isolated checkout/worktree boundaries.
+3. **Maintain:** reconcile departed PRs and fully maintain every authored open
+   PR. Inspect live heads, conflicts, signatures, review bodies, latest inline
+   thread replies, human and bot comments, CI checks, and raw failure logs.
+   Rebase, resolve conflicts, make code/test changes, run project validation,
+   commit and push only to the contributor fork, then reply, react, resolve,
+   and re-read the exact new head as project policy permits.
+4. **Learn and improve:** scan bounded own and peer outcomes, classify evidence,
+   update the narrowest skill/log only for a durable lesson, and validate the
+   instruction change.
+5. **Replenish:** evaluate every eligible missing slot independently. Perform
+   complete issue, linked-development, overlap, policy, and evidence screening;
+   finish qualified contributions end to end or record a source-backed blocker
+   for every unfilled slot.
+6. Return one structured project receipt containing open/target,
+   healthy/target, Maintain results, concrete Action results, a two-line Self
+   Learning result, departed PRs, exact remaining blockers, validation, remote
+   delivery state, and local files changed.
+
+The main agent is the coordinator and integrator. It must not run a serial
+all-project Maintain pass before delegation, because that splits ownership,
+duplicates Git operations, and makes the later project agent inherit mutable
+state it did not produce. The main agent:
+
+- writes complete delegation briefs and assigns one isolated project boundary
+  to each subagent;
+- waits for every project receipt, reviewing it against live repository
+  evidence and the completion gate;
+- resumes or restarts a stopped, failed, or incomplete project subagent instead
+  of silently omitting that project;
+- performs only cross-project integration and safe repair that cannot remain
+  project-local; and
+- appends one combined summary after every project lifecycle is complete or has
+  a concrete external blocker.
+
+Do not call `scripts/sweep-all-projects.sh` as the implementation of a full
+sweep. It is a maintenance-only compatibility helper and cannot perform review
+repair, learning, replenishment, or subagent orchestration.
+
 1. **Maintain:** Reconcile departed contributions and maintain every authored open PR or
    patch. Resolve every contributor-actionable review, CI, conflict, signature,
    and stale-state item for that contribution. If a safe rebase is needed,
@@ -86,9 +136,11 @@ same tick (other PRs, Learn, Replenish).
 Fix it (or record a maintainer-design blocker on that PR only), verify, then
 proceed to the next PR and to Learn → Replenish.
 
-**Sweep log summary table:** At the end of each project tick (and after
-multi-project batch sweeps), append a summary table to `.skippy/sweep-output.log`
-via `scripts/sweep-log-summary.sh` (fixed-width box table in the log) with columns:
+**Sweep log summary table:** At the end of a single-project tick, append its
+summary directly. During a multi-project sweep, each project subagent returns
+its row to the main agent without writing the global table; the main agent
+appends one combined table only after reviewing every receipt. Use
+`scripts/sweep-log-summary.sh` (fixed-width box table in the log) with columns:
 Project, Open, Healthy, Maintain, Action, Self Learning.
 
 - **Maintain:** state the number of rebases, pushes, conflicts resolved, or that
