@@ -56,6 +56,13 @@ the configured target is reached, or record the specific policy, authority,
 environment, overlap, or validation blocker that makes safe replenishment
 impossible.
 
+**Rebase conflicts are maintain work.** When a PR is `mergeable=CONFLICTING`,
+GitHub shows a conflict banner, or `sweep-maintain-pr.sh` logs `REBASE CONFLICT`,
+checkout the branch, rebase onto upstream default, resolve hunks, validate,
+force-push with lease, and re-check CI. Do not treat bash `FAILED` or
+`gh rebase failed: conflicts` as an external blocker — finish the rebase in
+the agent pass (see [contribution-queue.md](../playbooks/contribution-queue.md)).
+
 For a contribution queue, treat every PR and candidate as an independent work
 unit. Never serialize replenishment behind another PR's active CI or review,
 and never terminate a sweep because one candidate is stale or needs direction.

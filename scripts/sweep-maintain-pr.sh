@@ -207,7 +207,7 @@ if [[ "$REBASE_FAIL" == "1" ]]; then
     exit 0
   fi
   maintain_cleanup
-  exit 1
+  exit 2
 fi
 
 NEW=$(git -C "$WT" rev-parse --short HEAD)

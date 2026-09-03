@@ -67,9 +67,13 @@ This is ONE end-to-end pass. NOT a status-only report. NOT a rebase-only pass.
 
 ### 1. Maintain
 - Reconcile departed contributions
-- Maintain EVERY open authored PR: inspect live head, rebase if stale, fix CI and
+- Maintain EVERY open authored PR: inspect live head, rebase if stale, **resolve
+  merge conflicts** (checkout → rebase → fix hunks → validate → push — never
+  stop at \`REBASE CONFLICT\` / \`mergeable=CONFLICTING\`), fix CI and
   actionable reviews (human and bot: CodeRabbit, Greptile, pre-commit-ci, etc.),
   push signed commits, re-read checks after push
+- If \`sweep-maintain-pr.sh\` logged \`REBASE CONFLICT\` for a PR, that PR still
+  needs agent conflict resolution even when the bash tick summary shows \`failed\`
 - Produce the project skill sweep action table (one row per PR with Action Taken)
 
 ### 2. Learn

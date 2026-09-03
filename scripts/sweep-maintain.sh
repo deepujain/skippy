@@ -131,7 +131,12 @@ for p in json.load(sys.stdin):
   if "$MAINTAIN" "$REPO" "$pr" "$branch" "$CLONE" "$FORK_REMOTE" "$UPSTREAM_REMOTE" "$MAIN_BRANCH"; then
     :
   else
-    "$LOG" "$PROJECT" "MAINTAIN #$pr FAILED ($branch)"
+    ec=$?
+    if [[ "$ec" -eq 2 ]]; then
+      "$LOG" "$PROJECT" "MAINTAIN #$pr CONFLICT ($branch) — resolve rebase, validate, push"
+    else
+      "$LOG" "$PROJECT" "MAINTAIN #$pr FAILED ($branch)"
+    fi
     echo "failed" >>"$TRACKER"
   fi
 done

@@ -12,7 +12,7 @@ remains incomplete.
 
 | Step | Every tick |
 | --- | --- |
-| **Maintain** | All open authored PRs — rebase if stale, fix CI, address actionable review comments (human and bot), push signed commits, produce project-skill sweep action table (one row per PR) |
+| **Maintain** | All open authored PRs — rebase if stale, **resolve merge conflicts**, fix CI, address actionable review comments (human and bot), push signed commits, produce project-skill sweep action table (one row per PR) |
 | **Learn** | Bounded scan: review threads, CI failure shapes, CodeRabbit/Greptile/pre-commit-ci and other bot feedback; departed and peer PRs (merged and closed-without-merge). Adopt durable lessons → project learning log and/or project skill when evidence-backed |
 | **Replenish** | Fill each missing slot via full issue screen + contribution recipe, or record a **source-backed blocker per unfilled slot** |
 
@@ -36,6 +36,29 @@ the configured fork SSH remote before requesting broader token scope.
    an unresolved design decision. An active CI run or external
    review on one PR affects only that PR's health; it must not serially block
    independent work in other available slots.
+
+### Rebase conflicts are maintain work (not external blockers)
+
+When `mergeable=CONFLICTING`, GitHub shows a conflict banner, or
+`sweep-maintain-pr.sh` logs `REBASE CONFLICT`, the sweep is **not done** for
+that PR until you resolve it:
+
+1. Check out the PR branch in an isolated worktree (never the only checkout of
+   that branch if the main clone already holds it).
+2. Rebase onto upstream default (`main` / `trunk` / `master` per project skill).
+3. Resolve every conflict hunk — preserve upstream structure **and** the PR's
+   intended behavior (typical: keep both upstream changelog bullets and the PR's
+   `## Unreleased` entry; keep upstream refactors plus the PR's fix).
+4. Continue the rebase (`GIT_EDITOR=true git rebase --continue` when non-interactive).
+5. Run the project skill's focused validation (tests, lint) on the rebased head.
+6. Force-push with lease to the fork branch; re-read CI and review state.
+
+Do **not** treat `MAINTAIN #NNNN FAILED` or `gh rebase failed: conflicts` as
+"nothing to do on our side." Those mean the bash pre-step stopped; **Skippy
+must finish the rebase manually** before reporting the maintain step complete.
+Only stop on conflicts when a maintainer has an open unresolved design decision
+on the same hunk.
+
 2. **Learn:** Run the bounded continuous-learning scan (see
    [continuous-learning.md](continuous-learning.md)): inspect review comments,
    CI failures, and automated review bots on your open PRs; inspect departed
