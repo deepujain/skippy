@@ -69,6 +69,12 @@ apply the [maintain failure recovery table](../playbooks/contribution-queue.md#m
 verify `behind_by=0` / `mergeable≠CONFLICTING`, then **continue the sweep** —
 never hand off at the failure line.
 
+**Review comments are maintain work.** When human or bot threads are valid on the
+current head, fix in code (with a regression test when asked or non-obvious),
+reply on each thread concisely, and react when the platform allows it. Follow
+[pr-maintenance.md](../playbooks/pr-maintenance.md); do not leave actionable
+feedback unaddressed or answer only with a top-level PR comment.
+
 For a contribution queue, treat every PR and candidate as an independent work
 unit. Never serialize replenishment behind another PR's active CI or review,
 and never terminate a sweep because one candidate is stale or needs direction.
