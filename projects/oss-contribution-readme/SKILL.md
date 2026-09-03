@@ -1,6 +1,6 @@
 ---
 name: oss-contribution-readme
-description: Create or update a polished contribution matrix with linked project names, official logos, verified PR or patch counts, open and merged status, optional featured-project details, and LinkedIn-ready intro copy. Use when the user wants to update CONTRIBUTIONS.md, refresh the OSS matrix, refresh contribution counters, create a GitHub profile README, standalone OSS portfolio repo, contribution table with logos, public PR counts, tracker patch submissions, featured project table, or reusable open-source contribution showcase.
+description: Create or update a polished contribution matrix with linked project names, official logos, verified PR or patch counts, open and merged status, optional featured-project details, and LinkedIn-ready intro copy. Use when the user wants to update contribution counts in README.md, refresh the OSS matrix, refresh contribution counters, create a GitHub profile README, standalone OSS portfolio repo, contribution table with logos, public PR counts, tracker patch submissions, featured project table, or reusable open-source contribution showcase.
 ---
 
 # OSS Contribution README Skill
@@ -42,7 +42,7 @@ personal portfolio.
 | Type | Content |
 | --- | --- |
 | Inputs | Contributor name, GitHub username, target README path, project list, optional tracker URLs, preferred intro wording, optional featured projects |
-| Outputs | `CONTRIBUTIONS.md` (Skippy repo) or `README.md` (profile/showcase repos) with intro, contribution matrix, linked logos, verified counts, totals, and optional featured contribution table |
+| Outputs | `README.md` contribution sections (Skippy repo) or standalone `README.md` (profile/showcase repos) with intro, contribution matrix, linked logos, verified counts, totals, and optional featured contribution table |
 | Evidence | Count commands or source URLs, earliest contribution date for tenure claims, logo source links, `git diff --check` result |
 
 Preconditions:
@@ -255,7 +255,7 @@ the user asks.
 Before finalizing:
 
 ```bash
-git diff --check -- CONTRIBUTIONS.md README.md
+git diff --check -- README.md
 ```
 
 Also check:
@@ -270,13 +270,14 @@ Also check:
 - Public text contains no private tool attribution or generated-by language.
 
 If working in the Skippy repo and the user wants the update published, commit only
-`CONTRIBUTIONS.md` and directly related skill/template files. For other target
-repos, commit only `README.md` and directly related files. Leave unrelated dirty
-files untouched.
+the `README.md` contribution table sections and directly related skill/template
+files. For other target repos, commit only `README.md` and directly related
+files. Leave unrelated dirty files untouched.
 
 Publishing rule: requests such as "update contributions", "update the
-contribution matrix", and "refresh contribution counters" mean publish
-`CONTRIBUTIONS.md` in this repo after validation.
+contribution matrix", and "refresh contribution counters" mean update the
+`## Skippy-Assisted Contributions` and `## Non-Skippy Contributions` sections
+in `README.md` after validation.
 
 ## Quick Reference
 
@@ -287,5 +288,5 @@ contribution matrix", and "refresh contribution counters" mean publish
 | GitHub contributor link | `https://github.com/OWNER/REPO/pulls/USER` |
 | Logo size | `height="18"` |
 | Default sort | Project name ascending |
-| Validation | `git diff --check -- CONTRIBUTIONS.md README.md` plus visual/render inspection |
-| Publish Skippy update | Commit `CONTRIBUTIONS.md` and directly related skill/template files, then push |
+| Validation | `git diff --check -- README.md` plus visual/render inspection |
+| Publish Skippy update | Update contribution sections in `README.md`, commit, then push |
