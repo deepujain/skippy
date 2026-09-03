@@ -4,6 +4,11 @@
   <img src="images/skippy.png" alt="Skippy — project mascot" width="280">
 </p>
 
+Skippy is a layered engineering system for coding agents: playbooks, decision
+rules, verification gates, and portable project skills. Each
+`projects/<slug>/SKILL.md` captures live repository conventions, validation,
+review handling, and submission practices for one upstream project.
+
 ## Rigorous engineering for coding agents
 
 Coding agents generate plausible patches quickly. They are much weaker at the
