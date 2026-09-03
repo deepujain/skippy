@@ -20,6 +20,16 @@ Each tick runs **Maintain → Learn → Replenish** (all three mandatory):
 3. **Replenish** — fill each eligible missing slot through the full contribution
    recipe, or record a source-backed blocker per unfilled slot.
 
+End each tick by appending a summary table to `.skippy/sweep-output.log`:
+
+```bash
+scripts/sweep-log-summary.sh <reason> <project> \
+  --maintain "..." --action "..." --lesson "..."
+```
+
+`Lesson learned` must state skill/log updates from Learn, or `no skill change`
+with reason.
+
 Do not create overlapping or unvalidated work simply to reach the target. Continue
 until the target is reached, the verified maximum is reached, or each unfilled slot
 has a source-backed external blocker. Report completed actions, evidence, and the

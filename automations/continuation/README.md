@@ -49,7 +49,11 @@ those prompts before waiting 30 minutes.
 tail -f ~/nvidia/oss/skippy/.skippy/sweep-output.log
 ```
 
-Agent-completed sweeps append `SWEEP (...)` lines. Scheduler ticks:
+Agent-completed sweeps append `SWEEP (...)` lines and a **summary table** via
+`scripts/sweep-log-summary.sh` (columns: Project, Open, Healthy, Maintain,
+Action, Lesson learned — include skill/log updates from Learn).
+
+Scheduler ticks:
 `tail -f .skippy/sweep-scheduler.log`
 
 ## Permissions

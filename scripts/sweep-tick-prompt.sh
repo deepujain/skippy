@@ -93,7 +93,18 @@ This is ONE end-to-end pass. NOT a status-only report. NOT a rebase-only pass.
 - For each unfilled slot, record a source-backed blocker (overlap, policy, no
   qualified issue) — not a queue-wide "paused"
 
-Also update queue-policy.md when queue state changes.
+Also append the sweep summary table (required at end of every tick):
+
+\`\`\`bash
+${ROOT}/scripts/sweep-log-summary.sh ${REASON} ${PROJECT} \\
+  --maintain "<pushes/current/conflicts fixed>" \\
+  --action "<cap/replenish/CI/review outcome>" \\
+  --lesson "<learn step: skill/log update or why none>"
+\`\`\`
+
+For multi-project batch sweeps, use \`--all --tsv-file\` or repeated \`--row\`
+(see \`scripts/sweep-log-summary.sh\` header).
+
 Append a one-line outcome via: ${ROOT}/scripts/sweep-log.sh ${PROJECT} "SWEEP (${REASON}) <outcome>"
 
 Non-interactive: no approval prompts. Use the GitHub access ladder. Execute all three
