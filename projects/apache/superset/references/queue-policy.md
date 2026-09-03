@@ -9,7 +9,7 @@ Read the shared `references/contribution-queues.md` policy before treating this
 target as actionable.
 
 Base branch: `master`. Upstream remote: `apache`. Fork remote: `origin`
-(`deepujain/superset`). Local clone: `/Users/dejain/nvidia/oss/apache/superset`.
+(`deepujain/superset`). Local clone: `/Users/dejain/nvidia/oss/worktrees/apache/superset`.
 
 ## 2026-09-02 sweep state (scheduled, tick 3)
 

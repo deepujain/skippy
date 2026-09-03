@@ -24,7 +24,7 @@ Applies to both new PRs and updates to existing PRs.
 
 ## Project facts
 
-- Local checkout: `/Users/dejain/nvidia/oss/apache/superset`
+- Local checkout: `/Users/dejain/nvidia/oss/worktrees/apache/superset`
 - Upstream repo: `apache/superset`
 - Default branch: `master`
 - Fork/head owner: `deepujain`
@@ -82,7 +82,7 @@ Applies to both new PRs and updates to existing PRs.
 ## 2. Sync with upstream, create branch
 
 ```bash
-cd /Users/dejain/nvidia/oss/apache/superset
+cd /Users/dejain/nvidia/oss/worktrees/apache/superset
 git fetch apache
 git checkout master
 git pull apache master

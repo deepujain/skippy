@@ -98,7 +98,11 @@ fi
 git -C "$CLONE" fetch "$UPSTREAM" "$MAIN" --quiet
 git -C "$CLONE" fetch "$FORK_REMOTE" "$BRANCH" --quiet
 
-WT="$CLONE/.worktrees/maintain-$PR"
+OSS_ROOT="/Users/dejain/nvidia/oss"
+WORKTREES_ROOT="${SKIPPY_WORKTREES:-$OSS_ROOT/worktrees}"
+REL="${CLONE#$WORKTREES_ROOT/}"
+WT="$WORKTREES_ROOT/checkouts/$REL/maintain-$PR"
+mkdir -p "$(dirname "$WT")"
 git -C "$CLONE" worktree remove "$WT" --force 2>/dev/null || true
 rm -rf "$WT"
 git -C "$CLONE" worktree prune 2>/dev/null || true

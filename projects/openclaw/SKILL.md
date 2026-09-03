@@ -94,7 +94,7 @@ Use this loop to write MRs that are more likely to pass bot review, CI, and main
 **Do this before making any fixes.** Switch to main, update from upstream, then create the feature branch. Only after the new branch exists should any code be changed. Prefer **running these commands in the agent environment** (e.g. `run_terminal_cmd`) instead of asking the user to copy-paste.
 
 ```bash
-cd /Users/dejain/nvidia/oss/openclaw/openclaw
+cd /Users/dejain/nvidia/oss/worktrees/openclaw/openclaw
 git fetch upstream
 git checkout main
 git pull upstream main
@@ -184,7 +184,7 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 - **PR create command (preferred):**
 
 ```bash
-cd /Users/dejain/nvidia/oss/openclaw/openclaw
+cd /Users/dejain/nvidia/oss/worktrees/openclaw/openclaw
 gh pr create --repo openclaw/openclaw --base main --head deepujain:<branch> --title 'fix: short summary (Fixes #NNNNN)' --body-file PR_NNNNN_body.md
 ```
 
@@ -286,7 +286,7 @@ Do **not** answer the sweep with only a link summary. The default meaning of an 
 7. **Prefer posting a short PR comment with `gh`** when auth is healthy:
 
 ```bash
-cd /Users/dejain/nvidia/oss/openclaw/openclaw
+cd /Users/dejain/nvidia/oss/worktrees/openclaw/openclaw
 gh pr comment <url-or-number> --repo openclaw/openclaw --body 'Rebased on main. Addressed the review comments and reran the relevant tests locally. Should be good to go!'
 ```
 

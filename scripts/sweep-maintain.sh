@@ -10,7 +10,7 @@ LOG="$ROOT/scripts/sweep-log.sh"
 case "$PROJECT" in
   skillspector)
     REPO="NVIDIA/SkillSpector"
-    CLONE="/Users/dejain/nvidia/oss/nvidia/skillspector"
+    CLONE="/Users/dejain/nvidia/oss/worktrees/nvidia/skillspector"
     export PROJECT=skillspector
     if [[ -d "$CLONE/.git" ]]; then
       git -C "$CLONE" remote get-url fork &>/dev/null || \
@@ -25,7 +25,7 @@ case "$PROJECT" in
     ;;
   nemoclaw)
     REPO="NVIDIA/NemoClaw"
-    CLONE="/Users/dejain/nvidia/oss/nvidia/nemoclaw"
+    CLONE="/Users/dejain/nvidia/oss/worktrees/nvidia/nemoclaw"
     export PROJECT=nemoclaw
     FORK_REMOTE=origin
     UPSTREAM_REMOTE=upstream
@@ -33,7 +33,7 @@ case "$PROJECT" in
     ;;
   inspect-ai)
     REPO="UKGovernmentBEIS/inspect_ai"
-    CLONE="/Users/dejain/nvidia/oss/inspect-ai/inspect_ai"
+    CLONE="/Users/dejain/nvidia/oss/worktrees/inspect-ai/inspect_ai"
     export PROJECT=inspect-ai
     if [[ -d "$CLONE/.git" ]]; then
       git -C "$CLONE" remote get-url fork &>/dev/null || \
@@ -52,7 +52,7 @@ case "$PROJECT" in
     ;;
   hadoop)
     REPO="apache/hadoop"
-    CLONE="/Users/dejain/nvidia/oss/apache/hadoop"
+    CLONE="/Users/dejain/nvidia/oss/worktrees/apache/hadoop"
     export PROJECT=hadoop
     if [[ -d "$CLONE/.git" ]]; then
       git -C "$CLONE" remote get-url apache &>/dev/null || \
@@ -66,7 +66,7 @@ case "$PROJECT" in
     ;;
   airflow)
     REPO="apache/airflow"
-    CLONE="/Users/dejain/nvidia/oss/apache/airflow"
+    CLONE="/Users/dejain/nvidia/oss/worktrees/apache/airflow"
     export PROJECT=airflow
     if [[ -d "$CLONE/.git" ]]; then
       git -C "$CLONE" remote get-url apache &>/dev/null || \
@@ -80,7 +80,7 @@ case "$PROJECT" in
     ;;
   superset)
     REPO="apache/superset"
-    CLONE="/Users/dejain/nvidia/oss/apache/superset"
+    CLONE="/Users/dejain/nvidia/oss/worktrees/apache/superset"
     export PROJECT=superset
     if [[ -d "$CLONE/.git" ]]; then
       git -C "$CLONE" remote get-url apache &>/dev/null || \

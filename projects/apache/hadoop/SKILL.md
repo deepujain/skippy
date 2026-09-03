@@ -74,7 +74,7 @@ Use this loop for both new Hadoop PRs and existing PR sweeps:
 **Do this before making any fixes.** The default branch is `trunk`. Prefer running these commands in the agent environment where possible.
 
 ```bash
-cd /Users/dejain/nvidia/oss/apache/hadoop
+cd /Users/dejain/nvidia/oss/worktrees/apache/hadoop
 git fetch apache
 git checkout trunk
 git pull apache trunk
@@ -108,7 +108,7 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 - **Push to your fork** (`origin`), not `apache`.
 - **Before push, fix author or message if needed** so the final commit shows "Deepak Jain" and no tool attribution:
   ```bash
-  cd /Users/dejain/nvidia/oss/apache/hadoop
+  cd /Users/dejain/nvidia/oss/worktrees/apache/hadoop
   git commit --amend --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'HADOOP-12345. Short summary of the fix.'
   git push --no-verify --set-upstream origin HADOOP-12345-short-description
   ```
@@ -215,7 +215,7 @@ trigger comes from the user or an automated scheduled task.
 
 **Entry point:** User provides the PR URL (e.g. `https://github.com/apache/hadoop/pull/8336`). Start with **9.0** (fetch PR state and comments), then 9.1–9.5 as needed.
 
-**Hadoop specifics:** Base branch is **trunk** (not master). Remote for upstream is **apache**. Build/tests use **Maven** from repo root (`/Users/dejain/nvidia/oss/apache/hadoop`), e.g. `./mvnw test -pl <module> -am -Dtest=TestName` or `./mvnw compile -pl <module> -am`.
+**Hadoop specifics:** Base branch is **trunk** (not master). Remote for upstream is **apache**. Build/tests use **Maven** from repo root (`/Users/dejain/nvidia/oss/worktrees/apache/hadoop`), e.g. `./mvnw test -pl <module> -am -Dtest=TestName` or `./mvnw compile -pl <module> -am`.
 
 ### 9.0 Fetch latest from PR and reviewer comments (do this first)
 
@@ -239,7 +239,7 @@ trigger comes from the user or an automated scheduled task.
 **Branch name:** From the PR page, head is e.g. `deepujain:HDFS-17876-namenode-tracer-null-check` → use the part after the colon: `HDFS-17876-namenode-tracer-null-check`.
 
 ```bash
-cd /Users/dejain/nvidia/oss/apache/hadoop
+cd /Users/dejain/nvidia/oss/worktrees/apache/hadoop
 git fetch origin
 git checkout <branch-name>   # e.g. HDFS-17876-namenode-tracer-null-check
 git fetch apache
@@ -250,7 +250,7 @@ The agent may run the above, then push the rebased branch with `git push --no-ve
 
 ### 9.2 Run local tests (Maven, from repo root)
 
-Hadoop uses **Maven**. Run from the **repository root** (`/Users/dejain/nvidia/oss/apache/hadoop`). Set `JAVA_HOME` if needed (e.g. OpenJDK 17).
+Hadoop uses **Maven**. Run from the **repository root** (`/Users/dejain/nvidia/oss/worktrees/apache/hadoop`). Set `JAVA_HOME` if needed (e.g. OpenJDK 17).
 
 - **Compile only (fast):**  
   `./mvnw compile -pl <module> -am -DskipTests`  
@@ -381,7 +381,7 @@ Before posting, sanity-check that the PR title/body still matches the branch. If
 | Where        | What |
 |-------------|------|
 | **JIRA**    | Find and pick issues (HADOOP-xxxx, HDFS-xxxx, etc.). |
-| **Local**   | Repo at `/Users/dejain/nvidia/oss/apache/hadoop`. Add `apache` remote, branch from `trunk`, implement (include test when possible), commit with JIRA key in message. |
+| **Local**   | Repo at `/Users/dejain/nvidia/oss/worktrees/apache/hadoop`. Add `apache` remote, branch from `trunk`, implement (include test when possible), commit with JIRA key in message. |
 | **GitHub**  | Push to your fork, open PR into `apache/hadoop` (trunk). Use PR description format in §6; title and description reference the JIRA. |
 | **CI**      | Ensure patch applies to trunk (rebase if needed). If Yetus -1: fix and push; trigger new run with empty commit if no new Yetus comment. |
 | **Existing PR** | User gives PR URL → **§9**: Fetch PR (9.0: branch, CI, reviewer comments), check statuses even if comments are empty, checkout, rebase on `apache/trunk` (9.1), run local Maven tests (9.2), take actions (9.4), push (9.3), **generate PR comment** (9.5) from changes and local test results. |

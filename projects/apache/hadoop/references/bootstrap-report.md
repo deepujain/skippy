@@ -2,7 +2,7 @@
 
 Canonical repository: https://github.com/apache/hadoop  
 Default branch: `trunk`  
-Local clone: `/Users/dejain/nvidia/oss/apache/hadoop`  
+Local clone: `/Users/dejain/nvidia/oss/worktrees/apache/hadoop`  
 Fork: `deepujain/hadoop` (push remote `origin`)  
 Upstream: `apache/hadoop` (fetch remote `apache`)
 
@@ -19,7 +19,7 @@ https://github.com/apache/hadoop/pulls/deepujain).
 
 ## 2026-09-01 bootstrap sweep
 
-- Clone: shallow `trunk` at `/Users/dejain/nvidia/oss/apache/hadoop` (remotes `apache`, `origin`).
+- Clone: shallow `trunk` at `/Users/dejain/nvidia/oss/worktrees/apache/hadoop` (remotes `apache`, `origin`).
 - All 8 open PRs rebased onto `apache/trunk` and force-pushed:
   #8670→75bc9263, #8389→29ca07c6, #8388→da3325d5, #8335→1232d9b1,
   #8334→9f7b2fc8, #8310→1f232f46, #8307→5ab85957, #8306→dc2e4f06.
