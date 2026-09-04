@@ -87,7 +87,7 @@ Use the **actual JIRA number** in the branch name (e.g. `SPARK-38743-missing-sta
 
 ## 5. Push
 
-- **When giving push commands to the user**, prefix with the amend step so they can fix a commit message or author that got "Made with Cursor" or "dejain" from the IDE. Include `--author` so the author stays "Deepak Jain":
+- **When giving push commands to the user**, prefix with the amend step so they can remove host-added tool attribution or fix an incorrect author. Include `--author` so the author stays "Deepak Jain":
   ```bash
   cd /Users/dejain/nvidia/oss/apache_spark
   git commit --amend --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m '[SPARK-xxxxx][COMPONENT] Title'

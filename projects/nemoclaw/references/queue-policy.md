@@ -26,7 +26,7 @@ target as actionable.
   Existing exact-head receipts show `npm run build:cli`, the nested workspace
   build, and `npm run validate:pr` passed on every head.
 - **Identity and review:** all 26 commits have Deepak Jain author and committer
-  identity, DCO sign-off, no Cursor trailer, and GitHub verification
+  identity, DCO sign-off, no tool-attribution trailer, and GitHub verification
   `verified=true`, `reason=valid`. CodeRabbit passes all five. Inline threads
   are clear except #10311's two current replies for credential-backed Gemini
   runtime proof. #10311 and #10309 retain `CHANGES_REQUESTED` pending maintainer
@@ -63,7 +63,7 @@ target as actionable.
   `e806fa7dc`, #10705 `b0f3175ec`, #10704 `e646ce759`, #10311 `530375e19`,
   and #10309 `70249785c`.
 - **Identity and delivery:** all 25 PR commits have Deepak Jain author and
-  committer identity, DCO sign-off, no Cursor trailer, and GitHub verification
+  committer identity, DCO sign-off, no tool-attribution trailer, and GitHub verification
   `verified=true`, `reason=valid`. All branches are zero behind and mergeable.
   Exact-head PR bodies and reviewer-facing validation comments were refreshed.
 - **Review and CI:** CodeRabbit and all nine exact-head Advisor specialists pass

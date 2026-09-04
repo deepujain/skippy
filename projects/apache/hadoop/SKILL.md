@@ -100,7 +100,7 @@ Use the **actual JIRA key** in the branch name (e.g. `HADOOP-12345-fix-move-to-t
 - **Message:** Start with the JIRA key, then summary. Example: `HADOOP-12345. Fix MoveToTrash when file inode exists in trash.` or `HDFS-17760. Fix ParentNotDirectoryException in trash.` Use **single quotes** in shell to avoid zsh history expansion.
 - **Commit command:** Use `--author` with `-m` (Git does not allow `-c` and `-m` together):
   `git add <files>` then `git commit --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'HADOOP-12345. Short summary of the fix.'`
-- **No tool attribution:** Do not add "Made with Cursor" or similar to commit messages. If the IDE added it, amend before push.
+- **No tool attribution:** Do not add coding-agent attribution to commit messages. If the host added it, amend before push.
 - If the user prefers to run commit locally, give them the exact command block above instead of running it yourself.
 
 ## 5. Push
@@ -360,7 +360,7 @@ Before posting, sanity-check that the PR title/body still matches the branch. If
 | **Duplicate PR** | Another open PR already fixes the same JIRA; yours gets closed as duplicate. | Before picking an issue: skip JIRA issues with **pull-request-available** or with a linked GitHub PR; search GitHub PRs for the JIRA key and choose an issue with no open PR. |
 | **Searching only by JIRA key misses an existing PR** | Some Hadoop PRs fix the same behavior but do not clearly mention the JIRA id in the title/body, so a key-only search can still produce duplicate work. | During issue triage, search by JIRA key **and** by title keywords, error text, and touched subsystem before concluding the issue is unclaimed. |
 | **Linked history already rejected the approach** | A previous PR or review may already explain why a seemingly reasonable fix is not acceptable for Hadoop. Reopening it wastes time and annoys maintainers. | Read linked PR/JIRA discussion before coding, and treat maintainer design feedback as binding unless you are intentionally taking a clearly different path. |
-| **Wrong author / tool attribution** | Commit author shows "dejain" or message includes "Made with Cursor". | Amend with `--author="Deepak Jain <deepujain@gmail.com>"`, fix the message, then `git push --no-verify --force-with-lease origin <branch>`. |
+| **Wrong author / tool attribution** | Commit author is wrong or the message includes coding-agent attribution. | Amend with `--author="Deepak Jain <deepujain@gmail.com>"`, fix the message, then `git push --no-verify --force-with-lease origin <branch>`. |
 | **No comments, but failing CI** | PR looks idle if you only read the conversation tab. | Always inspect statuses before saying there is nothing to do. |
 | **Blocked log access** | `gh` auth is invalid or unavailable, so Actions logs cannot be inspected directly. | Say that immediately and ask for `gh auth login` or pasted failure details/logs instead of waiting for the user to guess. |
 | **Rebase-only or validation-only push with no PR comment** | Reviewers cannot tell whether the branch was just rebased, CI was retriggered, or local checks were rerun. | After every push, leave a 2-4 sentence PR comment with what changed in the branch state and the exact local Maven command/result, even if no source files changed. The comment documents the work; the push is what retriggers CI. |

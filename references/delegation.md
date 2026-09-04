@@ -46,9 +46,10 @@ isolated project worktrees. The lead must launch all project owners together;
 it must not perform serial pre-maintenance that changes their starting heads.
 A stopped owner is resumed or replaced before integration.
 
-## Cursor sweep runtime contract
+## Sweep runtime adapter contract
 
-Every project owner receives a run ID and must make its first action:
+Every project owner receives a run ID and initializes through the selected
+platform adapter. The stable compatibility facade is:
 
 ```bash
 eval "$(scripts/sweep-runtime.sh init <run-id> <project>)"
@@ -58,10 +59,8 @@ This creates a workspace-local temp directory, isolated project log, and
 observable startup checkpoint. The owner checkpoints `maintain`, `learn`, and
 `replenish`, then calls `finish` before returning its receipt.
 
-- Do not use system `/tmp` for sweep-owned state.
-- Do not ask for routine fork, GitHub, runtime-artifact, lock, or worktree
-  cleanup permission. If optional cleanup is denied, record
-  `cleanup_deferred`, retain the ignored artifact, and continue.
+- Read `integrations/<platform>/runtime-contract.md` for host-specific
+  permissions, sandbox, temporary-state, and agent-lifecycle behavior.
 - Do not wait on external CI or review for more than five minutes. Record the
   exact pending gate and continue independent lifecycle work.
 - Retry the same failing operation at most once after changing an input or
@@ -73,6 +72,10 @@ observable startup checkpoint. The owner checkpoints `maintain`, `learn`, and
   queued or stalled, not running. Replace it once; do not wait indefinitely.
 - Before any push, comment, or review request, compare the current remote head
   and existing messages so recovery is idempotent.
+
+All adapters implement
+`integrations/shared/sweep-adapter-contract.md` and the shared checkpoint
+schema. Platform behavior does not belong in project skills or queue policies.
 
 ## Integration protocol
 

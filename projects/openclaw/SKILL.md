@@ -134,16 +134,16 @@ If there are uncommitted changes on the current branch: `git stash push -m "desc
 
 - **Commit only the fix files.** Do **not** add or commit `PR_NNNNN_body.md`  - that file is for copy-paste into the GitHub PR description only; keep it untracked.
 - **Author:** Deepak Jain &lt;deepujain@gmail.com&gt; (never "dejain").
-- **Message:** Conventional style. Example: `fix(scope): summary` or `feat(scope): summary`, then body, then `Fixes #NNNNN`. No "Made with Cursor" in the message. Use **single quotes** for the commit message in shell commands to avoid zsh history expansion (e.g. `!`).
+- **Message:** Conventional style. Example: `fix(scope): summary` or `feat(scope): summary`, then body, then `Fixes #NNNNN`. No coding-agent attribution in the message. Use **single quotes** for the commit message in shell commands to avoid zsh history expansion (e.g. `!`).
 - **Always include author in git commit commands:** When generating any `git commit` or `git commit --amend` command, always add:  
   `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"`  
   Example: `git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit --no-verify -m 'message'`
-- **How to avoid Cursor appending "Made with Cursor" and wrong author:**
+- **How to avoid host-added tool attribution and a wrong author:**
   - Prefer the user's **commit script** from a normal (external) terminal:  
     `/Users/dejain/nvidia/oss/commit.sh "your message"`
   - Or run `git commit` (and any `git commit --amend`) in an **external** Terminal with:  
     `git -c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -m "..."`
-  - If amending author or message from inside Cursor, use **git plumbing** so Cursor does not modify the message:
+  - If the host mutates amended commit messages, use **git plumbing** so the host cannot alter the message:
     - Get message: `git log -1 --format=%B`
     - Rewrite: `TREE=$(git rev-parse HEAD^{tree}); PARENT=$(git rev-parse HEAD^); export GIT_AUTHOR_NAME="Deepak Jain" GIT_AUTHOR_EMAIL="deepujain@gmail.com"; NEW=$(echo "$MSG" | git commit-tree $TREE -p $PARENT -m "$MSG"); git reset --hard $NEW`
 

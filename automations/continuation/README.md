@@ -16,38 +16,12 @@ project skill and isolated worktrees. The main agent reviews every project
 receipt, recovers stopped agents, and writes only the combined summary. It does
 not perform a serial Maintain pass first.
 
-## How scheduling works (local IDE)
+## Scheduling and agent runtime
 
-One **foreground** loop process fires every project on the same interval. Each tick
-is written to `.skippy/pending-ticks.jsonl` and printed as
-`AGENT_LOOP_TICK_<project>-sweep` on **stdout**.
-
-```bash
-# From an IDE agent session (monitored shell — do NOT nohup or redirect stdout):
-./scripts/start-sweep-loops.sh
-```
-
-Or one project only:
-
-```bash
-./scripts/sweep-continuation-loop.sh skillspector
-```
-
-**Do not** background the loop with `&`, `nohup`, or stdout redirection. That
-orphans the sentinel stream and ticks never reach the agent.
-
-If the monitored shell dies, ticks accumulate in `pending-ticks.jsonl`. The
-`.cursor/hooks.json` **stop** hook drains one tick per agent turn (up to 8
-chained follow-ups). Open a Skippy chat to drain the backlog.
-
-Stop loops:
-
-```bash
-./scripts/stop-sweep-loops.sh
-```
-
-Run the first sweep immediately when arming (startup ticks fire at once). Execute
-those prompts before waiting 30 minutes.
+Scheduling, permission, sandbox, and agent-lifecycle behavior is
+platform-specific. Select the host under [`../../integrations/`](../../integrations/)
+and follow its runtime contract. Keep this continuation pack limited to the
+portable sweep prompt and project lifecycle.
 
 ## Watch output
 
@@ -66,17 +40,9 @@ Scheduler ticks:
 
 ## Permissions
 
-**Non-interactive by design.** Scheduled ticks must complete Maintain → Learn →
-Replenish without stopping for approval on routine fork-PR work (push, rebase,
-`gh pr comment`, open replenishment PR, CI polling). See `.cursor/permissions.json`
-and `.cursor/rules/skippy-sweep-noninteractive.mdc` in this repo and the parent
-`oss/` workspace.
-
-Use **unrestricted** approval mode. Only pause for destructive upstream writes
-(force-push to `apache/*` or `NVIDIA/*` default branches) or secrets in commits.
-
-Headless `cursor agent --force` is **not** used — NVIDIA org policy blocks it.
-The IDE agent runs each tick with the permissions above.
+External-write authorization comes from the selected platform adapter. Shared
+prompts still enforce Git safety and require exact delivery verification, but
+must not embed one host's approval model.
 
 ## Per-project continuation docs
 

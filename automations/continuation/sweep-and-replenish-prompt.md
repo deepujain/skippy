@@ -28,11 +28,10 @@ eval "$(scripts/sweep-runtime.sh init <run-id> <project-slug>)"
 ```
 
 Checkpoint each phase with `sweep-runtime.sh checkpoint`, then call `finish`.
-Use the emitted workspace-local `TMPDIR` and project log. Never put Skippy state
-in system `/tmp`, never append the global log from a project owner, and never
-ask for permission to clean a sweep-owned temp, lock, tracker, or worktree. If
-optional cleanup fails, checkpoint `cleanup_deferred`, leave it ignored, and
-finish.
+Use the emitted isolated temporary directory and project log. Never append the
+global log from a project owner. Apply permission, sandbox, and cleanup behavior
+from `integrations/<platform>/runtime-contract.md`; if cleanup is unavailable,
+checkpoint `cleanup_deferred`, retain the ignored artifact, and finish.
 
 Do not wait more than five minutes for external CI or review. Retry a
 no-progress operation only once after changing the input or method. Hand off a

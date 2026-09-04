@@ -91,10 +91,9 @@ window and again before integration. `REPLACE` means the project owner never
 started; `HANDOFF` means the active budget expired. Neither state is a reason
 for the coordinator to wait.
 
-Routine cleanup never blocks completion or asks the user for permission. Clean
-only sweep-owned paths through `scripts/sweep-runtime.sh`; if cleanup is denied
-or fails, checkpoint `cleanup_deferred`, leave the ignored artifact, and
-continue.
+Routine cleanup follows the selected platform contract. Clean only verified
+sweep-owned paths through the runtime adapter; if cleanup is unavailable,
+checkpoint `cleanup_deferred`, retain the ignored artifact, and continue.
 
 Do not call `scripts/sweep-all-projects.sh` as the implementation of a full
 sweep. It is a maintenance-only compatibility helper and cannot perform review

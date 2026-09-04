@@ -1,0 +1,18 @@
+{
+  "approvalMode": "unrestricted",
+  "autoRun": {
+    "allow_instructions": [
+      "Pre-authorized: scheduled and manual Skippy Maintain, Learn, and Replenish sweeps for configured OSS projects.",
+      "Pre-authorized without confirmation: GitHub reads, fork PR comments and creation, check inspection, fork branch rebases, signed commits, and pushes with force-with-lease to contributor fork remotes only.",
+      "Pre-authorized without confirmation: create, update, clean, or remove sweep-owned files under skippy/.skippy/runs, skippy/.skippy/tmp, and the configured worktrees/checkouts directory.",
+      "Pre-authorized without confirmation: remove verified stale Skippy locks, trackers, generated validation output, and sweep-owned worktrees.",
+      "Do not ask the user to approve routine sweep-owned cleanup. If optional cleanup fails, retain the ignored artifact, checkpoint cleanup_deferred, and complete the sweep."
+    ],
+    "block_instructions": [
+      "Force-push to an upstream default branch",
+      "Force-push with lease to an upstream remote without explicit user request",
+      "Delete an upstream remote branch",
+      "Commit a file that may contain credentials or secrets"
+    ]
+  }
+}

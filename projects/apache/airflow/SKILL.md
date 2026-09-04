@@ -169,7 +169,7 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 
 ## 6. Push
 
-- **When giving push commands to the user**, always prefix with the amend step so they can fix a commit message or author that got "Made with Cursor" or "dejain" from the IDE. Include `--author` so the author stays "Deepak Jain". Give the full block:
+- **When giving push commands to the user**, always prefix with the amend step so they can fix tool-attribution text or an incorrect host-provided author. Include `--author` so the author stays "Deepak Jain". Give the full block:
   ```bash
   cd /Users/dejain/nvidia/oss/worktrees/apache/airflow
   git commit --amend --no-verify --author="Deepak Jain <deepujain@gmail.com>" -m 'Fix ... (#NNNNN).'
@@ -189,7 +189,7 @@ uv run --project <PROJECT> pytest <test-file>::<TestClass>::<test_method> -xvs
 - **Evidence before PR:** Do not raise a PR unless you can point to concrete validation for the reported behavior. "Looks right from reading the code" is not sufficient for Airflow.
 - **Docs claims need source-of-truth proof:** For docs PRs, verify the claim against the code, release scripts, rendered docs, or maintainer comments. If you cannot prove the documentation statement is true, do not open the PR. A locally passing docs check only proves formatting, not correctness.
 - **Visual evidence for UI/UX changes:** If a PR changes UI appearance, layout, contrast, icons, colors, copy placement, empty states, or interaction affordances, include a screenshot or short before/after visual in the PR body or as an immediate PR comment. Do this proactively before reviewers ask. For dark/light-theme fixes, show the affected theme and the exact component state that changed.
-- **No tool attribution in commits:** Do not add "Made with Cursor" or similar to commit messages. If the IDE added it, amend before push (S6). This is separate from the mandatory PR-body `Generated-by:` disclosure required for Gen-AI assisted work.
+- **No tool attribution in commits:** Do not add coding-agent attribution to commit messages. If the host added it, amend before push (S6). This is separate from the mandatory PR-body `Generated-by:` disclosure required for Gen-AI assisted work.
 
 ## 8. Open the PR (GitHub)
 
@@ -435,7 +435,7 @@ Extracted from real contribution experience. Update this section as new patterns
 | **GitHub Issues** | [apache/airflow/issues](https://github.com/apache/airflow/issues). Pick any open, well-scoped issue (#NNNNN). Do NOT restrict to "good first issue" -- search all bugs with `no:assignee`. **Mandatory:** Confirm no open PR already targets it (issue timeline + search [apache/airflow/pulls](https://github.com/apache/airflow/pulls)); otherwise your PR will be closed as duplicate (e.g. [#63201](https://github.com/apache/airflow/pull/63201)). |
 | **Local** | Clone your fork, add `apache` remote, branch from `main` (or use existing PR branch for updates), implement (include test when possible), **run pre-checks and tests** (S4), commit only your files with issue ref in message, push (use `--no-verify` and `--force-with-lease` after rebase if hooks fail locally). |
 | **GitHub PR** | Push to your fork, open PR into **apache/airflow** (main). Create `PR_NNNNN_body.md` with `**Title:**` line; use description format in S8; end with `Fixes #NNNNN`. |
-| **Before opening PR** (S7) | Check fix direction (minimal vs design change); align with which components need the change; no "Made with Cursor" in commits. |
+| **Before opening PR** (S7) | Check fix direction (minimal vs design change); align with which components need the change; no coding-agent attribution in commits. |
 | **During review** (S9) | Be open to reversing the approach; address every comment; check statuses even if comments are empty; rebase when out-of-date; accept title changes; update test expectations if behavior changes. |
 | **JIRA-tracked Apache projects** | For Spark, Hadoop, HDFS, etc., issues live in JIRA. In the PR description include **JIRA id for credit** (e.g. `**JIRA assignee for credit:** deepujain`) so committers can assign the JIRA to the contributor. |
 | **CI** | Keep PR rebased on main; fix ruff/mypy/tests if CI fails. If GitHub Actions logs are unavailable because `gh` auth is broken, say so explicitly and ask for `gh auth login` or pasted failure details. If local pre-commit/pre-push hooks are broken (missing deps), use `--no-verify` and rely on CI. |

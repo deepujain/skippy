@@ -127,14 +127,13 @@ combined summary. A multi-project sweep is incomplete while any project agent
 is stopped, missing, or has returned only status without completing actionable
 work.
 
-Each brief must include one shared run ID and the Cursor runtime contract from
-`references/delegation.md`. Require `sweep-runtime.sh init` as the owner's first
-action, phase checkpoints, project-local logs, workspace-local `TMPDIR`,
+Each brief must include one shared run ID and the selected host contract under
+`integrations/<platform>/`. Require `sweep-runtime.sh init` as the owner's first
+action, phase checkpoints, project-local logs, isolated temporary state,
 idempotent recovery, bounded retries, and a 90-minute hard handoff. Treat a
 missing startup checkpoint after three minutes as queued/stalled and replace
-the owner once. Routine sweep-owned temp, lock, and worktree cleanup is
-non-interactive; when optional cleanup cannot run, defer it and finish instead
-of asking the user.
+the owner once. Apply cleanup and permission behavior through the host adapter,
+not through project skills or queue policy.
 
 When client support allows model selection, use the strongest reasoning model
 for cross-cutting design and adversarial judgment, a precise implementation

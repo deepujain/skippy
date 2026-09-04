@@ -25,7 +25,7 @@ When the user asks to contribute a PR to NemoClaw, pick the next issue, or "foll
 
 **Repo:** [NVIDIA/NemoClaw](https://github.com/NVIDIA/NemoClaw) - open source stack for running OpenClaw always-on assistants safely with OpenShell. Apache-2.0. Contributions require **signed-off commits** (`git commit -s`) and **verified (SSH-signed) commits** (`-S`).
 
-**Git commands:** The agent **must** run all git commands directly via the integrated terminal. **CRITICAL:** Before executing or suggesting any sync, checkout, or commit, the agent must run `git status` and `git branch` silently to verify the current state. If the local state already matches the target (e.g., already on the correct branch, already up to date with upstream/main), **skip the command and proceed immediately to the next step.** Never use "Fetch" or "Run" UI widgets if terminal access is available - execute directly to maintain flow. Always use `--no-verify` and explicit `-m` messages on commits to prevent `Made-with: Cursor` trailers. Never ask for permission to run git commands.
+**Git commands:** The agent **must** run all git commands directly via the integrated terminal. **CRITICAL:** Before executing or suggesting any sync, checkout, or commit, the agent must run `git status` and `git branch` silently to verify the current state. If the local state already matches the target (e.g., already on the correct branch, already up to date with upstream/main), **skip the command and proceed immediately to the next step.** Never use platform-specific sync widgets if terminal access is available. Always use `--no-verify` and explicit `-m` messages on commits to prevent tool-attribution trailers. Apply permission behavior through the selected runtime adapter.
 
 ## Shared execution guardrails
 
@@ -247,9 +247,9 @@ Use the recent merged PR scan (§2.0) to choose extra validation for the touched
 - **Author and Signed-off-by:** GitHub username is **deepujain**. Use real name and email so both **Author** and **Signed-off-by** show **Deepak Jain &lt;deepujain@gmail.com&gt;** (not "dejain" or the GitHub username). Always use `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author="Deepak Jain <deepujain@gmail.com>"`.
 - **Treat repository Git identity as test-contaminated state.** Tests and fixtures can write `Test User <test@example.com>` into the shared worktree config. After the final test run and immediately before every commit or amend, inspect `git config --show-origin --get user.name` and `user.email`, restore them if needed, and still pass the explicit `-c user.*` plus `--author` arguments below. Never rely on a previously correct config.
 - **Message:** Clear summary; reference the issue (e.g. `Fixes #NNNNN`). Use **single quotes** in shell to avoid zsh history expansion.
-- **`--no-verify` is mandatory.** This prevents `Made-with: Cursor` trailers and skips pre-commit hooks (hadolint etc. may not be installed).
+- **`--no-verify` is mandatory.** This prevents local hooks from adding tool-attribution trailers and skips unavailable pre-commit hooks.
 - **Commit only the fix files.** Do not add or commit any `PR_NNNNN_body.md` (that file is for copy-paste only).
-- **Verify after commit:** Run `git log -1 --format='%B'` and check for `Made-with: Cursor`. If present, immediately amend to strip it.
+- **Verify after commit:** Run `git log -1 --format='%B'` and remove any tool-attribution trailer before delivery.
 - **Stop on GitHub `no_user`.** Immediately after each push, query every PR commit through GitHub's commit API. Local `%G? = G` is insufficient: if GitHub reports `verification.verified: false` or `reason: no_user`, do not post a completion/review comment or wait for CI. Correct the author and committer identity, re-sign the affected commit stack, push with lease, and recheck GitHub verification first.
 
 **Commit command (agent runs this directly):**
@@ -486,7 +486,7 @@ For the `Review Comments` column, always categorize by reviewer identity rather 
      either worktree has unstaged changes. Their repository-level stash/hook
      state can interfere across worktrees. Commit first and validate the
      worktrees sequentially when pre-commit hooks may stash or rewrite files.
-4. **Stage and commit** - the agent runs `git add` and `git commit --amend` with the correct author, sign-off, signing flags, and `--no-verify`. Verify with `git log -1 --format='%B'` that no `Made-with: Cursor` trailer appeared; if it did, immediately amend to strip it.
+4. **Stage and commit** - the agent runs `git add` and `git commit --amend` with the correct author, sign-off, signing flags, and `--no-verify`. Verify with `git log -1 --format='%B'` that no tool-attribution trailer appeared; if it did, immediately amend to strip it.
 
 ### 8.3 Rebase  - the agent runs the rebase (sync step)
 
@@ -512,7 +512,7 @@ Verified signatures are a hard NemoClaw policy, not a nice-to-have. Do not ask f
 
 **CRITICAL: Rebases that replay multiple commits through the same file can leave a later conflict marker or stale hunk in a file you already "resolved" earlier in the sequence.** After the rebase completes, rerun the relevant build/typecheck/tests before pushing, even if the first conflict looked fully handled.
 
-**CRITICAL: If the rebase added `Made-with: Cursor`, give the user an amend command to strip it (see §8.4).**
+**CRITICAL: If the rebase added a tool-attribution trailer, strip it before delivery (see §8.4).**
 
 **CRITICAL: If `git log --show-signature -1` shows "No signature", give the user an amend command with `-S` to sign it (see §8.4).**
 
@@ -641,7 +641,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 - **Signed-off-by must say "Deepak Jain", not "dejain".** `git commit -s` uses the committer identity (git config `user.name`). If `user.name` is "dejain", the trailer becomes `Signed-off-by: dejain <...>`. Always give the user the commit command with `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com"` and `--author="Deepak Jain <deepujain@gmail.com>"` so both Author and Signed-off-by show the real name. GitHub username is **deepujain**.
 - **Build then test before commit.** Run build (if TypeScript in `nemoclaw/` changed): `cd nemoclaw && npm install --ignore-scripts && npm run build && cd ..`. Then run `npm test` from repo root. Fix any failures before giving commit commands.
 - **Update test expectations when behavior changes.** If the fix changes something that already has a test (e.g. image mapping in `getImageForModel`), update the test’s expected value; do not leave the test asserting the old behavior. Add new tests when the change introduces logic that should be covered.
-- **Agent runs commit and push directly.** Always use the correct flags: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. The `--no-verify` flag prevents `Made-with: Cursor` trailers and skips pre-commit hooks. After committing, verify with `git log -1 --format='%B'` that no trailer appeared.
+- **Agent runs commit and push directly.** Always use the correct flags: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. The `--no-verify` flag prevents local hooks from adding attribution and skips unavailable pre-commit hooks. After committing, verify with `git log -1 --format='%B'` that no tool-attribution trailer appeared.
 - **PR body:** Summary, Changes (file + what changed), Testing, Evidence it works, and `Signed-off-by: Deepak Jain <deepujain@gmail.com>`. "Fixes #NN" in the body so merging closes the issue. See [PR #81](https://github.com/NVIDIA/NemoClaw/pull/81) for a good example.
 - **Issue triage must include linked development.** Before starting an issue, read the issue comments, linked PRs, and referenced commits. If there is already an active PR for the same fix, skip the issue or work on that PR only.
 - **Duplicate checking needs keyword search, not just issue-number search.** Search PRs by issue number, title keywords, error strings, and affected subsystem/file names before opening a PR.
@@ -709,6 +709,6 @@ Say one of these so the agent applies this skill:
 |-------|------|
 | **Issues** | [NVIDIA/NemoClaw issues](https://github.com/NVIDIA/NemoClaw/issues). Pick an open, well-scoped issue (#NNNNN). |
 | **Local** | Repo at `/Users/dejain/nvidia/oss/worktrees/nvidia/nemoclaw`. Set upstream, branch from **main**, implement, **run tests** and update/add test expectations when applicable (§4), then commit and push directly (§5–§6). |
-| **Commit / Push** | Agent runs directly: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. Verify no `Made-with: Cursor` after commit. |
+| **Commit / Push** | Agent runs directly: `-c user.name="Deepak Jain" -c user.email="deepujain@gmail.com" commit -s -S --no-verify --author="Deepak Jain <deepujain@gmail.com>"`. Verify no tool-attribution trailer after commit. |
 | **PR** | Prefer `gh pr create` from fork branch to **NVIDIA/NemoClaw** main. **Title:** include issue number, e.g. `fix: short summary (Fixes #66)`. Use `PR_NNNNN_body.md` as `--body-file`, and include Testing plus **Evidence it works**. If `gh` auth is unavailable, provide the deep link and PR body path. |
 | **Open PR fix (§8)** | When the user shares an open PR link: inspect it with `gh` when available, use that existing PR branch, resolve files, run tests, rebase, commit, push directly, then prefer `gh pr comment` for the follow-up note including evidence. |

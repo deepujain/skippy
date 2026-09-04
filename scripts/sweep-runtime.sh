@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Cursor-safe runtime state for delegated Skippy project sweeps.
+# Platform-neutral runtime state for delegated Skippy project sweeps.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

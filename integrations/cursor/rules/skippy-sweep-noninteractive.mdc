@@ -1,0 +1,22 @@
+---
+description: Run Skippy sweeps non-interactively on Cursor
+alwaysApply: true
+---
+
+# Skippy sweep automation
+
+For scheduled or manual Skippy sweeps:
+
+- Read `skippy/integrations/cursor/runtime-contract.md`.
+- Initialize the assigned runtime before project work.
+- Do not ask for routine fork PR, GitHub, checkpoint, temporary artifact,
+  tracker, stale lock, generated-output, or owned-worktree cleanup permission.
+- Use the runtime-provided workspace-local `TMPDIR`; do not use system `/tmp`
+  for Skippy state.
+- If optional cleanup fails, checkpoint `cleanup_deferred`, retain the ignored
+  artifact, and finish the contribution lifecycle.
+- Use bounded retries and waits. Return a partial receipt at the hard runtime
+  limit instead of continuing invisibly.
+
+Pause only for an upstream default-branch force-push, unrequested remote branch
+deletion, unrelated history rewrite, or possible secret commit.
