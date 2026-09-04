@@ -1,12 +1,134 @@
 # inspect-ai contribution queue policy
 
 Target healthy open contributions: 4
-Repository or contributor maximum: 4 for contributors without write access
-Configured by: upstream contribution policy, refreshed 2026-08-31
+Repository or contributor maximum: none stated for accepted issues; upstream removed the former cap in `cf70b2404`
+Configured by: Skippy queue target plus live upstream contribution policy, refreshed 2026-09-03
 Refresh trigger: before every replenishment run and whenever repository policy changes
 
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
+
+## 2026-09-04 sweep state (manual-sweep-all, started 8:56 AM PT)
+
+- **Departed:** none since the 2026-09-03 7:13 PM PT sweep.
+- **Open PRs (2/4):** [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195)
+  at `30f2b96dd` and [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950)
+  at `fe8f48d8d`.
+- **Maintain completeness:** current `main` was `43a1e19fe`; both prior heads
+  were six commits behind and CONFLICTING. The helper stopped on each final
+  changelog repair commit, so the conflicts were resolved manually by retaining
+  all current upstream `## Unreleased` entries plus each PR entry. Both
+  three-commit branches were re-signed, validated, and force-pushed with leases
+  against the exact prior fork heads. Final compares are 0 behind and MERGEABLE;
+  all selected Build, Changelog Lint, Suppressions, and Embedded Viewer checks
+  are terminal green.
+- **Identity and signatures:** all six commits have author
+  `Deepak Jain <deepujain@gmail.com>` and SSH signatures. GitHub reports
+  `unknown_key` for all six; no selected upstream check rejects them. The two
+  changelog repair commits retain `Signed-off-by` trailers; this repository has
+  no selected DCO check.
+- **Review state:** #5195 remains `CHANGES_REQUESTED` only from the stale
+  maintainer review on `d3db5927`; its three requests remain implemented and
+  there are no inline threads. #4950 is `REVIEW_REQUIRED`; all four maintainer
+  threads are resolved and outdated, retain exact replies and reactions, and
+  have no current contributor-actionable finding.
+- **Healthy count:** 1/4. #4950 is strictly healthy pending maintainer review;
+  #5195 does not count until its stale changes-requested decision is cleared.
+- **Learn:** merged [#5247](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5247)
+  added authoritative gated-test requirements for provider, sandbox/tool,
+  agent, and async changes. Updated the project skill to require the live
+  slow-tests recipe and exact executed/skipped reporting. Skill layout, task
+  plan, diff, and lints validate.
+- **Replenish:** screened all 23 open accepted issues, their comments, claims,
+  linked work, issue-number and subsystem overlap, and open PR files. Twenty-one
+  are covered by authored or peer PRs. The only uncovered candidates are:
+  - [#5241](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5241): the
+    issue author states the accepted fix is already ready as a patch and will
+    open it; it also touches the same view-server source and test area as open
+    #5212. Contributor ownership and overlap make a competing PR ineligible.
+  - [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763): still
+    implemented in open [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454)
+    at `b923731a3`; the Inspect AI submodule/dist bump cannot precede that merge.
+  Both open slots are unavailable after independent complete screens of this
+  exhausted candidate set. The third strict-health deficit is #5195's stale
+  review gate, not an additional open slot. No duplicate contribution was
+  opened.
+
+## 2026-09-03 sweep state (manual-sweep-all, started 7:13 PM PT)
+
+- **Departed:** none since the 1:14 PM PT sweep.
+- **Open PRs (2/4):** [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195)
+  at `ae8ace3c1` and [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950)
+  at `5416ddd43`.
+- **Maintain completeness:** rebased both PRs onto `main` at `7aa7343e4`,
+  pushed both fork heads, diagnosed the first post-rebase Changelog Lint
+  failures from raw logs, recreated `## Unreleased`, and pushed signed DCO
+  follow-up commits. Both heads are MERGEABLE, 0 behind, and green across all
+  selected Build, Changelog Lint, Suppressions, and Embedded Viewer checks.
+  GitHub reports all six SSH-signed commits as `unknown_key`; no selected
+  upstream check rejects them.
+- **Review state:** #5195 remains `CHANGES_REQUESTED` only from the stale
+  maintainer review on `d3db5927`; all three checklist requests are present on
+  the exact head and await re-review. #4950 is `REVIEW_REQUIRED`; all four
+  maintainer threads remain resolved and outdated with exact-thread replies
+  and reactions, so no contributor-actionable finding remains.
+- **Healthy count:** 1/4. #4950 is healthy under strict project evidence;
+  #5195 does not count until the stale changes-requested decision is cleared.
+- **Learn:** upstream commit `cf70b2404` explicitly removed the former
+  per-author open-PR cap when the qualified-or-accepted gate replaced the
+  established-contributor path. Updated the project skill and this policy to
+  distinguish the configured Skippy target of 4 from upstream contributor
+  policy. Recent #5240 repeats the accepted-issue gate; #5206 and this run's
+  CI repair reinforce the existing `## Unreleased` rule.
+- **Replenish:** no qualified contribution was opened after rechecking all 22
+  open accepted issues, issue-linked development, claims, and exact open PR
+  states. Twenty-one issues are covered by the two authored PRs plus 19 open
+  peer PRs. The only uncovered issue, [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763),
+  is implemented in open [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454);
+  the project skill prohibits an Inspect AI submodule/dist bump before that
+  source PR merges. Open slot 1 and open slot 2 are therefore unavailable
+  after independent complete screens of the same exhausted accepted-issue
+  set. The third healthy-count deficit is the existing #5195 review gate, not
+  an empty open-queue slot. The queue remains 2 open and 1 healthy against
+  target 4.
+
+## 2026-09-03 sweep state (manual-sweep-all, 1:14 PM PT)
+
+- **Departed:** none since the 12:35 PM PT sweep.
+- **Open PRs (2/4):** [#5195](https://github.com/UKGovernmentBEIS/inspect_ai/pull/5195)
+  at `6b6fbff9e` and [#4950](https://github.com/UKGovernmentBEIS/inspect_ai/pull/4950)
+  at `0f271a9a7`.
+- **Maintain completeness:** both exact heads are MERGEABLE, 0 commits behind
+  `main` at `65173c1c1`, and green across every selected Build, Changelog Lint,
+  Suppressions, and Embedded Viewer check. All four commits have the required
+  `Deepak Jain <deepujain@gmail.com>` identity and SSH signatures; GitHub
+  reports `unknown_key`, and no selected upstream check rejects them. No code,
+  rebase, commit, or push was required.
+- **Review action:** #5195's three requested checklist items remain present on
+  the current head and await re-review of the stale CHANGES_REQUESTED review on
+  `d3db5927`. For #4950, reacted to and resolved all four outdated maintainer
+  threads after verifying their current-head replies; the design choice now
+  awaits maintainer review.
+- **Healthy count:** 1/4. #4950 has no remaining contributor-actionable item;
+  #5195 does not count while CHANGES_REQUESTED remains.
+- **Learn:** no new durable project rule. The only fresh relevant peer activity
+  was #5199 updating the existing #5177 implementation and #5214 updating an
+  unrelated sandbox-tools PR. Recent policy closures #5230 and #5232 repeat the
+  already-recorded accepted-issue gate. No project skill or learning-log update.
+- **Replenish:** **2 slots remain open** after rechecking all 22 open accepted
+  issues, their issue-number links, and open/closed PR overlap:
+  - [#5222](https://github.com/UKGovernmentBEIS/inspect_ai/issues/5222) remains
+    authored and assigned to maintainer `dragonstyle`; its broad Meta provider
+    deliverable requires live API refusal verification and is not available to
+    claim.
+  - #5211, #5210, #5177, #5159, #5150, #5145, #5089, #5080, #5046, #5037,
+    #4968, #4808, #4781, #4770, #4759, #4756, #4197, and #4193 are covered by
+    open peer PRs #5219, #5221, #5199, #5160, #5153, #5170, #5090, #5081,
+    #5047, #5038, #4969, #4809, #4782, #4773, #4766, #4801, #4234, and #5019.
+  - [#4763](https://github.com/UKGovernmentBEIS/inspect_ai/issues/4763) remains
+    blocked on open [ts-mono#454](https://github.com/meridianlabs-ai/ts-mono/pull/454);
+    the Inspect AI submodule/dist bump cannot precede that merge.
+  - #5091 and #4758 are already represented by authored PRs #5195 and #4950.
 
 ## 2026-09-03 sweep state (manual-sweep-all, Learn and Replenish completion)
 

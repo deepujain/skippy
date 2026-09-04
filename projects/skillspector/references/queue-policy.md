@@ -11,6 +11,136 @@ whenever `CONTRIBUTING.md` or GitHub policy changes
 Read the shared references/contribution-queues.md policy before configuring
 or acting on a target.
 
+## 2026-09-04 sweep state (8:56 AM PT project lifecycle)
+
+- **Departed since 2026-09-03 7:17 PM PT:** none. Authored open PRs remain
+  [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468), and
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain:** `sweep-maintain.sh skillspector
+  manual-sweep-all-2026-09-04-0856` found all five exact heads 0 behind
+  `main` at `7805bb94843d91cb9937f57264ca52642164499b`; no rebase, conflict
+  resolution, code/test change, commit, or fork push was required. Every head
+  is mergeable. Each exact head has one completed successful GitHub Actions
+  check suite, five terminal check runs, no raw failure, and a passing DCO
+  check. Every contributor commit is authored by `deepujain`/Deepak Jain and
+  contains `Signed-off-by: Deepak Jain <deepujain@gmail.com>`. GitHub reports
+  unsigned or unknown-key verification, which is not a published merge gate.
+- **Exact heads:** #428 `460904734913b5db96bcb7bf160471a04d95ba78`;
+  #434 `c05370096e945595074c221bdd6fe53e9e54fe78`; #436
+  `e3ca50a98e6c137b32625be500dbe957e2073510`; #468
+  `0b1d86319407b61032961668266ded9397d99fc7`; #469
+  `e975cf9ede6bae21610299f6d17908d3885b2d45`.
+- **Review:** #428 has rng1995's exact-head approval. #434 and #436 retain
+  stale `CHANGES_REQUESTED` decisions from older heads, but each sole finding
+  is fixed, replied to on the exact thread, reacted to, and resolved. Their
+  exact-head re-review comments remain current; formal reviewer requests are
+  unavailable to this contributor. #468 and #469 have no reviews, inline
+  threads, bot findings, or contributor action. The only other bot/council
+  comment is informational on #428. All five PR bodies contain no U+2014.
+- **Strict healthy:** 3/5 (#428, #468, #469). #434 and #436 await maintainer
+  re-review, so the current healthy-target rule leaves two replenishment slots
+  even though the repository already has five authored open PRs.
+- **Learn:** no authored departure, merge newer than #462, or closed-unmerged
+  PR newer than #438 exists. `main` remains `7805bb94`; live policy blobs are
+  `CONTRIBUTING.md` `0cf005ea` and CI `a79867f6`, with no changed policy
+  content or new CI/review pattern. Existing overlap, DCO, validation, and
+  graph-proxy rules cover the observed evidence. No project skill or learning
+  log update was warranted.
+- **Replenish:** screened all 51 live open issues plus all active PR files and
+  bodies for two strict-healthy slots. Existing open PRs cover #472, #464,
+  #460, #459, #456, #450, #449, #448, #445, #444, #440, #435, #433, #419,
+  #389, #335, #303, #297, #277, #181, #171, #72, #69, #37, and #10.
+  #413 is already fixed by merged #422; #334's sampling controls landed in
+  merged #427; #90's reported missing `base_prompt` assignment is absent on
+  current `main`; and #33 is an answered usage question.
+  #479 is claimed in its issue thread and overlaps the active canonical-sink
+  work in #182. #296 is claimed and still has unresolved report semantics.
+  #481 requires Windows 8.3-path execution unavailable on this macOS host and
+  overlaps active `input_handler.py` work in #163. #478, #477, #475, #441,
+  #446, #367, and #268 require security-sensitive analyzer/taint or broad
+  pattern changes in files already changed by #182, #409, #465, or #234.
+  #458, #326, #226, #212, #130, and #121 require maintainer-owned public
+  contract or architecture decisions. #363, #314, #304, #129, and #8 lack a
+  current independently reproducible, non-overlapping boundary under the
+  available environment or overlap active provider/analyzer work. #271 is
+  blocked on the maintainers' PyPI name-transfer process. No qualified,
+  independently validatable candidate remained for either slot, so no branch
+  or PR was created.
+
+## 2026-09-03 sweep state (7:17 PM PT project lifecycle)
+
+- **Departed since 1:18 PM PT:** none. Authored open PRs remain
+  [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468), and
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain:** `sweep-maintain.sh skillspector
+  manual-sweep-all-2026-09-03-1913` found all five exact heads 0 behind
+  `main`; no rebase, conflict resolution, code or test change, commit, or fork
+  push was required. All heads are mergeable. Every current CI context is
+  terminal with no failures or pending jobs; DCO passes on every PR. All PR
+  commits contain the expected contributor sign-off. GitHub reports commit
+  verification as unsigned or unknown-key, which is not a published project
+  merge requirement.
+- **Review:** #428 has exact-head approval. #434 and #436 retain stale
+  `CHANGES_REQUESTED` decisions, but their sole maintainer findings are fixed,
+  replied to on the exact threads, reacted to, and resolved. #468 and #469 have
+  no reviews, inline threads, bot findings, or contributor action. A formal
+  re-review request on #434 was denied because the contributor lacks
+  `RequestReviewsByLogin`; #436 was not retried under the same permission.
+  Existing exact-head replies and re-review comments remain visible on both.
+  All five current PR bodies contain no U+2014.
+- **Healthy:** 3/5 under the strict project receipt rule (#428, #468, #469).
+  #434 and #436 have no remaining contributor-actionable finding but await a
+  maintainer re-review to clear their blocking review decisions.
+- **Learn:** no authored departure, merge newer than #462, or closed-unmerged
+  PR newer than #438/#414 exists. `CONTRIBUTING.md` remains at `7ced4fba` and
+  public CI policy remains at `e27a973c`; the existing DCO, validation,
+  overlap, and graph-proxy rules cover all observed evidence. No project skill
+  or learning-log update was warranted.
+- **Replenish:** the configured open target is filled at 5/5 and live
+  `CONTRIBUTING.md` still publishes no lower contributor maximum. There is no
+  eligible missing open slot, so no candidate was screened and no PR was
+  created.
+
+## 2026-09-03 sweep state (independent project lifecycle)
+
+- **Time:** 1:18 PM PT.
+- **Departed since 12:31 PM PT:** none. Authored open PRs remain
+  [#428](https://github.com/NVIDIA/SkillSpector/pull/428),
+  [#434](https://github.com/NVIDIA/SkillSpector/pull/434),
+  [#436](https://github.com/NVIDIA/SkillSpector/pull/436),
+  [#468](https://github.com/NVIDIA/SkillSpector/pull/468), and
+  [#469](https://github.com/NVIDIA/SkillSpector/pull/469).
+- **Maintain:** `sweep-maintain.sh skillspector manual-sweep-all` found all five
+  exact heads 0 behind `main`; no rebase, conflict resolution, code change,
+  commit, or fork push was required. Every head is mergeable and all current
+  check runs are terminal with no failures or pending jobs, including DCO.
+  Linked issues #277, #433, #435, #460, and #448 are all still open.
+  Commit authors and sign-offs match the contributor identity; GitHub reports
+  the commits as unsigned or unknown-key, but the live repository policy
+  requires DCO sign-off rather than cryptographic commit verification.
+- **Review:** #428 is approved on its exact head. #434 and #436 retain stale
+  `CHANGES_REQUESTED` decisions, but each sole maintainer thread is fixed on the
+  current head, replied to, reacted to, and resolved; exact-head re-review
+  requests are already present. #468 and #469 have no reviews or inline
+  threads. No failed check log existed to inspect. Removed U+2014 em dashes
+  from the live bodies of #428, #434, and #436, then re-read all five heads.
+- **Healthy:** 3/5 (#428, #468, #469). #434 and #436 have no remaining
+  contributor-actionable finding but still await maintainer re-review to clear
+  the stale blocking decisions.
+- **Learn:** bounded own and peer outcome scan found no authored departure, no
+  merge newer than #462, and no closed-unmerged PR newer than #438/#414.
+  Current `CONTRIBUTING.md` and CI still establish the existing DCO, validation,
+  and overlap rules. No project skill or learning-log update was warranted.
+- **Replenish:** live policy still declares no lower contributor maximum. The
+  configured open target is filled at 5/5, so there is no missing open slot and
+  no candidate required screening in this run. No additional PR was created.
+
 ## 2026-09-03 sweep state (full sweep)
 
 - **Time:** 12:31 PM PT.

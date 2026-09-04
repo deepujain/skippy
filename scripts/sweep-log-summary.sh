@@ -14,17 +14,20 @@
 #   sweep-log-summary.sh <reason> --all \
 #     --row "project|maintain|action|lesson" \
 #     --row "inspect-ai|..."
+#
+# Main-agent integration after project agents verified hidden/external gates:
+#   --verified-row "project|open|target|healthy|maintain|action|lesson"
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="${SKIPPY_SWEEP_OUTPUT:-$ROOT/.skippy/sweep-output.log}"
+OUT="${SKIPPY_SUMMARY_OUTPUT:-$ROOT/.skippy/sweep-output.log}"
 TS="$("$ROOT/scripts/sweep-timestamp.sh")"
 AUTHOR=deepujain
 ALL_PROJECTS=(skillspector nemoclaw inspect-ai hadoop airflow superset)
 
 usage() {
   echo "usage: sweep-log-summary.sh <reason> <project> --maintain M --action A --lesson L" >&2
-  echo "       sweep-log-summary.sh <reason> --all [--tsv-file F | --row ...]" >&2
+  echo "       sweep-log-summary.sh <reason> --all [--tsv-file F | --row ... | --verified-row ...]" >&2
   exit 1
 }
 
@@ -148,6 +151,7 @@ if [[ "${1:-}" == "--all" ]]; then
   shift
   TSV_FILE=""
   ROWS=()
+  VERIFIED_ROWS=()
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --tsv-file)
@@ -156,6 +160,10 @@ if [[ "${1:-}" == "--all" ]]; then
         ;;
       --row)
         ROWS+=("$2")
+        shift 2
+        ;;
+      --verified-row)
+        VERIFIED_ROWS+=("$2")
         shift 2
         ;;
       *)
@@ -172,25 +180,41 @@ if [[ "${1:-}" == "--all" ]]; then
     done <"$TSV_FILE"
   fi
 
-  if [[ ${#ROWS[@]} -eq 0 ]]; then
-    echo "sweep-log-summary: --all requires --tsv-file or --row" >&2
+  if [[ ${#ROWS[@]} -eq 0 && ${#VERIFIED_ROWS[@]} -eq 0 ]]; then
+    echo "sweep-log-summary: --all requires --tsv-file, --row, or --verified-row" >&2
     exit 1
   fi
 
   TABLE_ROWS=()
-  for entry in "${ROWS[@]}"; do
-    IFS='|' read -r project maintain action lesson <<<"$entry"
-    project_repo "$project" >/dev/null || { echo "unknown project: $project" >&2; exit 1; }
-    read -r open healthy <<<"$(gh_stats "$project")"
-    tgt=$(project_target "$project")
-    if [[ "$maintain" == "auto" || -z "$maintain" ]]; then
-      maintain="$(last_maintain_summary "$project" "$REASON")"
-    fi
-    validate_summary_text "Maintain" "$maintain"
-    validate_summary_text "Action" "$action"
-    validate_summary_text "Self Learning" "$lesson"
-    TABLE_ROWS+=("$project|$open|$tgt|$healthy|$maintain|$action|$lesson")
-  done
+  if [[ ${#ROWS[@]} -gt 0 ]]; then
+    for entry in "${ROWS[@]}"; do
+      IFS='|' read -r project maintain action lesson <<<"$entry"
+      project_repo "$project" >/dev/null || { echo "unknown project: $project" >&2; exit 1; }
+      read -r open healthy <<<"$(gh_stats "$project")"
+      tgt=$(project_target "$project")
+      if [[ "$maintain" == "auto" || -z "$maintain" ]]; then
+        maintain="$(last_maintain_summary "$project" "$REASON")"
+      fi
+      validate_summary_text "Maintain" "$maintain"
+      validate_summary_text "Action" "$action"
+      validate_summary_text "Self Learning" "$lesson"
+      TABLE_ROWS+=("$project|$open|$tgt|$healthy|$maintain|$action|$lesson")
+    done
+  fi
+  if [[ ${#VERIFIED_ROWS[@]} -gt 0 ]]; then
+    for entry in "${VERIFIED_ROWS[@]}"; do
+      IFS='|' read -r project open tgt healthy maintain action lesson <<<"$entry"
+      project_repo "$project" >/dev/null || { echo "unknown project: $project" >&2; exit 1; }
+      [[ "$open" =~ ^[0-9]+$ && "$tgt" =~ ^[0-9]+$ && "$healthy" =~ ^[0-9]+$ ]] || {
+        echo "sweep-log-summary: verified counts must be non-negative integers: $entry" >&2
+        exit 1
+      }
+      validate_summary_text "Maintain" "$maintain"
+      validate_summary_text "Action" "$action"
+      validate_summary_text "Self Learning" "$lesson"
+      TABLE_ROWS+=("$project|$open|$tgt|$healthy|$maintain|$action|$lesson")
+    done
+  fi
 
   append_table "$REASON" "${TABLE_ROWS[@]}"
   exit 0

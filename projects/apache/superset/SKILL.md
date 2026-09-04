@@ -109,6 +109,8 @@ pre-commit run
 # re-stage auto-fixes, fix mypy/ruff/eslint failures manually
 pytest tests/path/to/test_file.py -xvs   # when backend behavior changes
 cd superset-frontend && npm test -- --testPathPattern=<pattern>  # frontend
+# For package TypeScript changes, build declarations before the root type check.
+npm run plugins:build && npm run type
 ```
 
 If the full environment is unavailable, run the narrowest check possible and

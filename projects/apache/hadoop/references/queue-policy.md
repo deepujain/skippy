@@ -11,6 +11,113 @@ target as actionable.
 Base branch: `trunk`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/hadoop`).
 
+## 2026-09-04 sweep state (manual-sweep-all, 8:56 AM PT)
+
+- **Departed since 2026-09-03 7:13 PM PT:** none. The authored set remains
+  #8670, #8389, #8388, #8335, #8334, #8310, #8307, and #8306.
+- **Maintain:** current `apache/trunk` moved to `706d4dcb`. Rebased all 8
+  branches without conflicts and force-pushed each with an exact lease. Live
+  compare reports `behind_by=0` and `MERGEABLE` for every exact head.
+- **Exact heads:** #8670 `b01e35a4`, #8389 `0816b8fe`, #8388 `3e7310de`,
+  #8335 `1fe24782`, #8334 `24100703`, #8310 `ce487c2d`, #8307 `73543f4b`,
+  and #8306 `99864626`.
+- **CI:** all current heads have successful triage and notification checks,
+  with fresh GitHub Build and Jenkins `pr-merge` runs queued or pending. No
+  current-head red check exists, so there was no new raw failure to diagnose.
+  #8306's Cloud-AWS manual-trigger notice is neutral and maintainer-only.
+- **Reviews:** all 8 inline review threads are resolved. #8335 remains
+  approved. #8307 and #8306 retain stale `CHANGES_REQUESTED` decisions from
+  earlier heads, with all concrete inline requests addressed; maintainer
+  re-review remains external.
+- **Identity and signatures:** every commit in all 8 PR ranges is authored by
+  Deepak Jain <deepujain@gmail.com>. GitHub reports every commit unsigned and
+  no commit has a DCO trailer; Hadoop's project recipe requires neither.
+- **Validation and delivery:** `git diff --check
+  apache/trunk...origin/<branch>` passed for all 8 rebased branches. This host
+  has no Java runtime, Maven, or Bats, so focused local tests could not be
+  rerun. Posted an exact-head rebase/validation comment on every PR, then
+  re-read heads, drift, reviews, and check suites.
+- **Healthy count:** 6/5. #8670, #8389, #8388, #8335, #8334, and #8310 have
+  no remaining contributor-actionable conflict, review finding, signature
+  defect, or red validation. #8307 and #8306 remain excluded pending
+  maintainer re-review.
+- **Learn:** no skill update. Newly merged peers #8712 and #8700 reinforced
+  the existing detailed-analysis plus focused-regression-test rule, while
+  closed #8710 only restated the established trunk/upstream authority boundary.
+- **Replenish:** no missing slot exists: 8 open and 6 strictly healthy versus
+  target 5. Therefore no JIRA candidate screen, branch, push, or PR was
+  eligible in this lifecycle.
+
+## 2026-09-03 sweep state (manual-sweep-all, 7:13 PM PT)
+
+- **Departed since 1:21 PM PT:** none; the authored set remains #8670, #8389,
+  #8388, #8335, #8334, #8310, #8307, and #8306.
+- **Maintain:** all 8 branches are mergeable and exactly 0 behind
+  `apache/trunk`; no rebase, conflict resolution, or source/test edit was
+  required. The maintenance helper initially failed inside the filesystem
+  sandbox, was diagnosed and rerun outside it, and then verified all 8 heads
+  current.
+- **CI action:** raw Jenkins consoles for #8335 build 12, #8334 build 12, and
+  #8310 build 21 ended with `Caught signal TERM` and exit 143 while HDFS tests
+  were still running, with no deterministic patch-specific error. Pushed
+  no-code refresh commits #8335 `c6e55996`, #8334 `e15a4e2e`, and #8310
+  `e14bfdef`, then posted exact-build comments. Their replacement Jenkins and
+  GitHub runs are queued or pending.
+- **Other CI:** #8389, #8388, #8307, and #8306 are fully green. #8670 has green
+  Yetus and Jenkins with its fork GitHub Build still in progress.
+- **Reviews:** all inline threads are resolved. #8335 remains approved. #8307
+  and #8306 retain stale `CHANGES_REQUESTED` decisions from old heads and await
+  maintainer re-review; no current-head contributor action remains.
+- **Identity and signatures:** every exact-head commit is authored by Deepak
+  Jain <deepujain@gmail.com>. The three refresh commits are unsigned and have
+  no DCO trailer, matching the existing Hadoop contribution recipe, which does
+  not require cryptographic signatures or DCO trailers.
+- **Healthy count:** 6/5 under the project definition: #8670, #8389, #8388,
+  #8335, #8334, and #8310 have no current contributor-actionable failure.
+  #8307 and #8306 remain excluded because maintainer re-review is outstanding.
+- **Learn:** three independent raw Jenkins consoles established a durable
+  timeout signature. Updated `projects/apache/hadoop/SKILL.md` to classify
+  signal TERM plus exit 143 at the pipeline timeout as infrastructure evidence
+  when no deterministic patch error appears, and to require a least-invasive
+  refresh with exact-head documentation.
+- **Replenish:** no candidate was eligible for screening or publication. The
+  queue remains above both the open target (8/5) and healthy target (6/5).
+
+## 2026-09-03 sweep state (manual-sweep-all, 1:21 PM PT)
+
+- **Departed since 12:30 PM PT:** none; the authored set remains #8670, #8389,
+  #8388, #8335, #8334, #8310, #8307, and #8306.
+- **Maintain:** all 8 exact heads are mergeable and 0 behind `apache/trunk`;
+  no rebase, source commit, or fork push was required in this pass. Every commit
+  is authored by Deepak Jain <deepujain@gmail.com>; signatures are absent and
+  not required by the Hadoop project recipe.
+- **Review action:** resolved all 7 already-addressed outdated threads on #8307
+  (2) and #8306 (5), after verifying their current diffs and latest author
+  replies. #8335's single addressed thread remains resolved. #8307 and #8306
+  still show stale `CHANGES_REQUESTED` decisions pending maintainer re-review.
+- **Metadata action:** corrected #8307's title and body to match its current
+  Path documentation/test-only scope; removed stale claims about reverted
+  FileSystem behavior and public APIs.
+- **CI:** no current-head red checks. #8670, #8388, and #8306 have green Yetus
+  and Jenkins results. #8389, #8335, #8334, #8310, and #8307 have fresh Jenkins
+  runs pending. Fork GHA matrices are queued or running after successful image
+  builds; the queue state is runner capacity, not a patch failure.
+- **Raw red evidence:** #8334's superseded Yetus build 10 failed unrelated HDFS
+  tests (`TestDataNodeLifeline` setup/reconfiguration timeouts plus other HA and
+  decommission flakes) while the patch's shaded client checks passed. #8310's
+  superseded build 16 named unrelated `TestBalancerWithHANameNodes`; later
+  Jenkins build 19 exited 137 after result collection without a patch-specific
+  error. Both current heads are rerunning.
+- **Healthy count:** 6/5. #8307 and #8306 remain excluded only because stale
+  changes-requested decisions need maintainer re-review; pending current-head CI
+  has no contributor-actionable failure.
+- **Learn:** no skill update. Recent merged peer PRs reinforced existing rules
+  for JIRA-linked titles, narrow diffs, and current metadata; this sweep's
+  scope-drift repair is already required by project skill sections 8 and 9.5.
+- **Replenish:** skipped by live target policy. The queue is over target at 8/5
+  open and 6/5 healthy, so no JIRA candidate screen, branch, push, or PR was
+  eligible.
+
 ## 2026-09-03 sweep state (manual-sweep-all, 12:30 PM PT)
 
 - **Departed since 11:25 AM PT:** none.

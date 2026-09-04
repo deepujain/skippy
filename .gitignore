@@ -9,3 +9,6 @@
 .skippy/sweep-agent-*.lock
 .skippy/pending-ticks.jsonl
 .skippy/sweep-loop.pid
+.skippy/runs/
+.skippy/runtime-current/
+.skippy/tmp/

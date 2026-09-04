@@ -33,7 +33,7 @@ Use this recipe for [UKGovernmentBEIS/inspect_ai](https://github.com/UKGovernmen
 - CI: ruff, mypy, pytest, package build on Python 3.10 and 3.11
 - Viewer/frontend CI: `src/inspect_ai/_view/ts-mono` pnpm build, generated schema/types, checked-in `dist`
 - Sandbox-tools CI: special gates for `src/inspect_sandbox_tools`, `src/inspect_ai/tool/**`, and `sandbox_tools_version.txt`
-- Current contribution policy: check `AGENTS.md` and `CONTRIBUTING.md` live. Qualified contributors are listed by account id; established contributors have at least one non-trivial merged PR; new contributors need an `accepted` issue before coding except trivial docs-only fixes. Accounts without write access are limited to 4 open PRs, draft PRs are not reviewed, and unrequested core functionality should become an extension unless maintainers accept it for core.
+- Current contribution policy: check `AGENTS.md`, `CONTRIBUTING.md`, and `.github/scripts/pr_gate.py` live. Qualified contributors are listed by account id; every other contributor needs an `accepted` issue before coding except trivial docs-only fixes. Upstream commit `cf70b2404` removed the former per-author open-PR cap because accepted issues now establish maintainer-approved demand; the Skippy queue target remains an independent local target, not an upstream maximum. Draft PRs are not reviewed, and unrequested core functionality should become an extension unless maintainers accept it for core.
 
 ## Required live reconnaissance
 
@@ -87,21 +87,21 @@ is invoked by the user or by a scheduled task.
 - On every sweep, after inspecting all authored open PRs, evaluate whether the
   repo's contribution gates allow a new issue PR. Do this even when no authored
   PR merged since the previous sweep.
-- Respect the live gate in this skill: accounts without write access keep **at
-  most 4 open PRs**, and non-qualified/non-established contributors still need
-  an `accepted` issue before coding except for trivial docs-only fixes.
-- If the queue is below the cap and contributor policy allows it, pick **one**
-  new well-scoped accepted issue using the normal Inspect AI issue-selection
+- Respect the live gate in this skill: non-qualified contributors need an
+  `accepted` issue before coding except for trivial docs-only fixes. Do not
+  infer an upstream open-PR cap from the configured Skippy queue target.
+- For each slot below the configured target that contributor policy allows,
+  pick a well-scoped accepted issue using the normal Inspect AI issue-selection
   rules in this skill and run the full new-PR recipe in the same sweep.
 - A failing/rerunning CI job, unresolved review, merge conflict, stale base, or
   unclear maintainer acceptance on one authored PR is a maintenance workstream
   for that PR, not a replenishment stop. Maintain it, then keep screening and
-  publishing independent qualified slots. Stop below the cap only for the
-  verified cap, a shared policy/publication restriction, or no qualified
+  publishing independent qualified slots. Stop below the target only for a
+  verified maximum, a shared policy/publication restriction, or no qualified
   non-overlapping accepted issue after the complete screen.
 - Report the outcome explicitly in the sweep output: `opened new PR`,
   `issue selected, PR in progress`, or `replenishment skipped` with the exact
-  blocker such as 4-open-PR cap reached, issue not accepted, a shared
+  blocker such as the configured queue target reached, issue not accepted, a shared
   publication restriction, duplicate risk, or no strong candidate.
 
 ```bash
@@ -139,8 +139,8 @@ When calibrating contribution style, also scan recent merged PRs from other cont
 
 1. **Pick and claim the issue.**
    - Read the current `AGENTS.md` and `CONTRIBUTING.md` contribution gates before opening or reopening PRs.
-   - Determine contributor tier live: compare `gh api users/deepujain --jq .id` with `.github/qualified.yml`, then inspect merged non-trivial PRs for established status. If neither applies, do not code or open a PR until the issue is labeled `accepted`, except for trivial docs-only fixes under the upstream size limit.
-   - Keep at most 4 Inspect AI PRs open for accounts without write access. If there are already 4 open PRs, maintain those or wait for review instead of opening more.
+   - Determine contributor policy live: compare `gh api users/deepujain --jq .id` with `.github/qualified.yml`. If the account is not listed, do not code or open a PR until the issue is labeled `accepted`, except for trivial docs-only fixes under the upstream size limit; prior merged PRs do not bypass this gate.
+   - Treat the configured healthy-open target as Skippy queue policy, not an upstream cap. Refresh `AGENTS.md`, `CONTRIBUTING.md`, and `.github/scripts/pr_gate.py` before relying on any contributor maximum.
    - Prefer `good first issue` or clearly scoped bugs/docs gaps unless the user asks for a larger change.
    - Treat `good first issue` as accepted, matching the upstream guide.
    - Before coding, re-evaluate value: require a demonstrated problem, reproduction, failing test, or maintainer-accepted direction. If the need is speculative, file or update an issue with evidence instead.
@@ -217,6 +217,7 @@ When calibrating contribution style, also scan recent merged PRs from other cont
 
    Additional validation by area:
 
+   - Before validating changes to model providers, sandbox/tool code, agents, or async plumbing, read the live `.claude/skills/slow-tests/SKILL.md` and run the applicable gated classes (`slow`, live provider API, flaky, and/or trio). Plain `pytest` skips these classes, and PR CI does not run live provider tests. Add a `### Slow tests` section under "Other information" with each exact command, passed and skipped counts by class/provider, and every environment limit such as missing keys, Docker, model access, or a local server. Never count a skip as an executed test.
    - Docs: render or at least inspect the affected Quarto page and generated data path.
    - CLI: run the exact `inspect ...` command or `--help` path affected by the issue.
    - Model/provider: test request construction, parsing, header merging, default/fallback precedence, and opt-out behavior without requiring secrets; include provider-specific tests.
@@ -241,7 +242,7 @@ When calibrating contribution style, also scan recent merged PRs from other cont
      --head deepujain:issue-NN-short-topic
    ```
 
-   Open a PR only when it is intended for review: linked to accepted work when required, locally validated, current with `main`, and within the 4-open-PR limit. Do not open draft PRs for work that should be reviewed; maintainers do not review draft PRs, and repeated draft rebases consume CI without advancing mergeability. If work is not ready, keep it local or in the fork without an upstream PR.
+   Open a PR only when it is intended for review: linked to accepted work when required, locally validated, current with `main`, and within the configured Skippy queue target unless the user changes it. Do not open draft PRs for work that should be reviewed; maintainers do not review draft PRs, and repeated draft rebases consume CI without advancing mergeability. If work is not ready, keep it local or in the fork without an upstream PR.
 
    Inspect AI requires contributor tooling disclosure in PR descriptions. If the user's public-text rule forbids naming or describing tooling, stop before opening the PR and ask for approved wording or do not open the PR. Never omit a required disclosure, invent a false disclosure, or publish private tool names against the user's instruction.
 

@@ -12,6 +12,100 @@ target as actionable.
 Base branch: `main`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/airflow`).
 
+## 2026-09-04 sweep state (sweep-all project pass, 8:56 AM PT)
+
+- **Departed:** none; the authored open set remains #72402, #72394, #71430,
+  #69157, and #69150.
+- **Maintain:** five force-push rebase updates occurred during the pass:
+  #72402 `2a71fe62` to `03348ded`, #72394 `02bdd832` to `84c7f269`,
+  #71430 `594cda49` to `3a374d6a`, #69157 `f993b0e7` to `d7572c06`,
+  and #69150 `bb440750` to `23195165`. All were performed by `deepujain`.
+  The maintain helper hit stale leases after the remote heads advanced, then
+  recovered through live compare and `gh pr update-branch --rebase`: 0
+  additional pushes, 5 current, 0 failed, 0 conflicts, and 0 source/test edits.
+- **Base and heads:** live `apache/main` is `6815d040`; all five exact heads are
+  mergeable and 0 behind.
+- **Checks:** 0 failures on every current head. At final recheck, #72402 had
+  21 pass / 5 pending / 10 skipped; #72394 6 / 20 / 10; #71430 7 / 19 / 10;
+  #69157 6 / 20 / 10; #69150 6 / 19 / 11. No current failure existed, so there
+  was no raw failure log to inspect.
+- **Reviews:** 0 unresolved current threads. #72394, #69157, and #69150 are
+  approved; #72402 and #71430 await maintainer review. Existing inline replies
+  remain current and resolved. Added `+1` reactions to four addressed human
+  inline findings across #69157 and #69150.
+- **Identity, DCO, signatures, disclosure:** all 13 current commits are authored
+  by Deepak Jain `<deepujain@gmail.com>` and all five bodies contain checked
+  Gen-AI disclosure plus `Generated-by:`. GitHub reports all 13 commits as
+  cryptographically unsigned; 1 has a `Signed-off-by` trailer and 12 do not.
+  Live contributor guidance, check rollups, and applicable rules expose no DCO
+  or signed-commit requirement.
+- **Learn:** no skill or learning-log update. Merged peer PRs #72455 and #72381
+  show focused test-backed changes already covered by existing guidance.
+  Closed-unmerged #72516 was an identical duplicate of #72515 and #68665 was
+  superseded by #72323, reinforcing existing overlap and supersession rules.
+- **Replenish:** skipped at strict healthy target 5/5. There is no eligible
+  missing slot, so no candidate issue was screened or started; another PR would
+  exceed target and conflict with the maintainer-bandwidth gate.
+
+## 2026-09-03 sweep state (sweep-all project pass, 7:13 PM PT)
+
+- **Departed:** none; the authored open set remains #72402, #72394, #71430,
+  #69157, and #69150.
+- **Maintain:** `sweep-maintain.sh` completed with `MAINTAIN_PUSHED=0`; all five
+  fork heads are mergeable and 0 behind live `apache/main` (`b3b62fa8`). No
+  rebase, conflict resolution, code/test change, push, reply, reaction, or
+  thread resolution was needed.
+- **Heads:** #72402 `2a71fe62`, #72394 `02bdd832`, #71430 `594cda49`, #69157
+  `f993b0e7`, #69150 `bb440750`.
+- **Checks:** 0 failed checks. #72402 (78), #72394 (79), and #71430 (107) have
+  no pending checks. #69157 (107) and #69150 (70) each have only the external
+  Mergeable check in progress. No current failure existed, so there was no raw
+  failure log to inspect.
+- **Reviews:** 0 unresolved current threads. #72394, #69157, and #69150 are
+  approved; #72402 and #71430 await maintainer review. Historical human inline
+  findings on #69157 and #69150 have replies and are resolved.
+- **Identity, DCO, signatures, disclosure:** all 14 PR commits are authored by
+  Deepak Jain `<deepujain@gmail.com>` and all five bodies contain the checked
+  Gen-AI disclosure plus `Generated-by:` line. GitHub reports all 14 commits as
+  cryptographically unsigned; 2 have `Signed-off-by` trailers and 12 do not.
+  Current Airflow contributor docs, check rollups, and repository rules expose
+  no DCO or cryptographic-signature requirement.
+- **Learn:** no skill or learning-log update. Peer closed-unmerged #72470 was
+  explicitly out of scope because its root cause belongs in the upstream
+  generator; #72397 was an author-closed duplicate draft. Both reinforce
+  existing scope and overlap rules and add no new durable Airflow rule.
+- **Replenish:** skipped at strict healthy target 5/5. No candidate was
+  screened or started because another PR would exceed the configured target
+  and conflict with the maintainer-bandwidth gate.
+
+## 2026-09-03 sweep state (sweep-all project pass, 1:14 PM PT)
+
+- **Departed:** none; the prior authored open set remains #72402, #72394,
+  #71430, #69157, and #69150.
+- **Maintain:** all five exact fork heads are mergeable and 0 behind live
+  `apache/main` (`b3b62fa8`); no rebase, source change, push, comment, reaction,
+  or thread resolution was needed.
+- **Heads:** #72402 `2a71fe62`, #72394 `02bdd832`, #71430 `594cda49`, #69157
+  `f993b0e7`, #69150 `bb440750`.
+- **Checks:** 0 failed checks. #72402 (78), #72394 (79), and #71430 (107) have
+  no pending checks. #69157 (107) and #69150 (70) each have only the external
+  Mergeable check in progress.
+- **Reviews:** 0 unresolved threads. #72394, #69157, and #69150 are approved;
+  #72402 and #71430 await maintainer review. Historical human inline findings
+  on #69157 and #69150 have current attributed replies and are resolved.
+- **Identity and disclosure:** all PR commits are authored by Deepak Jain
+  `<deepujain@gmail.com>` and all five PR bodies contain the checked Gen-AI
+  disclosure plus `Generated-by:` line. GitHub classifies the commits as
+  cryptographically unsigned; current Airflow policy and required checks do not
+  require cryptographic signatures or DCO trailers.
+- **Learn:** no skill or learning-log update. The bounded peer scan found one
+  recent test-only merge (#72082), no recent peer closed-unmerged outcome, and
+  no new authored review, CI failure, merge, closure, or durable Airflow
+  pattern.
+- **Replenish:** skipped at healthy target 5/5. No candidate was started or
+  screened because opening another PR would exceed the configured target and
+  conflict with the maintainer-bandwidth gate.
+
 ## 2026-09-03 sweep state (manual Learn and Replenish)
 
 - **Time:** ~12:30 PM PT.

@@ -73,6 +73,29 @@ state it did not produce. The main agent:
 - appends one combined summary after every project lifecycle is complete or has
   a concrete external blocker.
 
+Before delegation, create one run ID and prepare every project runtime with
+`scripts/sweep-runtime.sh prepare <run-id> <project>`. Include the run ID in
+every brief. Project owners
+must write phase checkpoints and use their emitted `TMPDIR` and isolated
+`SKIPPY_SWEEP_OUTPUT`; helpers must not write the global summary log.
+
+The coordinator must distinguish queued from running work. No startup
+checkpoint within three minutes means the owner never started and is replaced
+once. Do not describe it as "still running." A started owner gets a 90-minute
+hard handoff, one retry per no-progress operation, and at most five minutes of
+waiting for external CI or review. On expiry, integrate its partial receipt or
+resume token rather than waiting indefinitely.
+
+Run `scripts/sweep-watchdog.py <run-id> --root .skippy/runs` after the startup
+window and again before integration. `REPLACE` means the project owner never
+started; `HANDOFF` means the active budget expired. Neither state is a reason
+for the coordinator to wait.
+
+Routine cleanup never blocks completion or asks the user for permission. Clean
+only sweep-owned paths through `scripts/sweep-runtime.sh`; if cleanup is denied
+or fails, checkpoint `cleanup_deferred`, leave the ignored artifact, and
+continue.
+
 Do not call `scripts/sweep-all-projects.sh` as the implementation of a full
 sweep. It is a maintenance-only compatibility helper and cannot perform review
 repair, learning, replenishment, or subagent orchestration.
@@ -142,6 +165,11 @@ its row to the main agent without writing the global table; the main agent
 appends one combined table only after reviewing every receipt. Use
 `scripts/sweep-log-summary.sh` (fixed-width box table in the log) with columns:
 Project, Open, Healthy, Maintain, Action, Self Learning.
+
+For the combined table, pass each reviewed project receipt through
+`--verified-row "project|open|target|healthy|maintain|action|lesson"`. This
+preserves stricter project evidence such as maintainer-approval-gated workflow
+suites that GitHub omits from the ordinary PR status rollup.
 
 - **Maintain:** state the number of rebases, pushes, conflicts resolved, or that
   no branch update was required. Never append `see tick` or another pointer.

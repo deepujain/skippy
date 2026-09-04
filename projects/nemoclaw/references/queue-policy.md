@@ -1,12 +1,185 @@
 # nemoclaw contribution queue policy
 
 Target healthy open contributions: 5
-Repository or contributor maximum: 10 (enforced by github-actions on #10823)
-Configured by: user decision, pending live-policy confirmation
+Repository or contributor maximum: 5 (default in `.github/pr-limits.json`)
+Configured by: user target and live repository policy
 Refresh trigger: before every replenishment run and whenever repository policy changes
 
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
+
+## 2026-09-04 sweep state (runtime restart, 10:37 AM PT)
+
+- **Runtime:** `sweep-20260904-0856` started with the isolated runtime helper and
+  confirmed `startup/active`. Sweep state uses only
+  `.skippy/runs/sweep-20260904-0856/nemoclaw/`.
+- **Open (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311), and
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309). No authored PR
+  departed.
+- **Maintain:** recovery was idempotent, so no duplicate push or comment was
+  made. All five branches are mergeable and zero behind captured `main`
+  `d99d1dc579`. Exact heads are #10818 `fd5053b84`, #10705 `81882f00b`,
+  #10704 `9b11ad49b`, #10311 `63edceda4`, and #10309 `5b0e2ce9c`.
+  Existing exact-head receipts show `npm run build:cli`, the nested workspace
+  build, and `npm run validate:pr` passed on every head.
+- **Identity and review:** all 26 commits have Deepak Jain author and committer
+  identity, DCO sign-off, no Cursor trailer, and GitHub verification
+  `verified=true`, `reason=valid`. CodeRabbit passes all five. Inline threads
+  are clear except #10311's two current replies for credential-backed Gemini
+  runtime proof. #10311 and #10309 retain `CHANGES_REQUESTED` pending maintainer
+  disposition.
+- **CI and strict health (0/5):** #10309 passes all nine Advisor specialists.
+  #10818, #10705, and #10311 pass seven of nine; #10704 passes eight of nine.
+  Every failed Advisor job ended with HTTP 429, `textBytes=0`, and no published
+  finding. Fork `pull_request` workflows remain `action_required` pending
+  NVIDIA vetter approval.
+- **Learn:** no new skill update. The bounded peer sample repeats the retry
+  deadline series #11056/#11059/#11062 and read-only cache cleanup fix #11066,
+  both already recorded in `projects/nemoclaw/SKILL.md`.
+- **Replenish:** no slot is eligible. Live `.github/pr-limits.json` gives the
+  default contributor cap as 5 and the contributor already has 5 open PRs.
+  Future candidate [#10940](https://github.com/NVIDIA/NemoClaw/issues/10940)
+  is open, unassigned, and has no matching PR; linked
+  [#11045](https://github.com/NVIDIA/NemoClaw/issues/11045) is a distinct,
+  later failure point and is gated by `needs: triage`. #10940 still needs the
+  reported DGX Station local-vLLM environment and full runtime logs for
+  independent diagnosis and proof.
+
+## 2026-09-04 sweep state (manual full sweep, 3:27 AM PT)
+
+- **Open (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311), and
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309). No authored PR
+  departed since the previous receipt.
+- **Maintain:** all five branches were refreshed twice as `main` advanced during
+  the sweep: 10 fork force-pushes with leases, zero conflicts, and no source
+  changes. They were then validated serially on final base `d6e85434e` with the
+  nested workspace build and `npm run validate:pr`. Final heads are #10818
+  `e806fa7dc`, #10705 `b0f3175ec`, #10704 `e646ce759`, #10311 `530375e19`,
+  and #10309 `70249785c`.
+- **Identity and delivery:** all 25 PR commits have Deepak Jain author and
+  committer identity, DCO sign-off, no Cursor trailer, and GitHub verification
+  `verified=true`, `reason=valid`. All branches are zero behind and mergeable.
+  Exact-head PR bodies and reviewer-facing validation comments were refreshed.
+- **Review and CI:** CodeRabbit and all nine exact-head Advisor specialists pass
+  on every PR, with no pending or failed visible check. Inline threads are fully
+  resolved except #10311's two replies for credential-backed Gemini runtime
+  proof. #10311 and #10309 retain maintainer `CHANGES_REQUESTED` decisions
+  pending re-review. Fork workflows remain `action_required` pending NVIDIA
+  vetter approval, so strict healthy is 0/5.
+- **Learn:** merged peer series #11056, #11059, and #11062 establishes that a
+  shared action's retry budget and every caller workflow deadline must be
+  derived and covered together. `projects/nemoclaw/SKILL.md` now records this
+  reusable workflow-review rule.
+- **Replenish:** no slot is eligible because the live `.github/pr-limits.json`
+  default cap is 5 and the contributor has 5 open PRs. Candidate
+  [#10940](https://github.com/NVIDIA/NemoClaw/issues/10940) remains open,
+  unassigned, uncommented, and without linked or issue-number-matching PRs, but
+  independent diagnosis still requires the reported DGX Station local-vLLM
+  environment and complete runtime logs.
+
+## 2026-09-03 sweep state (manual sweep all, 7:13 PM PT)
+
+- **Open (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311), and
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309). No authored PR
+  departed since the prior receipt.
+- **Maintain:** all five branches were eight commits behind and were rebased
+  without conflicts onto `main` `2afbb2f09`, validated serially with
+  `npm run validate:pr`, and force-pushed to the fork with exact leases. Exact
+  heads are #10818 `625cac7c3`, #10705 `518b2c9ad`, #10704 `62048bcdb`,
+  #10311 `e0b5ca558`, and #10309 `6d8243d5e`.
+- **Identity and delivery:** every PR commit has Deepak Jain authorship and
+  committer identity, the required DCO trailer, and GitHub verification
+  `verified=true`, `reason=valid`. Every branch is zero behind and mergeable.
+  Exact-head validation comments and PR-body receipts were refreshed.
+- **Review:** CodeRabbit is green and all inline threads remain resolved on
+  #10818, #10705, #10704, and #10309. #10311 retains two current unresolved
+  replies for the same credential-backed Gemini runtime proof; the contributor
+  documented the absent secret-backed lane and cannot manufacture that
+  evidence. #10309 still carries the earlier maintainer
+  `CHANGES_REQUESTED` decision pending exact-head re-review.
+- **CI:** healthy count is 0/5 under strict project evidence. Exact-head Advisor
+  runs completed with no new published finding and failed only in provider
+  infrastructure lanes: #10818 and #10705 each have three HTTP 429,
+  zero-output failures; #10704 has three HTTP 429 failures plus one
+  zero-output timeout; #10311 has two HTTP 429 failures plus three zero-output
+  timeouts; #10309 has four HTTP 429 failures plus one zero-output timeout.
+  Raw logs show five exhausted provider retries, `textBytes=0`, and either HTTP
+  429 with no body or the 900-second session timeout. Source guardrails,
+  CodeRabbit, and available Advisor lanes passed. Fork `pull_request`
+  workflows remain `action_required` pending NVIDIA vetter approval.
+- **Learn:** no skill or learning-log update was warranted. The exact
+  HTTP-429/zero-artifact and timeout failure classes are already covered by the
+  Advisor model-protocol guidance, and merged peer
+  [#10999](https://github.com/NVIDIA/NemoClaw/pull/10999) confirms the same
+  infrastructure classification without adding a new contributor action.
+- **Replenish:** blocked at the live default contributor cap, 5/5, so there is
+  no eligible missing slot. Candidate
+  [#10940](https://github.com/NVIDIA/NemoClaw/issues/10940) remains open with
+  no assignee, comments, or matching PR by issue number, but still requires the
+  reported DGX Station local-vLLM environment and runtime logs for independent
+  diagnosis and proof.
+
+## 2026-09-03 sweep state (manual-sweep-all recovery, 3:36 PM PT)
+
+- **Open (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311), and
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309). No new departure;
+  [#10787](https://github.com/NVIDIA/NemoClaw/pull/10787) remains the latest
+  merged departure at merge commit `53634df3d`.
+- **Maintain:** all five branches were rebased onto `main` `3d754417b`,
+  validated serially with `npm run validate:pr`, checked commit-by-commit for
+  Deepak Jain authorship, DCO, and GitHub SSH verification, and pushed with
+  exact-head leases. Exact heads are #10818 `360c2f060`, #10705 `67034efb8`,
+  #10704 `e6424d5b9`, #10311 `65a9ca828`, and #10309 `4f8544e38`.
+- **Repairs:** #10818 injects the bounded structured Docker probe; #10704
+  preserves Windows transport and final-retry diagnostics; #10311 preserves
+  Gemini budgets through every probe owner; #10309 delegates native OpenClaw
+  install and fixes its dead collision guard plus SSH marker parsing. #10705's
+  source and behavioral fixes are preserved, but the interrupted owner's
+  reviewed-bundle commit was removed because it fails both qualification-receipt
+  and source-shape repository gates. #10309 additionally executes the generated
+  native installer against a fake Linux OpenClaw CLI and verifies publication,
+  provenance, replacement, and private staging cleanup.
+- **Review:** all contributor-actionable inline threads are resolved. #10309's
+  three latest CodeRabbit findings were fixed in `cc22d9cf4` and `4f8544e38`,
+  replied to, reacted to, resolved, and sent for re-review. #10311 retains the
+  explicit P1 request for credential-backed live Gemini runtime evidence.
+  #10705 retains the human request for a regenerated shipped bundle and drift
+  proof.
+- **External gates:** healthy count is 0/5. Exact-head Advisor runs produced no
+  actionable review output: #10818 exhausted all nine lanes with HTTP 429;
+  #10705 did so again on its later exact-head run; #10704 had eight HTTP 429
+  failures and one provider HTTP 403; #10309 passed three lanes and had six
+  HTTP 429 failures. #10311 has a second attempt in progress. The contributor
+  cannot manually rerun upstream jobs because GitHub requires repository admin
+  rights. This is a repeated infrastructure class, so no empty-commit retrigger
+  was added. #10309 retains its earlier `CHANGES_REQUESTED` decision pending
+  maintainer re-review. #10311 needs a maintainer-provided Gemini live E2E lane
+  and credential. #10705 needs one qualified workflow run that publishes both
+  Pi architecture images, both receipts, and matching receipt authority
+  digests. Remaining fork workflow approvals and ordinary maintainer review are
+  external.
+- **Learn:** project skill now treats committed reviewed-runtime bundles as
+  qualified release inputs. The durable gate sequence is owning bundle check,
+  full repository gate, both-architecture Pi qualification, and behavioral
+  contract coverage rather than raw bundle source-text assertions.
+- **Replenish:** blocked at the live contributor cap, 5/5. Candidate
+  [#10940](https://github.com/NVIDIA/NemoClaw/issues/10940) has no assignee,
+  comments, or PR overlap by issue number or title/error keywords, but is not
+  independently qualified: diagnosis and proof require the reported DGX Station
+  local-vLLM environment and full runtime logs. Closed #10852 remains rejected
+  as superseded by merged #10834.
 
 ## 2026-09-03 sweep state (manual-sweep-all)
 

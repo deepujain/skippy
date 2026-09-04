@@ -98,6 +98,25 @@ case "$PROJECT" in
     ;;
 esac
 
+if [[ -z "${SKIPPY_RUN_ID:-}" && -f "$ROOT/.skippy/runtime-current/$PROJECT" ]]; then
+  SKIPPY_RUN_ID="$(tr -d '\r\n' <"$ROOT/.skippy/runtime-current/$PROJECT")"
+  case "$SKIPPY_RUN_ID" in
+    ""|*[!A-Za-z0-9._-]*) unset SKIPPY_RUN_ID ;;
+    *) export SKIPPY_RUN_ID ;;
+  esac
+fi
+
+if [[ -n "${SKIPPY_RUN_ID:-}" ]]; then
+  SKIPPY_RUNTIME_DIR="$ROOT/.skippy/runs/$SKIPPY_RUN_ID/$PROJECT"
+  export SKIPPY_RUNTIME_DIR
+  export SKIPPY_SWEEP_OUTPUT="$SKIPPY_RUNTIME_DIR/sweep.log"
+  export TMPDIR="$SKIPPY_RUNTIME_DIR/tmp"
+else
+  SKIPPY_RUNTIME_DIR="${SKIPPY_RUNTIME_DIR:-$ROOT/.skippy/tmp/$PROJECT}"
+  export SKIPPY_RUNTIME_DIR
+fi
+mkdir -p "$SKIPPY_RUNTIME_DIR/tmp"
+
 "$LOG" "$PROJECT" "MAINTAIN ($REASON) starting for $REPO"
 
 if [[ ! -d "$CLONE/.git" ]]; then
@@ -119,9 +138,9 @@ if [[ "$COUNT" -eq 0 ]]; then
   exit 0
 fi
 
-TRACKER=$(mktemp)
+TRACKER="$SKIPPY_RUNTIME_DIR/tmp/maintain-tracker-$$"
+: >"$TRACKER"
 export SWEEP_MAINTAIN_TRACKER="$TRACKER"
-trap 'rm -f "$TRACKER"' EXIT
 
 echo "$JSON" | python3 -c "
 import json, sys

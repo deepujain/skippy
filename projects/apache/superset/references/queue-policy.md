@@ -11,6 +11,172 @@ target as actionable.
 Base branch: `master`. Upstream remote: `apache`. Fork remote: `origin`
 (`deepujain/superset`). Local clone: `/Users/dejain/nvidia/oss/worktrees/apache/superset`.
 
+## 2026-09-04 sweep state (manual sweep all, 8:56 AM PT)
+
+- **Departed since 7:13 PM PT:** none. The authored closed-PR query remains
+  empty.
+- **Open / strict healthy:** 2/5 open and 0/5 strict healthy. #43806 head
+  `339fc445b6` and #43803 head `e48c27fab5` are mergeable and 0 behind
+  `master` at `d9b201db74`. Their full exact-head workflow suites are
+  `action_required` with no jobs because upstream approval is maintainer-only,
+  so they are contributor-clean but not counted as green.
+- **Maintain:** both authored branches were 20 commits stale. #43806 rebased
+  cleanly from `53803d0701` to `339fc445b6`, passed 9 focused Jest tests,
+  changed-file oxlint, package declaration builds, the root TypeScript check,
+  and `git diff --check`, then was force-pushed with an exact lease. #43803
+  rebased cleanly from `6ec2fac81a` to `e48c27fab5`, retained exactly four
+  intended link edits, rejected the stale Release Notes anchor, reached the
+  GitHub releases endpoint with HTTP 200, passed `git diff --check`, and was
+  force-pushed with an exact lease. Local `pre-commit` remains unavailable;
+  exact-head pre-commit is waiting on maintainer workflow approval.
+- **Review, identity, and signatures:** #43806's two human/Copilot inline
+  threads remain replied to, reacted to, outdated, and resolved. The newest
+  Bito suggestion proposed `enable: true`; the root type check proved that
+  `ResizableProps['enable']` accepts `Enable | false` and rejected `true` with
+  TS2322, so the attempted change was reverted and the evidence was posted on
+  the PR. #43803 has no inline threads, and its latest Bito body reports zero
+  actionable suggestions. Every commit has the expected Deepak Jain identity.
+  GitHub reports all commits unsigned; two of three #43806 commits have DCO
+  trailers, while its first commit and #43803 do not. Current live policy and
+  checks require neither verified signatures nor DCO trailers.
+- **Learn:** no skill update. The rejected current-head Bito suggestion
+  reinforces the existing rule to verify bot findings against the real type
+  contract. Peer #43787 closed after its author found the Webpack-native CSS
+  migration was not ready for the Storybook ecosystem, but one author outcome
+  is not durable project policy. Recent merged peers #43830, #43834, #43846,
+  and #43820 add no new command, policy, or recurring review rule beyond the
+  current project skill.
+- **Candidate screen:** refreshed the 100 newest open issues and 100 open PRs,
+  cross-matched explicit issue references, and re-read the prior eligible
+  blockers. All 40 previously recorded overlap PRs remain open; new #43859
+  covers #43717 and #43861 covers #39007. New #43860 has a concrete default
+  install failure but its reporter offered to implement and Piyush-08-bot
+  publicly claimed it before this sweep. New #43862 lacks data or a deterministic
+  browser reproducer and was also publicly claimed. #43847 now has two public
+  implementation claims and still lacks a parsing-policy decision. #42679,
+  #42568, #42840, and #43352 retain their design, release-authority,
+  third-party ownership, or browser-validation blockers. Live contribution
+  guidance still publishes no contributor maximum.
+- **Replenish:** no qualified collision-free candidate remained, so no PR was
+  opened. Slot 3 is unavailable because all current narrow issue candidates
+  overlap active PRs. Slot 4 is unavailable because #43860, #43862, #43847,
+  and #43717 are publicly claimed or already have active implementations.
+  Slot 5 is unavailable after the remaining candidates failed the design,
+  release-authority, repository-ownership, or realistic validation gates.
+
+## 2026-09-03 sweep state (manual sweep all, 7:13 PM PT)
+
+- **Departed since 1:51 PM PT:** none. The authored closed-PR query remains
+  empty.
+- **Open / healthy:** 2/5 open and 2/5 healthy. #43806 head
+  `53803d0701` and #43803 head `6ec2fac81a` are each mergeable, 0 behind
+  `master` at `765a4ecca5`, exact-head CI green, and blocked only on maintainer
+  review.
+- **Maintain:** both authored branches became two commits stale during the
+  sweep. Each rebased cleanly onto current `master`, passed branch-specific
+  validation, and was force-pushed to `deepujain/superset` with an exact lease:
+  #43806 `cb209a8aed` -> `53803d0701`; #43803 `fb0114b2ef` ->
+  `6ec2fac81a`. #43806 passed 9 focused Jest tests, changed-file oxlint,
+  package declaration build, root type check, and `git diff --check`; its full
+  refreshed CI passed frontend lint and all eight Jest shards, Storybook,
+  coverage, CodeQL, Cypress, Playwright, Docker, pre-commit, and repository
+  gates. #43803 passed its four-file scope check, stale-anchor rejection,
+  GitHub releases HTTP 200 check, and `git diff --check`; local `pre-commit`
+  remained unavailable in the isolated worktree, but exact-head pre-commit and
+  docs preview passed in CI. #43806 retains two replied, reacted, outdated,
+  and resolved review threads; #43803 has no inline threads. The latest Bito
+  review bodies report zero actionable suggestions. Every commit has the
+  expected Deepak Jain identity. GitHub reports the commits unsigned; current
+  live contribution guidance and checks do not require verified signatures or
+  DCO trailers.
+- **Learn:** no skill update. Newly merged peer #43833 confirms the existing
+  rule to make narrow test-selector corrections against rendered labels.
+  Peer #43840 closed unmerged with no human closure reason, so its malformed
+  broad diff is classified as unknown rather than promoted into guidance. The
+  package declaration plus root type-check lesson from #43806 is already in
+  `projects/apache/superset/SKILL.md`.
+- **Candidate screen:** refreshed all 100 newest open issues, all 100 open PRs,
+  and every overlap recorded at 1:51 PM. Forty previously active overlap PRs
+  remain open. #42927 merged, but #43186 still covers #42926. The only issue
+  created after the prior sweep, #43847, is explicitly claimed by its reporter,
+  awaits a maintainer decision on ambiguous integer-string parsing, and shares
+  `stringifyTimeInput` with the reporter's open #43839. #43717 remains claimed
+  by rounakkm with issue-author approval and received a second peer claim.
+  #42679 still needs a decision on inclusive/exclusive equal timestamps;
+  #42568 requires the planned `apache-superset-core` 7.0 release; #42840 loses
+  data inside `pyathena` before Superset receives it; #43352 still lacks a
+  validated multi-row sticky-offset design and overlaps discussion #42925.
+  Live `CONTRIBUTING.md` contains no contributor maximum.
+- **Replenish:** no qualified, collision-free candidate remained, so no PR was
+  opened. Slot 3 is unavailable because the active exact-issue and exact-path
+  PR inventory remains occupied. Slot 4 is unavailable because #43717 and
+  #43847 are publicly claimed and the remaining current issues overlap active
+  work. Slot 5 is unavailable after #42679, #42568, #42840, and #43352 failed
+  the design, release-authority, repository-ownership, or validation gates.
+
+## 2026-09-03 sweep state (manual-sweep-all recovery, 1:51 PM PT)
+
+- **Departed since 12:35 PM PT:** none.
+- **Open / healthy:** 2/5 open and contributor-clean. Healthy is 0/5 because
+  refreshed exact-head workflows require upstream maintainer approval after
+  the final rebases.
+- **Maintain:** raw `lint-frontend` output on #43806's earlier head showed five
+  TS18048 errors because `mergeResizableConfig` exposed an optional return type
+  despite always returning an object. The pushed non-nullable return contract
+  reached an exact-head green run with 64 passing and 13 skipped checks,
+  including frontend lint, Jest, type, CodeQL, Cypress, and Playwright.
+  `master` then advanced by one commit, so both authored branches were rebased
+  again and force-pushed with leases. Current #43806 head `cb209a8aed` and
+  #43803 head `fb0114b2ef` are each 0 behind `master`, mergeable, and waiting
+  only on refreshed workflow approval and maintainer review. GitHub created
+  the full workflow set for both new heads with `action_required`, no jobs, and
+  no failure logs; approving upstream fork workflows is maintainer-only.
+  #43806 passed its focused 9-test
+  suite, changed-file oxlint, package declaration build, and root type check
+  after the final rebase. #43803's four changed links have no stale anchor and
+  the GitHub releases target returned HTTP 200; `pre-commit` was unavailable
+  in its isolated worktree, while its previous exact head had completed
+  pre-commit and docs preview successfully. The Copilot and human inline
+  findings on #43806 remain individually replied to, reacted to, and resolved;
+  latest Bito review bodies report zero actionable suggestions. Codecov's
+  informational 91.67% patch-coverage comment is non-blocking and its checks
+  passed. Every commit has the expected Deepak Jain identity. GitHub reports
+  the commits unsigned; live contribution guidance and checks do not require
+  verified signatures or DCO trailers.
+- **Learn:** updated `projects/apache/superset/SKILL.md` to require
+  `npm run plugins:build && npm run type` for package TypeScript changes.
+  Durable evidence is #43806: focused Jest and oxlint passed while the CI root
+  type check failed until package declarations were built and the exported
+  non-null contract was corrected.
+- **Candidate screen:** read issue bodies, comments, and timelines and checked
+  linked development, open and closed PRs by issue number, title/error phrases,
+  and affected paths. Active overlaps include #43812 -> #43813; #43801 ->
+  #43807; #43764 -> #43808; #43728 -> #43731; #43727 -> #43732; #43721 ->
+  #43722; #43714 -> #43756; #43576 -> #43577/#43697; #43574 -> #43575;
+  #43558/#43383 -> #43472; #43550 -> #43655; #43547 ->
+  #43682/#43693/#43694; #43503 -> #43504; #43385 -> #43683; #43356 ->
+  #43585/#43710; #43344 -> #43365; #43258 -> #40815; #43231 -> #43236;
+  #43138 -> #43175; #43068 -> #43071/#43116; #42989 -> #42994; #42978 ->
+  #43150/#43184; #42926 -> #42927/#43186; and #42980 ->
+  #43239/#43566. Additional active overlaps in the completed eligible pool are
+  #43084 -> #43181/#43457; #43002 -> #43182; #42876 -> #43214; #43342 ->
+  #43343; #43174 -> #43176; #43089 -> #43536; #43057 -> #43108; and #42979
+  -> #43168. #43717 is publicly claimed by rounakkm with issue-author
+  approval. #42679 still carries `validation:required` and an unresolved
+  maintainer question about inclusive/exclusive timestamp semantics. #42568
+  requires a coordinated `apache-superset-core` release planned for 7.0.
+  #42840 was traced by a maintainer to `pyathena`, where data is lost before
+  Superset receives it, so there is no in-repository owning boundary to patch.
+  #43352 overlaps discussion #42925 and still lacks a validated multi-row
+  sticky-offset design. Closed-overlap searches found no superseded
+  implementation for these five remaining blocked candidates.
+- **Replenish:** no qualified, collision-free candidate remained. Slots 3-5
+  are unavailable this run: slot 3 is blocked by the active exact-issue and
+  exact-path PRs above; slot 4 is blocked by the approved #43717 claim and
+  remaining active overlaps; slot 5 is blocked after the remaining candidates
+  failed validation, repository-ownership, release-authority, or design gates
+  (#42679, #42840, #42568, #43352).
+
 ## 2026-09-03 sweep state (manual-sweep-all, follow-up)
 
 - **Time:** 12:35 PM PT.

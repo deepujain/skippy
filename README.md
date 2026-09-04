@@ -201,6 +201,12 @@ slots. The main agent coordinates isolated project boundaries, recovers stopped
 agents, verifies each receipt, and produces one combined summary after every
 project finishes.
 
+On Cursor, each project owner starts with an observable workspace-local runtime
+checkpoint and isolated log. Routine fork operations and sweep-owned cleanup
+run non-interactively. Queued owners are detected within three minutes, active
+owners hand off by 90 minutes, and blocked cleanup is deferred rather than
+prompting the user or preventing completion.
+
 ### 3. Schedule it
 
 Ask your coding agent to schedule it:

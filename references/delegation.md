@@ -46,6 +46,34 @@ isolated project worktrees. The lead must launch all project owners together;
 it must not perform serial pre-maintenance that changes their starting heads.
 A stopped owner is resumed or replaced before integration.
 
+## Cursor sweep runtime contract
+
+Every project owner receives a run ID and must make its first action:
+
+```bash
+eval "$(scripts/sweep-runtime.sh init <run-id> <project>)"
+```
+
+This creates a workspace-local temp directory, isolated project log, and
+observable startup checkpoint. The owner checkpoints `maintain`, `learn`, and
+`replenish`, then calls `finish` before returning its receipt.
+
+- Do not use system `/tmp` for sweep-owned state.
+- Do not ask for routine fork, GitHub, runtime-artifact, lock, or worktree
+  cleanup permission. If optional cleanup is denied, record
+  `cleanup_deferred`, retain the ignored artifact, and continue.
+- Do not wait on external CI or review for more than five minutes. Record the
+  exact pending gate and continue independent lifecycle work.
+- Retry the same failing operation at most once after changing an input or
+  recovery method. Two no-progress outcomes become a checkpointed blocker.
+- Target 55 minutes for Maintain, 10 minutes for Learn, and 20 minutes for
+  Replenish. At 90 minutes total, return a truthful partial receipt and resume
+  token instead of continuing invisibly.
+- The lead treats an owner with no startup checkpoint after three minutes as
+  queued or stalled, not running. Replace it once; do not wait indefinitely.
+- Before any push, comment, or review request, compare the current remote head
+  and existing messages so recovery is idempotent.
+
 ## Integration protocol
 
 1. The lead reviews every delivered artifact against the brief and live source.

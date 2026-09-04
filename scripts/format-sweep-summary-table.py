@@ -56,7 +56,9 @@ def format_table(headers: list[str], rows: list[list[str]], caps: list[int]) -> 
         ]
 
     lines = [sep(), *row(headers), sep()]
-    for entry in rows:
+    for index, entry in enumerate(rows):
+        if index:
+            lines.append(sep())
         lines.extend(row(entry))
     lines.append(sep())
     return "\n".join(lines)

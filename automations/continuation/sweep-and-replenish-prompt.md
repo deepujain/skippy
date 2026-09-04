@@ -19,6 +19,35 @@ The main agent only coordinates and integrates: review every structured project
 receipt, resume or replace stopped/incomplete project agents, verify live
 delivery claims, and append one combined summary after all projects finish.
 
+The coordinator creates one `<run-id>` and runs
+`scripts/sweep-runtime.sh prepare <run-id> <project-slug>` for each project
+before delegation. The project owner's first action is:
+
+```bash
+eval "$(scripts/sweep-runtime.sh init <run-id> <project-slug>)"
+```
+
+Checkpoint each phase with `sweep-runtime.sh checkpoint`, then call `finish`.
+Use the emitted workspace-local `TMPDIR` and project log. Never put Skippy state
+in system `/tmp`, never append the global log from a project owner, and never
+ask for permission to clean a sweep-owned temp, lock, tracker, or worktree. If
+optional cleanup fails, checkpoint `cleanup_deferred`, leave it ignored, and
+finish.
+
+Do not wait more than five minutes for external CI or review. Retry a
+no-progress operation only once after changing the input or method. Hand off a
+partial receipt and resume token at 90 minutes instead of continuing
+invisibly. The coordinator replaces an owner once when no startup checkpoint
+appears within three minutes.
+
+After the startup window and before integration, the coordinator runs:
+
+```bash
+scripts/sweep-watchdog.py <run-id> --root .skippy/runs
+```
+
+Act on `REPLACE` or `HANDOFF`; do not wait on either state.
+
 Run a complete Skippy `sweep and replenish` for **<project slug>** in
 **<local checkout path>**. Read the project skill, its queue policy, and the
 shared contribution queue policy. Maintain the configured target of

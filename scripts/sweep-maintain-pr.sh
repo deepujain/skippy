@@ -61,7 +61,10 @@ github_behind_by() {
 
 maintain_cleanup() {
   [[ -n "${WT:-}" ]] || return 0
-  git -C "$CLONE" worktree remove "$WT" --force 2>/dev/null || rm -rf "$WT"
+  [[ -e "$WT" ]] || return 0
+  if ! git -C "$CLONE" worktree remove "$WT" --force 2>/dev/null; then
+    printf 'sweep-maintain-pr: deferred cleanup for %s\n' "$WT" >&2
+  fi
   git -C "$CLONE" worktree prune 2>/dev/null || true
 }
 
@@ -148,7 +151,8 @@ fi
 OSS_ROOT="/Users/dejain/nvidia/oss"
 WORKTREES_ROOT="${SKIPPY_WORKTREES:-$OSS_ROOT/worktrees}"
 REL="${CLONE#$WORKTREES_ROOT/}"
-WT="$WORKTREES_ROOT/checkouts/$REL/maintain-$PR"
+RUN_COMPONENT="${SKIPPY_RUN_ID:-manual}"
+WT="$WORKTREES_ROOT/checkouts/$REL/maintain-$PR-$RUN_COMPONENT-$$"
 LOCK_DIR="$ROOT/.skippy/maintain-locks"
 LOCK_FILE="$LOCK_DIR/${REL//\//-}.lock"
 mkdir -p "$LOCK_DIR" "$(dirname "$WT")"
@@ -179,9 +183,9 @@ FORK_LEASE_OID=$(git -C "$CLONE" rev-parse "$FORK_REMOTE/$BRANCH")
 
 maintain_cleanup
 if ! git -C "$CLONE" worktree add --detach "$WT" "$FORK_REMOTE/$BRANCH" 2>/dev/null; then
-  rm -rf "$WT"
   git -C "$CLONE" worktree prune 2>/dev/null || true
-  git -C "$CLONE" worktree add --detach "$WT" "$FORK_REMOTE/$BRANCH" || fail "worktree add failed at $WT"
+  git -C "$CLONE" worktree add --detach "$WT" "$FORK_REMOTE/$BRANCH" || \
+    fail "worktree add failed at unique path $WT; cleanup deferred"
 fi
 
 git -C "$WT" config user.name "Deepak Jain"
