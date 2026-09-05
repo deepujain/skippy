@@ -8,6 +8,30 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-05 sweep state (10:41 AM PT)
+
+- **Open (5/5):** #11095, #10818, #10705, #10704, and #10311. The live
+  default contributor cap remains 5, so no sixth PR was created.
+- **Maintain:** all five exact heads remain zero commits behind `main`
+  `afb2342666`, mergeable, and unchanged from the 8:21 AM delivery refresh.
+  No rebase or fork-branch push was necessary.
+- **Identity:** all 19 commits were re-read through GitHub's public commit API;
+  every commit reports `verified=true`, `reason=valid`, and carries the DCO
+  sign-off.
+- **Review and CI:** CodeRabbit reports success on every exact head. All visible
+  fork-triggered GitHub Actions are `action_required` pending NVIDIA vetter
+  approval. All contributor-actionable inline threads are resolved. #10311
+  retains two unresolved requests for credential-backed Gemini runtime proof,
+  which requires maintainer infrastructure and secrets.
+- **Scope check:** CodeRabbit's #11095 summary mentions unrelated base changes,
+  but the current `origin/main...head` diff is exactly four added documentation
+  lines in `docs/reference/commands.mdx`. No scope repair is warranted.
+- **Learn:** no skill update. A bounded sample of recent peer outcomes (#11044,
+  #10528, #11011, #10889, and #11102) repeats existing outcome-first,
+  real-boundary, and delivery-evidence rules.
+- **Replenish:** no slot is eligible because the authored-open count and the
+  live maximum are both exactly 5.
+
 ## 2026-09-05 delivery refresh (8:21 AM PT)
 
 - **Trigger:** the delivery-boundary refresh found that `main` advanced from
