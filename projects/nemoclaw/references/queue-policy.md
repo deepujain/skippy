@@ -8,6 +8,54 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-04 sweep state (graph sweep and replenish, 6:12 PM PT)
+
+- **Runtime:** `sweep-20260904-174549` used separate executable `maintain` and
+  `replenish` graph runs because the canonical mode router exposes delivery
+  state and queue state on different branches. The Codex checkpoint and task
+  receipt use the same sweep ID.
+- **Open (5/5):** [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704),
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311), and
+  [#10309](https://github.com/NVIDIA/NemoClaw/pull/10309). No authored PR
+  departed.
+- **Maintain:** captured upstream advanced to `fa08360a2`. PRs #10818, #10705,
+  #10704, and #10311 are nine commits behind; #10309 is one commit behind after
+  a maintainer merged the immediately preceding `main` into its fork branch.
+  #10818 was rebased without conflicts and passed both builds, 18 focused
+  tests, and `npm run validate:pr`. GitHub then classified every replayed SSH
+  signature as `unknown_key`, so the update was rejected by the delivery
+  contract and the original verified head `fd5053b84` was restored with an
+  exact force-with-lease. The other verified stacks were not rewritten with
+  the unrecognized key. Before further rebase delivery, register the active
+  GitHub key `SHA256:xk9gnP/BEr4xslTGkiS8sEO8POnsQLKpMTRfZcsTM8c` as a
+  Signing key and run the new temporary-ref GitHub verification preflight.
+- **Identity:** the final remote set contains 28 commits. Every commit is
+  GitHub verified with `reason=valid`; every contributor-authored commit uses
+  Deepak Jain author and committer identity and has the required DCO trailer.
+  #10309 retains two GitHub-verified maintainer merge commits.
+- **Review and CI:** #10818, #10705, and #10704 have no current unresolved
+  review thread. #10311 retains two current requests for credential-backed
+  Hermes to `inference.local` to Gemini proof; no contributor-accessible
+  secret-backed lane exists. #10309 passes CodeRabbit and all nine exact-head
+  Advisor jobs, with every inline thread resolved; its CI failure is the
+  explicit same-repository-only reviewed OpenShell SDK gate, and downstream
+  jobs are skipped. Other fork workflows remain `action_required` pending
+  NVIDIA approval. #10705's reviewed runtime bundle also remains a qualified
+  maintainer-workflow publication gate.
+- **Learn:** the bounded latest-10 merged peer scan inspected representative
+  #11070, #11075, #11046, #10996, and #11012 bodies, patches, reviews, and
+  latest comments. `projects/nemoclaw/SKILL.md` now requires a GitHub signing
+  recognition preflight before replacing a verified PR stack and records
+  #11075's shared symlink-safe input resolver plus real producer-to-verifier
+  handoff rule. The remaining outcomes repeat existing scope reduction,
+  product gate, and exact-head evidence guidance.
+- **Replenish:** no slot is eligible. Live `.github/pr-limits.json` at
+  `fa08360a2` still gives the default contributor cap as 5, and the current
+  authored-open count is 5. Candidate selection is deferred until a PR
+  departs and the live cap is read again.
+
 ## 2026-09-04 sweep state (runtime restart, 10:37 AM PT)
 
 - **Runtime:** `sweep-20260904-0856` started with the isolated runtime helper and

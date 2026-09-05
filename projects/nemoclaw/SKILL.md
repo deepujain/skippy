@@ -506,6 +506,15 @@ git rebase upstream/main --exec 'git -c user.name="Deepak Jain" -c user.email="d
 
 If `commit.gpgsign = true` globally, the rebase automatically signs the commit with the SSH key, but still verify with `%G?` because local config can drift between worktrees.
 
+Before replacing any already-verified PR stack, preflight the active signing key
+against GitHub rather than relying only on a local signature block. Push one
+signed replay commit to a temporary fork ref, query GitHub's commit API, and
+require `verified=true` with `reason=valid` before force-pushing the PR branch.
+If GitHub reports `unknown_key`, `no_user`, or any other unverified result,
+leave the verified PR head intact, remove the temporary ref, and restore the
+GitHub signing-key registration before continuing. A rebase can contain a
+cryptographically valid SSH signature from a key that GitHub does not know.
+
 Before a signing rebase, do not trust worktree-local `user.name` or `user.email`. Recreate the stack with explicit committer identity and signing, for example `GIT_COMMITTER_NAME="Deepak Jain" GIT_COMMITTER_EMAIL="deepujain@gmail.com" git rebase --force-rebase --gpg-sign upstream/main`. Then verify both sides of each commit with `git log --format='%h %G? %an <%ae> | %cn <%ce>' upstream/main..HEAD` and query GitHub's commit API after pushing. A local `G` signature can still appear as GitHub `no_user` when a stale committer identity such as a test fixture leaked from worktree config.
 
 Verified signatures are a hard NemoClaw policy, not a nice-to-have. Do not ask for review, push a final rebase, or report a PR as ready while any commit in `upstream/main..HEAD` is unsigned, unverified, authored as the wrong identity, or missing the correct `Signed-off-by: Deepak Jain <deepujain@gmail.com>` trailer.
@@ -605,6 +614,7 @@ Use PR comments to tell reviewers what changed and what relevant validation pass
 - **`npm run check:diff` is the normal broad-gate fallback.** When hooks are skipped or unavailable, run and cite it. Pair it with targeted tests for the changed behavior.
 - **PR Review Advisor is part of review handling.** Recent merged PRs addressed or explained PRA findings just like human review findings. Valid PRA items got a focused fix plus commit/test evidence; false positives got concise explanations backed by exact pinned commits, blobs, or tests.
 - **Security-sensitive historical fixtures need exact identity binding.** For old installer, image, archive, or dependency remediation work, bind behavior to exact reviewed identities such as ref + full commit SHA + package version, SRI/tarball URL, and metadata hash. Add negative tests for mixed identities and for failure paths that must not partially rewrite artifacts.
+- **Trusted artifact paths need one real handoff contract.** When a reviewed producer, cache key, sparse workflow checkout, and Docker consumer share repository inputs, resolve them through one symlink-safe helper, include that helper in every trusted sparse checkout, and execute the real producer output through the production verifier before publication. Text assertions over workflow or Dockerfile source do not prove the boundary ([#11075](https://github.com/NVIDIA/NemoClaw/pull/11075)).
 - **Docs can still need contract tests, but only for executable or user-critical guidance.** Recent docs merges added focused docs-contract tests for installer variables, platform status, starter prompt assets, and policy preview semantics while still avoiding unrelated runtime test churn.
 - **Station/platform docs need explicit evidence boundaries.** If a platform is tested with limitations, keep `ci_tested` / caveat status, installer disclosure, prompt assets, and docs in sync, and cite exact hardware evidence or mark it not applicable.
 - **Documentation must separate present behavior from planned ownership.** An open issue, named future integration, or generic action is not evidence that a specific caller or lifecycle exists. Describe current caller obligations without assigning them to unimplemented components, and require a checked-in call site or explicit external evidence before using present-tense implementation claims.
