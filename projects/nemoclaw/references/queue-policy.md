@@ -8,6 +8,31 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-05 delivery refresh (8:21 AM PT)
+
+- **Trigger:** the delivery-boundary refresh found that `main` advanced from
+  `fa08360a2` to `afb2342666`. The authored-open count remained exactly five,
+  but every branch was eight commits behind and therefore returned to
+  maintenance instead of being reported as current.
+- **Open (5/5):** #11095, #10818, #10705, #10704, and #10311 remain open. No
+  sixth PR was created.
+- **Fresh heads:** #11095 `af965fd85`, #10818 `e1d2aa365`, #10705
+  `8e939f082`, #10704 `db2137c05`, and #10311 `fbbee0009` were rebased onto
+  `afb2342666` and pushed with exact force-with-lease protection.
+- **Focused verification:** #10818 passed 18/18 tests; #10705 passed 5/5;
+  #10704 passed 132/132 after preserving both route protection and detached
+  Windows-host warm-up behavior; #10311 passed its 300-test changed-file
+  matrix with one intentional skip. Its later deduplication passed the 45-test
+  growth guard and both affected suites, 42/42.
+- **Inherited base gate:** reinstalling dependencies for #11095 reached a
+  new-base TypeScript portability failure in unchanged test-support files
+  before `docs:strict` could start. The docs change itself had already passed
+  strict docs validation, both builds, and `validate:pr` before the base
+  advance. This refresh does not misreport the new-base gate as green.
+- **Identity:** every rewritten commit is SSH signed and DCO signed off. The
+  terminal live query must still confirm GitHub verification and compare every
+  exact head with the then-current base after this receipt is pushed.
+
 ## 2026-09-04 corrective sweep state (delivery refresh, 7:25 PM PT)
 
 - **Correction:** the 6:12 PM receipt below was stale at delivery. Its live
