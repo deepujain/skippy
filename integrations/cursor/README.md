@@ -5,15 +5,22 @@ workspace permissions, and sandboxed tool execution.
 
 ## Installation
 
-1. Keep the workspace `.cursor/rules/skippy-sweep-noninteractive.mdc` as a thin
-   always-applied entrypoint to
-   [`rules/skippy-sweep-noninteractive.mdc`](rules/skippy-sweep-noninteractive.mdc).
-2. Merge the relevant entries from
-   [`permissions.example.json`](permissions.example.json) into the workspace
-   `.cursor/permissions.json`.
-3. Launch sweeps through
-   [`scripts/sweep-runtime.sh`](scripts/sweep-runtime.sh), or the stable root
-   facade.
+Run the idempotent workspace installer:
+
+```bash
+./integrations/cursor/scripts/install-workspace-policy.sh /path/to/workspace
+```
+
+It installs the always-applied sweep rule and merges the Skippy allow/block
+instructions into `.cursor/permissions.json` without discarding existing
+workspace permissions. `scripts/bootstrap-project.sh` runs this installer
+automatically for the parent workspace; pass an explicit third argument or set
+`SKIPPY_WORKSPACE_ROOT` when the workspace lives elsewhere. Set
+`SKIPPY_SKIP_CURSOR_POLICY=1` only when Cursor integration is intentionally
+disabled.
+
+Launch sweeps through [`scripts/sweep-runtime.sh`](scripts/sweep-runtime.sh),
+or the stable root facade.
 
 Read [`runtime-contract.md`](runtime-contract.md) before changing Cursor
 subagent orchestration. Cursor-specific approval, queue detection, and cleanup

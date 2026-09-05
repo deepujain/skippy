@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if (($# != 2)); then
-  echo "usage: $0 <slug> <canonical-repository-url>" >&2
+if (($# < 2 || $# > 3)); then
+  echo "usage: $0 <slug> <canonical-repository-url> [workspace-root]" >&2
   exit 2
 fi
 
@@ -18,6 +18,11 @@ repository_url="$2"
 }
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+workspace_root="${3:-${SKIPPY_WORKSPACE_ROOT:-$(cd "$root/.." && pwd)}}"
+if [[ "${SKIPPY_SKIP_CURSOR_POLICY:-0}" != "1" ]]; then
+  "$root/integrations/cursor/scripts/install-workspace-policy.sh" "$workspace_root"
+fi
+
 project_dir="$root/projects/$slug"
 [[ ! -e "$project_dir" ]] || {
   echo "refusing to overwrite existing project: projects/$slug" >&2
