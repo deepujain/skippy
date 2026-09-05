@@ -4,40 +4,44 @@
   <img src="images/skippy.png" alt="Skippy project mascot" width="280">
 </p>
 
-Skippy is a layered engineering system for coding agents: an executable
-workflow graph, playbooks, decision rules, verification gates, and portable
-project skills. Each
-`projects/<slug>/SKILL.md` captures live repository conventions, validation,
-review handling, and submission practices for one upstream project.
+Skippy is an AI graph engineering system for accountable software delivery.
+Its canonical workflow is an executable 23-node, 53-edge DAG that controls
+routing, evidence fan-out, typed joins and handoffs, bounded retries, repair,
+review, and terminal delivery or blocked states.
 
-You describe the outcome; Skippy runs the method: reproduce the problem, pick the
-owning boundary, verify at a real edge, and keep open PRs merge-ready without
-re-explaining the repo every session.
-You get accountable delivery you can trust or hand off: visible plans, signed
-commits, addressed review threads, and proof the change works, not a patch that
-only looked right in chat.
+Describe the outcome. Skippy investigates the repository, selects the owning
+boundary, executes the appropriate playbook, verifies changed behavior at a
+real edge, and keeps open pull requests merge-ready. The graph records what ran,
+what was learned, why the work moved forward, and whether delivery actually
+completed.
 
-It is not patching alone. Skippy covers investigation, bug fixes, features,
-refactors, performance work, security hardening, PR maintenance, repository
-bootstrap, and long autonomous runs on public OSS, private repos, or internal
-monorepos.
+Portable `projects/<slug>/SKILL.md` files preserve each repository's live
+conventions, validation commands, review handling, and submission practices.
+Skippy can therefore resume or hand off work without reconstructing the project
+contract in every session.
 
-## Rigorous engineering for coding agents
+Skippy covers investigation, bug fixes, features, refactors, performance work,
+security hardening, pull request maintenance, repository bootstrap, and long
+autonomous runs across public, private, and internal repositories.
 
-Coding agents generate plausible patches quickly. They are much weaker at the
-engineering around them: reproducing the failure, choosing the smallest owning
-boundary, knowing when a green build is not proof, learning from review, and
-handing off work another engineer can trust without redoing it.
+## Software delivery, controlled as a graph
 
-Skippy closes that gap. You describe the outcome; Skippy routes the request to
-a playbook, loads the project skill for that repository, builds a visible task
-plan, coordinates bounded specialist work when it helps, and refuses to report
-success until the changed behavior is verified at a real boundary.
+Most agent workflows leave engineering control flow inside a conversation.
+Investigation, implementation, validation, repair, and delivery may all occur,
+but nothing outside the model reliably enforces their order, inputs, retries, or
+completion conditions.
 
-It is not a prompt pack or a skill library on its own. It is a layered
-engineering system of an executable control plane, decision rules, playbooks,
-project adapters, task artifacts, role boundaries, and a verification gate that
-turns agent work into accountable delivery.
+Skippy makes that control flow executable. Agents and humans still own the
+reasoning and work inside task nodes; the workflow graph owns readiness,
+parallel branches, joins, routing, recovery, and terminal state. Structured
+outputs are validated before they become downstream inputs, failed verification
+enters a bounded repair loop, and success is not available until the delivery
+contract is satisfied.
+
+Playbooks, decision rules, project skills, task artifacts, and verification
+gates supply the engineering method executed by that graph. Together they
+produce a traceable contribution with visible decisions and proof at the
+changed boundary, not merely a plausible patch.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
