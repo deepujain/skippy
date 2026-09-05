@@ -21,6 +21,12 @@ SPEC.loader.exec_module(graph)
 EVIDENCE = {"facts": ["observed"], "sources": ["source:1"], "unknowns": []}
 WORK = {"summary": "bounded work complete", "artifacts": ["artifact"], "evidence": ["proof"]}
 PASS = {"status": "pass", "evidence": ["boundary passed"], "limits": []}
+FRESH = {
+    "status": "current",
+    "observed_at": "2026-09-04T19:25:00-07:00",
+    "evidence": ["live state refreshed after final mutation"],
+    "changes": [],
+}
 
 
 class RunHarness:
@@ -136,6 +142,8 @@ class CanonicalWorkflowTests(unittest.TestCase):
             "review",
             {"status": "ready", "findings": [], "evidence": ["diff reviewed"]},
         )
+        self.assertEqual(self.run.ready, {"delivery-refresh"})
+        self.run.complete("delivery-refresh", FRESH)
         self.assertEqual(self.run.ready, {"delivery"})
         self.run.complete("delivery", {"status": "delivered", "receipt": "verified receipt"})
         state = self.run.state
@@ -168,6 +176,8 @@ class CanonicalWorkflowTests(unittest.TestCase):
         self.run.complete("review-repair", WORK)
         self.assertEqual(self.run.ready, {"final-verification"})
         self.run.complete("final-verification", PASS)
+        self.assertEqual(self.run.ready, {"delivery-refresh"})
+        self.run.complete("delivery-refresh", FRESH)
         self.assertEqual(self.run.ready, {"delivery"})
         self.run.complete("delivery", {"status": "delivered", "receipt": "repair verified"})
         self.assertEqual(self.run.state["status"], "completed")
@@ -294,6 +304,7 @@ class RuntimeContractTests(unittest.TestCase):
         self.assertIn("flowchart TD", rendered)
         self.assertIn("evidence-join", rendered)
         self.assertIn("verification-router -->|fail| repair", rendered)
+        self.assertIn("review-router -->|ready| delivery-refresh", rendered)
 
     def test_tampered_persisted_state_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

@@ -8,6 +8,48 @@ Refresh trigger: before every replenishment run and whenever repository policy c
 Read the shared references/contribution-queues.md policy before treating this
 target as actionable.
 
+## 2026-09-04 corrective sweep state (delivery refresh, 7:25 PM PT)
+
+- **Correction:** the 6:12 PM receipt below was stale at delivery. Its live
+  query returned five PRs, but #10309 closed without merge at 6:12:24 PM PT,
+  superseded by NVIDIA-owned #11093. The actual authored-open count was four.
+  A graph pass based on the earlier observation did not prove the delivered
+  state.
+- **Open (5/5):** [#11095](https://github.com/NVIDIA/NemoClaw/pull/11095),
+  [#10818](https://github.com/NVIDIA/NemoClaw/pull/10818),
+  [#10705](https://github.com/NVIDIA/NemoClaw/pull/10705),
+  [#10704](https://github.com/NVIDIA/NemoClaw/pull/10704), and
+  [#10311](https://github.com/NVIDIA/NemoClaw/pull/10311).
+- **Maintain:** after the active SSH key was registered as a GitHub Signing
+  key, all four existing branches were rebased onto `fa08360a2`, validated,
+  and pushed with exact force-with-lease protection. Final heads are #10818
+  `e7e41c64f`, #10705 `f0ee08a31`, #10704 `62b192655`, and #10311
+  `503b9bf2a`. Their PR descriptions now contain the exact post-rebase test
+  receipts.
+- **Validation:** #10818 passed both builds, 18 focused tests, and
+  `npm run validate:pr`; #10704 passed both builds, 121 focused tests, and the
+  broad gate; #10311 passed both builds, 296 focused tests with one intentional
+  skip, and the broad gate. #10705 passed both builds, its focused unit suite,
+  and the broad gate; its four onboarding integration failures reproduce
+  identically on untouched `main` with the same managed-volume runtime error.
+- **Replenish:** #11039 was rejected because #11090 already owns the fix.
+  Unassigned NVIDIA QA issue #11057 had no competing PR, so docs-only #11095
+  was opened with strict docs validation, both builds, and the broad gate
+  passing at head `65a5cb125`.
+- **Identity and freshness:** the five PRs contain 19 commits. GitHub reports
+  every commit `verified=true`, `reason=valid`. The final live comparison uses
+  base `fa08360a2` and reports `behind_by: 0` for all five branches.
+- **Review and CI:** fork-triggered GitHub Actions remain `action_required`
+  pending NVIDIA approval. CodeRabbit is green on the four existing heads and
+  was pending on newly opened #11095 at the refresh boundary. These are
+  surfaced external states, not contributor-owned branch staleness.
+- **Graph correction:** the canonical workflow now requires a typed
+  `delivery-refresh` node after the final mutation and before `delivery`.
+  NemoClaw sweeps must re-query the exact open set and every live head against
+  current `main`; earlier observations cannot certify the terminal receipt.
+  Corrective run `nemoclaw-corrective-20260904-1925-maintain` completed the new
+  path with 34 events.
+
 ## 2026-09-04 sweep state (graph sweep and replenish, 6:12 PM PT)
 
 - **Runtime:** `sweep-20260904-174549` used separate executable `maintain` and

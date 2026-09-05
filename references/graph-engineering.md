@@ -12,13 +12,21 @@ shared delivery shape:
 
 ```text
 request -> frame -> mode router -> evidence fan-out -> join -> plan -> work
-        -> verify -> pass/recover/block -> review -> deliver/block
+        -> verify -> pass/recover/block -> review -> live refresh -> deliver/block
 ```
 
 This is a control plane, not another agent harness. Task nodes remain owned by
 the coding-agent host or a human. Completing a node records a typed output; the
 runtime then determines the next executable nodes without asking a model to
 interpret control-flow instructions.
+
+The canonical graph places `delivery-refresh` after the final review or repaired
+verification path. The host must re-read any volatile claim after its last
+mutation and immediately before delivery, including external queue counts,
+branch/base comparisons, CI, reviews, signatures, and publication state when
+they apply. An observation captured earlier in the run is evidence for planning,
+not proof of the final state. If the refresh finds drift, the host must repair or
+reframe the work instead of completing `delivery` with a stale receipt.
 
 ## Stable command surface
 

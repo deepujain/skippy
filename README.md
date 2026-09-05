@@ -49,10 +49,12 @@ flowchart LR
   E --> F["Plan and bounded work"]
   F --> G["Real-boundary verification"]
   G --> H{"Verification router"}
-  H -->|pass| I["Review and delivery"]
+  H -->|pass| I["Review"]
   H -->|recoverable| J["Repair and reverify"]
   H -->|blocked| K["Blocked receipt"]
   J --> I
+  I --> L["Live delivery refresh"]
+  L --> M["Delivery receipt"]
 ```
 
 The standard is simple: write less code, own the right boundary, and prove what
@@ -70,7 +72,7 @@ Skippy separates three concerns that are often blurred together:
   routing, retries, terminal state, and the event trail.
 
 The canonical [delivery workflow](workflows/skippy-delivery.json) is data, not
-a diagram that the model is expected to remember. Its 22 nodes and 51 edges
+a diagram that the model is expected to remember. Its 23 nodes and 53 edges
 cover investigation, change, maintenance, and replenishment. Task nodes remain
 owned by the coding-agent host or a human; the standard-library
 [graph runtime](scripts/skippy-graph.py) owns the control flow around them.
@@ -85,6 +87,9 @@ That turns the major handoffs into executable contracts:
   before state changes;
 - retries are bounded, and exhausted attempts follow declared error edges;
 - `run.json` persists atomic, resumable state plus an ordered event trace;
+- a typed delivery refresh re-reads volatile external state after the last
+  mutation, so an earlier queue count or branch comparison cannot certify the
+  final receipt;
 - Mermaid diagrams are generated from the same graph that executes.
 
 ```bash

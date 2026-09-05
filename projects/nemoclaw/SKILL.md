@@ -418,6 +418,15 @@ is triggered by the user or by a scheduled task.
   `issue selected, PR in progress`, or `replenishment skipped` with the exact
   blocker such as queue still unhealthy, overlap risk, no good candidate, or
   maintainer policy friction.
+- **Refresh live state at the delivery boundary.** After the last push, PR
+  create/edit/comment, or other remote mutation, query the authored-open PR
+  set again and compare every live head with the then-current `main`. Also
+  re-read exact-head signature, CI, review, and publication state. An earlier
+  graph observation, planned PR, or just-created PR URL does not prove the
+  final count or freshness. If the count changed or `main` advanced, return to
+  maintenance or replenishment and repeat this refresh. Complete the sweep
+  only when the final receipt names the refresh time, current base SHA, exact
+  open set, and per-branch `behind_by` result.
 
 Use this table format for NemoClaw open-PR sweeps unless the user explicitly asks for a different format:
 

@@ -303,6 +303,25 @@
       "description": "Permit delivery only when post-review verification passes."
     },
     {
+      "id": "delivery-refresh",
+      "kind": "task",
+      "executor": "agent",
+      "activation": "settled",
+      "description": "After the final mutation and immediately before delivery, re-read every volatile completion claim such as queue count, branch freshness, CI, review, signature, and publication state. Earlier observations cannot satisfy this node.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["status", "observed_at", "evidence", "changes"],
+        "properties": {
+          "status": {"const": "current"},
+          "observed_at": {"type": "string", "minLength": 1},
+          "evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "changes": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
       "id": "delivery",
       "kind": "task",
       "executor": "agent",
@@ -386,7 +405,7 @@
 
     {"from": "review", "to": "review-router"},
     {"from": "review", "to": "blocked", "on": "error"},
-    {"from": "review-router", "to": "delivery", "when": {"equals": "ready"}},
+    {"from": "review-router", "to": "delivery-refresh", "when": {"equals": "ready"}},
     {"from": "review-router", "to": "review-repair", "when": {"equals": "needs_changes"}},
     {"from": "review-router", "to": "blocked", "when": {"equals": "blocked"}},
     {"from": "review-router", "to": "blocked", "when": {"default": true}},
@@ -395,10 +414,12 @@
     {"from": "review-repair", "to": "blocked", "on": "error"},
     {"from": "final-verification", "to": "final-verification-router"},
     {"from": "final-verification", "to": "blocked", "on": "error"},
-    {"from": "final-verification-router", "to": "delivery", "when": {"equals": "pass"}},
+    {"from": "final-verification-router", "to": "delivery-refresh", "when": {"equals": "pass"}},
     {"from": "final-verification-router", "to": "blocked", "when": {"in": ["fail", "blocked"]}},
     {"from": "final-verification-router", "to": "blocked", "when": {"default": true}},
 
+    {"from": "delivery-refresh", "to": "delivery"},
+    {"from": "delivery-refresh", "to": "blocked", "on": "error"},
     {"from": "delivery", "to": "blocked", "on": "error"}
   ]
 }
