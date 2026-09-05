@@ -4,8 +4,9 @@
   <img src="images/skippy.png" alt="Skippy project mascot" width="280">
 </p>
 
-Skippy is a layered engineering system for coding agents: playbooks, decision
-rules, verification gates, and portable project skills. Each
+Skippy is a layered engineering system for coding agents: an executable
+workflow graph, playbooks, decision rules, verification gates, and portable
+project skills. Each
 `projects/<slug>/SKILL.md` captures live repository conventions, validation,
 review handling, and submission practices for one upstream project.
 
@@ -34,27 +35,73 @@ plan, coordinates bounded specialist work when it helps, and refuses to report
 success until the changed behavior is verified at a real boundary.
 
 It is not a prompt pack or a skill library on its own. It is a layered
-engineering system of decision rules, playbooks, project adapters, task artifacts,
-role boundaries, helper programs, and a verification gate that turns agent work
-into accountable delivery.
+engineering system of an executable control plane, decision rules, playbooks,
+project adapters, task artifacts, role boundaries, and a verification gate that
+turns agent work into accountable delivery.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 flowchart LR
-  A["Outcome and constraints"] --> B["Skippy router"]
-  B --> C["Project skill"]
-  B --> D["Decision system"]
-  B --> E["Playbook"]
-  C --> F["Task plan"]
-  D --> F
-  E --> F
-  F --> G["Bounded implementation"]
-  G --> H["Real-boundary verification"]
-  H --> I["Review and delivery receipt"]
+  A["Outcome and constraints"] --> B["Frame request"]
+  B --> C{"Mode router"}
+  C --> D["Evidence fan-out"]
+  D --> E(("Settled join"))
+  E --> F["Plan and bounded work"]
+  F --> G["Real-boundary verification"]
+  G --> H{"Verification router"}
+  H -->|pass| I["Review and delivery"]
+  H -->|recoverable| J["Repair and reverify"]
+  H -->|blocked| K["Blocked receipt"]
+  J --> I
 ```
 
 The standard is simple: write less code, own the right boundary, and prove what
 changed.
+
+## Graph engineering, enforced
+
+Skippy separates three concerns that are often blurred together:
+
+- The **agent harness** supplies models, tools, permissions, memory, and task
+  execution.
+- The **reasoning loop** investigates, designs, implements, verifies, and
+  reviews the change.
+- The **workflow graph** deterministically controls readiness, fan-out, joins,
+  routing, retries, terminal state, and the event trail.
+
+The canonical [delivery workflow](workflows/skippy-delivery.json) is data, not
+a diagram that the model is expected to remember. Its 22 nodes and 51 edges
+cover investigation, change, maintenance, and replenishment. Task nodes remain
+owned by the coding-agent host or a human; the standard-library
+[graph runtime](scripts/skippy-graph.py) owns the control flow around them.
+
+That turns the major handoffs into executable contracts:
+
+- routers select explicit success, recovery, and blocked paths, with a required
+  default edge;
+- joins wait for all required inputs, including settled joins after conditional
+  branches;
+- JSON Schema validates workflow input, task output, and downstream handoffs
+  before state changes;
+- retries are bounded, and exhausted attempts follow declared error edges;
+- `run.json` persists atomic, resumable state plus an ordered event trace;
+- Mermaid diagrams are generated from the same graph that executes.
+
+```bash
+python3 scripts/skippy-graph.py validate workflows/skippy-delivery.json
+python3 scripts/skippy-graph.py diagram workflows/skippy-delivery.json
+python3 scripts/skippy-graph.py init workflows/skippy-delivery.json \
+  .skippy/runs/example --run-id example \
+  --input-json '{"outcome":"Fix duplicate OAuth sessions","preserve":["valid login and logout"]}'
+python3 scripts/skippy-graph.py ready .skippy/runs/example
+```
+
+The host claims a ready task with `start`, then reports a typed result through
+`complete` or a bounded attempt failure through `fail`. Another process or
+session can resume from the same run directory. Version 1 rejects cycles and
+uses explicit finite repair paths so joins and resumption remain unambiguous.
+See [Executable Graph Control](references/graph-engineering.md) for the full
+node, edge, state, and host contract.
 
 Skippy follows how a strong engineer joins a codebase: read docs and history,
 understand open and closed merge requests, contribute, learn from outcomes, and
@@ -239,17 +286,19 @@ change.
 
 ## Getting started (agent setup)
 
-Skippy is a set of agent instructions, not a shell command. Add or attach
-[Skippy Mode](skippy/SKILL.md) to your coding agent, then attach the relevant
-project skill under `projects/`. The prompts above are messages you send to the
-agent, not commands to paste into Terminal unless a helper script is named
-explicitly.
+Add or attach [Skippy Mode](skippy/SKILL.md) to your coding agent, then attach
+the relevant project skill under `projects/`. Natural-language examples above
+are messages for the agent. For non-trivial work on a Python-capable host,
+Skippy Mode uses the executable graph control plane and the agent executes the
+task nodes returned by `ready`. Hosts that cannot run it use the Markdown task
+plan and completion gate as a documented portable fallback.
 
 ## What makes it an engineering system
 
 | Layer | Purpose |
 | --- | --- |
 | [Skippy Mode](skippy/SKILL.md) | Routes the request, keeps the plan visible, selects supporting capabilities, and enforces the completion gate |
+| [Executable graph](references/graph-engineering.md) | Enforces typed handoffs, deterministic routers, joins, bounded retries, resumable state, and an inspectable event trail |
 | [Engineering decision system](references/engineering-principles.md) | Guides ownership, complexity, reliability, security, evidence, and delivery decisions without reducing engineering to a count of slogans |
 | [Playbook library](playbooks/index.md) | Supplies the ordered work moves for investigation, change, assurance, autonomous work, and contribution queues |
 | [Project skills](#project-skills) | Supply each repository's policy, commands, layout, CI, review, and local conventions |
@@ -270,10 +319,12 @@ then translated into work moves rather than copied as book summaries.
 ```text
 skippy/
 ├── skippy/       Router and specialist role definitions
-├── references/   Shared contribution protocol, principles, and evidence rules
+├── workflows/    Executable, validated workflow specifications
+├── references/   Shared protocols, principles, graph, and evidence rules
 ├── playbooks/    Work sequences selected by uncertainty and risk
 ├── projects/     One project-specific skill per repository
-├── scripts/      Task-plan, decision-log, and structural-validation helpers
+├── scripts/      Graph runtime, task artifacts, and validation helpers
+├── tests/        Graph control-plane behavior and recovery tests
 ├── automations/  Optional continuation prompts for supported clients
 └── README.md      Start here (includes contribution matrix)
 ```
@@ -389,6 +440,8 @@ Use the helper programs when a task spans multiple turns, agents, or days.
 ./scripts/check-task-plan.sh .skippy/tasks/oauth-session-race.md
 ./scripts/decision-log.sh .skippy/decisions/oauth-session-race.tsv reproduce \
   'Two callback deliveries create two records' reproduced
+python3 scripts/skippy-graph.py status .skippy/runs/oauth-session-race --full
+python3 scripts/skippy-graph.py events .skippy/runs/oauth-session-race
 ./scripts/verify-skill-layout.sh
 ```
 
@@ -427,16 +480,20 @@ Codex, Claude Code, Cursor, Gemini CLI, Aider, Continue, OpenCode, Cline, and
 other agents that load local instructions.
 
 Clients differ in their scheduler, worktree, browser, and delegation support.
-Skippy uses those capabilities when present and falls back to a portable core:
-explicit contracts, bounded work, durable artifacts, and evidence.
+Skippy uses those capabilities when present. Its Python control plane is
+host-neutral and calls back into the client only for executable task nodes.
+When Python execution is unavailable, Skippy falls back to a portable core:
+explicit contracts, bounded work, durable Markdown artifacts, and evidence.
+That fallback must not be described as runtime-enforced graph execution.
 
 ## What Skippy does not promise
 
 Skippy cannot make a model correct by declaration. It cannot bypass repository
 permissions, replace maintainer or reviewer judgment, or turn missing test
 infrastructure into a green result. Bootstrap and learning stay evidence-backed
-and refreshable. It exposes those limits and creates the smallest durable
-verification capability when the project needs one.
+and refreshable. The graph controls work; it does not execute task bodies or
+grant authority the host does not have. Skippy exposes those limits and creates
+the smallest durable verification capability when the project needs one.
 
 ## Install
 
@@ -445,6 +502,9 @@ git clone https://github.com/deepujain/skippy.git
 cd skippy
 ./scripts/verify-skill-layout.sh
 ```
+
+The verification script checks the skill layout, validates the canonical graph,
+and runs its control-plane tests.
 
 Attach [Skippy Mode](skippy/SKILL.md) and the target project skill when one
 exists. For merge-request queue work on external repositories, also attach

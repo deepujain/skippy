@@ -1,0 +1,404 @@
+{
+  "schema_version": 1,
+  "id": "skippy-delivery",
+  "description": "Host-neutral control graph for investigation, change, maintenance, and replenishment work.",
+  "input_schema": {
+    "type": "object",
+    "required": ["outcome", "preserve"],
+    "properties": {
+      "outcome": {"type": "string", "minLength": 1},
+      "preserve": {"type": "array", "items": {"type": "string"}}
+    },
+    "additionalProperties": false
+  },
+  "nodes": [
+    {
+      "id": "frame",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Turn the request into an execution contract and select the work mode.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["outcome", "done_means", "preserve", "mode", "risk"],
+        "properties": {
+          "outcome": {"type": "string", "minLength": 1},
+          "done_means": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "preserve": {"type": "array", "items": {"type": "string"}},
+          "mode": {"type": "string", "enum": ["investigate", "change", "maintain", "replenish"]},
+          "risk": {"type": "string", "enum": ["low", "medium", "high", "unknown"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "mode-router",
+      "kind": "router",
+      "selector": "mode",
+      "description": "Select evidence work from the explicit execution mode."
+    },
+    {
+      "id": "current-system",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Trace current behavior, ownership, callers, and the closest real boundary.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["facts", "sources", "unknowns"],
+        "properties": {
+          "facts": {"type": "array", "items": {"type": "string"}},
+          "sources": {"type": "array", "items": {"type": "string"}},
+          "unknowns": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "historical-intent",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Inspect history and precedent when they can change the decision.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["facts", "sources", "unknowns"],
+        "properties": {
+          "facts": {"type": "array", "items": {"type": "string"}},
+          "sources": {"type": "array", "items": {"type": "string"}},
+          "unknowns": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "project-contract",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Load repository policy, commands, compatibility rules, and delivery constraints.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["facts", "sources", "unknowns"],
+        "properties": {
+          "facts": {"type": "array", "items": {"type": "string"}},
+          "sources": {"type": "array", "items": {"type": "string"}},
+          "unknowns": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "delivery-state",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Read live branch, CI, review, conflict, signature, and publication state.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["facts", "sources", "unknowns"],
+        "properties": {
+          "facts": {"type": "array", "items": {"type": "string"}},
+          "sources": {"type": "array", "items": {"type": "string"}},
+          "unknowns": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "queue-state",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Read the contribution target, open work, overlap, and eligible candidates.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["facts", "sources", "unknowns"],
+        "properties": {
+          "facts": {"type": "array", "items": {"type": "string"}},
+          "sources": {"type": "array", "items": {"type": "string"}},
+          "unknowns": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "evidence-join",
+      "kind": "join",
+      "join": "settled",
+      "description": "Wait for every selected evidence branch and bundle typed receipts by source.",
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "required": ["facts", "sources", "unknowns"],
+          "properties": {
+            "facts": {"type": "array", "items": {"type": "string"}},
+            "sources": {"type": "array", "items": {"type": "string"}},
+            "unknowns": {"type": "array", "items": {"type": "string"}}
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "plan",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Select the narrow playbook path and make decisions traceable to evidence.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["steps", "skipped", "verification"],
+        "properties": {
+          "steps": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "skipped": {"type": "array", "items": {"type": "string"}},
+          "verification": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "perform-work",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Execute the selected mode at the smallest owning boundary.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["summary", "artifacts", "evidence"],
+        "properties": {
+          "summary": {"type": "string", "minLength": 1},
+          "artifacts": {"type": "array", "items": {"type": "string"}},
+          "evidence": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "verify",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Exercise the real changed or investigated boundary and proportional broad checks.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["status", "evidence", "limits"],
+        "properties": {
+          "status": {"type": "string", "enum": ["pass", "fail", "blocked"]},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "limits": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "verification-router",
+      "kind": "router",
+      "selector": "status",
+      "description": "Route verified work to review, failed work to repair, and external limits to handoff."
+    },
+    {
+      "id": "repair",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Correct the verified failure without broadening scope.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["summary", "artifacts", "evidence"],
+        "properties": {
+          "summary": {"type": "string", "minLength": 1},
+          "artifacts": {"type": "array", "items": {"type": "string"}},
+          "evidence": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "reverify",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Repeat the failed proof on the repaired state.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["status", "evidence", "limits"],
+        "properties": {
+          "status": {"type": "string", "enum": ["pass", "fail", "blocked"]},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "limits": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "reverification-router",
+      "kind": "router",
+      "selector": "status",
+      "description": "Admit a repaired result only after the original proof passes."
+    },
+    {
+      "id": "review",
+      "kind": "task",
+      "executor": "agent",
+      "activation": "settled",
+      "description": "Review behavior, security, compatibility, cleanup, scope, and delivery evidence.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["status", "findings", "evidence"],
+        "properties": {
+          "status": {"type": "string", "enum": ["ready", "needs_changes", "blocked"]},
+          "findings": {"type": "array", "items": {"type": "string"}},
+          "evidence": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "review-router",
+      "kind": "router",
+      "selector": "status",
+      "description": "Require review findings to be resolved before delivery."
+    },
+    {
+      "id": "review-repair",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Apply accepted review findings as one bounded repair pass.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["summary", "artifacts", "evidence"],
+        "properties": {
+          "summary": {"type": "string", "minLength": 1},
+          "artifacts": {"type": "array", "items": {"type": "string"}},
+          "evidence": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "final-verification",
+      "kind": "task",
+      "executor": "agent",
+      "description": "Verify the repaired review state at the same public boundary.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["status", "evidence", "limits"],
+        "properties": {
+          "status": {"type": "string", "enum": ["pass", "fail", "blocked"]},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "limits": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "final-verification-router",
+      "kind": "router",
+      "selector": "status",
+      "description": "Permit delivery only when post-review verification passes."
+    },
+    {
+      "id": "delivery",
+      "kind": "task",
+      "executor": "agent",
+      "activation": "settled",
+      "terminal_status": "completed",
+      "description": "Produce the truthful delivery receipt and known external state.",
+      "max_attempts": 2,
+      "output_schema": {
+        "type": "object",
+        "required": ["status", "receipt"],
+        "properties": {
+          "status": {"const": "delivered"},
+          "receipt": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "blocked",
+      "kind": "task",
+      "executor": "agent",
+      "activation": "settled",
+      "terminal_status": "blocked",
+      "description": "Record the exact external, policy, authority, or exhausted-repair blocker.",
+      "max_attempts": 1,
+      "output_schema": {
+        "type": "object",
+        "required": ["status", "reason", "resume"],
+        "properties": {
+          "status": {"const": "blocked"},
+          "reason": {"type": "string", "minLength": 1},
+          "resume": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  ],
+  "edges": [
+    {"from": "START", "to": "frame"},
+    {"from": "frame", "to": "mode-router"},
+    {"from": "frame", "to": "blocked", "on": "error"},
+
+    {"from": "mode-router", "to": "current-system", "when": {"in": ["investigate", "change", "maintain"]}},
+    {"from": "mode-router", "to": "historical-intent", "when": {"in": ["investigate", "change", "replenish"]}},
+    {"from": "mode-router", "to": "project-contract", "when": {"in": ["investigate", "change", "maintain", "replenish"]}},
+    {"from": "mode-router", "to": "delivery-state", "when": {"equals": "maintain"}},
+    {"from": "mode-router", "to": "queue-state", "when": {"equals": "replenish"}},
+    {"from": "mode-router", "to": "blocked", "when": {"default": true}},
+
+    {"from": "current-system", "to": "evidence-join"},
+    {"from": "historical-intent", "to": "evidence-join"},
+    {"from": "project-contract", "to": "evidence-join"},
+    {"from": "delivery-state", "to": "evidence-join"},
+    {"from": "queue-state", "to": "evidence-join"},
+    {"from": "current-system", "to": "blocked", "on": "error"},
+    {"from": "historical-intent", "to": "blocked", "on": "error"},
+    {"from": "project-contract", "to": "blocked", "on": "error"},
+    {"from": "delivery-state", "to": "blocked", "on": "error"},
+    {"from": "queue-state", "to": "blocked", "on": "error"},
+
+    {"from": "evidence-join", "to": "plan"},
+    {"from": "plan", "to": "perform-work"},
+    {"from": "plan", "to": "blocked", "on": "error"},
+    {"from": "perform-work", "to": "verify"},
+    {"from": "perform-work", "to": "blocked", "on": "error"},
+    {"from": "verify", "to": "verification-router"},
+    {"from": "verify", "to": "blocked", "on": "error"},
+
+    {"from": "verification-router", "to": "review", "when": {"equals": "pass"}},
+    {"from": "verification-router", "to": "repair", "when": {"equals": "fail"}},
+    {"from": "verification-router", "to": "blocked", "when": {"equals": "blocked"}},
+    {"from": "verification-router", "to": "blocked", "when": {"default": true}},
+
+    {"from": "repair", "to": "reverify"},
+    {"from": "repair", "to": "blocked", "on": "error"},
+    {"from": "reverify", "to": "reverification-router"},
+    {"from": "reverify", "to": "blocked", "on": "error"},
+    {"from": "reverification-router", "to": "review", "when": {"equals": "pass"}},
+    {"from": "reverification-router", "to": "blocked", "when": {"in": ["fail", "blocked"]}},
+    {"from": "reverification-router", "to": "blocked", "when": {"default": true}},
+
+    {"from": "review", "to": "review-router"},
+    {"from": "review", "to": "blocked", "on": "error"},
+    {"from": "review-router", "to": "delivery", "when": {"equals": "ready"}},
+    {"from": "review-router", "to": "review-repair", "when": {"equals": "needs_changes"}},
+    {"from": "review-router", "to": "blocked", "when": {"equals": "blocked"}},
+    {"from": "review-router", "to": "blocked", "when": {"default": true}},
+
+    {"from": "review-repair", "to": "final-verification"},
+    {"from": "review-repair", "to": "blocked", "on": "error"},
+    {"from": "final-verification", "to": "final-verification-router"},
+    {"from": "final-verification", "to": "blocked", "on": "error"},
+    {"from": "final-verification-router", "to": "delivery", "when": {"equals": "pass"}},
+    {"from": "final-verification-router", "to": "blocked", "when": {"in": ["fail", "blocked"]}},
+    {"from": "final-verification-router", "to": "blocked", "when": {"default": true}},
+
+    {"from": "delivery", "to": "blocked", "on": "error"}
+  ]
+}

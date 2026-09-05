@@ -36,3 +36,16 @@ directory and sweep log, and leave the combined summary to the coordinator.
 
 Platform adapters may tighten permission and sandbox rules but must not weaken
 Git safety, project validation, or external-write verification.
+
+## Graph control boundary
+
+When a sweep is run through `workflows/skippy-delivery.json`, the adapter treats
+`scripts/skippy-graph.py ready` as the source of executable work. It may run
+independent ready nodes concurrently, but it must claim each node, return a
+schema-valid result, and let the shared runtime advance joins and routers.
+Platform-specific state must not select routes, mark joins complete, or create
+terminal states outside the graph.
+
+Sweep checkpoints remain the lightweight per-project watchdog contract. Graph
+run state is the finer-grained workflow contract. An adapter may link their run
+identifiers, but neither artifact replaces the other.

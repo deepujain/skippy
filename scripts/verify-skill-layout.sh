@@ -11,19 +11,30 @@ while IFS= read -r skill; do
   fi
 done < <(find "$root/projects" "$root/skippy" -name SKILL.md -type f | sort)
 
-for reference in contribution-quality.md continuous-learning.md contribution-queues.md execution-contracts.md verification-receipts.md engineering-principles.md engineering-foundations.md project-bootstrap.md delegation.md oss-contribution-system.md; do
+for reference in contribution-quality.md continuous-learning.md contribution-queues.md execution-contracts.md verification-receipts.md engineering-principles.md engineering-foundations.md graph-engineering.md project-bootstrap.md delegation.md oss-contribution-system.md; do
   if [[ ! -f "$root/references/$reference" ]]; then
     echo "missing shared reference: $reference" >&2
     errors=1
   fi
 done
 
-for file in playbooks/index.md playbooks/bootstrap-project.md playbooks/continuous-learning.md playbooks/contribution-queue.md skippy/agents/investigator.md skippy/agents/verifier.md scripts/bootstrap-project.sh scripts/configure-project-queue.sh scripts/record-project-learning.sh automations/continuation/sweep-and-replenish-prompt.md; do
+for file in playbooks/index.md playbooks/bootstrap-project.md playbooks/continuous-learning.md playbooks/contribution-queue.md skippy/agents/investigator.md skippy/agents/verifier.md scripts/bootstrap-project.sh scripts/configure-project-queue.sh scripts/record-project-learning.sh scripts/skippy-graph.py workflows/skippy-delivery.json automations/continuation/sweep-and-replenish-prompt.md; do
   if [[ ! -f "$root/$file" ]]; then
     echo "missing orchestration artifact: $file" >&2
     errors=1
   fi
 done
+
+if ! python3 -B "$root/scripts/skippy-graph.py" validate \
+  "$root/workflows/skippy-delivery.json" >/dev/null; then
+  echo "invalid canonical Skippy workflow" >&2
+  errors=1
+fi
+
+if ! python3 -B -m unittest discover -s "$root/tests" >/dev/null 2>&1; then
+  echo "Skippy graph runtime tests failed" >&2
+  errors=1
+fi
 
 for heading in '## Frame the problem' '## Design the right change' '## Build for operation' '## Verify and learn' '## Collaborate without losing ownership'; do
   if ! rg -Fqx "$heading" "$root/references/engineering-principles.md"; then

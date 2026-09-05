@@ -28,6 +28,27 @@ For durable work, create a task artifact with
 `scripts/new-task-plan.sh`. For multi-turn, autonomous, or high-stakes work,
 record meaningful decisions with `scripts/decision-log.sh`.
 
+## Executable graph control
+
+For non-trivial work on a host that can run Python, use the
+[executable graph control](../references/graph-engineering.md) instead of
+leaving routing, joins, and terminal state entirely in prose. Initialize
+[`workflows/skippy-delivery.json`](../workflows/skippy-delivery.json), execute
+the task nodes returned by `ready`, and record their results with `complete` or
+`fail`. The graph runtime owns deterministic routing, typed handoffs, joins,
+bounded retries, durable state, and the event trace. The primary agent still
+owns the task contract, external authority, implementation, verification, and
+final delivery claim.
+
+Independent nodes returned by the same `ready` call are an explicit fan-out.
+Apply the delegation protocol before assigning them to other agents. Do not
+invent extra branches or bypass a join because one result arrives first. A
+router or join completes automatically; never ask a model to simulate it.
+
+When the host cannot run the graph control plane, keep the portable Markdown
+task plan and record the runtime limitation. Do not claim that prose-only
+execution was graph-enforced.
+
 ## Routing
 
 | Request shape | First playbook | Supporting capability |
