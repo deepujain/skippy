@@ -485,11 +485,14 @@ are present.
      out across many untouched files while `npm run validate:pr` and all focused
      tests pass, classify it as a local capacity signal, not a branch regression,
      and rely on the isolated GitHub jobs for the full matrix.
-   - `npm run validate:pr` compares `origin/main` with committed `HEAD`; it does
-     not validate unstaged follow-up edits. Run focused checks on the working
-     tree, commit the final patch, then run `validate:pr` against that commit.
-     If a formatting hook rewrites files, amend those changes and rerun the
-     gate before pushing.
+   - **Let a normal push own final publication validation.** Since merged
+     PR #11591, the pre-push gate builds the required CLI/plugin artifacts and
+     runs the read-only publication checks once with the required heap. Run
+     focused tests on the working tree, commit the final patch, then use a
+     normal `git push`; do not run a redundant explicit `validate:pr`
+     immediately before that push. Use explicit `npm run validate:pr` only for
+     deliberate local qualification without publication or to diagnose the
+     gate, and record the exact command that actually ran.
    - Do not run `prek` or `validate:pr` concurrently in linked worktrees while
      either worktree has unstaged changes. Their repository-level stash/hook
      state can interfere across worktrees. Commit first and validate the
